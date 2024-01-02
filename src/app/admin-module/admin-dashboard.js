@@ -1,10 +1,11 @@
+"use client";
 import React from "react";
+import { useState } from "react";
 import dashboard from "../../../public/images/dashboard.svg";
 import eventadd from "../../../public/images/event-add.svg";
 import eventlist from "../../../public/images/event-list.svg";
 import setting from "../../../public/images/setting.svg";
-import inquiry from "../../../public/images/enquiry.svg";
-
+import inquiry from "../../../public/images/close-square.svg";
 import Image from "next/image";
 
 export const menulist = [
@@ -26,12 +27,12 @@ export const menulist = [
     component: "",
     icon: eventlist,
   },
-//   {
-//     id: 4,
-//     label: "Enquiry",
-//     component: "",
-//     icon: inquiry,
-//   },
+  //   {
+  //     id: 4,
+  //     label: "Enquiry",
+  //     component: "",
+  //     icon: inquiry,
+  //   },
   {
     id: 4,
     label: "Setting",
@@ -41,42 +42,48 @@ export const menulist = [
 ];
 
 const AdminDashboard = () => {
-//   const [showDrawer, setShowDrawer] = useState(false);
+  const [showDrawer, setShowDrawer] = useState("");
 
   return (
     <section className="">
       <div className="flex min-h-screen relative lg:static">
-        <div className="py-2 px-3  absolute top-4 left-2 flex flex-col gap-[5px] cursor-pointer lg:hidden"
-        //   onClick={() => setShowDrawer(true)}
+        <div
+          className="py-2 px-3  absolute top-4 left-2 flex flex-col gap-[5px] cursor-pointer lg:hidden"
+          onClick={() => setShowDrawer(true)}
         >
           <div className="bg-black h-[2px] w-[20px]"></div>
           <div className="bg-black h-[2px] w-[20px]"></div>
           <div className="bg-black h-[2px] w-[20px]"></div>
         </div>
         <div
-          className="flex flex-col justify-between min-h-screen lg:py-[70px] xl:py-[60px] 2xl:py-[100px] py-[10px] text-white bg-black 
-        xl:w-[22%] lg:w-[23%]"
+          className={`flex flex-col justify-between min-h-screen md:py-[20px] lg:py-[70px] xl:py-[60px] 2xl:py-[100px] py-[10px] text-white bg-black 
+        xl:w-[22%] lg:w-[23%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
+                 ${
+                   showDrawer
+                     ? "block  absolute top-0 left-0 min-h-screen is-show"
+                     : "hidden lg:block"
+                 }`}
         >
+          <div
+            className="relative text-white  flex flex-col gap-[5px] cursor-pointer lg:hidden  text-right mr-3 mt-2"
+            onClick={() => setShowDrawer(false)}
+          >
+            <div className="flex justify-end">
+              {" "}
+              <Image src={inquiry} className="md:w-10 sm:w-8  w-7" />{" "}
+            </div>
+          </div>
+
           <div className="">
             <div className="flex justify-center items-center whitespace-pre-wrap ">
-              <h1 className="2xl:text-[35px] lg:text-[18px] text-[24px] font-semibold  text-center whitespace-nowrap">
+              <h1 className="2xl:text-[35px] lg:text-[18px] md:text-[18px] sm:text-[16px] text-[14px] font-semibold  text-center whitespace-nowrap ">
                 Admin Dashboard
               </h1>
             </div>
           </div>
           <div className="flex flex-col 2xl:gap-6 gap-3 ">
             {menulist.map((item, index) => (
-              <div
-                className="pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[25px] xl:text-[16px] lg:text-[14px] "
-                // key={index}
-                // className={`pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300
-                //                     ${
-                //                       item.id === ComponentId
-                //                         ? "bg-menu_secondary"
-                //                         : "hover:menu_secondary hover:text-white hover:rounded-md"
-                //                     }  `}
-                // onClick={() => handleClick(item.id)}
-              >
+              <div className="sm:pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[25px] xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px] ">
                 {" "}
                 <Image
                   src={item?.icon}
@@ -91,7 +98,7 @@ const AdminDashboard = () => {
           </div>
           <div className="">
             <div>
-              <div className="pl-6 py-3 mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[16px] 2xl:text-[25px] lg:text-[14px]">
+              <div className="sm:pl-6 py-3 mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[16px] 2xl:text-[25px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]">
                 <p>Sign Out</p>
               </div>
             </div>
