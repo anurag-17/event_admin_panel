@@ -1,11 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
+import { EyeIcon } from "@heroicons/react/24/outline";
+import { EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const Login = () => {
   const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleToggle = () => {
@@ -13,7 +19,7 @@ const Login = () => {
   };
 
   const addFormHandler = (event) => {
-    event.preventDefault(); // Fix: Use event, not e
+    event.preventDefault();
     setLoading(true);
 
     const options = {
@@ -21,11 +27,10 @@ const Login = () => {
       url: "http://localhost:4000/api/auth/adminLogin",
       data: { email: email, password: password },
     };
-
     axios
       .request(options)
       .then(function (response) {
-        if (response?.status === 200) {
+        if (response?.status === 201) {
           localStorage.setItem(
             "accessToken",
             JSON.stringify(response.data.token)
@@ -34,8 +39,6 @@ const Login = () => {
             "userDetails",
             JSON.stringify(response?.data?.user?._id)
           );
-          dispatch(setAdminToken(response?.data?.token));
-          setLoading(false);
           toast.success("Success. Login Successfully!");
           router.push("/admin-dashboard");
         } else {
@@ -45,14 +48,16 @@ const Login = () => {
       })
       .catch(function (error) {
         setLoading(false);
+        toast.error(" Login Failed!")
         console.error(error);
       });
   };
 
   return (
     <>
+      <ToastContainer />
       <section className="h-screen bg-[#FCEBF2] flex items-center ">
-        <div className="bg-white mx-auto flex flex-col lg:flex-row  w-2/3 lg:w-1/2 lg:rounded-r-[20px] lg:rounded-t-[20px] rounded-t-[20px] rounded-b-[20px]">
+        <div className="bg-white mx-auto flex flex-col lg:flex-row  w-1/3 lg:w-1/2 lg:rounded-r-[20px] lg:rounded-t-[20px] rounded-t-[20px] rounded-b-[20px]">
           <div className="w-full lg:w-1/2 h-[200px] lg:h-auto login-bg"></div>
           <div className="w-full lg:w-1/2">
             <form
@@ -123,6 +128,17 @@ const Login = () => {
                   2xl:mt-2 2xl:p-[12px] 2xl:text-[20px] 
                   w-full border rounded-md focus:outline-none "
                 />
+                <button
+                  type="button"
+                  className="absolute top-1/2  transform -translate-y-1/2 cursor-pointer"
+                  onClick={handleToggle}
+                >
+                  {/* {showPassword ? (
+                      <EyeIcon class="h-6 w-6 text-gray-500" />
+                    ) : (
+                      <EyeSlashIcon className="h-6 w-6 text-gray-500" />
+                    )} */}
+                </button>
               </div>
               <button
                 type="submit"
