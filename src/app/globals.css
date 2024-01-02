@@ -2,26 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+@media (min-width: 1024px) {
+  .login-bg {
+    background-image: url(../../public/images/event.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+   
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@media (max-width: 1024px) {
+  .login-bg {
+    background-image: url(../../public/images/event.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    
+  }
 }
