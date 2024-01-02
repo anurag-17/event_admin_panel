@@ -1,9 +1,10 @@
 import React from 'react'
+import Login from './admin-module/login'
 
 const page = () => {
   return (
     <div>
-      hello
+    <Login/>
     </div>
   )
 }
