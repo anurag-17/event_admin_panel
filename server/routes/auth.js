@@ -14,8 +14,11 @@ const {
   deleteaUser,
   updatedUser,
   updatePassword,
+  dataa
 } = require("../controllers/auth");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
+
+router.route("/dataa").get(dataa);
 
 router.route("/login").post(login);
 
