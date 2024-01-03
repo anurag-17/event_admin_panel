@@ -1,12 +1,17 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-import dashboard from "../../../public/images/dashboard.svg";
-import eventadd from "../../../public/images/event-add.svg";
-import eventlist from "../../../public/images/event-list.svg";
-import setting from "../../../public/images/setting.svg";
-import inquiry from "../../../public/images/close-square.svg";
+import dashboard from "../../../../public/images/dashboard.svg";
+import eventadd from "../../../../public/images/event-add.svg";
+import eventlist from "../../../../public/images/event-list.svg";
+import setting from "../../../../public/images/setting.svg";
+import inquiry from "../../../../public/images/close-square.svg";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import logo from "../../../../public/images/event-logo.png";
+import Category from "../../../component/admin/category/category";
+import { Fragment } from "react";
+
 
 export const menulist = [
   {
@@ -23,16 +28,10 @@ export const menulist = [
   },
   {
     id: 3,
-    label: "Event List",
-    component: "",
+    label: "Category",
+    component: <Category/>,
     icon: eventlist,
   },
-  //   {
-  //     id: 4,
-  //     label: "Enquiry",
-  //     component: "",
-  //     icon: inquiry,
-  //   },
   {
     id: 4,
     label: "Setting",
@@ -42,7 +41,25 @@ export const menulist = [
 ];
 
 const AdminDashboard = () => {
+  const [ComponentId, setComponentId] = useState(1);
   const [showDrawer, setShowDrawer] = useState("");
+  const [userToken, setUserToken] = useState(null);
+  const router = useRouter();
+
+  const handleClick = (id) => {
+    setComponentId(id);
+    setShowDrawer(false);
+  };
+
+  const handleSignout = () => {
+    console.log("Logging out...");
+    setUserToken(null);
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userDetails");
+    router.push("/admin");
+  };
+
+ 
 
   return (
     <section className="">
@@ -73,7 +90,9 @@ const AdminDashboard = () => {
               <Image src={inquiry} className="md:w-10 sm:w-8  w-7" />{" "}
             </div>
           </div>
-
+          {/* <div>
+  <Image src={logo} />
+</div> */}
           <div className="">
             <div className="flex justify-center items-center whitespace-pre-wrap ">
               <h1 className="2xl:text-[35px] lg:text-[18px] md:text-[18px] sm:text-[16px] text-[14px] font-semibold  text-center whitespace-nowrap ">
@@ -81,10 +100,20 @@ const AdminDashboard = () => {
               </h1>
             </div>
           </div>
-          <div className="flex flex-col 2xl:gap-6 gap-3 ">
+          <div className="flex flex-col 2xl:gap-6 gap-3 lg:mt-14 xl:mt-20 2xl:mt-28">
             {menulist.map((item, index) => (
-              <div className="sm:pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[25px] xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px] ">
-                {" "}
+            
+
+                <div
+                  key={index}
+                  className={`sm:pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[25px] xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]  
+                                    ${
+                                      item.id === ComponentId
+                                        ? "bg-menu_secondary"
+                                        : "hover:menu_secondary hover:text-white hover:rounded-md"
+                                    }  `}
+                  onClick={() => handleClick(item.id)}
+                >
                 <Image
                   src={item?.icon}
                   alt={item.label}
@@ -98,13 +127,23 @@ const AdminDashboard = () => {
           </div>
           <div className="">
             <div>
-              <div className="sm:pl-6 py-3 mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[16px] 2xl:text-[25px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]">
+              <div
+                onClick={handleSignout}
+                className="lg:mt-14 xl:mt-20 2xl:mt-28 sm:pl-6 py-3 mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[16px] 2xl:text-[25px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]"
+              >
                 <p>Sign Out</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="bg-[#f3f3f3] w-full"></div>
+        <div className="bg-[#f3f3f3] w-full">
+
+        {menulist.map((item, index) => (
+            <Fragment key={index}>
+              {ComponentId === item.id && item.component}
+            </Fragment>
+          ))}
+        </div>
       </div>
     </section>
   );
