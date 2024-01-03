@@ -2,18 +2,19 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import the styles
+import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 
 const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
   const [title, setTitle] = useState("");
   const router = useRouter();
-    // const { auth_token } = ((state) => state.adminAuth || null);
-    const auth_token = JSON.parse(localStorage.getItem("accessToken"))
-    console.log(auth_token,"token")
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [isLoading, setLoading] = useState(false);
+  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  console.log(auth_token, "token");
 
+  const handleSubmit = async (e) => {
+    e && e.preventDefault();
+    setLoading(true);
     const data = {
       title: title,
     };
@@ -29,17 +30,15 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
       })
         .then((res) => {
           if (res.ok) {
-            router.push("/categories");
-            toast.success("Category created successfully!");
+            // router.push("/categories");
             refreshData();
             closeDrawer();
+            setLoading(false);
           } else {
-            throw new Error("Server error");
           }
         })
         .catch((e) => {
           console.log(e);
-          toast.error("Server error!");
         });
     } catch (error) {
       console.error(error);
@@ -48,7 +47,6 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
 
   return (
     <>
-      <ToastContainer />
       <div
         className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
       2xl:px-5  2xl:h-[50px] 2xl:my-5

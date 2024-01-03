@@ -8,10 +8,10 @@ import setting from "../../../../public/images/setting.svg";
 import inquiry from "../../../../public/images/close-square.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import logo from "../../../../public/images/event-logo.png";
-import Category from "../../../component/admin/category/category";
+import logo from "../../../../public/images/sterna-logo.png";
+import Category from "../../../component/admin/category";
+import SubCategoryPage from "../../../component/admin/sub-category/index";
 import { Fragment } from "react";
-
 
 export const menulist = [
   {
@@ -29,11 +29,17 @@ export const menulist = [
   {
     id: 3,
     label: "Category",
-    component: <Category/>,
+    component: <Category />,
     icon: eventlist,
   },
   {
     id: 4,
+    label: "Sub-Category",
+    component: <SubCategoryPage />,
+    icon: eventlist,
+  },
+  {
+    id: 5,
     label: "Setting",
     component: "",
     icon: setting,
@@ -59,11 +65,9 @@ const AdminDashboard = () => {
     router.push("/admin");
   };
 
- 
-
   return (
-    <section className="">
-      <div className="flex min-h-screen relative lg:static">
+    <section className="z-0">
+      <div className="flex min-h-screen relative lg:static ">
         <div
           className="py-2 px-3  absolute top-4 left-2 flex flex-col gap-[5px] cursor-pointer lg:hidden"
           onClick={() => setShowDrawer(true)}
@@ -73,7 +77,7 @@ const AdminDashboard = () => {
           <div className="bg-black h-[2px] w-[20px]"></div>
         </div>
         <div
-          className={`flex flex-col justify-between min-h-screen md:py-[20px] lg:py-[70px] xl:py-[60px] 2xl:py-[100px] py-[10px] text-white bg-black 
+          className={`flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[30px] 2xl:py-[50px] py-[10px] text-white bg-black 
         xl:w-[22%] lg:w-[23%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
                  ${
                    showDrawer
@@ -90,30 +94,28 @@ const AdminDashboard = () => {
               <Image src={inquiry} className="md:w-10 sm:w-8  w-7" />{" "}
             </div>
           </div>
-          {/* <div>
-  <Image src={logo} />
-</div> */}
+          <div className="flex ">
+            <Image src={logo} className="w-32 sm:w-28 md:w-36 xl:w-40 2xl:w-56 lg:w-32 mx-auto" />
+          </div>
           <div className="">
-            <div className="flex justify-center items-center whitespace-pre-wrap ">
-              <h1 className="2xl:text-[35px] lg:text-[18px] md:text-[18px] sm:text-[16px] text-[14px] font-semibold  text-center whitespace-nowrap ">
+            <div className="flex justify-center items-center whitespace-pre-wrap lg:mt-4 xl:mt-5 2xl:mt-7 md:mt-2 mt-4">
+              <h1 className="2xl:text-[30px] lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-semibold  text-center whitespace-nowrap ">
                 Admin Dashboard
               </h1>
             </div>
           </div>
-          <div className="flex flex-col 2xl:gap-6 gap-3 lg:mt-14 xl:mt-20 2xl:mt-28">
+          <div className="flex flex-col 2xl:gap-6 gap-1 mt-10 lg:mt-14 xl:mt-20 2xl:mt-28">
             {menulist.map((item, index) => (
-            
-
-                <div
-                  key={index}
-                  className={`sm:pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[25px] xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]  
+              <div
+                key={index}
+                className={`sm:pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[25px] xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]  
                                     ${
                                       item.id === ComponentId
                                         ? "bg-menu_secondary"
                                         : "hover:menu_secondary hover:text-white hover:rounded-md"
                                     }  `}
-                  onClick={() => handleClick(item.id)}
-                >
+                onClick={() => handleClick(item.id)}
+              >
                 <Image
                   src={item?.icon}
                   alt={item.label}
@@ -129,7 +131,7 @@ const AdminDashboard = () => {
             <div>
               <div
                 onClick={handleSignout}
-                className="lg:mt-14 xl:mt-20 2xl:mt-28 sm:pl-6 py-3 mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[16px] 2xl:text-[25px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]"
+                className="lg:mt-10 xl:mt-14 2xl:mt-24 sm:pl-6 py-3 mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[16px] 2xl:text-[25px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]"
               >
                 <p>Sign Out</p>
               </div>
@@ -137,8 +139,7 @@ const AdminDashboard = () => {
           </div>
         </div>
         <div className="bg-[#f3f3f3] w-full">
-
-        {menulist.map((item, index) => (
+          {menulist.map((item, index) => (
             <Fragment key={index}>
               {ComponentId === item.id && item.component}
             </Fragment>

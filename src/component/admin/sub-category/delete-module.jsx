@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
@@ -18,12 +19,13 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
 
     const options = {
       method: "DELETE",
-      url: "http://localhost:4000/api/category/deleteCategory",
-      data :{
+      url: "http://localhost:4000/api/subCategory/deleteSubCategory",
+      data: {
         id: categoryID,
       },
       headers: {
         Accept: "application/json",
+        "Content-Type": "application/json",
         authorization: auth_token,
       },
     };
@@ -31,14 +33,14 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
     axios
       .request(options)
       .then(function (response) {
-        console.log(response);
         if (response.status === 200) {
           setLoading(false);
-          toast.success("category deleted successfully !");
+          // toast.success("Sub Category deleted successfully !");
           handleClose();
           refreshData();
         } else {
           setLoading(false);
+          toast.error("Failed, server error!");
           return;
         }
       })
