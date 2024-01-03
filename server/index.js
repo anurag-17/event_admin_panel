@@ -9,6 +9,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const path = require("path");
 const dotenv = require("dotenv");
+const passport = require('passport');
 
 // Connect Database
 connectDB();
@@ -48,8 +49,18 @@ app.get("/", (req, res) => {
   res.send("API is running..");
 });
 
+// Auth and User 
 app.use("/api/auth", require("./routes/auth"));
-app.use("/api/category", require("./routes/category"))
+
+// Category
+app.use("/api/category", require("./routes/category"));
+
+// Sub Category
+app.use("/api/subCategory", require("./routes/subCategory"));
+
+// Events
+app.use("/api/event", require("./routes/event"));
+
 app.use("/api/auth/upload", require("./routes/auth"));
 
 // Error Handler 
