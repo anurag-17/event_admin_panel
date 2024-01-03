@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-import EditCate from "./category-edit";
+import EditCate from "./edit-module";
 import { Transition, Dialog } from "@headlessui/react";
 import { Fragment } from "react";
-import DeleteModuleC from "./cate-delete";
-import CreateCategoryForm from "./add-cate";
+import DeleteModuleC from "./delete-module";
+import CreateCategoryForm from "./add-module";
 
 const Category = () => {
   const [getAllCate, setGetAllCate] = useState([]);
@@ -15,6 +15,7 @@ const Category = () => {
   const [editData, setEditData] = useState([]);
   const [categoryID, setCategoryID] = useState("");
   const [isOpenDelete, setOpenDelete] = useState(false);
+  const [isRefresh, setRefresh] = useState(false);
 
   const openDrawerO = async (_id) => {
     setCateEdit(_id);
@@ -65,7 +66,7 @@ const Category = () => {
   // -------GetAll category---------
   useEffect(() => {
     defaultgetAllCate();
-  }, []);
+  }, [isRefresh]);
 
   const defaultgetAllCate = () => {
     const option = {
@@ -86,7 +87,7 @@ const Category = () => {
   return (
     <>
       <div>
-        <div className="flex justify-between items-center 2xl:pt-4 2xl:px-10 border border-[#f3f3f3] rounded-lg   2xl:h-[100px] xl:h-[80px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border mx-10 lg:mx-12 bg-white rounded-lg   2xl:h-[100px] xl:h-[80px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Category List </h2>
 
           <div className="flex items-center w-[40%]">
@@ -100,13 +101,13 @@ const Category = () => {
           </div>
           <h2>Welcome Back, Admin</h2>
         </div>
-        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border border-[#f3f3f3] rounded-lg  w-full 2xl:h-[100px] xl:h-[80px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-12    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
           <div className="">
             <button
               onClick={openDrawer}
-              className="border border-white hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[18px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
+              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
             >
-              + Add Brand
+              + Add Category
             </button>
           </div>
         </div>
@@ -158,21 +159,22 @@ const Category = () => {
             </div>
           </div>
         )}
-        <table className="table-auto bg-white rounded-md mt-5  relative w-full lg:w-8/12 xl:w-8/12 p-10">
+        <div className="mx-10 lg:mx-12 z-10">
+        <table className="border w-full table-auto bg-white rounded-md mt-5   relative   p-10">
           <thead className="">
             <tr
-              className="bg-coolGray-200 text-gray-400 text-start flex w-full 
-          2xl:text-[20px] 
+              className="bg-coolGray-200 text-gray-400 text-start flex  
+          2xl:text-[22px] 
           xl:text-[14px]
            lg:text-[12px] 
            md:text-[12px] 
            sm:text-[12px] 
            text-[10px]"
             >
-              <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ml-5  ">
+              <th className="mx-5 w-2/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
                 S.NO
               </th>
-              <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-4/12 ">
+              <th className="ml-10  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
                 EVENT NAME
               </th>
 
@@ -186,20 +188,20 @@ const Category = () => {
               {getAllCate.map((item, index) => (
                 <tr
                   key={index}
-                  className="text-start flex w-full 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
+                  className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                 >
-                  <td className="mx-5 my-auto w-2/12">{index + 1}</td>
+                  <td className="mx-5 my-auto w-2/12">{index + 1 +"."}</td>
                   <td className="my-auto ml-10 w-4/12">{item.title}</td>
 
                   <td className="w-3/12">
-                    <div className="flex my-3">
+                    <div className="flex my-3 gap-3">
                       <button onClick={() => openDrawerO(item?._id)}>
                         Edit
                       </button>
                       <button
                         type="button"
                         onClick={() => openModal(item?._id)}
-                        className="rounded-md bg-gray-300 bg-opacity-20 px-4 py-2 text-sm font-medium hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                        // className="rounded-md bg-gray-300 bg-opacity-20 px-4 py-2 text-sm font-medium hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                       >
                         Delete
                       </button>
@@ -210,6 +212,7 @@ const Category = () => {
             </tbody>
           )}
         </table>
+        </div>
       </div>
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>

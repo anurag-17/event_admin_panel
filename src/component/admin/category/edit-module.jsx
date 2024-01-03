@@ -6,11 +6,11 @@ import { useSelector } from "react-redux";
 const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
   const [title, setTitle] = useState({
-    id:cateEdit
+    id: cateEdit,
   });
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"))
+  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
   // const { auth_token } = useSelector((state) => state.adminAuth || null);
- console.log(cateEdit);
+  console.log(cateEdit);
   const inputHandler = (e) => {
     const { name, value } = e.target;
 
@@ -37,7 +37,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
       );
 
       if (response.status === 200) {
-        toast.success("Category Update successfully !");
+        // toast.success("Category Update successfully !");
         setLoading(false);
         closeDrawer();
         refreshData();
@@ -54,7 +54,6 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
 
   return (
     <>
-    <ToastContainer/>
       <div
         className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
         2xl:px-5  2xl:h-[50px] 2xl:my-5
