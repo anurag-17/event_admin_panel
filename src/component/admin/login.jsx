@@ -1,11 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import { EyeIcon } from "@heroicons/react/24/outline";
-import { EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const Login = () => {
   const [email, setUsername] = useState("");
@@ -40,7 +38,7 @@ const Login = () => {
             JSON.stringify(response?.data?.user?._id)
           );
           toast.success("Success. Login Successfully!");
-          router.push("/admin-dashboard");
+          router.push("/admin/admin-dashboard");
         } else {
           setLoading(false);
           return;
@@ -48,10 +46,14 @@ const Login = () => {
       })
       .catch(function (error) {
         setLoading(false);
-        toast.error(" Login Failed!")
+        toast.error(" Login Failed!");
         console.error(error);
       });
   };
+
+  const loginwithgoogle = ()=>{
+    window.open("http://localhost:4000/auth/google/callback","_self")
+}
 
   return (
     <>
@@ -128,17 +130,23 @@ const Login = () => {
                   2xl:mt-2 2xl:p-[12px] 2xl:text-[20px] 
                   w-full border rounded-md focus:outline-none "
                 />
+                <div>
+                  <p
+                    className="cursor-pointer text-blue-700  xl:my-1 py-[6px] text-[13px] my-5
+               sm:text-[13px] 
+               md:text-[13px] 
+               lg:text-[12px] 
+               xl:text-[13px]  
+                 2xl:text-[20px] 2xl:my-2"
+                  >
+                    Forgot Password
+                  </p>
+                </div>
                 <button
                   type="button"
                   className="absolute top-1/2  transform -translate-y-1/2 cursor-pointer"
                   onClick={handleToggle}
-                >
-                  {/* {showPassword ? (
-                      <EyeIcon class="h-6 w-6 text-gray-500" />
-                    ) : (
-                      <EyeSlashIcon className="h-6 w-6 text-gray-500" />
-                    )} */}
-                </button>
+                ></button>
               </div>
               <button
                 type="submit"
@@ -153,7 +161,14 @@ const Login = () => {
                 Login
               </button>
             </form>
+
+          <div className="text-center">
+          <button className='login-with-google-btn my-1' onClick={loginwithgoogle}>
+                    Sign In With Google
+                </button>
           </div>
+          </div>
+
         </div>
       </section>
     </>
