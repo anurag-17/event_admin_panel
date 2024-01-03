@@ -26,7 +26,7 @@ module.exports = function (passport) {
 
         try {
           //find the user in our database 
-          let user = await User.findOne({ email: newUser.email })
+          let user = await User.findOne({ email: profile.emails[0].value })
 
           if (user) {
             //If user present in our database.

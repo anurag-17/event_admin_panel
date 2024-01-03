@@ -10,6 +10,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const dotenv = require("dotenv");
 const passport = require('passport');
+const User = require("./models/User");
+const OAuth2Strategy = require('passport-google-oauth20').Strategy;
 
 // Connect Database
 connectDB();
@@ -43,6 +45,74 @@ app.use(
   })
 );
 
+// setuppassport
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  new OAuth2Strategy({
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL:"/auth/google/callback",
+      scope:["profile","email"]
+  },
+  async(accessToken,refreshToken,profile,done)=>{
+
+      try {
+          let user = await User.findOne({email: profile.emails[0].value});
+
+          if(!user){
+              user = new User({
+                // googleId: profile.id,
+                //   displayName: profile.displayName,
+                  firstname: profile.name.givenName,
+                  lastname: profile.name.familyName,
+                //   image: profile.photos[0].value,
+                  email: profile.emails[0].value
+              });
+
+              await user.save();
+          }
+
+          return done(null,user)
+      } catch (error) {
+          return done(error,null)
+      }
+  }
+  )
+)
+
+passport.serializeUser((user,done)=>{
+  done(null,user);
+})
+
+passport.deserializeUser((user,done)=>{
+  done(null,user);
+});
+
+// initial google ouath login
+app.get("/auth/google",passport.authenticate("google",{scope:["profile","email"]}));
+
+app.get("/auth/google/callback",passport.authenticate("google",{
+  successRedirect:"http://localhost:3000/admin/admin-dashboard",
+  failureRedirect:"http://localhost:3000/login"
+}));
+
+app.get("/login/sucess",async(req,res)=>{
+
+  if(req.user){
+      res.status(200).json({message:"user Login",user:req.user})
+  }else{
+      res.status(400).json({message:"Not Authorized"})
+  }
+})
+
+app.get("/logout",(req,res,next)=>{
+  req.logout(function(err){
+      if(err){return next(err)}
+      res.redirect("http://localhost:3000");
+  })
+})
 
 // Backend API is Running Msg 
 app.get("/", (req, res) => {

@@ -20,7 +20,6 @@ const UserSchema = new mongoose.Schema(
     },
     mobile: {
       type: String,
-      required: [true, "Please Enter Mobile No."],
       unique: true,
     },
     password: {
