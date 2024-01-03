@@ -283,7 +283,7 @@ exports.getallUser = async (req, res) => {
     const skip = (page - 1) * limit;
     userQuery.skip(skip).limit(limit);
 
-    const users = await userQuery.populate("wishlist").exec();
+    const users = await userQuery.exec();
 
     // Count total items
     const totalItems = await User.countDocuments();
@@ -375,11 +375,15 @@ exports.updatePassword = async (req, res) => {
 
 exports.dataa = async (req, res) => {
   try {
-    const apiKey = 'DPQLLTeFJAY6GwasReCwul0hkBAxLyv7'; // Replace with your actual API key
-    const response = await axios.get('https://private-anon-ebc054a4b-ticketmasterdiscoveryapi.apiary-mock.com/mfxapi//v2/events?domain&lang&attraction_ids&category_ids&subcategory_ids&event_ids&event_name&venue_ids&city_ids&country_ids&postal_code&lat&long&radius&eventdate_to&eventdate_from&onsaledate_to&onsaledate_from&offsaledate_to&offsaledate_from&min_price&max_price&price_excl_fees&seats_available&cancelled&&is_not_package&sort_by&order&rows&start&excludee_external', {
+    const apiKey = 'DPQLLTeFJAY6GwasReCwul0hkBAxLyv7';
+    const eventId = 'G5diZfkn0B-bh';
+
+    const response = await axios.get(`https://app.ticketmaster.com/discovery/v2/attractions.json?apikey=DPQLLTeFJAY6GwasReCwul0hkBAxLyv7`, {
       headers: {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${apiKey}` // Include your API key here
+        'Host': 'app.ticketmaster.com',
+        'X-Target-URI': 'https://app.ticketmaster.com',
+        'Connection': 'Keep-Alive'
       }
     });
 
@@ -391,20 +395,14 @@ exports.dataa = async (req, res) => {
     res.status(response.status).json(response.data);
   } catch (error) {
     if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
       console.error('Error Status:', error.response.status);
       console.error('Error Headers:', error.response.headers);
       console.error('Error Response:', error.response.data);
-      
-      // Send the error response to the client
       res.status(error.response.status).json(error.response.data);
     } else if (error.request) {
-      // The request was made but no response was received
       console.error('No response received');
       res.status(500).send('Internal Server Error');
     } else {
-      // Something happened in setting up the request
       console.error('Error setting up the request:', error.message);
       res.status(500).send('Internal Server Error');
     }
