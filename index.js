@@ -139,14 +139,14 @@ server.get('/auth/facebook', passport.authenticate('facebook',{scope:['public_pr
 
 // Google Authenticate Callback
 server.get("/auth/google/callback", passport.authenticate("google",{
-  successRedirect:"http://localhost:4000/admin/admin-dashboard",
-  failureRedirect:"http://localhost:4000/login"
+  successRedirect:"http://3.90.234.160:4000/admin/admin-dashboard",
+  failureRedirect:"http://3.90.234.160:4000/login"
 }));
 
 // Facebook Authenticate Callback
 server.get("/auth/facebook/callback", passport.authenticate("facebook",{
-    successRedirect: 'http://localhost:4000/admin/admin-dashboard',
-    failureRedirect: 'http://localhost:4000/login'
+    successRedirect: 'http://3.90.234.160:4000/admin/admin-dashboard',
+    failureRedirect: 'http://3.90.234.160:4000/login'
 }));
 
 server.get("/login/sucess", async (req, res) => {
@@ -162,7 +162,7 @@ server.get("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("http://localhost:4000");
+    res.redirect("http://3.90.234.160:4000");
   });
 });
 
