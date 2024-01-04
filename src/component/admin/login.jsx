@@ -54,6 +54,9 @@ const Login = () => {
   const loginwithgoogle = ()=>{
     window.open("http://localhost:4000/auth/google/callback","_self")
 }
+  const loginwithfacebook = ()=>{
+    window.open("http://localhost:4000/auth/facebook/callback","_self")
+}
 
   return (
     <>
@@ -165,6 +168,11 @@ const Login = () => {
           <div className="text-center">
           <button className='login-with-google-btn my-1' onClick={loginwithgoogle}>
                     Sign In With Google
+                </button>
+          </div>
+          <div className="text-center">
+          <button className='login-with-facebook-btn my-1' onClick={loginwithfacebook}>
+                    Sign In With Facebook
                 </button>
           </div>
           </div>

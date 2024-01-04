@@ -20,7 +20,7 @@ exports.register = async (req, res, next) => {
   const userData = {
     email,
     mobile,
-    role: req.body.role,
+    // role: req.body.role,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     password: req.body.password,

@@ -1,42 +1,50 @@
-require("dotenv").config({ path: "./.env" });
+require("dotenv").config({ path: "./server/.env" });
 const express = require("express");
-const connectDB = require("./config/db");
-const errorHandler = require("./middleware/errorHandler");
+const connectDB = require("./server/config/db");
+const errorHandler = require("./server/middleware/errorHandler");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const next = require('next');
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const path = require("path");
 const dotenv = require("dotenv");
 const passport = require('passport');
-const User = require("./models/User");
+const User = require("./server/models/User");
 const OAuth2Strategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 // Connect Database
-connectDB();
+// connectDB();
 
-const app = express();
+// const app = express();
 
+app.prepare().then(() => {
+  connectDB();
+  const server = express();
 const corsOptions = {
   origin: [
   "http://localhost:3000",
+  "http://localhost:4000",
   "*"
 ],
   credentials: true, 
 };
 
-app.use(cors(corsOptions));
+server.use(cors(corsOptions));
 
-app.use(express.json());
-app.use(cors({ origin: "*" }));
-app.use(cookieParser('secret'));
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "5mb", extended: true }));
-app.use(
+server.use(express.json());
+server.use(cors({ origin: "*" }));
+server.use(cookieParser('secret'));
+server.use(bodyParser.json({ limit: "50mb" }));
+server.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(express.json({ limit: "50mb" }));
+server.use(express.urlencoded({ limit: "5mb", extended: true }));
+server.use(
   session({
     secret: process.env.SECRET_SESSION,
     resave: false,
@@ -46,8 +54,8 @@ app.use(
 );
 
 // set-up-passport
-app.use(passport.initialize());
-app.use(passport.session());
+server.use(passport.initialize());
+server.use(passport.session());
 
 // Google OAuth
 passport.use(
@@ -124,24 +132,24 @@ passport.deserializeUser((user,done)=>{
 });
 
 // Initial Google oauth Login
-app.get("/auth/google",passport.authenticate("google",{scope:["profile","email"]}));
+server.get("/auth/google",passport.authenticate("google",{scope:["profile","email"]}));
 
 // Initial Facebook oauth Login
-app.get('/auth/facebook', passport.authenticate('facebook',{scope:['public_profile', 'email']}));
+server.get('/auth/facebook', passport.authenticate('facebook',{scope:['public_profile', 'email']}));
 
 // Google Authenticate Callback
-app.get("/auth/google/callback", passport.authenticate("google",{
-  successRedirect:"http://localhost:3000/admin/admin-dashboard",
-  failureRedirect:"http://localhost:3000/login"
+server.get("/auth/google/callback", passport.authenticate("google",{
+  successRedirect:"http://localhost:4000/admin/admin-dashboard",
+  failureRedirect:"http://localhost:4000/login"
 }));
 
 // Facebook Authenticate Callback
-app.get("/auth/facebook/callback", passport.authenticate("facebook",{
-    successRedirect: 'http://localhost:3000/admin/admin-dashboard',
-    failureRedirect: 'http://localhost:3000/login'
+server.get("/auth/facebook/callback", passport.authenticate("facebook",{
+    successRedirect: 'http://localhost:4000/admin/admin-dashboard',
+    failureRedirect: 'http://localhost:4000/login'
 }));
 
-app.get("/login/sucess", async (req, res) => {
+server.get("/login/sucess", async (req, res) => {
   if (req.user) {
     res.status(200).json({ message: "user Login", user: req.user });
   } else {
@@ -149,40 +157,44 @@ app.get("/login/sucess", async (req, res) => {
   }
 });
 
-app.get("/logout", (req, res, next) => {
+server.get("/logout", (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
     }
-    res.redirect("http://localhost:3000");
+    res.redirect("http://localhost:4000");
   });
 });
 
-// Backend API is Running Msg 
-app.get("/", (req, res) => {
-  res.send("API is running..");
-});
+// // Backend API is Running Msg 
+// server.get("/", (req, res) => {
+//   res.send("API is running..");
+// });
 
 // Auth and User 
-app.use("/api/auth", require("./routes/auth"));
+server.use("/api/auth", require("./server/routes/auth"));
 
 // Category
-app.use("/api/category", require("./routes/category"));
+server.use("/api/category", require("./server/routes/category"));
 
 // Sub Category
-app.use("/api/subCategory", require("./routes/subCategory"));
+server.use("/api/subCategory", require("./server/routes/subCategory"));
 
 // Events
-app.use("/api/event", require("./routes/event"));
+server.use("/api/event", require("./server/routes/event"));
 
-app.use("/api/auth/upload", require("./routes/auth"));
+server.use("/api/auth/upload", require("./server/routes/auth"));
+
+server.get('*', (req, res) => {
+  return handle(req, res);
+});
 
 // Error Handler 
-app.use(errorHandler);
+server.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
 
-const server = app.listen(PORT, () =>
+ server.listen(PORT, () =>
   console.log(`Server running on port ${PORT}`)
 );
 // DB error handler
@@ -190,3 +202,5 @@ process.on("unhandledRejection", (err, promise) => {
   console.log(`Log Error: ${err}`);
   server.close(() => process.exit(1));
 });
+
+})

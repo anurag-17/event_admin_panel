@@ -11,11 +11,11 @@ const UserSchema = new mongoose.Schema(
     },
     lastname: {
       type: String,
-      required: [true, "Please Enter Lastname"],
+      // required: [true, "Please Enter Lastname"],
     },
     email: {
       type: String,
-      required: [true, "Please Enter Email Address"],
+      // required: [true, "Please Enter Email Address"],
       unique: true,
     },
     mobile: {
@@ -32,6 +32,12 @@ const UserSchema = new mongoose.Schema(
       default: "user",
     },
     refreshToken: {
+      type: String,
+    },
+    provider: {
+      type: String,
+    },
+    provider_ID: {
       type: String,
     },
     passwordChangedAt: Date,
