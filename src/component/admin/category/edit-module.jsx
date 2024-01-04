@@ -26,7 +26,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
 
     try {
       const response = await axios.put(
-        `http://3.90.234.160:4000/api/category/updateCategory`,
+        `/api/category/updateCategory`,
         title,
         {
           headers: {

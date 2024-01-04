@@ -6,7 +6,7 @@ import { Fragment } from "react";
 import CreateEvent from "./create-module";
 import EditEvent from "./update-module";
 import DeleteEvent from "./delete-module";
-import cut from "../../../../public/images/close-square.svg"
+import cut from "../../../../public/images/close-square.svg";
 
 const Event = () => {
   const [getAllEvent, setGetAllCate] = useState([]);
@@ -23,7 +23,7 @@ const Event = () => {
     try {
       const options = {
         method: "POST",
-        url: "http://3.90.234.160:4000/api/event/getEvent",
+        url: "/api/event/getEvent",
         data: {
           id: _id,
         },
@@ -74,13 +74,13 @@ const Event = () => {
   const defaultEvent = () => {
     const option = {
       method: "GET",
-      url: "http://3.90.234.160:4000/api/event/getAllEvents",
+      url: "/api/event/getAllEvents",
     };
     axios
       .request(option)
       .then((response) => {
         setGetAllCate(response.data.events);
-        console.log(response.data.events, "Event");
+        refreshData();
       })
       .catch((err) => {
         console.log(err, "Error");
@@ -126,8 +126,7 @@ const Event = () => {
               onClick={closeDrawer}
               className=" text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
-              />
+              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
               <span className="sr-only bg-black">Close menu</span>
             </button>
             <div>
@@ -150,8 +149,7 @@ const Event = () => {
               onClick={closeDrawerO}
               className="  shadow-2xl text-sm   top-1  inline-flex items-center justify-center "
             >
-               <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
-              />
+              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
               <span className="sr-only bg-black">Close menu</span>
             </button>
             <div>
@@ -286,4 +284,3 @@ const Event = () => {
 };
 
 export default Event;
-

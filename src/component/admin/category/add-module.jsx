@@ -20,7 +20,7 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
     };
 
     try {
-      await fetch("http://3.90.234.160:4000/api/category/createCategory", {
+      await fetch("/api/category/createCategory", {
         method: "POST",
         headers: {
           "content-type": "application/json",

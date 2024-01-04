@@ -28,7 +28,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
 
     try {
       const response = await axios.put(
-        "http://3.90.234.160:4000/api/subCategory/updateSubCategory",
+        "/api/subCategory/updateSubCategory",
         categoryDetails,
         {
           headers: {
@@ -60,7 +60,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
     setLoadingBtn(true);
     const options = {
       method: "GET",
-      url: "http://3.90.234.160:4000/api/category/getallCategory",
+      url: "/api/category/getallCategory",
     };
 
     axios

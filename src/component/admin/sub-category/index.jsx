@@ -47,7 +47,7 @@ const SubCategoryPage = () => {
     setLoadingBtn(true);
     const options = {
       method: "GET",
-      url: "http://3.90.234.160:4000/api/subCategory/getallSubCategory",
+      url: "/api/subCategory/getallSubCategory",
       headers: {
         "content-type": "application/json",
         authorization: auth_token,
@@ -75,7 +75,7 @@ const SubCategoryPage = () => {
     try {
       const options = {
         method: "POST",
-        url: "http://3.90.234.160:4000/api/subCategory/getSubCategory",
+        url: "/api/subCategory/getSubCategory",
         headers: {
           authorization: auth_token,
         },

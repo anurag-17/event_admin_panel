@@ -95,9 +95,7 @@ const AdminDashboard = () => {
               <Image src={inquiry} className="md:w-10 sm:w-8  w-7" />{" "}
             </div>
           </div>
-          <div className="flex ">
-            <Image src={logo} className="w-32 sm:w-28 md:w-36 xl:w-40 2xl:w-56 lg:w-32 mx-auto" />
-          </div>
+         
           <div className="">
             <div className="flex justify-center items-center whitespace-pre-wrap lg:mt-4 xl:mt-5 2xl:mt-7 md:mt-2 mt-4">
               <h1 className="2xl:text-[30px] lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-semibold  text-center whitespace-nowrap ">
