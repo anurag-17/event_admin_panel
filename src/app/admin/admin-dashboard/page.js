@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import logo from "../../../../public/images/sterna-logo.png";
 import Category from "../../../component/admin/category";
 import SubCategoryPage from "../../../component/admin/sub-category/index";
+import Event from "../../../component/admin/event/index"
 import { Fragment } from "react";
 
 export const menulist = [
@@ -22,8 +23,8 @@ export const menulist = [
   },
   {
     id: 2,
-    label: "Add Event",
-    component: "",
+    label: "Event",
+    component: <Event/>,
     icon: eventadd,
   },
   {
@@ -69,7 +70,7 @@ const AdminDashboard = () => {
     <section className="z-0">
       <div className="flex min-h-screen relative lg:static ">
         <div
-          className="py-2 px-3  absolute top-4 left-2 flex flex-col gap-[5px] cursor-pointer lg:hidden"
+          className="py-2 px-3  absolute top-3 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
           onClick={() => setShowDrawer(true)}
         >
           <div className="bg-black h-[2px] w-[20px]"></div>
