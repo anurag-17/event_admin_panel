@@ -23,7 +23,7 @@ const Event = () => {
     try {
       const options = {
         method: "POST",
-        url: "http://localhost:4000/api/event/getEvent",
+        url: "http://3.90.234.160:4000/api/event/getEvent",
         data: {
           id: _id,
         },
@@ -74,7 +74,7 @@ const Event = () => {
   const defaultEvent = () => {
     const option = {
       method: "GET",
-      url: "http://localhost:4000/api/event/getAllEvents",
+      url: "http://3.90.234.160:4000/api/event/getAllEvents",
     };
     axios
       .request(option)

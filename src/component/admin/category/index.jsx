@@ -22,7 +22,7 @@ const Category = () => {
     try {
       const options = {
         method: "POST",
-        url: "http://localhost:4000/api/category/getCategory",
+        url: "http://3.90.234.160:4000/api/category/getCategory",
         data: {
           id: _id,
         },
@@ -71,7 +71,7 @@ const Category = () => {
   const defaultgetAllCate = () => {
     const option = {
       method: "GET",
-      url: "http://localhost:4000/api/category/getallCategory",
+      url: "http://3.90.234.160:4000/api/category/getallCategory",
     };
     axios
       .request(option)
