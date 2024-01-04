@@ -43,7 +43,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
 
     try {
       const response = await axios.put(
-        `http://3.90.234.160:4000/api/event/updateEvent`,
+        `/api/event/updateEvent`,
         eventDetail,
         {
           headers: {
@@ -74,7 +74,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   const defaultCategory = () => {
     const option = {
       method: "GET",
-      url: "http://3.90.234.160:4000/api/category/getallCategory",
+      url: "/api/category/getallCategory",
     };
     axios
       .request(option)
@@ -94,7 +94,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   const defaultSubCategory = () => {
     const option = {
       method: "GET",
-      url: "http://3.90.234.160:4000/api/subCategory/getallSubCategory",
+      url: "/api/subCategory/getallSubCategory",
     };
     axios
       .request(option)
@@ -129,36 +129,6 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
           onSubmit={handleUpdateCategory}
           className="flex flex-wrap bg-white border  rounded-lg 2xl:p-2 xl:p-2  lg:p-1 md:p-2 p-1  mx-auto"
         >
-          {/* <div className="mt-2">
-            <label
-              className="absolute bg-white z-20 text-gray-800
-            2xl:text-[20px] 2xl:mt-5 2xl:ml-12
-            xl:text-[16px] xl:mt-[6px] xl:ml-7
-            lg:text-[14px] lg:mt-[6px] lg:ml-[26px]
-            md:text-[13px] md:mt-1 md:ml-6
-            sm:text-[11px] sm:mt-[2px] sm:ml-5
-            text-[10px] mt-[0px] ml-4
-            "
-            >
-              Event
-            </label>
-            <input
-              onChange={inputHandler}
-              defaultValue={editData?.name}
-              defaultValue={editData?.title}
-              type="text"
-              name="name"
-              className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12
-               2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-               xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-              lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[13px] md:m-4 md:px-3 md:py-2 md:h-[30px]
-              sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[12px] m-2 px-2 py-1 h-[25px]
-              "
-              required
-            />
-          </div> */}
           {/* ------1.Event Name----- */}
           <div className="w-1/2">
             <label
@@ -491,18 +461,29 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
           </div>
           {/* ------12. Event category----- */}
 
-          <div className="grid grid-cols-6 gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-4 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6">
+          <div className="w-1/2 grid grid-cols-6 gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-4 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6">
             <label
               htmlFor=""
-              className="custom-input-label 2xl:text-[20px] xl:text-[16px] lg:text-[14px] md:text-[12px] sm:text-[10px] text-[12px] px-2 md:px-3 lg:px-4 xl:px-5 2xl:px-0"
+              className="absolute bg-white z-20 text-gray-800
+          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
+          xl:text-[14px] xl:mt-2 xl:ml-8
+          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
+          md:text-[10px] md:mt-2 md:ml-6
+          sm:text-[9px] sm:mt-1 sm:ml-5
+          text-[8px] mt-[2px] ml-4"
             >
               Event Category
             </label>
 
-            <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0">
+            <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0 w-full">
               <select
                 name="category"
-                className="custom-input 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative  2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
+            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
+            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
+            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
+            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
+            text-sm m-2 px-2 py-1 h-[20px] w-full"
                 defaultValue={
                   editData?.category ? editData.category : eventDetail.category
                 }
@@ -534,17 +515,29 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
           </div>
           {/* ------13. Event subCategory----- */}
 
-          <div className="grid grid-cols-6 gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-4 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6 w-1/2">
+          <div className="w-1/2 grid grid-cols-6 gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-4 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6">
             <label
               htmlFor=""
-              className="custom-input-label 2xl:text-[20px] xl:text-[16px] lg:text-[14px] md:text-[12px] sm:text-[10px] text-[12px] px-2 md:px-3 lg:px-4 xl:px-5 2xl:px-0"
+              className="absolute bg-white z-20 text-gray-800
+          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
+          xl:text-[14px] xl:mt-2 xl:ml-8
+          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
+          md:text-[10px] md:mt-2 md:ml-6
+          sm:text-[9px] sm:mt-1 sm:ml-5
+          text-[8px] mt-[2px] ml-4"
             >
-              Event Sub Category
+              Event Category
             </label>
-            <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0">
+
+            <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0 w-full">
               <select
                 name="subCategory"
-                className="custom-input 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative  2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
+            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
+            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
+            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
+            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
+            text-sm m-2 px-2 py-1 h-[20px] w-full"
                 defaultValue={
                   editData?.subCategory
                     ? editData.subCategory
@@ -562,16 +555,16 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                 </option>
                 {getallSubCategory
                   .filter((item, indr) => {
-                    return item?.category?.title === eventDetail.category;
+                    return item?.title === eventDetail.title;
                   })
                   .map((item) => (
                     <option
                       className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                       key={item.id}
-                      value={item.title}
+                      value={item.subCategory}
                       selected={
-                        item.title ===
-                        (editData?.title || eventDetail.subCategory)
+                        item.subCategory ===
+                        (editData?.subCategory || eventDetail.subCategory)
                       }
                     >
                       {item?.subCategory}

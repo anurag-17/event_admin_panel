@@ -4,6 +4,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+// import { BASE_URL } from "../../../";
+
+
 
 const Login = () => {
   const [email, setUsername] = useState("");
@@ -11,18 +14,18 @@ const Login = () => {
   const [isLoading, setLoading] = useState(false);
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-
   const handleToggle = () => {
     setShowPassword(!showPassword);
   };
-
+  // const base_url = process.env.NEXT_PUBLIC_base_url
+  // console.log(process.env.NEXT_PUBLIC_base_url);
   const addFormHandler = (event) => {
     event.preventDefault();
     setLoading(true);
 
     const options = {
       method: "POST",
-      url: "http://3.90.234.160:4000/api/auth/adminLogin",
+      url: `/api/auth/adminLogin`,
       data: { email: email, password: password },
     };
     axios

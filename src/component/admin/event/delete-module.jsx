@@ -18,7 +18,7 @@ const DeleteEvent = ({ eventID, closeModal, refreshData }) => {
 
     const options = {
       method: "DELETE",
-      url: "http://3.90.234.160:4000/api/event/deleteEvent",
+      url: "/api/event/deleteEvent",
       data: {
         id: eventID,
       },

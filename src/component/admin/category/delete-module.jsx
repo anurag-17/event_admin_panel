@@ -18,7 +18,7 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
 
     const options = {
       method: "DELETE",
-      url: "http://3.90.234.160:4000/api/category/deleteCategory",
+      url: "/api/category/deleteCategory",
       data: {
         id: categoryID,
       },
