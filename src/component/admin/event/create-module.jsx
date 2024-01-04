@@ -60,7 +60,7 @@ const CreateEvent = ({ closeDrawer }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:4000/api/event/createEvent", {
+      await fetch("http://3.90.234.160:4000/api/event/createEvent", {
         method: "POST",
         headers: {
           "content-type": "application/json",

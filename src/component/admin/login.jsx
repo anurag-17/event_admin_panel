@@ -22,7 +22,7 @@ const Login = () => {
 
     const options = {
       method: "POST",
-      url: "http://localhost:4000/api/auth/adminLogin",
+      url: "http://3.90.234.160:4000/api/auth/adminLogin",
       data: { email: email, password: password },
     };
     axios

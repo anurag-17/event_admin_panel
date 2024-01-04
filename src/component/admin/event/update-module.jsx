@@ -43,7 +43,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/event/updateEvent`,
+        `http://3.90.234.160:4000/api/event/updateEvent`,
         eventDetail,
         {
           headers: {
@@ -74,7 +74,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   const defaultCategory = () => {
     const option = {
       method: "GET",
-      url: "http://localhost:4000/api/category/getallCategory",
+      url: "http://3.90.234.160:4000/api/category/getallCategory",
     };
     axios
       .request(option)
@@ -94,7 +94,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   const defaultSubCategory = () => {
     const option = {
       method: "GET",
-      url: "http://localhost:4000/api/subCategory/getallSubCategory",
+      url: "http://3.90.234.160:4000/api/subCategory/getallSubCategory",
     };
     axios
       .request(option)
@@ -491,19 +491,14 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
           </div>
           {/* ------12. Event category----- */}
 
-          <div className="w-1/2">
+          <div className="grid grid-cols-6 gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-4 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6">
             <label
-              className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
+              htmlFor=""
+              className="custom-input-label 2xl:text-[20px] xl:text-[16px] lg:text-[14px] md:text-[12px] sm:text-[10px] text-[12px] px-2 md:px-3 lg:px-4 xl:px-5 2xl:px-0"
             >
               Event Category
             </label>
+
             <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0">
               <select
                 name="category"
@@ -544,7 +539,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
               htmlFor=""
               className="custom-input-label 2xl:text-[20px] xl:text-[16px] lg:text-[14px] md:text-[12px] sm:text-[10px] text-[12px] px-2 md:px-3 lg:px-4 xl:px-5 2xl:px-0"
             >
-              Product Sub Category
+              Event Sub Category
             </label>
             <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0">
               <select

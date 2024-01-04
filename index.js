@@ -28,7 +28,7 @@ app.prepare().then(() => {
 const corsOptions = {
   origin: [
   "http://localhost:3000",
-  "http://localhost:4000",
+  "http://3.90.234.160:4000",
   "*"
 ],
   credentials: true, 

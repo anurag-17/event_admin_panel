@@ -21,7 +21,7 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
     };
 
     try {
-      await fetch("http://localhost:4000/api/subCategory/createSubCategory", {
+      await fetch("http://3.90.234.160:4000/api/subCategory/createSubCategory", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -58,7 +58,7 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
   const defaultCategory = () => {
     const option = {
       method: "GET",
-      url: "http://localhost:4000/api/category/getallCategory",
+      url: "http://3.90.234.160:4000/api/category/getallCategory",
     };
     axios
       .request(option)
