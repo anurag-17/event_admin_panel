@@ -1,9 +1,9 @@
 const ShowSubCategory = ({ allSubCategory, openDrawerO, openModal }) => {
   console.log(allSubCategory);
   return (
-    <div className="mx-10 lg:mx-10">
+    <div className="mx-10 lg:mx-8">
 
-     <table className="border w-11/12 table-auto  bg-white rounded-md mt-5  relative lg:w-full  ">
+     <table className="border w-full table-auto  bg-white rounded-md mt-5  relative lg:w-full  ">
       <thead className="">
         <tr
           className="bg-coolGray-200 text-gray-400 text-start flex w-full 
