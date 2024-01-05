@@ -66,7 +66,7 @@ const Login = () => {
     <>
       <ToastContainer />
       <section className="h-screen bg-[#FCEBF2] flex items-center ">
-        <div className="bg-white mx-auto flex flex-col lg:flex-row  w-1/3 lg:w-1/2 lg:rounded-r-[20px] lg:rounded-t-[20px] rounded-t-[20px] rounded-b-[20px]">
+        <div className="bg-white mx-auto flex flex-col lg:flex-row w-3/4 sm:w-2/4 lg:w-1/2 lg:rounded-r-[20px] lg:rounded-t-[20px] rounded-t-[20px] rounded-b-[20px]">
           <div className="w-full lg:w-1/2 h-[200px] lg:h-auto login-bg"></div>
           <div className="w-full lg:w-1/2">
             <form
@@ -168,13 +168,13 @@ const Login = () => {
                 Login
               </button>
 
-              <div className="flex justify-center gap-2 sm:gap-3 lg:gap-4 2xl:gap-5 my-1">
+              <div className="flex justify-center gap-4 sm:gap-3 lg:gap-4 2xl:gap-5 my-1">
               <div className="text-center">
                 <button
                   className="login-with-google-btn my-1"
                   onClick={loginwithgoogle}
                 >
-                  <Image src={google} className="w-4 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9" />
+                  <Image src={google} className="w-6 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9" />
                 </button>
               </div>
               <div className="text-center">
@@ -182,12 +182,12 @@ const Login = () => {
                   className="login-with-facebook-btn my-1"
                   onClick={loginwithfacebook}
                 >
-                  <Image src={facebook} className="w-4 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9" />
+                  <Image src={facebook} className="w-6 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9" />
                 </button>
               </div>
               <div className="text-center">
                 <button className="login-with-facebook-btn my-1">
-                  <Image src={apple} className="w-4 sm:w-5 md:w-6 xl:w-7 2xl:w-9" />
+                  <Image src={apple} className="w-6 sm:w-5 md:w-6 xl:w-7 2xl:w-9" />
                 </button>
               </div>
             </div>
