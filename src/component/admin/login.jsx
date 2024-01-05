@@ -8,6 +8,7 @@ import google from "../../../public/images/google-icon.svg";
 import facebook from "../../../public/images/facebook-icon.svg";
 import apple from "../../../public/images/apple-icon.svg";
 import Image from "next/image";
+import Link from "next/link";
 
 const Login = () => {
   const [email, setUsername] = useState("");
@@ -138,16 +139,18 @@ const Login = () => {
                   w-full border rounded-md focus:outline-none "
                 />
                 <div>
-                  <p
-                    className="cursor-pointer text-blue-700  xl:my-1 py-[6px] text-[13px] my-5
+                  <Link href="./" >
+                    <p
+                      className="cursor-pointer text-blue-700  xl:my-1 py-[6px] text-[13px] my-5
                sm:text-[13px] 
                md:text-[13px] 
                lg:text-[12px] 
                xl:text-[13px]  
                  2xl:text-[20px] 2xl:my-2"
-                  >
-                    Forgot Password
-                  </p>
+                    >
+                      Forgot Password
+                    </p>
+                  </Link>
                 </div>
                 <button
                   type="button"
@@ -169,30 +172,38 @@ const Login = () => {
               </button>
 
               <div className="flex justify-center gap-4 sm:gap-3 lg:gap-4 2xl:gap-5 my-1">
-              <div className="text-center">
-                <button
-                  className="login-with-google-btn my-1"
-                  onClick={loginwithgoogle}
-                >
-                  <Image src={google} className="w-6 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9" />
-                </button>
+                <div className="text-center">
+                  <button
+                    className="login-with-google-btn my-1"
+                    onClick={loginwithgoogle}
+                  >
+                    <Image
+                      src={google}
+                      className="w-6 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9"
+                    />
+                  </button>
+                </div>
+                <div className="text-center">
+                  <button
+                    className="login-with-facebook-btn my-1"
+                    onClick={loginwithfacebook}
+                  >
+                    <Image
+                      src={facebook}
+                      className="w-6 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9"
+                    />
+                  </button>
+                </div>
+                <div className="text-center">
+                  <button className="login-with-facebook-btn my-1">
+                    <Image
+                      src={apple}
+                      className="w-6 sm:w-5 md:w-6 xl:w-7 2xl:w-9"
+                    />
+                  </button>
+                </div>
               </div>
-              <div className="text-center">
-                <button
-                  className="login-with-facebook-btn my-1"
-                  onClick={loginwithfacebook}
-                >
-                  <Image src={facebook} className="w-6 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9" />
-                </button>
-              </div>
-              <div className="text-center">
-                <button className="login-with-facebook-btn my-1">
-                  <Image src={apple} className="w-6 sm:w-5 md:w-6 xl:w-7 2xl:w-9" />
-                </button>
-              </div>
-            </div>
             </form>
-            
           </div>
         </div>
       </section>

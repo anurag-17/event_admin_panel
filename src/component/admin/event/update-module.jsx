@@ -485,10 +485,10 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                   <option
                     className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                     key={item._id}
-                    value={item.title}
+                    value={item._id}
                     selected={
-                      item.title ===
-                      (editData?.category || eventDetail.category)
+                      item._id ===
+                      (editData?._id || eventDetail.category)
                     }
                   >
                     {item.title}
