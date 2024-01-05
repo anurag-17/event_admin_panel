@@ -5,9 +5,9 @@ const Pagination = ({ total_pages, current_page, onPageChange }) => {
 
   return (
     <>
-           <div className="flex justify-end items-center gap-1 xl:gap-2 ">
+           <div className="flex justify-center items-center gap-2 xl:gap-2 mt-14 mb-16">
       <button
-        className="flex items-center sm:gap-1 xl:gap-2 px-6 py-3 font-sans 2xl:text-[16px] xl:text-[16px] lg:text-[12px] md:text-[12px] sm:text-[10px] font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        className="flex items-center sm:gap-1 xl:gap-2 px-6 py-3 font-sans 2xl:text-xl xl:text-[16px] lg:text-[12px] md:text-[12px] sm:text-[10px] text-[10px] font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
         type="button"
         onClick={() => onPageChange(current_page - 1)}
         disabled={current_page === 1}
@@ -24,8 +24,8 @@ const Pagination = ({ total_pages, current_page, onPageChange }) => {
             key={page}
             className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg ${
               page === current_page
-                ? 'bg-gray-900 text-white shadow-md shadow-gray-900/10'
-                : 'text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20'
+              ? 'bg-gray-400  text-[10px] text-black shadow-md shadow-gray-900/10'
+                : ' hover:bg-gray-900/10 '
             } text-center align-middle font-sans 2xl:text-xl xl:text-[16px] lg:text-[12px] md:text-[12px] sm:text-[10px] font-medium uppercase transition-all disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
             type="button"
             onClick={() => onPageChange(page)}
@@ -36,7 +36,7 @@ const Pagination = ({ total_pages, current_page, onPageChange }) => {
         ))}
       </div>
       <button
-        className="flex items-center gap-2 px-6 py-3 font-sans 2xl:text-[16px] xl:text-[16px] lg:text-[12px] md:text-[12px] sm:text-[10px] font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+         className="flex items-center  gap-2 lg:px-6 lg:py-3 font-sans 2xl:text-xl xl:text-[16px] lg:text-[12px] md:text-[12px] sm:text-[10px] text-[10px] font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
         type="button"
         onClick={() => onPageChange(current_page + 1)}
         disabled={current_page === total_pages}
