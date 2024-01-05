@@ -3,10 +3,15 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+import axios from "axios";
 
 const CreateEvent = ({ closeDrawer }) => {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
+  const [getallSubCategory, setGetallSubCategory] = useState([]);
+  const [getallCategory, setGetallCategory] = useState([]);
+
   const auth_token = JSON.parse(localStorage.getItem("accessToken"));
   console.log(auth_token, "token");
   const [eventDetail, setEventDetail] = useState({
@@ -82,6 +87,44 @@ const CreateEvent = ({ closeDrawer }) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  useEffect(() => {
+    defaultCategory();
+  }, []);
+
+  const defaultCategory = () => {
+    const option = {
+      method: "GET",
+      url: "/api/category/getallCategory",
+    };
+    axios
+      .request(option)
+      .then((response) => {
+        setGetallCategory(response?.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  useEffect(() => {
+    defaultSubCategory();
+  }, []);
+
+  const defaultSubCategory = () => {
+    const option = {
+      method: "GET",
+      url: "/api/subCategory/getallSubCategory",
+    };
+    axios
+      .request(option)
+      .then((response) => {
+        setGetallSubCategory(response?.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -167,7 +210,7 @@ const CreateEvent = ({ closeDrawer }) => {
         </div>
         {/* ------3. Event startDate----- */}
 
-         <div className="w-1/2">
+        <div className="w-1/2">
           <label
             className="absolute bg-white z-20 text-gray-800
           2xl:text-[18px] 2xl:mt-6 2xl:ml-14
@@ -183,7 +226,7 @@ const CreateEvent = ({ closeDrawer }) => {
           <input
             onChange={inputHandler}
             value={eventDetail.startDate}
-            type="text"
+            type="date"
             name="startDate"
             className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
             xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
@@ -194,7 +237,7 @@ const CreateEvent = ({ closeDrawer }) => {
             "
             required
           />
-        </div> 
+        </div>
         {/* ------4. Event endDate----- */}
 
         <div className="w-1/2">
@@ -213,7 +256,7 @@ const CreateEvent = ({ closeDrawer }) => {
           <input
             onChange={inputHandler}
             value={eventDetail.endDate}
-            type="text"
+            type="date"
             name="endDate"
             className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
             xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
@@ -224,7 +267,7 @@ const CreateEvent = ({ closeDrawer }) => {
             "
             required
           />
-        </div> 
+        </div>
         {/* ------5. Event location----- */}
 
         <div className="w-1/2">
@@ -440,62 +483,83 @@ const CreateEvent = ({ closeDrawer }) => {
 
         <div className="w-1/2">
           <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
+            htmlFor="category"
+            className="absolute bg-white z-20 text-gray-800 2xl:text-[18px] 2xl:mt-6 2xl:ml-14 xl:text-[14px] xl:mt-2 xl:ml-8 lg:text-[12px] lg:mt-[10px] lg:ml-[26px] md:text-[10px] md:mt-2 md:ml-6 sm:text-[9px] sm:mt-1 sm:ml-5 text-[8px] mt-[2px] ml-4"
           >
             Event Category
           </label>
-          <input
-            onChange={inputHandler}
-            value={eventDetail.category}
-            type="text"
-            name="category"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
-          />
+
+          <div className="">
+            <select
+              name="category"
+              className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px] xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px] lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px] md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px] sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px] text-sm m-2 px-2 py-1 h-[20px] w-10/12 lg:w-8/12"
+              onChange={inputHandler}
+              required
+              minLength={3}
+              maxLength={32}
+            >
+              <option value="">Select Category</option>
+              {getallCategory.map((item) => (
+                <option
+                  key={item.id}
+                  value={item._id}
+                  selected={item._id === eventDetail.title}
+                  className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                >
+                  {item.title}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+
         {/* ------13. Event subCategory----- */}
 
-        <div className="w-1/2">
+        <div className="w-1/2 ">
           <label
+            htmlFor=""
             className="absolute bg-white z-20 text-gray-800
           2xl:text-[18px] 2xl:mt-6 2xl:ml-14
           xl:text-[14px] xl:mt-2 xl:ml-8
           lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
           md:text-[10px] md:mt-2 md:ml-6
           sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
+          text-[8px] mt-[2px] ml-4"
           >
             Event SubCategory
           </label>
-          <input
-            onChange={inputHandler}
-            value={eventDetail.subCategory}
-            type="text"
-            name="subCategory"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
+
+          <div className="">
+            <select
+              name="subCategory"
+              className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative  2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
             xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
             lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
             md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
             sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
-          />
+            text-sm m-2 px-2 py-1 h-[20px] w-10/12  lg:w-8/12"
+              onChange={inputHandler}
+              required
+              minLength={3}
+              maxLength={32}
+            >
+              <option value="" >
+                Select SubCategory
+              </option>
+              {getallSubCategory.map((item) => (
+                <option
+                  key={item.id}
+                  value={item.subCategory}
+                  selected={item.title === eventDetail.subCategory}
+                  className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                >
+                  {item.subCategory}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+
         {/* ------14. Event capacity----- */}
 
         <div className="w-1/2">

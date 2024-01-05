@@ -9,6 +9,9 @@ import ShowSubCategory from "../sub-category/showSubCategory";
 import DeleteModuleC from "../sub-category/delete-module";
 import AddSubCategory from "./create-module";
 import EditSubCategory from "../sub-category/edit-module";
+import Loader from "../../loader";
+import cut from "../../../../public/images/close-square.svg";
+import Image from "next/image";
 
 const SubCategoryPage = () => {
   const [isOpenDelete, setOpenDelete] = useState(false);
@@ -21,6 +24,7 @@ const SubCategoryPage = () => {
   const [isLoadingBtn, setLoadingBtn] = useState(false);
   const [allSubCategory, setAllCategory] = useState([]);
   const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const [isLoader, setLoader] = useState(false);
 
   const openSubCategory = () => {
     setSubCateDrwaer(true);
@@ -44,6 +48,8 @@ const SubCategoryPage = () => {
   }, [isRefresh]);
 
   const defaultCategory = () => {
+    setLoader(true);
+
     setLoadingBtn(true);
     const options = {
       method: "GET",
@@ -59,6 +65,7 @@ const SubCategoryPage = () => {
       .then((response) => {
         setAllCategory(response?.data);
         setLoadingBtn(false);
+        setLoader(false);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -72,6 +79,8 @@ const SubCategoryPage = () => {
 
   const openDrawerO = async ({ subCateId }) => {
     setCateEdit(subCateId);
+    setLoader(true);
+
     try {
       const options = {
         method: "POST",
@@ -87,6 +96,7 @@ const SubCategoryPage = () => {
       if (response.status === 200) {
         setEditData(response?.data);
         setIsDrawerOpenO(true);
+        setLoader(false);
       } else {
         console.error("Error: Unexpected response status");
       }
@@ -103,6 +113,7 @@ const SubCategoryPage = () => {
 
   return (
     <>
+      {isLoader && <Loader />}
       <section>
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7   border flex justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 mx-10 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold "> Sub Category List </h2>
@@ -137,9 +148,10 @@ const SubCategoryPage = () => {
             <button
               type="button"
               onClick={closeSubCategory}
-              className= " border text-gray-400  shadow-2xl text-sm w-14  top-2  inline-flex items-center justify-center "
+              className="  text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
             >
-              Close
+              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
+
               <span className="sr-only bg-black">Close menu</span>
             </button>
             <div>
@@ -161,9 +173,10 @@ const SubCategoryPage = () => {
             <button
               type="button"
               onClick={closeDrawerO}
-              className="border text-gray-400  shadow-2xl text-sm w-14  top-2  inline-flex items-center justify-center "
+              className=" text-gray-400  shadow-2xl text-sm top-2  inline-flex items-center justify-center "
             >
-              Close
+              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
+
               <span className="sr-only bg-black">Close menu</span>
             </button>
             <div>

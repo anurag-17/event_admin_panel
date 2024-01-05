@@ -6,35 +6,24 @@ import { useEffect } from "react";
 
 const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  // console.log(auth_token, "token")
   const [isLoading, setLoading] = useState(false);
   const [getallCategory, setGetallCategory] = useState([]);
   const [getallSubCategory, setGetallSubCategory] = useState([]);
+  // console.log(editData, "data");
 
-  const [eventDetail, setEventDetail] = useState({
-    name: editData?.name || "",
-    description: editData?.description || "",
-    startDate: editData?.startDate || "",
-    endDate: editData?.endDate || "",
-    location: editData?.location || "",
-    city: editData?.city || "",
-    country: editData?.country || "",
-    latitude: editData?.latitude || "",
-    longitude: editData?.longitude || "",
-    price: editData?.price || "",
-    currency: editData?.currency || "",
-    category: editData?.category || "",
-    subCategory: editData?.subCategory || "",
-    capacity: editData?.capacity || "",
-    image: editData?.image || "",
-    resource_url: editData?.resource_url || "",
-  });
+  const [eventDetail, setEventDetail] = useState(editData);
 
   const inputHandler = (e) => {
-    const { name, value } = e.target;
-    setEventDetail((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    console.log(e.target.name);
+    console.log(e.target.value);
+    const { name, value } = e.target.value;
+    // setEventDetail((prevData) => ({
+    //   ...prevData,
+    //   [name]: value,
+    // }));
+    setEventDetail({...eventDetail,[e.target.name]:e.target.value})
+    console.log(eventDetail)
   };
 
   const handleUpdateCategory = async (e) => {
@@ -42,16 +31,13 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
     setLoading(true);
 
     try {
-      const response = await axios.put(
-        `/api/event/updateEvent`,
-        eventDetail,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: auth_token,
-          },
-        }
-      );
+       
+        const response = await axios.put(`/api/event/updateEvent`, eventDetail, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: auth_token,
+        },
+      });
 
       if (response.status === 200) {
         setLoading(false);
@@ -80,7 +66,6 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
       .request(option)
       .then((response) => {
         setGetallCategory(response?.data);
-        console.log("herry", response?.data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -100,7 +85,6 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
       .request(option)
       .then((response) => {
         setGetallSubCategory(response?.data);
-        console.log("herry", response?.data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -144,11 +128,11 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
               Event Name
             </label>
             <input
-              onChange={inputHandler}
-              defaultValue={editData?.name ? editData?.name : eventDetail.name}
+              defaultValue={editData?.name ? editData?.name : eventDetail?.name}
               required
               type="text"
               name="name"
+              onChange={inputHandler}
               className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
             xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
             lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
@@ -500,7 +484,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                 {getallCategory.map((item) => (
                   <option
                     className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                    key={item.id}
+                    key={item._id}
                     value={item.title}
                     selected={
                       item.title ===
@@ -526,7 +510,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
           sm:text-[9px] sm:mt-1 sm:ml-5
           text-[8px] mt-[2px] ml-4"
             >
-              Event Category
+              Event SubCategory
             </label>
 
             <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0 w-full">
@@ -560,7 +544,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                   .map((item) => (
                     <option
                       className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                      key={item.id}
+                      key={item._id}
                       value={item.subCategory}
                       selected={
                         item.subCategory ===

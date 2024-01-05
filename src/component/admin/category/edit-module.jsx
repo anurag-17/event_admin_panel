@@ -25,16 +25,12 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
     setLoading(true);
 
     try {
-      const response = await axios.put(
-        `/api/category/updateCategory`,
-        title,
-        {
-          headers: {
-            "content-Type": "application/json",
-            authorization: auth_token,
-          },
-        }
-      );
+      const response = await axios.put(`/api/category/updateCategory`, title, {
+        headers: {
+          "content-Type": "application/json",
+          authorization: auth_token,
+        },
+      });
 
       if (response.status === 200) {
         // toast.success("Category Update successfully !");
