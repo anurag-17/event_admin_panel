@@ -14,12 +14,13 @@ import SubCategoryPage from "../../../component/admin/sub-category/index";
 import Event from "../../../component/admin/event/index";
 import { Fragment } from "react";
 import Loader from "../../../component/loader";
+import Dashboard from "../../../component/dashboard"
 
 export const menulist = [
   {
     id: 1,
     label: "Dashboard",
-    component: "",
+    component: <Dashboard/>,
     icon: dashboard,
   },
   {
@@ -75,7 +76,8 @@ const AdminDashboard = () => {
       {isLoader && <Loader />}
 
       <section className="z-0">
-        <div className="flex min-h-screen relative lg:static ">
+   
+       <div className="flex min-h-screen relative lg:static ">
           <div
             className="py-2 px-3  absolute top-3 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
             onClick={() => setShowDrawer(true)}
@@ -152,6 +154,8 @@ const AdminDashboard = () => {
             ))}
           </div>
         </div>
+        
+     
       </section>
     </>
   );
