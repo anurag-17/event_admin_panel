@@ -4,9 +4,10 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-// import { BASE_URL } from "../../../";
-
-
+import google from "../../../public/images/google-icon.svg";
+import facebook from "../../../public/images/facebook-icon.svg";
+import apple from "../../../public/images/apple-icon.svg";
+import Image from "next/image";
 
 const Login = () => {
   const [email, setUsername] = useState("");
@@ -54,12 +55,12 @@ const Login = () => {
       });
   };
 
-  const loginwithgoogle = ()=>{
-    window.open("http://3.90.234.160:4000/auth/google/callback","_self")
-}
-  const loginwithfacebook = ()=>{
-    window.open("http://3.90.234.160:4000/auth/facebook/callback","_self")
-}
+  const loginwithgoogle = () => {
+    window.open("http://3.90.234.160:4000/auth/google/callback", "_self");
+  };
+  const loginwithfacebook = () => {
+    window.open("http://3.90.234.160:4000/auth/facebook/callback", "_self");
+  };
 
   return (
     <>
@@ -166,20 +167,33 @@ const Login = () => {
               >
                 Login
               </button>
+
+              <div className="flex justify-center gap-2 sm:gap-3 lg:gap-4 2xl:gap-5 my-1">
+              <div className="text-center">
+                <button
+                  className="login-with-google-btn my-1"
+                  onClick={loginwithgoogle}
+                >
+                  <Image src={google} className="w-4 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9" />
+                </button>
+              </div>
+              <div className="text-center">
+                <button
+                  className="login-with-facebook-btn my-1"
+                  onClick={loginwithfacebook}
+                >
+                  <Image src={facebook} className="w-4 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9" />
+                </button>
+              </div>
+              <div className="text-center">
+                <button className="login-with-facebook-btn my-1">
+                  <Image src={apple} className="w-4 sm:w-5 md:w-6 xl:w-7 2xl:w-9" />
+                </button>
+              </div>
+            </div>
             </form>
-
-          <div className="text-center">
-          <button className='login-with-google-btn my-1' onClick={loginwithgoogle}>
-                    Sign In With Google
-                </button>
+            
           </div>
-          <div className="text-center">
-          <button className='login-with-facebook-btn my-1' onClick={loginwithfacebook}>
-                    Sign In With Facebook
-                </button>
-          </div>
-          </div>
-
         </div>
       </section>
     </>
