@@ -23,6 +23,9 @@ const EventSchema = new mongoose.Schema(
     country: {
       type: String,
     },
+    address: {
+      type: String,
+    },
     latitude: {
       type: String,
     },

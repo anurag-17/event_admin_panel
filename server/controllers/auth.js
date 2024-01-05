@@ -1,10 +1,12 @@
 const User = require("../models/User");
+const Event = require("../models/Event")
 const ErrorResponse = require("../utils/errorRes");
 const sendEmail = require("../utils/sendEmail");
 const validateMongoDbId = require("../utils/validateMongodbId");
 // const { generateToken } = require("../config/jwtToken");
 const sendToken = require("../utils/jwtToken");
 const axios = require('axios');
+const cheerio = require('cheerio');
 
 exports.register = async (req, res, next) => {
   const { email, mobile } = req.body;
@@ -376,9 +378,12 @@ exports.updatePassword = async (req, res) => {
 exports.dataa = async (req, res) => {
   try {
     const apiKey = 'DPQLLTeFJAY6GwasReCwul0hkBAxLyv7';
-    const eventId = 'G5diZfkn0B-bh';
 
-    const response = await axios.get(`https://app.ticketmaster.com/discovery/v2/attractions.json?apikey=DPQLLTeFJAY6GwasReCwul0hkBAxLyv7`, {
+    // Fetch events data
+    const response = await axios.get('https://app.ticketmaster.com/discovery/v2/events.json', {
+      params: {
+        apikey: apiKey,
+      },
       headers: {
         'Accept': 'application/json',
         'Host': 'app.ticketmaster.com',
@@ -387,24 +392,68 @@ exports.dataa = async (req, res) => {
       }
     });
 
-    console.log('Status:', response.status);
-    console.log('Headers:', response.headers);
-    console.log('Response:', response.data);
+    const events = response.data._embedded.events;
 
-    // Send the response data to the client
-    res.status(response.status).json(response.data);
-  } catch (error) {
-    if (error.response) {
-      console.error('Error Status:', error.response.status);
-      console.error('Error Headers:', error.response.headers);
-      console.error('Error Response:', error.response.data);
-      res.status(error.response.status).json(error.response.data);
-    } else if (error.request) {
-      console.error('No response received');
-      res.status(500).send('Internal Server Error');
-    } else {
-      console.error('Error setting up the request:', error.message);
-      res.status(500).send('Internal Server Error');
+    // Filter events based on Start and End Dates
+    const filteredEvents = events.filter(event => {
+      const eventStartDate = new Date(event.dates.start.dateTime);
+      const eventEndDate = new Date(event.sales.public.endDateTime);
+
+      const filterStartDate = new Date('2023-12-01T14:30:00');
+      const filterEndDate = new Date('2024-05-21T14:30:00');
+
+      return eventStartDate >= filterStartDate && eventEndDate <= filterEndDate;
+    });
+
+    // Process and save each filtered event to the database
+    for (const event of filteredEvents) {
+      // Check if the event with the same name already exists
+      const existingEvent = await Event.findOne({ name: event.name });
+
+      if (!existingEvent) {
+        // Extract relevant venue information
+        const venueInfo = {
+          city: event._embedded.venues[0].city.name,
+          address: event._embedded.venues[0].address.line1,
+          location: event._embedded.venues[0].name,
+        };
+
+        // Extract relevant event information
+        const eventData = {
+          name: event.name,
+          description: event.info,
+          startDate: event.dates.start.dateTime,
+          endDate: event.sales.public.endDateTime,
+          image: event.images[0].url,
+          price: 'SomePrice', // You may need to adjust this based on Ticketmaster's response
+          resource_url: event.url,
+          ...venueInfo,
+        };
+
+        // Save the event to the database
+        await Event.create(eventData);
+      }
     }
+
+    res.status(200).json({ message: 'Filtered events saved successfully.' });
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).send('Internal Server Error');
   }
 };
+
+// const REACT_APP_GOOGLE_MAP = "AIzaSyA7RsUa_iAL3Lai3U-vW1PpwY5zGyhKOoE"
+// if (req.body?.address && req.body?.address != "") {
+//   await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${req.body?.address}&key=${REACT_APP_GOOGLE_MAP}`).then((res) => {
+//     // console.log(res.data.results[0].geometry.location);
+//     if (res.data.status === "OK") {
+
+//       req.body.google_geo_location = res.data.results[0].geometry.location
+//     } else {
+//       // console.log(res.data);
+//     }
+
+//   }).catch((e) => {
+//     console.log(e);
+//   })
+// }
