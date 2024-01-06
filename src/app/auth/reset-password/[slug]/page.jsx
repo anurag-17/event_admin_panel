@@ -27,7 +27,7 @@ const ResetPassword = ({ params }) => {
 
       if (response.status === 200) {
         setLoading(false);
-        router.push("/login");
+        router.push("/auth/login");
       } else {
         setLoading(false);
       }
@@ -98,7 +98,7 @@ const ResetPassword = ({ params }) => {
                 >
                   {isLoading ? "Loading.." : "Get  link"}
                 </button>
-                <Link href="/login">
+                <Link href="/auth/login">
                   <div className="text-[16px] font-medium underline text-center py-3 cursor-password">
                     Update
                   </div>
