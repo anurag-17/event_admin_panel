@@ -6,24 +6,17 @@ import { useEffect } from "react";
 
 const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   const auth_token = JSON.parse(localStorage.getItem("accessToken"));
-  // console.log(auth_token, "token")
   const [isLoading, setLoading] = useState(false);
   const [getallCategory, setGetallCategory] = useState([]);
   const [getallSubCategory, setGetallSubCategory] = useState([]);
-  // console.log(editData, "data");
-
   const [eventDetail, setEventDetail] = useState(editData);
 
   const inputHandler = (e) => {
     console.log(e.target.name);
     console.log(e.target.value);
     const { name, value } = e.target.value;
-    // setEventDetail((prevData) => ({
-    //   ...prevData,
-    //   [name]: value,
-    // }));
-    setEventDetail({...eventDetail,[e.target.name]:e.target.value})
-    console.log(eventDetail)
+    setEventDetail({ ...eventDetail, [e.target.name]: e.target.value });
+    console.log(eventDetail);
   };
 
   const handleUpdateCategory = async (e) => {
@@ -31,8 +24,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
     setLoading(true);
 
     try {
-       
-        const response = await axios.put(`/api/event/updateEvent`, eventDetail, {
+      const response = await axios.put(`/api/event/updateEvent`, eventDetail, {
         headers: {
           "Content-Type": "application/json",
           authorization: auth_token,
@@ -487,8 +479,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                     key={item._id}
                     value={item._id}
                     selected={
-                      item._id ===
-                      (editData?._id || eventDetail.category)
+                      item._id === (editData?._id || eventDetail.category)
                     }
                   >
                     {item.title}
@@ -650,7 +641,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="border bg-blue-600 text-white  rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
+            className="border bg-blue-500 hover:bg-blue-600 text-white  rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
               xl:text-[14px] xl:py-2 xl:px-4  xl:m-5 xl:mt-0
               lg:text-[12px] lg:py-2 lg:px-3 lg:m-5 lg:mt-0
               md:text-[12px] md:py-1 md:px-2 md:m-4 md:mt-0

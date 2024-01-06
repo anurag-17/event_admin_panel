@@ -75,9 +75,9 @@ const Event = () => {
 
   useEffect(() => {
     defaultEvent(current_page, pageLimit);
-  }, [current_page]);
+  }, [current_page, isRefresh]);
 
-  const pageLimit = 10;
+  const pageLimit = 20;
   const defaultEvent = (page, limit) => {
     setLoader(true);
     const option = {
@@ -313,12 +313,12 @@ const Event = () => {
           </table>
         </div>
       </div>
-  
-       <Pagination
-          total_pages={total_pages}
-          current_page={current_page}
-          onPageChange={handlePageChange}
-        />
+
+      <Pagination
+        total_pages={total_pages}
+        current_page={current_page}
+        onPageChange={handlePageChange}
+      />
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
