@@ -442,7 +442,7 @@ exports.dataa = async (req, res) => {
   }
 };
 
-// const REACT_APP_GOOGLE_MAP = "AIzaSyA7RsUa_iAL3Lai3U-vW1PpwY5zGyhKOoE"
+
 // if (req.body?.address && req.body?.address != "") {
 //   await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${req.body?.address}&key=${REACT_APP_GOOGLE_MAP}`).then((res) => {
 //     // console.log(res.data.results[0].geometry.location);
