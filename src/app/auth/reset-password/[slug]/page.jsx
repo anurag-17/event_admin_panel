@@ -53,7 +53,7 @@ const ResetPassword = ({ params }) => {
      "
           >
             <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">
-              New Password{" "}
+            Change Password{" "}
             </h2>
           </div>
           <div>
@@ -72,7 +72,7 @@ const ResetPassword = ({ params }) => {
         text-[10px] mt-[0px] ml-4
         "
                 >
-                  Email Address
+                  New Password
                 </label>
                 <input
                   type="password"
@@ -91,17 +91,14 @@ const ResetPassword = ({ params }) => {
               </div>
 
               <div className="mt-4">
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-blue-600 font-medium text-white p-2 rounded-lg  hover:bg-blue-800 hover:border  xl:h-[40px] login-btn"
-                >
-                  {isLoading ? "Loading.." : "Get  link"}
-                </button>
                 <Link href="/auth/login">
-                  <div className="text-[16px] font-medium underline text-center py-3 cursor-password">
-                    Update
-                  </div>
+                  <button
+                    type="submit"
+               
+                    className="w-full bg-blue-500 font-medium text-white p-2 rounded-lg  hover:bg-blue-600 hover:border  xl:h-[40px] login-btn"
+                  >
+                  Update Password
+                  </button>
                 </Link>
               </div>
             </form>

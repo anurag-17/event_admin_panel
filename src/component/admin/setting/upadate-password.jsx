@@ -50,14 +50,14 @@ const UpadatePassword = () => {
 
   return (
     <>
-      <div className="flex bg-white ml-5 ">
-        <div className="w-6/12">
-          <div className="bg-white  p-5  ">
-            <h1 className="text-[25px] m-10 mt-0">Change Password</h1>
+      <div className="  bg-white ml-5 w-3/4 lg:w-2/3 xl:w-1/2  mt-20">
+     
+          <div className="bg-white  p-5 border ">
+            <h1 className="text-[25px]  mt-0 font-semibold">Change Password</h1>
 
             <form onSubmit={handleSubmit}>
               <div className="my-16">
-                <div className="mb-3">
+                <div className="">
                   <label
                     className="absolute bg-white z-20 text-gray-800
             2xl:text-[20px] 2xl:mt-5 2xl:ml-12
@@ -158,12 +158,12 @@ const UpadatePassword = () => {
                 <div className="mt-4">
                   <button
                     type="submit"
-                    className="border  rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
-              xl:text-[14px] xl:py-2 xl:px-4  xl:m-5 xl:mt-0
-              lg:text-[12px] lg:py-2 lg:px-3 lg:m-5 lg:mt-0
-              md:text-[12px] md:py-1 md:px-2 md:m-4 md:mt-0
-              sm:text-[11px] sm:py-1  sm:px-1 sm:m-3 sm:mt-0
-              text-[10px] py-[3px] px-1 m-2 mt-0 bg-blue-500 text-white hover:bg-blue-600
+                    className="border  rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2  2xl:mt-0 2xl:ml-10
+              xl:text-[14px] xl:py-2 xl:px-4  xl:mt-0 xl:ml-5
+              lg:text-[12px] lg:py-2 lg:px-3 lg:mt-0 lg:ml-5
+              md:text-[12px] md:py-2 md:px-2  md:mt-0 md:ml-4
+              sm:text-[11px] sm:py-[6px]  sm:px-1  sm:mt-0 sm:ml-3
+              text-[10px] py-[3px] px-[6px] m-2 mt-0 bg-blue-500 text-white hover:bg-blue-600 ml-2
                "
                   >
                     Update Password
@@ -172,8 +172,8 @@ const UpadatePassword = () => {
               </div>
             </form>
           </div>
-        </div>
-        <div className="w-6/12 my-auto"></div>
+       
+        {/* <div className="w-6/12 my-auto"></div> */}
       </div>
     </>
   );

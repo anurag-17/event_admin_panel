@@ -669,26 +669,3 @@ const CreateEvent = ({ closeDrawer }) => {
 };
 
 export default CreateEvent;
-
-// const handleSubmit = async (e) => {
-//   e && e.preventDefault();
-//   setLoading(true);
-//   const data = {
-//     title: title,
-//     name: name,
-//     description: Description,
-//     startDate: startDate,
-//     endDate: endDate,
-//     location: location,
-//     city: city,
-//     country: country,
-//     latitude: latitude,
-//     longitude: longitude,
-//     price: price,
-//     currency: currency,
-//     category: category,
-//     subCategory: subCategory,
-//     capacity: capacity,
-//     image: image,
-//     resource_url: resource_url,
-//   };
