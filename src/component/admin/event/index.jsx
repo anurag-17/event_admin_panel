@@ -12,6 +12,8 @@ import Pagination from "../../pagination";
 
 const Event = () => {
   const [getAllEvent, setGetAllEvent] = useState([]);
+  const [getAllCate, setGetAllCate] = useState([]);
+  const [allSubCategory, setAllSubCategory] = useState([]);
   const [isRefresh, setRefresh] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isDrawerOpenO, setIsDrawerOpenO] = useState(false);
@@ -122,6 +124,53 @@ const Event = () => {
     }
   };
 
+  useEffect(() => {
+    defaultgetAllCate();
+  }, [isRefresh]);
+
+  const defaultgetAllCate = () => {
+    setLoader(true);
+    const option = {
+      method: "GET",
+      url: "/api/category/getallCategory",
+    };
+    axios
+      .request(option)
+      .then((response) => {
+        setGetAllCate(response.data);
+        console.log(response.data, "cate");
+        setLoader(false);
+      })
+      .catch((err) => {
+        console.log(err, "Error");
+      });
+  };
+
+  useEffect(() => {
+    defaultCategory();
+  }, [isRefresh]);
+
+  const defaultCategory = () => {
+    const options = {
+      method: "GET",
+      url: "/api/subCategory/getallSubCategory",
+      headers: {
+        "content-type": "application/json",
+      },
+    };
+
+    axios
+      .request(options)
+      .then((response) => {
+        setAllSubCategory(response?.data);
+        setLoadingBtn(false);
+        setLoader(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <>
       {isLoader && <Loader />}
@@ -141,7 +190,137 @@ const Event = () => {
           </div>
           <h2>Welcome Back, Admin</h2>
         </div>
-        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+          <div>
+            <div className="flex gap-2 lg:gap-2 xl:gap-2 2xl:gap-4">
+              {/* ----- Category-------- */}
+
+              <div>
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by Category
+                    </label>
+                  </div>
+
+                  <select
+                    name="category"
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
+                     md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                     sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px]
+                      text-sm  px-2 py-1 h-[20px] "
+                    required
+                    minLength={3}
+                    maxLength={32}
+                  >
+                    <option value=""> Category</option>
+                    {getAllCate.map((item) => (
+                      <option
+                        key={item.id}
+                        value={item._id}
+                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                      >
+                        {item.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* ----- SubCategory-------- */}
+
+              <div className="">
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by SubCategory
+                    </label>
+                  </div>
+                  <select
+                    name="category"
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
+                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
+                   text-sm  px-2 py-1 h-[20px] "
+                    required
+                    minLength={3}
+                    maxLength={32}
+                  >
+                    <option value=""> SubCategory</option>
+                    {allSubCategory.map((item) => (
+                      <option
+                        key={item.id}
+                        value={item._id}
+                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                      >
+                        {item.subCategory}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* -----Start Date-------- */}
+
+              <div className="">
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by Start Date
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
+                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
+                   text-sm  px-2 py-1 h-[20px] "
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* -----End Date-------- */}
+
+              <div className="">
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by End Date
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
+                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
+                   text-sm  px-2 py-1 h-[20px] "
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* -----Add Event-------- */}
+
           <div className="">
             <button
               onClick={openDrawer}
@@ -201,7 +380,7 @@ const Event = () => {
           </div>
         )}
         <div className="mx-10 lg:mx-8 z-10 ">
-          <table className="border w-full table-auto bg-white rounded-md mt-5   relative   p-10 ">
+          <table className=" table-auto overflow-y-scroll h-[500px] border w-full  bg-white rounded-md mt-5   relative   p-10 ">
             <thead className="">
               <tr
                 className="bg-coolGray-200 text-gray-400 text-start flex  px-2 border
@@ -215,12 +394,10 @@ const Event = () => {
                 <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
                   S.NO
                 </th>
-                <th className="  w-3/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
+                <th className="  w-2/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
                   EVENT NAME
                 </th>
-                <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
-                  Price
-                </th>
+
                 <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
                   City
                 </th>
@@ -234,25 +411,26 @@ const Event = () => {
                 <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
                   Location
                 </th>
+                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                  Category
+                </th>
                 <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
                   Action
                 </th>
               </tr>
             </thead>
             {getAllEvent?.length > 0 && (
-              <tbody className="">
+              <tbody className="overflow-x-scroll w-full">
                 {getAllEvent.map((item, index) => (
                   <tr
                     key={index}
                     className="p-2 text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                   >
                     <td className=" my-auto w-1/12">{index + 1 + "."}</td>
-                    <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
-                      {item.name}
+                    <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
+                      <p className="w-40">{item.name}</p>
                     </td>
-                    <td className="my-auto  w-1/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
-                      {item.price}
-                    </td>
+
                     <td className="my-auto  w-1/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
                       {item.city}
                     </td>
@@ -265,6 +443,35 @@ const Event = () => {
                     <td className="my-auto  w-2/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
                       {item.location}
                     </td>
+                    <td className="my-auto  w-2/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
+                      <div className="">
+                        <select
+                          name="category"
+                          className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
+                     md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                     sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px]
+                      text-sm  px-2 py-1 h-[20px] "
+                          required
+                          minLength={3}
+                          maxLength={32}
+                        >
+                          <option value="">Select</option>
+                          {getAllCate.map((item) => (
+                            <option
+                              key={item.id}
+                              value={item._id}
+                              className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                            >
+                              {item.title}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </td>
+
                     <td className="my-auto  w-1/12 ">
                       <div className="flex my-3 gap-3">
                         <button onClick={() => openDrawerO(item?._id)}>
