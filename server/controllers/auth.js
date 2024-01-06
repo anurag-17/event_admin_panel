@@ -354,12 +354,12 @@ exports.deleteaUser = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   try {
-    const { currentPassword, newPassword } = req.body;
+    const { oldPassword, newPassword } = req.body;
     const { _id } = req.user._id;
 
     const user = await User.findById(_id).select("+password");
     // Verify the current password
-    const isPasswordMatch = await user.matchPasswords(currentPassword);
+    const isPasswordMatch = await user.matchPasswords(oldPassword);
     if (!isPasswordMatch) {
       return res.status(203).json({ message: "Current password is incorrect" });
     }
