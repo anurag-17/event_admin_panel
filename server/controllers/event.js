@@ -25,8 +25,8 @@ exports.deleteEvent = asyncHandler(async (req, res) => {
 });
 
 exports.deleteBulkEvent = asyncHandler(async (req, res) => {
-  const { eventIds } = req.body;
-  const deleteEvents = await Event.deleteMany({ _id: { $in: eventIds } });
+  // const { eventIds } = req.body;
+  const deleteEvents = await Event.deleteMany();
   res.json(deleteEvents);
 });
 
@@ -83,6 +83,17 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
 
 exports.londontheatredirect = asyncHandler(async (req, res) => {
   try {
+    const { startDate, endDate } = req.query;
+
+    // Ensure startDate and endDate are provided
+    if (!startDate || !endDate) {
+      return res.status(400).json({ message: 'Both startDate and endDate are required in the query parameters.' });
+    }
+
+    // Parse the provided dates
+    const filterStartDate = new Date(startDate);
+    const filterEndDate = new Date(endDate);
+
     // Fetch events data
     const eventsResponse = await axios.get(
       "https://api.londontheatredirect.com/rest/v2/Events",
@@ -90,6 +101,9 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         headers: {
           Accept: "application/json",
           "Api-Key": "Testing12345",
+        },
+        params: {
+          // Include any other necessary parameters
         },
       }
     );
@@ -100,9 +114,6 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
     const filteredEvents = events.filter((event) => {
       const eventStartDate = new Date(event.StartDate);
       const eventEndDate = new Date(event.EndDate);
-
-      const filterStartDate = new Date("2023-12-01T14:30:00");
-      const filterEndDate = new Date("2024-05-21T14:30:00");
 
       return eventStartDate >= filterStartDate && eventEndDate <= filterEndDate;
     });
@@ -119,9 +130,8 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
           },
         }
       );
-      // console.log(venueResponse.data);
+
       const venueData = venueResponse.data.Venue;
-      console.log(venueData);
 
       // Extract relevant venue information
       const venueInfo = {

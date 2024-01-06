@@ -18,12 +18,12 @@ const User = require("./server/models/User");
 const OAuth2Strategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 // Connect Database
-// connectDB();
+connectDB();
 
 // const app = express();
 
 app.prepare().then(() => {
-  connectDB();
+  // connectDB();
   const server = express();
 const corsOptions = {
   origin: [
@@ -195,7 +195,7 @@ server.use(errorHandler);
 const PORT = process.env.PORT || 4000;
 
  server.listen(PORT, () =>
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on http://localhost:${PORT}`)
 );
 // DB error handler
 process.on("unhandledRejection", (err, promise) => {

@@ -49,9 +49,11 @@ const EventSchema = new mongoose.Schema(
     capacity: {
       type: String,
     },
-    image: {
-      type: String,
-    },
+    images: [
+      {
+        url: { type: String }
+      },
+    ],
     resource_url: {
       type: String,
     },

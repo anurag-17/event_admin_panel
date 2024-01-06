@@ -375,32 +375,41 @@ exports.updatePassword = async (req, res) => {
   }
 };
 
-exports.dataa = async (req, res) => {
+exports.fetchEvent = async (req, res) => {
   try {
-    const apiKey = 'DPQLLTeFJAY6GwasReCwul0hkBAxLyv7';
+    
+    const apiKey = process.env.TICKETMASTER_API_KEY;
+
+    // Extract start and end dates from query parameters
+    const startDateParam = req.query.startDate;
+    const endDateParam = req.query.endDate;
+
+    // Validate and parse the dates
+    const filterStartDate = new Date(startDateParam);
+    const filterEndDate = new Date(endDateParam);
 
     // Fetch events data
-    const response = await axios.get('https://app.ticketmaster.com/discovery/v2/events.json', {
-      params: {
-        apikey: apiKey,
-      },
-      headers: {
-        'Accept': 'application/json',
-        'Host': 'app.ticketmaster.com',
-        'X-Target-URI': 'https://app.ticketmaster.com',
-        'Connection': 'Keep-Alive'
+    const response = await axios.get(
+      process.env.TICKETMASTER_URL,
+      {
+        params: {
+          apikey: apiKey,
+        },
+        headers: {
+          Accept: "application/json",
+          Host: "app.ticketmaster.com",
+          "X-Target-URI": "https://app.ticketmaster.com",
+          Connection: "Keep-Alive",
+        },
       }
-    });
+    );
 
     const events = response.data._embedded.events;
 
     // Filter events based on Start and End Dates
-    const filteredEvents = events.filter(event => {
+    const filteredEvents = events.filter((event) => {
       const eventStartDate = new Date(event.dates.start.dateTime);
       const eventEndDate = new Date(event.sales.public.endDateTime);
-
-      const filterStartDate = new Date('2023-12-01T14:30:00');
-      const filterEndDate = new Date('2024-05-21T14:30:00');
 
       return eventStartDate >= filterStartDate && eventEndDate <= filterEndDate;
     });
@@ -413,9 +422,12 @@ exports.dataa = async (req, res) => {
       if (!existingEvent) {
         // Extract relevant venue information
         const venueInfo = {
+          country: event._embedded.venues[0].country.name,
           city: event._embedded.venues[0].city.name,
           address: event._embedded.venues[0].address.line1,
           location: event._embedded.venues[0].name,
+          latitude: event._embedded.venues[0].location.latitude,
+          longitude: event._embedded.venues[0].location.longitude,
         };
 
         // Extract relevant event information
@@ -424,8 +436,9 @@ exports.dataa = async (req, res) => {
           description: event.info,
           startDate: event.dates.start.dateTime,
           endDate: event.sales.public.endDateTime,
-          image: event.images[0].url,
-          price: 'SomePrice', // You may need to adjust this based on Ticketmaster's response
+          // image: event.images[0].url,
+          images: event.images.map((image) => ({ url: image.url })),
+          price: 0,
           resource_url: event.url,
           ...venueInfo,
         };
@@ -435,10 +448,10 @@ exports.dataa = async (req, res) => {
       }
     }
 
-    res.status(200).json({ message: 'Filtered events saved successfully.' });
+    res.status(200).json({ message: "Filtered events saved successfully." });
   } catch (error) {
-    console.error('Error:', error.message);
-    res.status(500).send('Internal Server Error');
+    console.error("Error:", error.message);
+    res.status(500).send("Internal Server Error");
   }
 };
 

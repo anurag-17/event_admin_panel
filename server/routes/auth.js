@@ -14,11 +14,11 @@ const {
   deleteaUser,
   updatedUser,
   updatePassword,
-  dataa
+  fetchEvent
 } = require("../controllers/auth");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
-router.route("/dataa").get(dataa);
+router.route("/fetchEvents").get(fetchEvent);
 
 router.route("/login").post(login);
 
