@@ -4,9 +4,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import google from "../../../public/images/google-icon.svg";
-import facebook from "../../../public/images/facebook-icon.svg";
-import apple from "../../../public/images/apple-icon.svg";
+import google from "../../../../public/images/google-icon.svg";
+import facebook from "../../../../public/images/facebook-icon.svg";
+import apple from "../../../../public/images/apple-icon.svg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -65,7 +65,7 @@ const Login = () => {
 
   return (
     <>
-      <ToastContainer />
+<ToastContainer autoClose={2000} />
       <section className="h-screen bg-[#FCEBF2] flex items-center ">
         <div className="bg-white mx-auto flex flex-col lg:flex-row w-3/4 sm:w-2/4 lg:w-1/2 lg:rounded-r-[20px] lg:rounded-t-[20px] rounded-t-[20px] rounded-b-[20px]">
           <div className="w-full lg:w-1/2 h-[200px] lg:h-auto login-bg"></div>
@@ -139,7 +139,7 @@ const Login = () => {
                   w-full border rounded-md focus:outline-none "
                 />
                 <div>
-                  <Link href="/forgot-password/page">
+                  <Link href="/auth/forgot-password/page">
                     <p
                       className="cursor-pointer text-blue-700  xl:my-1 py-[6px] text-[13px] my-5
                sm:text-[13px] 

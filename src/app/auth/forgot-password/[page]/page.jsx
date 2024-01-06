@@ -10,7 +10,6 @@ const ForgotPassword = () => {
   const [msg, setMsg] = useState("");
   const token = JSON.parse(localStorage.getItem("authToken" || ""));
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -21,7 +20,7 @@ const ForgotPassword = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            authorization : token, 
+            authorization: token,
           },
         }
       );
@@ -109,7 +108,8 @@ const ForgotPassword = () => {
                 >
                   {isLoading ? "Loading.." : "Get  link"}
                 </button>
-                <Link href="/login">
+
+                <Link href="/auth/login">
                   <div className=" font-medium underline text-center py-3 cursor-password 2xl:text-[22px] xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[13px] text-[12px]">
                     Login
                   </div>
