@@ -8,19 +8,19 @@ import setting from "../../../../public/images/setting.svg";
 import inquiry from "../../../../public/images/close-square.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import logo from "../../../../public/images/sterna-logo.png";
 import Category from "../../../component/admin/category";
 import SubCategoryPage from "../../../component/admin/sub-category/index";
 import Event from "../../../component/admin/event/index";
+import UpadatePassword from "../../../component/admin/setting/upadate-password"
 import { Fragment } from "react";
 import Loader from "../../../component/loader";
-import Dashboard from "../../../component/dashboard"
+import Dashboard from "../../../component/dashboard";
 
 export const menulist = [
   {
     id: 1,
     label: "Dashboard",
-    component: <Dashboard/>,
+    component: <Dashboard />,
     icon: dashboard,
   },
   {
@@ -44,7 +44,7 @@ export const menulist = [
   {
     id: 5,
     label: "Setting",
-    component: "",
+    component: <UpadatePassword/>,
     icon: setting,
   },
 ];
@@ -76,8 +76,7 @@ const AdminDashboard = () => {
       {isLoader && <Loader />}
 
       <section className="z-0">
-   
-       <div className="flex min-h-screen relative lg:static ">
+        <div className="flex min-h-screen relative lg:static ">
           <div
             className="py-2 px-3  absolute top-3 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
             onClick={() => setShowDrawer(true)}
@@ -154,8 +153,6 @@ const AdminDashboard = () => {
             ))}
           </div>
         </div>
-        
-     
       </section>
     </>
   );

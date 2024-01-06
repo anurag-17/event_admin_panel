@@ -653,7 +653,7 @@ const CreateEvent = ({ closeDrawer }) => {
 
         <button
           type="submit"
-          className="border bg-blue-600 text-white lg:rounded-lg bg-lightBlue-600 2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
+          className="border bg-blue-500 hover:bg-blue-600 text-white lg:rounded-lg bg-lightBlue-600 2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
             xl:text-[14px] xl:p-2 xl:m-5 xl:mt-0
             lg:text-[12px] lg:p-2 lg:m-5 lg:mt-0
             md:text-[11px] md:p-[6px] md:m-4 md:mt-0

@@ -174,7 +174,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="border  rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
+            className="border bg-blue-500 hover:bg-blue-600 text-white rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
               xl:text-[14px] xl:py-2 xl:px-4  xl:m-5 xl:mt-0
               lg:text-[12px] lg:py-2 lg:px-3 lg:m-5 lg:mt-0
               md:text-[12px] md:py-1 md:px-2 md:m-4 md:mt-0
