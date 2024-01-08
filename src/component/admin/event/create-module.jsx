@@ -226,7 +226,7 @@ const CreateEvent = ({ closeDrawer }) => {
           <input
             onChange={inputHandler}
             value={eventDetail.startDate}
-            type="date"
+            type="datetime-local"
             name="startDate"
             className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
             xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
@@ -256,7 +256,7 @@ const CreateEvent = ({ closeDrawer }) => {
           <input
             onChange={inputHandler}
             value={eventDetail.endDate}
-            type="date"
+            type="datetime-local"
             name="endDate"
             className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
             xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
@@ -549,8 +549,8 @@ const CreateEvent = ({ closeDrawer }) => {
               {getallSubCategory.map((item) => (
                 <option
                   key={item.id}
-                  value={item.subCategory}
-                  selected={item.title === eventDetail.subCategory}
+                  value={item._id}
+                  selected={item._id === eventDetail.subCategory}
                   className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                 >
                   {item.subCategory}

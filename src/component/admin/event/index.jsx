@@ -11,9 +11,8 @@ import cut from "../../../../public/images/close-square.svg";
 import Pagination from "../../pagination";
 
 const Event = () => {
+  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
   const [getAllEvent, setGetAllEvent] = useState([]);
-  const [getAllCate, setGetAllCate] = useState([]);
-  const [allSubCategory, setAllSubCategory] = useState([]);
   const [isRefresh, setRefresh] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isDrawerOpenO, setIsDrawerOpenO] = useState(false);
@@ -24,7 +23,29 @@ const Event = () => {
   const [isLoader, setLoader] = useState(false);
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
+  const [allSubCategory, setAllSubCategory] = useState([]);
+  const [getAllCate, setGetAllCate] = useState([]);
+  const [eventDetail, setEventDetail] = useState(editData);
+  const [editCategory, setEditCategory] = useState({
+    _id: "",
+    category: "",
+    subCategory: "",
+  });
+  const [eventCategory, setEventCategory] = useState(["All"]);
+  const [eventSubCategory, setEventSubCategory] = useState("");
+  const [catagoryFilter, setCatagoryFilter] = useState("");
+  const [subCategoryFilter, setSubCategoryFilter] = useState("");
+  const [showLargeImage, setShowLargeImage] = useState(false);
+  const [largeImageSrc, setLargeImageSrc] = useState("");
   const visiblePageCount = 10;
+
+  const handleImageClick = (imageSrc) => {
+    setLargeImageSrc(imageSrc);
+    setShowLargeImage(true);
+  };
+  const handleLargeImageClose = () => {
+    setShowLargeImage(false);
+  };
   const openDrawerO = async (_id) => {
     try {
       const options = {
@@ -124,6 +145,35 @@ const Event = () => {
     }
   };
 
+  const handleDateSearch = (e) => {
+    const startDate = e.target.value.trim();
+
+    if (startDate === "") {
+      refreshData();
+    } else {
+      const endDate = "";
+      const options = {
+        method: "GET",
+        url: `http://localhost:4000/api/event/getAllEvents`,
+        params: {
+          startDate,
+          endDate,
+        },
+      };
+
+      axios
+        .request(options)
+        .then(function (response) {
+          if (response.status === 200) {
+            setGetAllEvent(response.data.events);
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
+  };
+
   useEffect(() => {
     defaultgetAllCate();
   }, [isRefresh]);
@@ -147,10 +197,12 @@ const Event = () => {
   };
 
   useEffect(() => {
-    defaultCategory();
+    defaultsubCategory();
   }, [isRefresh]);
 
-  const defaultCategory = () => {
+  const defaultsubCategory = () => {
+    setLoader(true);
+
     const options = {
       method: "GET",
       url: "/api/subCategory/getallSubCategory",
@@ -163,7 +215,7 @@ const Event = () => {
       .request(options)
       .then((response) => {
         setAllSubCategory(response?.data);
-        setLoadingBtn(false);
+        console.log(response?.data, "subb");
         setLoader(false);
       })
       .catch((error) => {
@@ -171,6 +223,98 @@ const Event = () => {
       });
   };
 
+  const inputHandler = (e) => {
+    // const { name, value } = e.target;
+    setEditCategory({ ...editCategory, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdateCategory = async (id) => {
+    editCategory._id = id;
+    try {
+      const response = await axios.put(`/api/event/updateEvent`, editCategory, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: auth_token,
+        },
+      });
+
+      if (response.status === 200) {
+        closeDrawer();
+        refreshData();
+        setEditCategory({
+          _id: "",
+          category: "",
+          subCategory: "",
+        });
+      } else {
+        console.error("Server error!");
+      }
+    } catch (error) {
+      console.error("Server error:", error);
+    }
+  };
+
+  // ------ filter  by Sub-category ------ //
+
+  const handleSearchSubCategory = (e) => {
+    const cate = e.target.value;
+
+    if (cate === "All") {
+      setSubCategoryFilter("");
+      refreshData();
+    } else {
+      setBrandFilter(cate);
+      const options = {
+        method: "GET",
+        url:
+          subCategoryFilter == ""
+            ? `api/event/getAllEvents?category=${cate}`
+            : `api/event/getAllEvents?category=${cate}&subCategory=${subCategoryFilter}`,
+      };
+      axios
+        .request(options)
+        .then(function (response) {
+          if (response.status === 200) {
+            setGetAllEvent(response?.data?.events);
+            console.log(response?.data?.events, "jj");
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
+  };
+
+  // ------ filter products by category ------ //
+  const handleSearchCategories = (e) => {
+    const subcate = e.target.value;
+    if (subcate === "All") {
+      setCatagoryFilter("");
+      setGetAllEvent();
+      refreshData();
+      setSelectedCategory(subcate);
+    } else {
+      setCatagoryFilter(e.target.value);
+      const options = {
+        method: "GET",
+        url:
+          catagoryFilter == ""
+            ? `api/event/getAllEvents?subCategory=${subcate}`
+            : `api/event/getAllEvents?subCategory=${subcate}&category=${catagoryFilter}`,
+      };
+      axios
+        .request(options)
+        .then(function (response) {
+          if (response.status === 200) {
+            setAllProduct(response.data?.events);
+            setSelectedCategory(subcate);
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
+  };
   return (
     <>
       {isLoader && <Loader />}
@@ -216,6 +360,10 @@ const Event = () => {
                     required
                     minLength={3}
                     maxLength={32}
+                    onChange={(e) => {
+                      handleSearchCategories(e);
+                      inputHandler(e);
+                    }}
                   >
                     <option value=""> Category</option>
                     {getAllCate.map((item) => (
@@ -242,7 +390,7 @@ const Event = () => {
                     </label>
                   </div>
                   <select
-                    name="category"
+                    name="subCategory"
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -253,17 +401,25 @@ const Event = () => {
                     required
                     minLength={3}
                     maxLength={32}
+                    onChange={(e) => {
+                      handleSearchSubCategory(e);
+                      inputHandler(e);
+                    }}
                   >
                     <option value=""> SubCategory</option>
-                    {allSubCategory.map((item) => (
-                      <option
-                        key={item.id}
-                        value={item._id}
-                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                      >
-                        {item.subCategory}
-                      </option>
-                    ))}
+                    {allSubCategory
+                      .filter((item, indr) => {
+                        return item?.category?._id === editCategory?.category;
+                      })
+                      .map((itemss) => (
+                        <option
+                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                          key={itemss?._id}
+                          value={itemss._id}
+                        >
+                          {itemss?.subCategory}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
@@ -288,6 +444,7 @@ const Event = () => {
                    md:text-sm md:px-3 md:py-2 md:h-[25px] 
                    sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
                    text-sm  px-2 py-1 h-[20px] "
+                      onChange={handleDateSearch}
                     />
                   </div>
                 </div>
@@ -312,6 +469,7 @@ const Event = () => {
                    md:text-sm md:px-3 md:py-2 md:h-[25px] 
                    sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
                    text-sm  px-2 py-1 h-[20px] "
+                      onChange={handleDateSearch}
                     />
                   </div>
                 </div>
@@ -379,145 +537,242 @@ const Event = () => {
             </div>
           </div>
         )}
-        <div className="mx-10 lg:mx-8 z-10 ">
-          <table className=" table-auto overflow-y-scroll h-[500px] border w-full  bg-white rounded-md mt-5   relative   p-10 ">
-            <thead className="">
-              <tr
-                className="bg-coolGray-200 text-gray-400 text-start flex  px-2 border
+        <div className="relative flex mx-10 lg:mx-8  overflow-x-auto ">
+          <div className=" z-10 w-full ">
+            <table className="lg:w-[130%]  border bg-white rounded-md mt-5 p-10">
+              <thead className="">
+                <tr
+                  className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
           2xl:text-[22px] 
           xl:text-[14px]
            lg:text-[12px] 
            md:text-[12px] 
            sm:text-[12px] 
-           text-[10px]"
-              >
-                <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
-                  S.NO
-                </th>
-                <th className="  w-2/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
-                  EVENT NAME
-                </th>
+           text-[10px] "
+                >
+                  <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
+                    S.NO
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
+                    Image
+                  </th>
+                  <th className="  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
+                    EVENT NAME
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                    City
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    Start Date
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    End Date
+                  </th>
 
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
-                  City
-                </th>
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                  Start Date
-                </th>
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                  End Date
-                </th>
-
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                  Location
-                </th>
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                  Category
-                </th>
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            {getAllEvent?.length > 0 && (
-              <tbody className="overflow-x-scroll w-full">
-                {getAllEvent.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="p-2 text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
-                  >
-                    <td className=" my-auto w-1/12">{index + 1 + "."}</td>
-                    <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
-                      <p className="w-40">{item.name}</p>
-                    </td>
-
-                    <td className="my-auto  w-1/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
-                      {item.city}
-                    </td>
-                    <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
-                      {item.startDate}
-                    </td>
-                    <td className="my-auto  w-2/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
-                      {item.endDate}
-                    </td>
-                    <td className="my-auto  w-2/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
-                      {item.location}
-                    </td>
-                    <td className="my-auto  w-2/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]">
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    Location
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    Category
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <div className="overflow-y-scroll  ">
+                <div className="h-[300px] xl:h-[400px]">
+                  {getAllEvent?.length > 0 && (
+                    <tbody className=" w-full ">
                       <div className="">
-                        <select
-                          name="category"
-                          className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                        {getAllEvent.map((item, index) => (
+                          <tr
+                            key={index}
+                            className=" w-full p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
+                          >
+                            <td className=" my-auto w-1/12">
+                              {index + 1 + "."}
+                            </td>
+                            <td className="my-auto  w-1/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
+                              <div
+                                className="cursor-pointer"
+                                onClick={() => handleImageClick(item?.image)}
+                              >
+                                <img
+                                  src={item?.images[0]?.url}
+                                  height={100}
+                                  width={100}
+                                />
+                              </div>
+                              <div className="">
+                                {showLargeImage && (
+                                  <div className="fixed border-2 top-40 left-96 w-6/12 lg:h-[350px] xl:h-[450px] flex items-center justify-center bg-white bg-opacity-75">
+                                    <div className="max-w-3xl w-full">
+                                      <div
+                                        className="flex justify-end cursor-pointer"
+                                        onClick={handleLargeImageClose}
+                                      >
+                                        <Image
+                                          src={cut}
+                                          className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14 "
+                                        />
+                                      </div>
+                                      <div
+                                        className="cursor-pointer"
+                                        onClick={() => setShowLargeImage(false)}
+                                      >
+                                        <img
+                                          src={item?.images[0]?.url}
+                                          height={240}
+                                          width={240}
+                                          className="mx-auto xl:w-[400px]"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
+                              <p className="w-40">{item.name}</p>
+                            </td>
+
+                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
+                              {item.city}
+                            </td>
+                            <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
+                              {item.startDate}
+                            </td>
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
+                              {item.endDate}
+                            </td>
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
+                              {item.location}
+                            </td>
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  xl:pl-10 ">
+                              <div className="">
+                                <select
+                                  name="category"
+                                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                     2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
                      md:text-sm md:px-3 md:py-2 md:h-[25px] 
                      sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px]
                       text-sm  px-2 py-1 h-[20px] "
-                          required
-                          minLength={3}
-                          maxLength={32}
-                        >
-                          <option value="">Select</option>
-                          {getAllCate.map((item) => (
-                            <option
-                              key={item.id}
-                              value={item._id}
-                              className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                            >
-                              {item.title}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </td>
+                                  onChange={inputHandler}
+                                  required
+                                  minLength={3}
+                                  maxLength={32}
+                                  defaultValue={item?.category?._id}
+                                >
+                                  <option value="">Select Category</option>
 
-                    <td className="my-auto  w-1/12 ">
-                      <div className="flex my-3 gap-3">
-                        <button onClick={() => openDrawerO(item?._id)}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-sky-600"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                            />
-                          </svg>
-                        </button>
+                                  {getAllCate.map((items) => (
+                                    <option
+                                      className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                      key={items._id}
+                                      value={items._id}
+                                    >
+                                      {items.title}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className="my-1">
+                                <select
+                                  name="subCategory"
+                                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
+                                   xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                                   lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
+                                    md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                                    sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px]
+                      text-sm  px-2 py-1 h-[20px] "
+                                  onChange={inputHandler}
+                                  required
+                                  minLength={3}
+                                  maxLength={32}
+                                  defaultValue={item?.subCategory?._id}
+                                >
+                                  <option value="">Select Sub Category</option>
+                                  {allSubCategory
+                                    .filter((item, indr) => {
+                                      return (
+                                        item?.category?._id ===
+                                        editCategory?.category
+                                      );
+                                    })
+                                    .map((itemss) => (
+                                      <option
+                                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                        key={itemss?._id}
+                                        value={itemss._id}
+                                      >
+                                        {itemss?.subCategory}
+                                      </option>
+                                    ))}
+                                </select>
+                              </div>
 
-                        <button
-                          onClick={() => openModal(item?._id)}
-                          type="button"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-red-800"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                            />
-                          </svg>
-                        </button>
+                              <button
+                                onClick={() => handleUpdateCategory(item?._id)}
+                                className="border bg-blue-500 hover:bg-blue-600 text-white py-[2px] px-1 rounded-md lg:rounded-lg ml-1 lg:ml-2"
+                              >
+                                Save
+                              </button>
+                            </td>
+
+                            <td className="my-auto  w-2/12 xl:pl-12 ">
+                              <div className="flex my-3 gap-3 ">
+                                <button onClick={() => openDrawerO(item?._id)}>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-sky-600"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                    />
+                                  </svg>
+                                </button>
+
+                                <button
+                                  onClick={() => openModal(item?._id)}
+                                  type="button"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-red-800"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                       </div>
-                    </td>
-                  </tr>
-                ))}
-                <hr />
-              </tbody>
-            )}
-          </table>
+                      <hr />
+                    </tbody>
+                  )}
+                </div>
+              </div>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -526,6 +781,7 @@ const Event = () => {
         current_page={current_page}
         onPageChange={handlePageChange}
       />
+
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
+    "aws-sdk": "^2.1531.0",
     "axios": "^1.6.3",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",

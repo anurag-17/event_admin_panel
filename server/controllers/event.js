@@ -69,9 +69,9 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     ];
   }
 
-  if (startDate && endDate) {
+  if (startDate ) {
     query.startDate = { $gte: new Date(startDate) };
-    query.endDate = { $lte: new Date(endDate) };
+    // query.endDate = { $lte: new Date(endDate) };
   }
 
   if (category) {
