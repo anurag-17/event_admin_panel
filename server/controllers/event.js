@@ -53,7 +53,7 @@ exports.getEvent = asyncHandler(async (req, res) => {
 });
 
 exports.getAllEvents = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 10, searchQuery, startDate, endDate } = req.query;
+  const { page = 1, limit = 10, searchQuery, startDate, endDate, category, subCategory } = req.query;
 
   const currentPage = parseInt(page, 10);
   const itemsPerPage = parseInt(limit, 10);
@@ -72,6 +72,14 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
   if (startDate && endDate) {
     query.startDate = { $gte: new Date(startDate) };
     query.endDate = { $lte: new Date(endDate) };
+  }
+
+  if (category) {
+    query.category = category;
+  }
+
+  if (subCategory) {
+    query.subCategory = subCategory;
   }
 
   const totalEvents = await Event.countDocuments(query);
