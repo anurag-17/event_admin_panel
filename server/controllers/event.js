@@ -4,8 +4,21 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 const axios = require("axios");
 
 exports.createEvent = asyncHandler(async (req, res) => {
-  const newEvent = await Event.create(req.body);
-  res.json(newEvent);
+  try {
+    const existingEvent = await Event.findOne({ name: req.body.name });
+
+    if (existingEvent) {
+      return res
+        .status(409)
+        .json({ error: "Event with this name already exists" });
+    }
+
+    const newEvent = await Event.create(req.body);
+    res.status(201).json(newEvent);
+  } catch (error) {
+    console.error("Error creating event:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 exports.updateEvent = asyncHandler(async (req, res) => {
