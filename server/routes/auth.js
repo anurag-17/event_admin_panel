@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-// const upload = require("../utils/uploadImage"); // Import the upload middleware
+const multer = require('multer');
 const {
   register,
   login,
@@ -14,9 +14,12 @@ const {
   deleteaUser,
   updatedUser,
   updatePassword,
-  fetchEvent
+  fetchEvent,
+  uploadImage
 } = require("../controllers/auth");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.route("/fetchEvents").get(fetchEvent);
 
@@ -50,20 +53,6 @@ router.delete("/deleteaUser/:id", deleteaUser);
 router.route("/forgotpassword").post(forgotPassword);
 router.route("/resetpassword/:resetToken").put(resetPassword);
 
-// Uploading images
-// router.post("/upload", upload.array("images", 5), (req, res) => {
-
-//   // Check if files were uploaded successfully
-//   if (!req.files || req.files.length === 0) {
-//     return res.status(400).json({ error: "No files uploaded." });
-//   }
-
-//   // Get the uploaded image URLs from Cloudinary
-//   const imageUrls = req.files.map((file) => file.path);
-
-//   // You can save these image URLs to your product model or perform other actions as needed
-
-//   res.status(200).json({ imageUrls });
-// });
+router.route("/uploadImage").post(isAuthenticatedUser, authorizeRoles("admin"), upload.single('file'),uploadImage)
 
 module.exports = router;

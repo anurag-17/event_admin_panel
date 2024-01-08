@@ -7,6 +7,24 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 const sendToken = require("../utils/jwtToken");
 const axios = require('axios');
 const cheerio = require('cheerio');
+const uploadOnS3 = require("../Utils/uploadImage");
+
+exports.uploadImage = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "Invalid request" });
+    }
+
+    let fileName = req.file.originalname;
+
+    let url = await uploadOnS3(req.file.buffer, fileName);
+    console.log("URL:::=>", url);
+    return res.status(200).json({ status: true, url: url });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 exports.register = async (req, res, next) => {
   const { email, mobile } = req.body;

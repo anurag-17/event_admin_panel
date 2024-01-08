@@ -1,23 +1,38 @@
-const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const AWS = require('aws-sdk');
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
+  region: process.env.REGION,
 });
 
-// Set up multer storage using Cloudinary
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "product-images", // Specify the folder where images will be stored
-    allowed_formats: ["jpg", "png", "jpeg"]
-  },
-});
+const s3 = new AWS.S3();
 
-const upload = multer({ storage: storage });
+function uploadOnS3(file, filename) {
+    
+    var date = new Date();
+    var parentFolder = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 
-module.exports = upload;
+    const params = {
+        Bucket: process.env.BUCKET,
+        Key: parentFolder + '/' + filename,
+        Body: file,
+    };
+    
+    return new Promise(function (resolve, reject) {
+        s3.upload(params, function (err, data) { // Use s3.upload instead of s3Bucket.upload
+            if (err) {
+                console.log('Error =>' + err);
+                reject(null);
+            }
+            if (data != null) {
+                console.log('Image', 'uploadOnS3' + data.Location);
+                resolve(data.Location);
+            }
+        });
+    });
+}
+
+module.exports = uploadOnS3;
+
+
