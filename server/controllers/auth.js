@@ -7,7 +7,7 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 const sendToken = require("../utils/jwtToken");
 const axios = require('axios');
 const cheerio = require('cheerio');
-const uploadOnS3 = require("../Utils/uploadImage");
+const uploadOnS3 = require("../utils/uploadImage");
 
 exports.uploadImage = async (req, res, next) => {
   try {

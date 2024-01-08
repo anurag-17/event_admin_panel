@@ -44,7 +44,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
     } catch (error) {
       setLoading(false);
       console.error(error);
-      toast.error("Server error sasas!");
+      toast.error("Server error!");
     }
   };
 
