@@ -82,7 +82,7 @@ exports.getEvent = asyncHandler(async (req, res) => {
 
 exports.getAllEvents = asyncHandler(async (req, res) => {
   try {
-    const { page = 1, limit = 10, searchQuery, startDate, endDate, category, subCategory } = req.query;
+    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory } = req.query;
 
     const currentPage = parseInt(page, 10);
     const itemsPerPage = parseInt(limit, 10);
