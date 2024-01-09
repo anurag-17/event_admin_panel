@@ -8,7 +8,8 @@ const {
     deleteBulkEvent,
     getEvent,
     getAllEvents,
-    londontheatredirect
+    londontheatredirect,
+    skiddleEvents
 } = require("../controllers/event");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
@@ -25,5 +26,7 @@ router.post("/getEvent", getEvent);
 router.get("/getAllEvents", getAllEvents);
 
 router.get("/londontheatredirect", londontheatredirect);
+
+router.get("/skiddleEvents", skiddleEvents);
 
 module.exports = router;
