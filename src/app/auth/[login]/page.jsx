@@ -57,10 +57,10 @@ const Login = () => {
   };
 
   const loginwithgoogle = () => {
-    window.open("http://3.90.234.160:4000/auth/google/callback", "_self");
+    window.open("/auth/google/callback", "_self");
   };
   const loginwithfacebook = () => {
-    window.open("http://3.90.234.160:4000/auth/facebook/callback", "_self");
+    window.open("/auth/facebook/callback", "_self");
   };
 
   return (

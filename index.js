@@ -66,7 +66,7 @@ passport.use(
       scope:["profile","email"]
   },
   async(accessToken,refreshToken,profile,done)=>{
-
+  // console.log(":::::::",accessToken);
       try {
           let user = await User.findOne({email: profile.emails[0].value});
 
@@ -139,14 +139,14 @@ server.get('/auth/facebook', passport.authenticate('facebook',{scope:['public_pr
 
 // Google Authenticate Callback
 server.get("/auth/google/callback", passport.authenticate("google",{
-  successRedirect:"http://3.90.234.160:4000/admin/admin-dashboard",
-  failureRedirect:"http://3.90.234.160:4000/login"
+  successRedirect:"/admin/admin-dashboard",
+  failureRedirect:"/login"
 }));
 
 // Facebook Authenticate Callback
 server.get("/auth/facebook/callback", passport.authenticate("facebook",{
-    successRedirect: 'http://3.90.234.160:4000/admin/admin-dashboard',
-    failureRedirect: 'http://3.90.234.160:4000/login'
+    successRedirect: '/admin/admin-dashboard',
+    failureRedirect: '/login'
 }));
 
 server.get("/login/sucess", async (req, res) => {
