@@ -1,7 +1,7 @@
 const Event = require("../models/Event");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
-const axios = require("axios");
+const axios = require('axios');
 
 exports.createEvent = asyncHandler(async (req, res) => {
   try {
@@ -13,6 +13,23 @@ exports.createEvent = asyncHandler(async (req, res) => {
         .json({ error: "Event with this name already exists" });
     }
 
+    // Use Google Geocoding API to get latitude and longitude
+    const address  = req.body.location;
+    const googleApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.GOOGLE_MAP_KEY}`;
+
+    const geocodingResponse = await axios.get(googleApiUrl);
+
+    if (geocodingResponse.data.results.length === 0) {
+      return res.status(400).json({ error: "Invalid address, cannot find coordinates" });
+    }
+
+    const location = geocodingResponse.data.results[0].geometry.location;
+
+    // Add latitude and longitude to the request body
+    req.body.latitude = location.lat;
+    req.body.longitude = location.lng;
+
+    // Create the new event
     const newEvent = await Event.create(req.body);
     res.status(201).json(newEvent);
   } catch (error) {

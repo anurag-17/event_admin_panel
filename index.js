@@ -66,7 +66,7 @@ passport.use(
       scope:["profile","email"]
   },
   async(accessToken,refreshToken,profile,done)=>{
-  // console.log(":::::::",accessToken);
+// console.log(":::::::",accessToken);
       try {
           let user = await User.findOne({email: profile.emails[0].value});
 
