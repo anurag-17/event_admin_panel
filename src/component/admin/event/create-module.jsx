@@ -12,8 +12,7 @@ const CreateEvent = ({ closeDrawer }) => {
   const [getallSubCategory, setGetallSubCategory] = useState([]);
   const [getallCategory, setGetallCategory] = useState([]);
 
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
-  console.log(auth_token, "token");
+  const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
   const [eventDetail, setEventDetail] = useState({
     name: "",
     description: "",
@@ -32,7 +31,17 @@ const CreateEvent = ({ closeDrawer }) => {
     image: "",
     resource_url: "",
   });
+  console.log(eventDetail.image, "token");
+  const [eventImage, setEventImage] = useState(""); 
+  const [imageDisable, setImageDisable] = useState(false);
+  const [imageUpload, setImageUpload] = useState(false);
 
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+  const day = today.getDate().toString().padStart(2, '0');
+  const formattedToday = `${year}-${month}-${day}T00:00`;
+  // console.log(formattedToday)
   const refreshData = () => {
     setEventDetail({
       name: "",
@@ -54,38 +63,87 @@ const CreateEvent = ({ closeDrawer }) => {
     });
   };
 
-  const inputHandler = (e) => {
+  const inputHandler = (e) => { 
     const { name, value } = e.target;
-    setEventDetail({
-      ...eventDetail,
-      [name]: value,
-    });
+    if (e.target.name === "image") {
+      setEventImage({ file: e.target.files[0] });
+    }else{
+      setEventDetail({
+        ...eventDetail,
+        [name]: value,
+      });
+    }
+  };
+
+  const uploadImage = async () => {
+    alert("okk")
+    setImageUpload(true);
+
+    if (eventImage == "" || eventImage == undefined) {
+      setImageUpload(false);
+      return toast.warn("Please upload image.");
+    }
+
+    try {
+      const response = await axios.post("/api/auth/uploadImage", eventImage, {
+        headers: {
+          authorization: auth_token,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        // console.log('Category added:', response?.data);
+        setEventDetail({ ...eventDetail, ["image"]: response?.data?.url });
+        setImageDisable(true);
+        setImageUpload(false);
+        // setSubmited(true);
+      } else {
+        setEventDetail({ ...eventDetail, ["image"]: "" });
+        setImageDisable(false);
+        setImageUpload(false);
+      }
+    } catch (error) {
+      console.error("Error adding category:", error?.response?.data);
+      setImageUpload(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await fetch("/api/event/createEvent", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: auth_token,
-        },
-        body: JSON.stringify(eventDetail),
-      })
-        .then((res) => {
-          if (res.ok) {
-            refreshData();
-            closeDrawer();
-            setLoading(false);
-          } else {
-          }
+    setLoading(true);
+    if(eventDetail?.image == ""){
+      toast.warn("Please fill all feilds");
+    }else{
+      try {
+        await fetch("/api/event/createEvent", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: auth_token,
+          },
+          body: JSON.stringify(eventDetail),
         })
-        .catch((e) => {
-          console.log(e);
-        });
-    } catch (error) {
-      console.error(error);
+          .then((res) => {
+            if (res.status===201) {
+              refreshData();
+              closeDrawer();
+              setLoading(false);
+              toast.success("Submit successfully!")
+            } else {
+              setLoading(false);
+              return
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            setLoading(false);
+          });
+      } catch (error) {
+        console.error(error);
+        toast.error(error?.response?.data?.messgae || "server error")
+        setLoading(false);
+      }
     }
   };
 
@@ -129,6 +187,7 @@ const CreateEvent = ({ closeDrawer }) => {
 
   return (
     <>
+
       <div
         className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
       2xl:px-5  2xl:h-[50px] 2xl:my-5
@@ -166,6 +225,7 @@ const CreateEvent = ({ closeDrawer }) => {
           <input
             value={eventDetail.name}
             onChange={inputHandler}
+            maxLength={100}
             required
             type="text"
             name="name"
@@ -206,6 +266,7 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px]
             "
             required
+            maxLength={300}
           />
         </div>
         {/* ------3. Event startDate----- */}
@@ -236,6 +297,8 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px]
             "
             required
+            min={formattedToday}
+            // max={maxDatetime}
           />
         </div>
         {/* ------4. Event endDate----- */}
@@ -266,6 +329,7 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px]
             "
             required
+            min={eventDetail?.startDate ||  formattedToday}
           />
         </div>
         {/* ------5. Event location----- */}
@@ -296,6 +360,7 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px]
             "
             required
+            maxLength={200}
           />
         </div>
         {/* ------6.Event city----- */}
@@ -326,6 +391,7 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px]
             "
             required
+            maxLength={64}
           />
         </div>
 
@@ -357,6 +423,7 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px]
             "
             required
+            maxLength={64}
           />
         </div>
         {/* ------8. Event latitude----- */}
@@ -447,6 +514,8 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px]
             "
             required
+            pattern="[0-9]*"
+            title="Please enter only numbers"
           />
         </div>
         {/* ------11. Event currency----- */}
@@ -495,8 +564,7 @@ const CreateEvent = ({ closeDrawer }) => {
               className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px] xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px] lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px] md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px] sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px] text-sm m-2 px-2 py-1 h-[20px] w-10/12 lg:w-8/12"
               onChange={inputHandler}
               required
-              minLength={3}
-              maxLength={32}
+              maxLength={64}
             >
               <option value="">Select Category</option>
               {getallCategory.map((item) => (
@@ -540,12 +608,9 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px] w-10/12  lg:w-8/12"
               onChange={inputHandler}
               required
-              minLength={3}
-              maxLength={32}
+              maxLength={64}
             >
-              <option value="" >
-                Select SubCategory
-              </option>
+              <option value="">Select SubCategory</option>
               {getallSubCategory.map((item) => (
                 <option
                   key={item.id}
@@ -588,6 +653,8 @@ const CreateEvent = ({ closeDrawer }) => {
             text-sm m-2 px-2 py-1 h-[20px]
             "
             required
+            pattern="[0-9]*"
+            title="Please enter only numbers"
           />
         </div>
         {/* ------15. Event resource_url----- */}
@@ -622,7 +689,47 @@ const CreateEvent = ({ closeDrawer }) => {
         </div>
         {/* ------16. Event image----- */}
 
-        <div className="w-1/2">
+        <div className="py-2 flex items-end gap-x-10 w-1/2">
+                  <div className="w-[50%]">
+                    <span className="login-input-label cursor-pointer mb-2">
+                      Picture
+                    </span>
+                    <div className="flex items-center w-full">
+                      <input
+                        id="file"
+                        type="file"
+                        name="image"
+                        disabled={imageDisable}
+                        onChange={inputHandler}
+                        className="w-full text-black border text-[13px] hover:white "
+                        accept="image/png,image/jpg, image/jpeg , image/*"
+                      />
+                    </div>
+                  </div>
+                  <div className="">
+                    <button
+                      className={`focus-visible:outline-none text-[13px] px-4 py-1 rounded
+                                ${
+                                  imageDisable
+                                    ? " bg-[green]"
+                                    : imageUpload
+                                    ? "bg-[gray]"
+                                    : "bg-[#070708] text-[white]"
+                                }`}
+                      type="button"
+                      onClick={uploadImage}
+                      disabled={imageDisable || imageUpload}
+                    >
+                      {imageDisable
+                        ? "Uploaded"
+                        : imageUpload
+                        ? "Loading.."
+                        : "Upload"}
+                    </button>
+                  </div>
+                </div>
+
+        {/* <div className="w-1/2">
           <label
             className="absolute bg-white z-20 text-gray-800
           2xl:text-[18px] 2xl:mt-6 2xl:ml-14
@@ -649,7 +756,7 @@ const CreateEvent = ({ closeDrawer }) => {
             "
             required
           />
-        </div>
+        </div> */}
 
         <button
           type="submit"
