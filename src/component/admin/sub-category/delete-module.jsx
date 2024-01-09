@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken"|| ""));
 
   const handleClose = () => {
     closeModal();
@@ -35,7 +35,7 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
       .then(function (response) {
         if (response.status === 200) {
           setLoading(false);
-          // toast.success("Sub Category deleted successfully !");
+          toast.success("SubCategory deleted successfully !");
           handleClose();
           refreshData();
         } else {
@@ -53,7 +53,7 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
 
   return (
     <>
-      {/* <ToastContainer/> */}
+    
       <div className="mt-2">
         <p className="lg:text-[16px] text-[16px] font-normal leading-[30px] text-gray-500 mt-4">
           Do you really want to delete these records? You cant't view this in

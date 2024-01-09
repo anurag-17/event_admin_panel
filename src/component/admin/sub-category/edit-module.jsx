@@ -10,7 +10,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   const [getallCategory, setGetallCategory] = useState();
   const [isLoadingBtn, setLoadingBtn] = useState(false);
   const [isRefresh, setRefresh] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken"|| ""));
 
 
   const inputHandler = (e) => {
@@ -39,7 +39,8 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
       );
 
       if (response.status === 200) {
-        toast.success("Updated successfully !");
+        toast.success("SubCategory Update Successfully!");
+
         setLoading(false);
         closeDrawer();
         refreshData();
@@ -49,6 +50,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
     } catch (error) {
       setLoading(false);
       console.error(error);
+      toast.error("Server error!");
     }
   };
 

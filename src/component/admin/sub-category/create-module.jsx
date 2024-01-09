@@ -9,7 +9,7 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
   const [subCategory, setSubCategory] = useState("");
   const [getallCategory, setGetallCategory] = useState([]);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken"|| ""));
 
   const handleSubmit = async (e) => {
     e && e.preventDefault();
@@ -32,10 +32,12 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
         .then((res) => {
           if (res.ok) {
             // router.push("/categories");
-            // toast.success("Category Create successfully !");
+           
             refreshData();
             closeDrawer();
             setLoading(false);
+            toast.success("SubCategory Added Successfully!");
+
           } else {
             setLoading(false);
             throw new Error("failed to create");
@@ -44,7 +46,8 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
         .catch((e) => {
           console.log(e);
           setLoading(false);
-          toast.failed("Server error !");
+          toast.error("Failed. something went wrong!");
+
         });
     } catch (error) {
       setLoading(false);

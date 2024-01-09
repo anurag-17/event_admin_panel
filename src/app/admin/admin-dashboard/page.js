@@ -6,6 +6,7 @@ import eventadd from "../../../../public/images/event-add.svg";
 import eventlist from "../../../../public/images/event-list.svg";
 import setting from "../../../../public/images/setting.svg";
 import inquiry from "../../../../public/images/close-square.svg";
+import alluser from "../../../../public/images/users-2.svg"
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Category from "../../../component/admin/category";
@@ -15,6 +16,7 @@ import UpadatePassword from "../../../component/admin/setting/upadate-password"
 import { Fragment } from "react";
 import Loader from "../../../component/loader";
 import Dashboard from "../../../component/dashboard";
+import AllUser from "../../../component/admin/users";
 
 export const menulist = [
   {
@@ -43,6 +45,12 @@ export const menulist = [
   },
   {
     id: 5,
+    label: "All Users",
+    component: <AllUser/>,
+    icon: alluser,
+  },
+  {
+    id: 6,
     label: "Setting",
     component: <UpadatePassword/>,
     icon: setting,

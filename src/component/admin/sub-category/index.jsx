@@ -12,6 +12,8 @@ import EditSubCategory from "../sub-category/edit-module";
 import Loader from "../../loader";
 import cut from "../../../../public/images/close-square.svg";
 import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+
 
 const SubCategoryPage = () => {
   const [isOpenDelete, setOpenDelete] = useState(false);
@@ -23,7 +25,7 @@ const SubCategoryPage = () => {
   const [isDrawerOpenO, setIsDrawerOpenO] = useState(false);
   const [isLoadingBtn, setLoadingBtn] = useState(false);
   const [allSubCategory, setAllCategory] = useState([]);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [isLoader, setLoader] = useState(false);
 
   const openSubCategory = () => {
@@ -113,6 +115,8 @@ const SubCategoryPage = () => {
 
   return (
     <>
+    <ToastContainer autoClose={1000}/>
+
       {isLoader && <Loader />}
       <section>
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7   border flex justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 mx-10 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">

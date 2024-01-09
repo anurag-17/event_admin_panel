@@ -9,7 +9,7 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
   const [title, setTitle] = useState("");
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   console.log(auth_token, "token");
 
   const handleSubmit = async (e) => {
@@ -34,11 +34,13 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
             refreshData();
             closeDrawer();
             setLoading(false);
+            toast.success("Category Added Successfully!");
           } else {
           }
         })
         .catch((e) => {
           console.log(e);
+          toast.error(" Category Added  Failed!");
         });
     } catch (error) {
       console.error(error);
