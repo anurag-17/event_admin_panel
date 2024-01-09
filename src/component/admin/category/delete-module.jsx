@@ -5,7 +5,7 @@ import axios from "axios";
 
 const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
 
   const handleClose = () => {
     closeModal();
@@ -34,7 +34,7 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
         console.log(response);
         if (response.status === 200) {
           setLoading(false);
-          // toast.success("category deleted successfully !");
+          toast.success("Category Deleted successfully !");
           handleClose();
           refreshData();
         } else {

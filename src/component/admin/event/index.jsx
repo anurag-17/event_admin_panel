@@ -9,9 +9,10 @@ import DeleteEvent from "./delete-module";
 import Loader from "../../loader";
 import cut from "../../../../public/images/close-square.svg";
 import Pagination from "../../pagination";
+import { ToastContainer } from "react-toastify";
 
 const Event = () => {
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [getAllEvent, setGetAllEvent] = useState([]);
   const [isRefresh, setRefresh] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -31,6 +32,7 @@ const Event = () => {
     category: "",
     subCategory: "",
   });
+  const [selectCategory, setSelectedCategory] = useState(null);
   const [eventCategory, setEventCategory] = useState(["All"]);
   const [eventSubCategory, setEventSubCategory] = useState("");
   const [catagoryFilter, setCatagoryFilter] = useState("");
@@ -253,23 +255,51 @@ const Event = () => {
       console.error("Server error:", error);
     }
   };
-
-  // ------ filter  by Sub-category ------ //
-
-  const handleSearchSubCategory = (e) => {
+  // ------ filter by category ------ //
+  const handleSearchCategories = (e) => {
     const cate = e.target.value;
-
     if (cate === "All") {
-      setSubCategoryFilter("");
+      setCatagoryFilter("");
       refreshData();
+      setSelectedCategory(cate);
     } else {
-      setBrandFilter(cate);
+      setCatagoryFilter(e.target.value);
       const options = {
         method: "GET",
         url:
           subCategoryFilter == ""
-            ? `api/event/getAllEvents?category=${cate}`
-            : `api/event/getAllEvents?category=${cate}&subCategory=${subCategoryFilter}`,
+            ? `http://localhost:4000/api/event/getAllEvents?category=${cate}`
+            : `http://localhost:4000/api/event/getAllEvents?category=${cate}&subCategory=${subCategoryFilter}`,
+      };
+      axios
+        .request(options)
+        .then(function (response) {
+          if (response.status === 200) {
+            setAllProduct(response?.data?.events);
+            setSelectedCategory(subcate);
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
+  };
+  // ------ filter  by Sub-category ------ //
+
+  const handleSearchSubCategory = (e) => {
+    const subcate = e.target.value;
+
+    if (subcate === "All") {
+      setSubCategoryFilter("");
+      refreshData();
+    } else {
+      setSubCategoryFilter(subcate);
+      const options = {
+        method: "GET",
+        url:
+          catagoryFilter == ""
+            ? `http://localhost:4000/api/event/getAllEvents?subCategory=${subcate}`
+            : `http://localhost:4000/api/event/getAllEvents?subCategory=${subcate}&category=${catagoryFilter}`,
       };
       axios
         .request(options)
@@ -285,39 +315,10 @@ const Event = () => {
     }
   };
 
-  // ------ filter products by category ------ //
-  const handleSearchCategories = (e) => {
-    const subcate = e.target.value;
-    if (subcate === "All") {
-      setCatagoryFilter("");
-      setGetAllEvent();
-      refreshData();
-      setSelectedCategory(subcate);
-    } else {
-      setCatagoryFilter(e.target.value);
-      const options = {
-        method: "GET",
-        url:
-          catagoryFilter == ""
-            ? `api/event/getAllEvents?subCategory=${subcate}`
-            : `api/event/getAllEvents?subCategory=${subcate}&category=${catagoryFilter}`,
-      };
-      axios
-        .request(options)
-        .then(function (response) {
-          if (response.status === 200) {
-            setAllProduct(response.data?.events);
-            setSelectedCategory(subcate);
-          }
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    }
-  };
   return (
     <>
       {isLoader && <Loader />}
+      <ToastContainer />
       <div>
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-10 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Event List </h2>
@@ -337,7 +338,7 @@ const Event = () => {
         <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
           <div>
             <div className="flex gap-2 lg:gap-2 xl:gap-2 2xl:gap-4">
-              {/* ----- Category-------- */}
+              {/* -----Filter Category-------- */}
 
               <div>
                 <div className="">
@@ -378,8 +379,9 @@ const Event = () => {
                   </select>
                 </div>
               </div>
+             
 
-              {/* ----- SubCategory-------- */}
+              {/* -----Filter SubCategory-------- */}
 
               <div className="">
                 <div className="">
@@ -424,7 +426,7 @@ const Event = () => {
                 </div>
               </div>
 
-              {/* -----Start Date-------- */}
+              {/* -----Filter Start Date-------- */}
 
               <div className="">
                 <div className="">
@@ -449,7 +451,7 @@ const Event = () => {
                   </div>
                 </div>
               </div>
-              {/* -----End Date-------- */}
+              {/* -----Filter End Date-------- */}
 
               <div className="">
                 <div className="">
@@ -581,27 +583,28 @@ const Event = () => {
                 </tr>
               </thead>
               <div className="overflow-y-scroll  ">
-                <div className="h-[300px] xl:h-[400px]">
+                <div className="h-[300px] xl:h-[400px] 2xl:h-[500px]">
                   {getAllEvent?.length > 0 && (
-                    <tbody className=" w-full ">
-                      <div className="">
+                    <tbody className="px-2 w-full">
+                      <div className="w-full">
                         {getAllEvent.map((item, index) => (
                           <tr
                             key={index}
-                            className=" w-full p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
+                            className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                           >
                             <td className=" my-auto w-1/12">
                               {index + 1 + "."}
                             </td>
                             <td className="my-auto  w-1/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
                               <div
-                                className="cursor-pointer"
+                                className="cursor-pointer "
                                 onClick={() => handleImageClick(item?.image)}
                               >
                                 <img
                                   src={item?.images[0]?.url}
                                   height={100}
                                   width={100}
+                                  className="w-2/3"
                                 />
                               </div>
                               <div className="">

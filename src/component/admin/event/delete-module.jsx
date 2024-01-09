@@ -5,7 +5,7 @@ import axios from "axios";
 
 const DeleteEvent = ({ eventID, closeModal, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
 
   const handleClose = () => {
     closeModal();
