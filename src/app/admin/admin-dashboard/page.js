@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import dashboard from "../../../../public/images/dashboard.svg";
 import eventadd from "../../../../public/images/event-add.svg";
 import eventlist from "../../../../public/images/event-list.svg";
@@ -63,11 +63,29 @@ const AdminDashboard = () => {
   const [userToken, setUserToken] = useState(null);
   const router = useRouter();
   const [isLoader, setLoader] = useState(false);
+  const [token, setToken] = useState(
+   localStorage?.getItem("accessToken" )
+  );
+  const [authenticated, setAuthenticated] = useState(false);
+  const [isRefresh, setRefresh] = useState(false);
+
+
+  useEffect(() => {
+    const authToekn = token ? JSON.parse(token) : null;
+    console.log(authToekn)
+    if (authToekn) {
+      setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
+      router.push("/admin");
+    }
+  }, [isRefresh]);
 
   const handleClick = (id) => {
     setComponentId(id);
     setShowDrawer(false);
   };
+
 
   const handleSignout = () => {
     setLoader(true);

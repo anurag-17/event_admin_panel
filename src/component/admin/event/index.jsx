@@ -50,6 +50,7 @@ const Event = () => {
     setShowLargeImage(false);
   };
   const openDrawerO = async (_id) => {
+    setLoader(true)
     try {
       const options = {
         method: "POST",
@@ -60,15 +61,18 @@ const Event = () => {
       };
       const response = await axios.request(options);
       if (response.status === 200) {
-        setEditData(response.data);
-        console.log(response.data, "A Event");
+        setEditData(response?.data);
+        console.log(response?.data, "A Event");
 
         setIsDrawerOpenO(true);
+        setLoader(false)
       } else {
         console.error("Error: Unexpected response status");
+        setLoader(false)
       }
     } catch (error) {
       console.error(error);
+      setLoader(false)
     }
   };
 
@@ -104,6 +108,7 @@ const Event = () => {
   }, [current_page, isRefresh]);
 
   const pageLimit = 20;
+
   const defaultEvent = (page, limit) => {
     setLoader(true);
     const option = {
@@ -833,6 +838,7 @@ const Event = () => {
 
                             <td className="my-auto  w-2/12 xl:pl-12 ">
                               <div className="flex my-3 gap-3 ">
+                                {console.log( )}
                                 <button onClick={() => openDrawerO(item?._id)}>
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"

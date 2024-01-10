@@ -44,7 +44,8 @@ const Login = () => {
             JSON.stringify(response?.data?.user?._id)
           );
           toast.success("Success. Login Successfully!");
-          router.push("/admin/admin-dashboard");
+          // router.push("/admin/admin-dashboard");
+          router.push("/");
         } else {
           setLoading(false);
           return;
