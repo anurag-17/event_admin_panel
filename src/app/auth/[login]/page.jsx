@@ -46,6 +46,7 @@ const Login = () => {
           toast.success("Success. Login Successfully!");
           // router.push("/admin/admin-dashboard");
           router.push("/");
+          setLoading(false);
         } else {
           setLoading(false);
           return;
