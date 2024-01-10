@@ -464,7 +464,7 @@ const Event = () => {
                     name="category"
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                     2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                    xl:text-[12px]  xl:px-3 xl:py-[2.5px]  xl:w-28 
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
                     md:text-[10px] md:py-1  w-full
                     sm:text-[8px]  sm:py-1
@@ -504,8 +504,8 @@ const Event = () => {
                   <select
                     name="subCategory"
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-40 
+                    xl:text-[12px]  xl:px-3 xl:py-[2.5px]  xl:w-28 
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
                     md:text-[10px] md:py-1  w-full
                     sm:text-[8px]  sm:py-1
