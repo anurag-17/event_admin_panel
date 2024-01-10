@@ -150,10 +150,10 @@ const AllUser = () => {
                 {getAllUser.map((item, index) => (
                   <tr
                     key={index}
-                    className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
+                    className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[12px] text-[10px]"
                   >
                     <td className="my-2 mx-5 w-1/12">{index + 1 + "."}</td>
-                    <td className="my-auto  w-2/12">
+                    <td className="my-auto w-2/12">
                       {item.firstname} {item.lastname}
                     </td>
 

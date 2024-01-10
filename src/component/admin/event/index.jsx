@@ -35,10 +35,11 @@ const Event = () => {
   const [selectCategory, setSelectedCategory] = useState(null);
   const [eventCategory, setEventCategory] = useState(["All"]);
   const [eventSubCategory, setEventSubCategory] = useState("");
-  const [catagoryFilter, setCatagoryFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [subCategoryFilter, setSubCategoryFilter] = useState("");
   const [showLargeImage, setShowLargeImage] = useState(false);
   const [largeImageSrc, setLargeImageSrc] = useState("");
+  const [eventFetch, setEventFetch] = useState("");
   const visiblePageCount = 10;
 
   const handleImageClick = (imageSrc) => {
@@ -162,7 +163,6 @@ const Event = () => {
           endDate,
         },
       };
-
       axios
         .request(options)
         .then(function (response) {
@@ -259,11 +259,11 @@ const Event = () => {
   const handleSearchCategories = (e) => {
     const cate = e.target.value;
     if (cate === "All") {
-      setCatagoryFilter("");
+      setCategoryFilter("");
       refreshData();
       setSelectedCategory(cate);
     } else {
-      setCatagoryFilter(e.target.value);
+      setCategoryFilter(e.target.value);
       const options = {
         method: "GET",
         url:
@@ -297,9 +297,9 @@ const Event = () => {
       const options = {
         method: "GET",
         url:
-          catagoryFilter == ""
+          categoryFilter == ""
             ? `http://localhost:4000/api/event/getAllEvents?subCategory=${subcate}`
-            : `http://localhost:4000/api/event/getAllEvents?subCategory=${subcate}&category=${catagoryFilter}`,
+            : `http://localhost:4000/api/event/getAllEvents?subCategory=${subcate}&category=${categoryFilter}`,
       };
       axios
         .request(options)
@@ -313,6 +313,53 @@ const Event = () => {
           console.error(error);
         });
     }
+  };
+
+  // -----------------event fetch--------------
+
+  const defaultEventFetch = () => {
+    const options1 = {
+      method: "GET",
+      url: "http://localhost:4000/api/auth/fetchEvents",
+    };
+
+    const options2 = {
+      method: "GET",
+      url: "http://localhost:4000/api/event/skiddleEvents",
+    };
+
+    const options3 = {
+      method: "GET",
+      url: "http://localhost:4000/api/event/londontheatredirect",
+    };
+
+    axios
+      .all([
+        axios.request(options1),
+        axios.request(options2),
+        axios.request(options3),
+      ])
+      .then(
+        axios.spread((response1, response2, response3) => {
+          if (response1.status === 200) {
+            setEventFetch(response1.data);
+            console.log(response1.data, "fetchEvents");
+          }
+
+          if (response2.status === 200) {
+            setEventFetch(response2.data);
+            console.log(response2.data, "skiddleEvents");
+          }
+
+          if (response3.status === 200) {
+            setEventFetch(response3.data);
+            console.log(response3.data, "londontheatredirect");
+          }
+        })
+      )
+      .catch(function (error) {
+        console.error(error);
+      });
   };
 
   return (
@@ -334,6 +381,65 @@ const Event = () => {
             />
           </div>
           <h2>Welcome Back, Admin</h2>
+        </div>
+
+        {/* ---------Event fetch---------- */}
+        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+          <div className="flex gap-2">
+            <div className="">
+              <div className="">
+                <div>
+                  {" "}
+                  <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                    Start Date
+                  </label>
+                </div>
+                <div>
+                  <input
+                    type="date"
+                    value=""
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
+                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
+                   text-sm  px-2 py-1 h-[20px] "
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="">
+              <div className="">
+                <div>
+                  {" "}
+                  <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                    End Date
+                  </label>
+                </div>
+                <div>
+                  <input
+                    type="date"
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
+                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
+                   text-sm  px-2 py-1 h-[20px] "
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <button
+              onClick={defaultEventFetch}
+              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
+            >
+              + Fetch External Event
+            </button>
+          </div>
         </div>
         <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
           <div>
@@ -369,7 +475,7 @@ const Event = () => {
                     <option value=""> Category</option>
                     {getAllCate.map((item) => (
                       <option
-                        key={item.id}
+                        key={item._id}
                         value={item._id}
                         className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                       >
@@ -379,7 +485,6 @@ const Event = () => {
                   </select>
                 </div>
               </div>
-             
 
               {/* -----Filter SubCategory-------- */}
 
@@ -555,7 +660,7 @@ const Event = () => {
                   <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
                     S.NO
                   </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
                     Image
                   </th>
                   <th className="  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
@@ -595,7 +700,7 @@ const Event = () => {
                             <td className=" my-auto w-1/12">
                               {index + 1 + "."}
                             </td>
-                            <td className="my-auto  w-1/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
+                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
                               <div
                                 className="cursor-pointer "
                                 onClick={() => handleImageClick(item?.image)}
@@ -604,7 +709,7 @@ const Event = () => {
                                   src={item?.images[0]?.url}
                                   height={100}
                                   width={100}
-                                  className="w-2/3"
+                                  className="w-2/4"
                                 />
                               </div>
                               <div className="">
@@ -636,23 +741,23 @@ const Event = () => {
                                 )}
                               </div>
                             </td>
-                            <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
+                            <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
                               <p className="w-40">{item.name}</p>
                             </td>
 
                             <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
                               {item.city}
                             </td>
-                            <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
+                            <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
                               {item.startDate}
                             </td>
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
                               {item.endDate}
                             </td>
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-8">
                               {item.location}
                             </td>
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  xl:pl-10 ">
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  xl:pl-7 ">
                               <div className="">
                                 <select
                                   name="category"
