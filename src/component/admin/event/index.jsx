@@ -12,7 +12,7 @@ import Pagination from "../../pagination";
 import { ToastContainer } from "react-toastify";
 
 const Event = () => {
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
   const [getAllEvent, setGetAllEvent] = useState([]);
   const [isRefresh, setRefresh] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -712,6 +712,7 @@ const Event = () => {
                               >
                                 <img
                                   src={item?.images[0]?.url}
+                                  alt="loading.."
                                   height={100}
                                   width={100}
                                   className="w-2/4"
@@ -736,6 +737,7 @@ const Event = () => {
                                       >
                                         <img
                                           src={item?.images[0]?.url}
+                                          alt="loading.."
                                           height={240}
                                           width={240}
                                           className="mx-auto xl:w-[400px]"
