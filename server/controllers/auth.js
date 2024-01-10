@@ -399,12 +399,14 @@ exports.fetchEvent = async (req, res) => {
     const apiKey = process.env.TICKETMASTER_API_KEY;
 
     // Extract start and end dates from query parameters
-    const startDateParam = req.query.startDate;
-    const endDateParam = req.query.endDate;
+    let { startDate, endDate } = req.query;
 
-    // Validate and parse the dates
-    const filterStartDate = new Date(startDateParam);
-    const filterEndDate = new Date(endDateParam);
+    // Default startDate to the current date if not provided
+    startDate = startDate ? new Date(startDate) : new Date();
+
+    // Default endDate to one month after the current date if not provided
+    endDate = endDate ? new Date(endDate) : new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
 
     // Fetch events data
     const response = await axios.get(
@@ -429,8 +431,10 @@ exports.fetchEvent = async (req, res) => {
       const eventStartDate = new Date(event.dates.start.dateTime);
       const eventEndDate = new Date(event.sales.public.endDateTime);
 
-      return eventStartDate >= filterStartDate && eventEndDate <= filterEndDate;
+      return eventStartDate >= startDate && eventEndDate <= endDate;
     });
+
+    let eventsAdded = 0;
 
     // Process and save each filtered event to the database
     for (const event of filteredEvents) {
@@ -463,28 +467,16 @@ exports.fetchEvent = async (req, res) => {
 
         // Save the event to the database
         await Event.create(eventData);
+        console.log(`Event ${event.name} saved successfully.`);
+        eventsAdded++;
+      } else {
+        console.error(`Event ${event.name} already exists. Skipping...`);
       }
     }
 
-    res.status(200).json({ message: "Filtered events saved successfully." });
+    res.status(200).json({ message: `Filtered events saved successfully. ${eventsAdded} event(s) added.` });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
   }
 };
-
-
-// if (req.body?.address && req.body?.address != "") {
-//   await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${req.body?.address}&key=${REACT_APP_GOOGLE_MAP}`).then((res) => {
-//     // console.log(res.data.results[0].geometry.location);
-//     if (res.data.status === "OK") {
-
-//       req.body.google_geo_location = res.data.results[0].geometry.location
-//     } else {
-//       // console.log(res.data);
-//     }
-
-//   }).catch((e) => {
-//     console.log(e);
-//   })
-// }

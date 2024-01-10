@@ -173,6 +173,9 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
 
     const events = eventsResponse.data.Events;
 
+    // Initialize the eventsAdded counter
+    let eventsAdded = 0;
+
     // Filter events based on startDate and endDate
     const filteredEvents = events.filter((event) => {
       const eventStartDate = new Date(event.StartDate);
@@ -234,13 +237,16 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
           // Save the event to the database
           await Event.create(eventData);
           console.log(`Event ${event.Name} saved successfully.`);
+          
+          // Increment the eventsAdded counter
+          eventsAdded++;
         } else {
           console.error("Error fetching geocoding data:", geocodingResponse.data.error_message || "Unknown error");
         }
       }
     }
 
-    res.status(200).json({ message: "Filtered events saved successfully." });
+    res.status(200).json({ message: `Filtered events saved successfully. ${eventsAdded} event(s) added.` });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
@@ -263,6 +269,9 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
     
     const skiddleResponse = await axios.get(skiddleApiUrl);
     const skiddleEvents = skiddleResponse.data.results;
+
+    // Initialize the eventsAdded counter
+    let eventsAdded = 0;
 
     // Filter events based on startDate and endDate
     const filteredEvents = skiddleEvents.filter((event) => {
@@ -301,10 +310,13 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
 
         // Save the event to the database
         await Event.create(eventData);
+        
+        // Increment the eventsAdded counter
+        eventsAdded++;
       }
     }
 
-    res.status(200).json({ message: "Filtered events saved successfully." });
+    res.status(200).json({ message: `Filtered events saved successfully. ${eventsAdded} event(s) added.` });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
