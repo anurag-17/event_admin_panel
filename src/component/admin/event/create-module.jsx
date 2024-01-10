@@ -12,7 +12,8 @@ const CreateEvent = ({ closeDrawer }) => {
   const [getallSubCategory, setGetallSubCategory] = useState([]);
   const [getallCategory, setGetallCategory] = useState([]);
 
-  const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
+  const accessTokenString = localStorage.getItem("accessToken");
+  const auth_token = accessTokenString ? JSON.parse(accessTokenString) : null;
   const [eventDetail, setEventDetail] = useState({
     name: "",
     description: "",
@@ -21,25 +22,25 @@ const CreateEvent = ({ closeDrawer }) => {
     location: "",
     city: "",
     country: "",
-    latitude: "",
-    longitude: "",
+    // latitude: "",
+    // longitude: "",
     price: "",
     currency: "",
     category: "",
     subCategory: "",
     capacity: "",
-    image: "",
+    images: [],
     resource_url: "",
   });
-  console.log(eventDetail.image, "token");
-  const [eventImage, setEventImage] = useState(""); 
+  // console.log(eventDetail.image, "token");
+  const [eventImage, setEventImage] = useState("");
   const [imageDisable, setImageDisable] = useState(false);
   const [imageUpload, setImageUpload] = useState(false);
 
   const today = new Date();
   const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-  const day = today.getDate().toString().padStart(2, '0');
+  const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
+  const day = today.getDate().toString().padStart(2, "0");
   const formattedToday = `${year}-${month}-${day}T00:00`;
   // console.log(formattedToday)
   const refreshData = () => {
@@ -51,8 +52,6 @@ const CreateEvent = ({ closeDrawer }) => {
       location: "",
       city: "",
       country: "",
-      latitude: "",
-      longitude: "",
       price: "",
       currency: "",
       category: "",
@@ -63,11 +62,11 @@ const CreateEvent = ({ closeDrawer }) => {
     });
   };
 
-  const inputHandler = (e) => { 
+  const inputHandler = (e) => {
     const { name, value } = e.target;
-    if (e.target.name === "image") {
+    if (e.target.name === "images") {
       setEventImage({ file: e.target.files[0] });
-    }else{
+    } else {
       setEventDetail({
         ...eventDetail,
         [name]: value,
@@ -75,8 +74,13 @@ const CreateEvent = ({ closeDrawer }) => {
     }
   };
 
+  const addField = (e) => {
+    setImageDisable(false);
+    setEventImage("");
+  };
+
   const uploadImage = async () => {
-    alert("okk")
+    // alert("okk")
     setImageUpload(true);
 
     if (eventImage == "" || eventImage == undefined) {
@@ -94,12 +98,21 @@ const CreateEvent = ({ closeDrawer }) => {
 
       if (response.status === 200) {
         // console.log('Category added:', response?.data);
-        setEventDetail({ ...eventDetail, ["image"]: response?.data?.url });
+        // setEventDetail({
+        //   ...eventDetail,
+        //   images: [...eventDetail.images, response?.data?.url],
+        // });
+        const newImage = { url: response?.data?.url };
+        setEventDetail({
+          ...eventDetail,
+          images: [...eventDetail?.images, newImage],
+        });
+  
         setImageDisable(true);
         setImageUpload(false);
         // setSubmited(true);
       } else {
-        setEventDetail({ ...eventDetail, ["image"]: "" });
+        setEventDetail({ ...eventDetail, ["images"]: "" });
         setImageDisable(false);
         setImageUpload(false);
       }
@@ -109,44 +122,78 @@ const CreateEvent = ({ closeDrawer }) => {
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   if (eventDetail?.images?.length<1 ) {
+  //     toast.warn("Please upload atleast 1 image");
+  //   } else {
+  //     try {
+  //       await fetch("/api/event/createEvent", {
+  //         method: "POST",
+  //         headers: {
+  //           "content-type": "application/json",
+  //           authorization: auth_token,
+  //         },
+  //         body: JSON.stringify(eventDetail),
+  //       })
+  //         .then((res) => {
+  //           if (res.status === 201) {
+  //             refreshData();
+  //             closeDrawer();
+  //             setLoading(false);
+  //             toast.success("Submit successfully!");
+  //           } else {
+  //             setLoading(false);
+  //             return;
+  //           }
+  //         })
+  //         .catch((e) => {
+  //           console.log(e);
+  //           setLoading(false);
+  //         });
+  //     } catch (error) {
+  //       console.error(error);
+  //       toast.error(error?.response?.data?.messgae || "server error");
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    if(eventDetail?.image == ""){
-      toast.warn("Please fill all feilds");
-    }else{
+    if (eventDetail?.images?.length < 1) {
+      toast.warn("Please upload atleast 1 image");
+    } else {
       try {
-        await fetch("/api/event/createEvent", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            authorization: auth_token,
-          },
-          body: JSON.stringify(eventDetail),
-        })
-          .then((res) => {
-            if (res.status===201) {
-              refreshData();
-              closeDrawer();
-              setLoading(false);
-              toast.success("Submit successfully!")
-            } else {
-              setLoading(false);
-              return
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            setLoading(false);
-          });
+        const response = await axios.post(
+          `/api/event/createEvent`,
+          JSON.stringify(eventDetail),
+          {
+            headers: {
+              "content-type": "application/json",
+              authorization: auth_token,
+            },
+          }
+        );
+
+        if (response.status === 201) {
+          refreshData();
+          closeDrawer();
+          setLoading(false);
+          toast.success("Submit successfully!");
+        } else {
+          setLoading(false);
+          return;
+        }
       } catch (error) {
         console.error(error);
-        toast.error(error?.response?.data?.messgae || "server error")
+        toast.error(error?.response?.data?.messgae || "server error");
         setLoading(false);
       }
     }
   };
-
   useEffect(() => {
     defaultCategory();
   }, []);
@@ -187,7 +234,6 @@ const CreateEvent = ({ closeDrawer }) => {
 
   return (
     <>
-
       <div
         className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
       2xl:px-5  2xl:h-[50px] 2xl:my-5
@@ -210,16 +256,7 @@ const CreateEvent = ({ closeDrawer }) => {
       >
         {/* ------1.Event Name----- */}
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event Name
           </label>
           <input
@@ -229,28 +266,12 @@ const CreateEvent = ({ closeDrawer }) => {
             required
             type="text"
             name="name"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-          />
+            className="custom_input" />
         </div>
         {/* ------2. Event description----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event Description
           </label>
           <input
@@ -258,30 +279,15 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.description}
             type="text"
             name="description"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"  
+             required
             maxLength={300}
           />
         </div>
         {/* ------3. Event startDate----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event StartDate
           </label>
           <input
@@ -289,14 +295,7 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.startDate}
             type="datetime-local"
             name="startDate"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"   required
             min={formattedToday}
             // max={maxDatetime}
           />
@@ -304,16 +303,7 @@ const CreateEvent = ({ closeDrawer }) => {
         {/* ------4. Event endDate----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event EndDate
           </label>
           <input
@@ -321,30 +311,14 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.endDate}
             type="datetime-local"
             name="endDate"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
-            min={eventDetail?.startDate ||  formattedToday}
+            className="custom_input"   required
+            min={eventDetail?.startDate || formattedToday}
           />
         </div>
         {/* ------5. Event location----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event Location
           </label>
           <input
@@ -352,30 +326,14 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.location}
             type="text"
             name="location"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"   required
             maxLength={200}
           />
         </div>
         {/* ------6.Event city----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event City
           </label>
           <input
@@ -383,14 +341,7 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.city}
             type="text"
             name="city"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"   required
             maxLength={64}
           />
         </div>
@@ -398,16 +349,7 @@ const CreateEvent = ({ closeDrawer }) => {
         {/* ------7. Event country----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event Country
           </label>
           <input
@@ -415,90 +357,15 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.country}
             type="text"
             name="country"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"   required
             maxLength={64}
           />
         </div>
-        {/* ------8. Event latitude----- */}
-
-        <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
-            Event Latitude
-          </label>
-          <input
-            onChange={inputHandler}
-            value={eventDetail.latitude}
-            type="text"
-            name="latitude"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
-          />
-        </div>
-        {/* ------9. Event longitude----- */}
-
-        <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
-            Event Longitude
-          </label>
-          <input
-            onChange={inputHandler}
-            value={eventDetail.longitude}
-            type="text"
-            name="longitude"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
-          />
-        </div>
+       
         {/* ------10. Event price----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event Price
           </label>
           <input
@@ -506,14 +373,7 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.price}
             type="text"
             name="price"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"   required
             pattern="[0-9]*"
             title="Please enter only numbers"
           />
@@ -521,16 +381,7 @@ const CreateEvent = ({ closeDrawer }) => {
         {/* ------11. Event currency----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event Currency
           </label>
           <input
@@ -538,30 +389,20 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.currency}
             type="text"
             name="currency"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"   required
           />
         </div>
         {/* ------12. Event category----- */}
 
         <div className="w-1/2">
-          <label
-            htmlFor="category"
-            className="absolute bg-white z-20 text-gray-800 2xl:text-[18px] 2xl:mt-6 2xl:ml-14 xl:text-[14px] xl:mt-2 xl:ml-8 lg:text-[12px] lg:mt-[10px] lg:ml-[26px] md:text-[10px] md:mt-2 md:ml-6 sm:text-[9px] sm:mt-1 sm:ml-5 text-[8px] mt-[2px] ml-4"
-          >
+          <label  htmlFor="category" className="custom_input_label" >
             Event Category
           </label>
 
           <div className="">
             <select
               name="category"
-              className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px] xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px] lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px] md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px] sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px] text-sm m-2 px-2 py-1 h-[20px] w-10/12 lg:w-8/12"
+              className="custom_input w-10/12 lg:w-8/12"
               onChange={inputHandler}
               required
               maxLength={64}
@@ -584,28 +425,14 @@ const CreateEvent = ({ closeDrawer }) => {
         {/* ------13. Event subCategory----- */}
 
         <div className="w-1/2 ">
-          <label
-            htmlFor=""
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4"
-          >
+          <label htmlFor=""  className="custom_input_label" >
             Event SubCategory
           </label>
 
           <div className="">
             <select
               name="subCategory"
-              className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative  2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px] w-10/12  lg:w-8/12"
+              className="custom_input w-10/12 lg:w-8/12"
               onChange={inputHandler}
               required
               maxLength={64}
@@ -628,16 +455,7 @@ const CreateEvent = ({ closeDrawer }) => {
         {/* ------14. Event capacity----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event Capacity
           </label>
           <input
@@ -645,14 +463,7 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.capacity}
             type="text"
             name="capacity"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"   required
             pattern="[0-9]*"
             title="Please enter only numbers"
           />
@@ -660,16 +471,7 @@ const CreateEvent = ({ closeDrawer }) => {
         {/* ------15. Event resource_url----- */}
 
         <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
-          >
+          <label className="custom_input_label" >
             Event URL
           </label>
           <input
@@ -677,99 +479,72 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.resource_url}
             type="text"
             name="resource_url"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
+            className="custom_input"   required
           />
         </div>
         {/* ------16. Event image----- */}
 
-        <div className="py-2 flex items-end gap-x-10 w-1/2">
-                  <div className="w-[50%]">
-                    <span className="login-input-label cursor-pointer mb-2">
-                      Picture
-                    </span>
-                    <div className="flex items-center w-full">
-                      <input
-                        id="file"
-                        type="file"
-                        name="image"
-                        disabled={imageDisable}
-                        onChange={inputHandler}
-                        className="w-full text-black border text-[13px] hover:white "
-                        accept="image/png,image/jpg, image/jpeg , image/*"
-                      />
-                    </div>
-                  </div>
-                  <div className="">
-                    <button
-                      className={`focus-visible:outline-none text-[13px] px-4 py-1 rounded
-                                ${
-                                  imageDisable
-                                    ? " bg-[green]"
-                                    : imageUpload
-                                    ? "bg-[gray]"
-                                    : "bg-[#070708] text-[white]"
-                                }`}
-                      type="button"
-                      onClick={uploadImage}
-                      disabled={imageDisable || imageUpload}
-                    >
-                      {imageDisable
-                        ? "Uploaded"
+        <div className="2xl:m-10 lg:m-5 md:m-4 sm:m-3">
+          <div className="py-2 flex items-end gap-x-10 ">
+            <div className="">
+              <span className="login-input-label cursor-pointer mb-2">
+                Picture
+              </span>
+              <div className="flex items-center w-full">
+                <input
+                  id="file"
+                  type="file"
+                  name="images"
+                  disabled={imageDisable}
+                  onChange={inputHandler}
+                  className="w-full text-black border text-[13px] hover:white max-w-[200px] mt-2"
+                  accept="image/png,image/jpg, image/jpeg , image/*"
+                />
+              </div>
+            </div>
+
+            <div className="">
+              {imageDisable ? (
+                <button
+                  className="p-2 border h-[20px] flex justify-center items-center"
+                  type="button"
+                  onClick={addField}
+                >
+                  +
+                </button>
+              ) : (
+                <button
+                  className={`focus-visible:outline-none  text-white text-[13px] px-4 py-1 rounded
+                    ${
+                      imageDisable
+                        ? " bg-[green]"
                         : imageUpload
-                        ? "Loading.."
-                        : "Upload"}
-                    </button>
-                  </div>
-                </div>
+                        ? "bg-[gray]"
+                        : "bg-[#070708] text-[white]"
+                    }`}
+                  type="button"
+                  onClick={uploadImage}
+                  disabled={imageDisable || imageUpload}
+                >
+                  {imageDisable
+                    ? "Uploaded"
+                    : imageUpload
+                    ? "Loading.."
+                    : "Upload"}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
 
-        {/* <div className="w-1/2">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[10px] md:mt-2 md:ml-6
-          sm:text-[9px] sm:mt-1 sm:ml-5
-          text-[8px] mt-[2px] ml-4
-          "
+        <div className="w-full">
+          <button
+            type="submit"
+            className="custom_btn"
           >
-            Event Image
-          </label>
-          <input
-            onChange={inputHandler}
-            value={eventDetail.image}
-            type="text"
-            name="image"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
-            "
-            required
-          />
-        </div> */}
-
-        <button
-          type="submit"
-          className="border bg-blue-500 hover:bg-blue-600 text-white lg:rounded-lg bg-lightBlue-600 2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
-            xl:text-[14px] xl:p-2 xl:m-5 xl:mt-0
-            lg:text-[12px] lg:p-2 lg:m-5 lg:mt-0
-            md:text-[11px] md:p-[6px] md:m-4 md:mt-0
-            sm:text-[10px] sm:p-1 sm:m-3 sm:mt-0
-            text-[9px] p-1 m-2 mt-0 rounded-md
-             "
-        >
-          Add Event
-        </button>
+            Add Event
+          </button>
+        </div>
       </form>
     </>
   );
