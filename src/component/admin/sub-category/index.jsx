@@ -154,7 +154,7 @@ const SubCategoryPage = () => {
               onClick={closeSubCategory}
               className="  text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
+              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"  alt="close"/>
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -179,7 +179,7 @@ const SubCategoryPage = () => {
               onClick={closeDrawerO}
               className=" text-gray-400  shadow-2xl text-sm top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
+              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"  alt="close"/>
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -202,7 +202,7 @@ const SubCategoryPage = () => {
       </section>
 
       <Transition appear show={isOpenDelete} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className=" z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

@@ -69,7 +69,6 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
       .request(options)
       .then((response) => {
         setGetallCategory(response?.data);
-        console.log("hell", response?.data);
         setLoadingBtn(false);
       })
       .catch((error) => {
@@ -98,6 +97,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
 
       <div>
         <form
+        
           onSubmit={handleUpdateCategory}
           className=" bg-white border  rounded-lg 2xl:p-2 xl:p-2  lg:p-1 md:p-2 p-1  mx-auto"
         >
@@ -161,13 +161,14 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
               required
               minLength={3}
               max={84}
+              selected
             >
               <option value="" disabled>
                 Select Category
               </option>
               {getallCategory?.map((item, index) => (
-                <option value={editData?.category}>
-                  <p>{item?.title}</p>
+                <option key={item.id}  value={editData?.category} >
+                  {item?.title}
                 </option>
               ))}
             </select>

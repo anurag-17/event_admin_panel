@@ -116,8 +116,8 @@ const AllUser = () => {
           <h2>Welcome Back, Admin</h2>
         </div>
 
-        <div className="relative flex mx-5 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
-          <div className=" z-10 w-full ">
+        <div className=" flex mx-5 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
+          <div className=" w-full ">
             <table className="w-[155%] sm:w-[100%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
                 <tr
@@ -195,7 +195,7 @@ const AllUser = () => {
       </div>
 
       <Transition appear show={isModalOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className=" z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -225,12 +225,13 @@ const AllUser = () => {
                       <img
                         src="/images/close-square.svg"
                         className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
+                        alt="close"
                       />
                     </button>
                   </div>
                   <Dialog.Title
                     as="h3"
-                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900 mb-4"
                   >
                     <div></div>
                     User Detail

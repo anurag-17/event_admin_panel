@@ -9,8 +9,6 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
     id: cateEdit,
   });
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
-  // const { auth_token } = useSelector((state) => state.adminAuth || null);
-  console.log(cateEdit);
   const inputHandler = (e) => {
     const { name, value } = e.target;
 
@@ -33,12 +31,10 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
       });
 
       if (response.status === 200) {
-        // toast.success("Category Update successfully !");
         setLoading(false);
         closeDrawer();
         refreshData();
         toast.success("Category Update Successfully!");
-
       } else {
         setLoading(false);
         toast.error("Server error !");

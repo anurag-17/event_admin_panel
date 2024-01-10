@@ -50,7 +50,7 @@ const Event = () => {
     setShowLargeImage(false);
   };
   const openDrawerO = async (_id) => {
-    setLoader(true)
+    setLoader(true);
     try {
       const options = {
         method: "POST",
@@ -65,14 +65,14 @@ const Event = () => {
         console.log(response?.data, "A Event");
 
         setIsDrawerOpenO(true);
-        setLoader(false)
+        setLoader(false);
       } else {
         console.error("Error: Unexpected response status");
-        setLoader(false)
+        setLoader(false);
       }
     } catch (error) {
       console.error(error);
-      setLoader(false)
+      setLoader(false);
     }
   };
 
@@ -389,13 +389,13 @@ const Event = () => {
         </div>
 
         {/* ---------Event fetch---------- */}
-        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px]">
           <div className="flex gap-2">
             <div className="">
               <div className="">
                 <div>
                   {" "}
-                  <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                  <label className=" text-gray-500 sm:text-[8px]   md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
                     Start Date
                   </label>
                 </div>
@@ -403,13 +403,13 @@ const Event = () => {
                   <input
                     type="date"
                     value=""
-                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
-                   text-sm  px-2 py-1 h-[20px] "
+                    md:text-[10px] md:px-2  
+                    sm:text-[8px]   
+                   text-sm "
                   />
                 </div>
               </div>
@@ -418,20 +418,20 @@ const Event = () => {
               <div className="">
                 <div>
                   {" "}
-                  <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                  <label className=" text-gray-500  sm:text-[8px]  md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
                     End Date
                   </label>
                 </div>
                 <div>
                   <input
                     type="date"
-                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
-                   text-sm  px-2 py-1 h-[20px] "
+                    md:text-[10px] md:px-2  
+                    sm:text-[8px]  
+                   text-sm "
                   />
                 </div>
               </div>
@@ -440,13 +440,13 @@ const Event = () => {
           <div className="">
             <button
               onClick={defaultEventFetch}
-              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
+              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-2 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
             >
               + Fetch External Event
             </button>
           </div>
         </div>
-        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px]">
           <div>
             <div className="flex gap-2 lg:gap-2 xl:gap-2 2xl:gap-4">
               {/* -----Filter Category-------- */}
@@ -455,20 +455,20 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 sm:text-[8px]   md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by Category
                     </label>
                   </div>
 
                   <select
                     name="category"
-                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                     2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
-                     md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                     sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px]
-                      text-sm  px-2 py-1 h-[20px] "
+                    md:text-[10px] md:py-1  w-full
+                    sm:text-[8px]  sm:py-1
+                   text-sm  "
                     required
                     minLength={3}
                     maxLength={32}
@@ -497,19 +497,19 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 sm:text-[8px]   md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by SubCategory
                     </label>
                   </div>
                   <select
                     name="subCategory"
-                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
-                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
-                   text-sm  px-2 py-1 h-[20px] "
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
+                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
+                    md:text-[10px] md:py-1  w-full
+                    sm:text-[8px]  sm:py-1
+                   text-sm  "
                     required
                     minLength={3}
                     maxLength={32}
@@ -542,20 +542,20 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500  sm:text-[8px]    md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by Start Date
                     </label>
                   </div>
                   <div>
                     <input
                       type="date"
-                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
-                   text-sm  px-2 py-1 h-[20px] "
+                    md:text-[10px] md:px-2  
+                    sm:text-[8px]  
+                   text-sm "
                       onChange={handleDateSearch}
                     />
                   </div>
@@ -567,20 +567,20 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500   sm:text-[8px]   md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by End Date
                     </label>
                   </div>
                   <div>
                     <input
                       type="date"
-                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
-                   text-sm  px-2 py-1 h-[20px] "
+                    md:text-[10px] md:px-2  
+                    sm:text-[8px]   
+                   text-sm "
                       onChange={handleDateSearch}
                     />
                   </div>
@@ -594,7 +594,7 @@ const Event = () => {
           <div className="">
             <button
               onClick={openDrawer}
-              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
+              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-2 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
             >
               + Add Event
             </button>
@@ -649,8 +649,8 @@ const Event = () => {
             </div>
           </div>
         )}
-        <div className="relative flex mx-10 lg:mx-8  overflow-x-auto ">
-          <div className=" z-10 w-full ">
+        <div className=" flex mx-10 lg:mx-8  overflow-x-auto ">
+          <div className=" w-full ">
             <table className="lg:w-[130%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
                 <tr
@@ -768,13 +768,13 @@ const Event = () => {
                               <div className="">
                                 <select
                                   name="category"
-                                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                     2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
                     lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
-                     md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                     sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px]
-                      text-sm  px-2 py-1 h-[20px] "
+                    md:text-[10px] md:py-1  w-full
+                    sm:text-[8px]  
+                   text-sm  "
                                   onChange={inputHandler}
                                   required
                                   minLength={3}
@@ -797,13 +797,13 @@ const Event = () => {
                               <div className="my-1">
                                 <select
                                   name="subCategory"
-                                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
-                                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
-                                   xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
-                                   lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
-                                    md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                                    sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px]
-                      text-sm  px-2 py-1 h-[20px] "
+                                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
+                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
+                    md:text-[10px] md:py-1  w-full
+                   sm:text-[8px]  
+                   text-sm  "
                                   onChange={inputHandler}
                                   required
                                   minLength={3}
@@ -840,7 +840,7 @@ const Event = () => {
 
                             <td className="my-auto  w-2/12 xl:pl-12 ">
                               <div className="flex my-3 gap-3 ">
-                                {console.log( )}
+                                {console.log()}
                                 <button onClick={() => openDrawerO(item?._id)}>
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -899,7 +899,7 @@ const Event = () => {
       />
 
       <Transition appear show={isOpenDelete} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className=" z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

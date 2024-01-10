@@ -134,7 +134,7 @@ const Category = () => {
               onClick={closeDrawer}
               className="  text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
+              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" alt="close"/>
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -158,7 +158,7 @@ const Category = () => {
               onClick={closeDrawerO}
               className="  shadow-2xl text-sm top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
+              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" alt="close"/>
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -173,7 +173,7 @@ const Category = () => {
           </div>
         )}
         <div className="mx-10 lg:mx-8 ">
-          <table className="z-10 border w-full table-auto bg-white rounded-md mt-5   relative   p-10">
+          <table className="z-10 border w-full table-auto bg-white rounded-md mt-5      p-10">
             <thead className="">
               <tr
                 className="bg-coolGray-200 text-gray-400 text-start flex border 
