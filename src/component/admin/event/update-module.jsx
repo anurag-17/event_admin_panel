@@ -1,5 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { ToastContainer , toast} from "react-toastify";
+
 import axios from "axios";
 import Image from "next/image";
 
@@ -40,40 +42,45 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
       });
     setEventDetail({ ...eventDetail, [`images`]: newImage });
     setImageDisable(false);
-    refreshData();
+    // refreshData();
   };
   // console.log(eventDetail)
 
   const uploadImage = async (e) => {
+    alert("okk")
     setImageUpload(true);
 
     if (eventImage == "" || eventImage == undefined) {
       setImageUpload(false);
       return toast.warn("Please upload image.");
     }
+else{
+  try {
+    const response = await axios.post("/api/auth/uploadImage", eventImage, {
+      headers: {
+        Authorization: auth_token,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-    try {
-      const response = await axios.post("/api/auth/uploadImage", eventImage, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
+    if (response.status === 200) {
+      const newImage = { url: response?.data?.url };
+      setEventDetail({
+        ...eventDetail,
+        images: [...eventDetail?.images, newImage],
       });
-
-      if (response.status === 200) {
-        // console.log('Category added:', response?.data);
-        setEventDetail({ ...eventDetail, ["image"]: response?.data?.url });
-        setImageDisable(true);
-        setImageUpload(false);
-      } else {
-        setEventDetail({ ...eventDetail, ["image"]: "" });
-        setImageDisable(false);
-        setImageUpload(false);
-      }
-    } catch (error) {
-      console.error("Error adding category:", error?.response?.data);
+      setImageDisable(true);
+      setImageUpload(false);
+    } else {
+      setEventDetail({ ...eventDetail, ["images"]: "" });
+      setImageDisable(false);
       setImageUpload(false);
     }
+  } catch (error) {
+    console.error("Error", error);
+    setImageUpload(false);
+  }
+}
   };
 
   const addField = async (e) => {
@@ -461,7 +468,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
               <div className="grid grid-cols-2 gap-2 w-1/2 2xl:px-10 lg:px-5 px-4 ">
                 {eventDetail?.images?.map((item, inx) => (
                   <>
-                  {console.log(item)}
+                  {/* {console.log(item)} */}
                     <div className="flex gap-2 items-center ">
                       <p
                         className="underline md:text-[18px] text-[16px] font-[400] px-4 cursor-pointer"
@@ -505,11 +512,13 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                 ) : (
                   <button
                     className={`focus-visible:outline-none  text-white text-[13px] px-4 py-1 rounded
-                                    ${
-                                      imageDisable
-                                        ? "bg-[green]"
-                                        : "bg-[#070708bd]"
-                                    }`}
+                    ${
+                      imageDisable
+                        ? " bg-[green]"
+                        : imageUpload
+                        ? "bg-[gray]"
+                        : "bg-[#070708] text-[white]"
+                    }`}
                     type="button"
                     onClick={uploadImage}
                     disabled={imageDisable || imageUpload}
@@ -573,11 +582,12 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                     X
                   </div>
                   <div className="px-5 py-4">
-                    <Image
-                       src={`/utils?url=${encodeURIComponent(imgUrl)}`}
+                    <img
+                      //  src={`/utils?url=${encodeURIComponent(imgUrl)}`}
+                       src={imgUrl}
                       alt="loading.."
-                      height={300}
-                      width={300}
+                      // height={300}
+                      // width={300}
                     />
                   </div>
                 </Dialog.Panel>
