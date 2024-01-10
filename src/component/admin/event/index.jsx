@@ -162,7 +162,7 @@ const Event = () => {
       const endDate = "";
       const options = {
         method: "GET",
-        url: `http://localhost:4000/api/event/getAllEvents`,
+        url: `http://100.24.75.181:4000/api/event/getAllEvents`,
         params: {
           startDate,
           endDate,
@@ -273,8 +273,8 @@ const Event = () => {
         method: "GET",
         url:
           subCategoryFilter == ""
-            ? `http://localhost:4000/api/event/getAllEvents?category=${cate}`
-            : `http://localhost:4000/api/event/getAllEvents?category=${cate}&subCategory=${subCategoryFilter}`,
+            ? `http://100.24.75.181:4000/api/event/getAllEvents?category=${cate}`
+            : `http://100.24.75.181:4000/api/event/getAllEvents?category=${cate}&subCategory=${subCategoryFilter}`,
       };
       axios
         .request(options)
@@ -303,8 +303,8 @@ const Event = () => {
         method: "GET",
         url:
           categoryFilter == ""
-            ? `http://localhost:4000/api/event/getAllEvents?subCategory=${subcate}`
-            : `http://localhost:4000/api/event/getAllEvents?subCategory=${subcate}&category=${categoryFilter}`,
+            ? `http://100.24.75.181:4000/api/event/getAllEvents?subCategory=${subcate}`
+            : `http://100.24.75.181:4000/api/event/getAllEvents?subCategory=${subcate}&category=${categoryFilter}`,
       };
       axios
         .request(options)
@@ -325,17 +325,17 @@ const Event = () => {
   const defaultEventFetch = () => {
     const options1 = {
       method: "GET",
-      url: "http://localhost:4000/api/auth/fetchEvents",
+      url: "http://100.24.75.181:4000/api/auth/fetchEvents",
     };
 
     const options2 = {
       method: "GET",
-      url: "http://localhost:4000/api/event/skiddleEvents",
+      url: "http://100.24.75.181:4000/api/event/skiddleEvents",
     };
 
     const options3 = {
       method: "GET",
-      url: "http://localhost:4000/api/event/londontheatredirect",
+      url: "http://100.24.75.181:4000/api/event/londontheatredirect",
     };
 
     axios
