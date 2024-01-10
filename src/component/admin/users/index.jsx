@@ -100,7 +100,7 @@ const AllUser = () => {
   return (
     <>
       <div>
-        <div className="lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border mx-10 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border mx-10 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Users List </h2>
 
           <div className="flex items-center w-[40%]">
@@ -116,77 +116,81 @@ const AllUser = () => {
           <h2>Welcome Back, Admin</h2>
         </div>
 
-        <div className="mx-10 lg:mx-8 z-10">
-          <table className="border w-full table-auto bg-white rounded-md mt-5   relative   p-10">
-            <thead className="">
-              <tr
-                className="bg-coolGray-200 text-gray-400 text-start flex  
+        <div className="relative flex mx-5 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
+          <div className=" z-10 w-full ">
+            <table className="w-[155%] sm:w-[100%]  border bg-white rounded-md mt-5 p-10">
+              <thead className="">
+                <tr
+                  className="bg-coolGray-200 text-gray-400 text-start flex  
           2xl:text-[22px] 
           xl:text-[14px]
            lg:text-[12px] 
            md:text-[12px] 
            sm:text-[12px] 
            text-[10px]"
-              >
-                <th className="mx-5 w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
-                  S.NO
-                </th>
-                <th className="  w-2/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
-                  USER NAME
-                </th>
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-4/12 ">
-                  EMAIL
-                </th>
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                  Provider
-                </th>
-                <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                  VIEW
-                </th>
-              </tr>
-            </thead>
-            {getAllUser?.length > 0 && (
-              <tbody>
-                {getAllUser.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[12px] text-[10px]"
-                  >
-                    <td className="my-2 mx-5 w-1/12">{index + 1 + "."}</td>
-                    <td className="my-auto w-2/12">
-                      {item.firstname} {item.lastname}
-                    </td>
+                >
+                  <th className="mx-3 lg:mx-5 w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
+                    S.NO
+                  </th>
+                  <th className="  w-3/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
+                    USER NAME
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-5/12 sm:w-4/12 ">
+                    EMAIL
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                    Provider
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
+                    VIEW
+                  </th>
+                </tr>
+              </thead>
+              {getAllUser?.length > 0 && (
+                <tbody>
+                  {getAllUser.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[12px] text-[10px]"
+                    >
+                      <td className="my-2 mx-3 lg:mx-5 w-1/12">
+                        {index + 1 + "."}
+                      </td>
+                      <td className="my-auto w-3/12">
+                        {item.firstname} {item.lastname}
+                      </td>
 
-                    <td className="my-auto  w-4/12">{item.email}</td>
-                    <td className="my-auto  w-2/12">{item.provider}</td>
-                    <td className="my-auto  w-2/12">
-                      <button onClick={() => openModal(item?._id)}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-4 h-4 sm:w-5 sm:h-5 m:dw-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-sky-600 cursor-pointer"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                          />
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            )}
-          </table>
+                      <td className="my-auto w-5/12 sm:w-4/12">{item.email}</td>
+                      <td className="my-auto  w-2/12">{item.provider}</td>
+                      <td className="my-auto  w-1/12">
+                        <button onClick={() => openModal(item?._id)}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4 sm:w-5 sm:h-5 m:dw-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-sky-600 cursor-pointer"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              )}
+            </table>
+          </div>
         </div>
       </div>
 

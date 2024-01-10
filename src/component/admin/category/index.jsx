@@ -97,8 +97,8 @@ const Category = () => {
     <>
       {isLoader && <Loader />}
 <ToastContainer autoClose={1000}/>
-      <div>
-        <div className="lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border mx-10 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+      <div className="z-10">
+        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border mx-10 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Category List </h2>
 
           <div className="flex items-center w-[40%]">
@@ -172,11 +172,11 @@ const Category = () => {
             </div>
           </div>
         )}
-        <div className="mx-10 lg:mx-8 z-10">
-          <table className="border w-full table-auto bg-white rounded-md mt-5   relative   p-10">
+        <div className="mx-10 lg:mx-8 ">
+          <table className="z-10 border w-full table-auto bg-white rounded-md mt-5   relative   p-10">
             <thead className="">
               <tr
-                className="bg-coolGray-200 text-gray-400 text-start flex  
+                className="bg-coolGray-200 text-gray-400 text-start flex border 
           2xl:text-[22px] 
           xl:text-[14px]
            lg:text-[12px] 

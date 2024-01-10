@@ -1,18 +1,18 @@
 "use client";
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import dashboard from "../../../../public/images/dashboard.svg";
 import eventadd from "../../../../public/images/event-add.svg";
 import eventlist from "../../../../public/images/event-list.svg";
 import setting from "../../../../public/images/setting.svg";
-import inquiry from "../../../../public/images/close-square.svg";
-import alluser from "../../../../public/images/users-2.svg"
+import inquiry from "../../../../public/images/close-white.svg";
+import alluser from "../../../../public/images/users-2.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Category from "../../../component/admin/category";
 import SubCategoryPage from "../../../component/admin/sub-category/index";
 import Event from "../../../component/admin/event/index";
-import UpadatePassword from "../../../component/admin/setting/upadate-password"
+import UpadatePassword from "../../../component/admin/setting/upadate-password";
 import { Fragment } from "react";
 import Loader from "../../../component/loader";
 import Dashboard from "../../../component/dashboard";
@@ -46,13 +46,13 @@ export const menulist = [
   {
     id: 5,
     label: "All Users",
-    component: <AllUser/>,
+    component: <AllUser />,
     icon: alluser,
   },
   {
     id: 6,
     label: "Setting",
-    component: <UpadatePassword/>,
+    component: <UpadatePassword />,
     icon: setting,
   },
 ];
@@ -63,16 +63,13 @@ const AdminDashboard = () => {
   const [userToken, setUserToken] = useState(null);
   const router = useRouter();
   const [isLoader, setLoader] = useState(false);
-  const [token, setToken] = useState(
-   localStorage?.getItem("accessToken" )
-  );
+  const [token, setToken] = useState(localStorage?.getItem("accessToken"));
   const [authenticated, setAuthenticated] = useState(false);
   const [isRefresh, setRefresh] = useState(false);
 
-
   useEffect(() => {
     const authToekn = token ? JSON.parse(token) : null;
-    console.log(authToekn)
+    console.log(authToekn);
     if (authToekn) {
       setAuthenticated(true);
     } else {
@@ -86,7 +83,6 @@ const AdminDashboard = () => {
     setShowDrawer(false);
   };
 
-
   const handleSignout = () => {
     setLoader(true);
     console.log("Logging out...");
@@ -98,11 +94,12 @@ const AdminDashboard = () => {
   };
 
   return (
+
     <>
       {isLoader && <Loader />}
 
-      <section className="z-0">
-        <div className="flex min-h-screen relative lg:static ">
+      <section className="z-50">
+        <div className="flex min-h-screen  lg:static ">
           <div
             className="py-2 px-3  absolute top-3 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
             onClick={() => setShowDrawer(true)}
@@ -144,7 +141,7 @@ const AdminDashboard = () => {
                   className={`sm:pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[25px] xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]  
                                     ${
                                       item.id === ComponentId
-                                        ? "bg-menu_secondary"
+                                        ? "bg-gray-700"
                                         : "hover:menu_secondary hover:text-white hover:rounded-md"
                                     }  `}
                   onClick={() => handleClick(item.id)}
