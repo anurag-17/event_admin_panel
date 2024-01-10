@@ -10,7 +10,6 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
-  console.log(auth_token, "token");
 
   const handleSubmit = async (e) => {
     e && e.preventDefault();

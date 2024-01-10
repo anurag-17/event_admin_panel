@@ -8,14 +8,13 @@ const ShowSubCategory = ({
 }) => {
   return (
     <>
-
       <div className="mx-10 lg:mx-8">
-        <table className="border w-full table-auto  bg-white rounded-md mt-5  relative lg:w-full  ">
+        <table className="border w-full table-auto  bg-white rounded-md mt-5   lg:w-full  ">
           <thead className="">
             <tr
               className="bg-coolGray-200 text-gray-400 text-start flex w-full 
           2xl:text-[20px] 
-          xl:text-[14px]
+           xl:text-[14px]
            lg:text-[12px] 
            md:text-[12px] 
            sm:text-[12px] 

@@ -18,14 +18,14 @@ const GetAUser = ({ selectedItemData, closeModal }) => {
 
             <div>
               <div className="flex my-2">
-              <label className="w-1/3">Email : </label>
-              <h1 className="w-2/3">{item?.email}</h1>
+                <label className="w-1/3">Email : </label>
+                <h1 className="w-2/3">{item?.email}</h1>
               </div>
             </div>
             <div>
               <div className="flex my-2">
-              <label className="w-1/3">Provider : </label>
-              <h1 className="w-2/3">{item?.provider}</h1>
+                <label className="w-1/3">Provider : </label>
+                <h1 className="w-2/3">{item?.provider}</h1>
               </div>
             </div>
           </div>
