@@ -148,16 +148,14 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
 
 exports.londontheatredirect = asyncHandler(async (req, res) => {
   try {
-    const { startDate, endDate } = req.query;
+    let { startDate, endDate } = req.query;
 
-    // Ensure startDate and endDate are provided
-    if (!startDate || !endDate) {
-      return res.status(400).json({ message: 'Both startDate and endDate are required in the query parameters.' });
-    }
+    // Default startDate to the current date if not provided
+    startDate = startDate ? new Date(startDate) : new Date();
 
-    // Parse the provided dates
-    const filterStartDate = new Date(startDate);
-    const filterEndDate = new Date(endDate);
+    // Default endDate to one month after the current date if not provided
+    endDate = endDate ? new Date(endDate) : new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
 
     // Fetch events data
     const eventsResponse = await axios.get(
@@ -175,66 +173,74 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
 
     const events = eventsResponse.data.Events;
 
-    // Filter events based on StartDate and EndDate
+    // Filter events based on startDate and endDate
     const filteredEvents = events.filter((event) => {
       const eventStartDate = new Date(event.StartDate);
       const eventEndDate = new Date(event.EndDate);
 
-      return eventStartDate >= filterStartDate && eventEndDate <= filterEndDate;
+      return eventStartDate >= startDate && eventEndDate <= endDate;
     });
 
     // Process and save each filtered event to the database
     for (const event of filteredEvents) {
-      // Fetch venue details
-      const venueResponse = await axios.get(
-        `https://api.londontheatredirect.com/rest/v2/Venues/${event.VenueId}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Api-Key": process.env.skiddleApiKey,
-          },
-        }
-      );
+      // Check if the event already exists in the database
+      const existingEvent = await Event.findOne({ name: event.Name, startDate: event.StartDate, endDate: event.EndDate });
 
-      const venueData = venueResponse.data.Venue;
-
-      // Use Google Geocoding API to get latitude and longitude for the venue
-      const addressToGeocode = venueData.Address || venueData.Name;
-      const googleApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressToGeocode)}&key=${process.env.GOOGLE_MAP_KEY}`;
-      const geocodingResponse = await axios.get(googleApiUrl);
-      // const location = geocodingResponse.data.results[0].geometry.location;
-
-      if (geocodingResponse.data.results && geocodingResponse.data.results.length > 0) {
-        const location = geocodingResponse.data.results[0].geometry.location;
-      
-        // Extract relevant venue information
-        const venueInfo = {
-          city: venueData.City,
-          address: venueData.Address || venueData.Name,
-          location: venueData.Name,
-          latitude: location.lat,
-          longitude: location.lng,
-        };
-      
-        // Extract relevant event information
-        const eventData = {
-          name: event.Name,
-          description: event.Description,
-          startDate: event.StartDate,
-          endDate: event.EndDate,
-          image: event.MainImageUrl,
-          price: event.CurrentPrice,
-          resource_url: event.EventDetailUrl,
-          ...venueInfo,
-        };
-      
-        // Save the event to the database
-        await Event.create(eventData);
-        res.status(200).json({ message: "Filtered events saved successfully." });
+      if (existingEvent) {
+        console.error(`Event ${event.Name} already exists. Skipping...`);
       } else {
-        console.error("Error fetching geocoding data:", geocodingResponse.data.error_message || "Unknown error");
+        // Fetch venue details
+        const venueResponse = await axios.get(
+          `https://api.londontheatredirect.com/rest/v2/Venues/${event.VenueId}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Api-Key": process.env.skiddleApiKey,
+            },
+          }
+        );
+
+        const venueData = venueResponse.data.Venue;
+
+        // Use Google Geocoding API to get latitude and longitude for the venue
+        const addressToGeocode = venueData.Address || venueData.Name;
+        const googleApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressToGeocode)}&key=${process.env.GOOGLE_MAP_KEY}`;
+        const geocodingResponse = await axios.get(googleApiUrl);
+        
+        if (geocodingResponse.data.results && geocodingResponse.data.results.length > 0) {
+          const location = geocodingResponse.data.results[0].geometry.location;
+        
+          // Extract relevant venue information
+          const venueInfo = {
+            city: venueData.City,
+            address: venueData.Address || venueData.Name,
+            location: venueData.Name,
+            latitude: location.lat,
+            longitude: location.lng,
+          };
+        
+          // Extract relevant event information
+          const eventData = {
+            name: event.Name,
+            description: event.Description,
+            startDate: event.StartDate,
+            endDate: event.EndDate,
+            image: event.MainImageUrl,
+            price: event.CurrentPrice,
+            resource_url: event.EventDetailUrl,
+            ...venueInfo,
+          };
+        
+          // Save the event to the database
+          await Event.create(eventData);
+          console.log(`Event ${event.Name} saved successfully.`);
+        } else {
+          console.error("Error fetching geocoding data:", geocodingResponse.data.error_message || "Unknown error");
+        }
       }
     }
+
+    res.status(200).json({ message: "Filtered events saved successfully." });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
@@ -243,16 +249,14 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
 
 exports.skiddleEvents = asyncHandler(async (req, res) => {
   try {
-    const { startDate, endDate } = req.query;
+    let { startDate, endDate } = req.query;
 
-    // Ensure startDate and endDate are provided
-    if (!startDate || !endDate) {
-      return res.status(400).json({ message: 'Both startDate and endDate are required in the query parameters.' });
-    }
+    // Default startDate to the current date if not provided
+    startDate = startDate ? new Date(startDate) : new Date();
 
-    // Parse the provided dates
-    const filterStartDate = new Date(startDate);
-    const filterEndDate = new Date(endDate);
+    // Default endDate to one month after the current date if not provided
+    endDate = endDate ? new Date(endDate) : new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
 
     // Fetch events data from Skiddle API
     const skiddleApiUrl = `https://www.skiddle.com/api/v1/events/?api_key=${process.env.skiddleApiKey}`;
@@ -260,33 +264,44 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
     const skiddleResponse = await axios.get(skiddleApiUrl);
     const skiddleEvents = skiddleResponse.data.results;
 
-    // Filter events based on StartDate and EndDate
+    // Filter events based on startDate and endDate
     const filteredEvents = skiddleEvents.filter((event) => {
       const eventStartDate = new Date(event.startdate);
       const eventEndDate = new Date(event.enddate || event.startdate);
 
-      return eventStartDate >= filterStartDate && eventEndDate <= filterEndDate;
+      return eventStartDate >= startDate && eventEndDate <= endDate;
     });
 
     // Process and save each filtered event to the database
     for (const event of filteredEvents) {
-      const eventData = {
+      // Check if the event already exists in the database
+      const existingEvent = await Event.findOne({
         name: event.eventname,
-        description: event.description,
         startDate: event.startdate,
-        endDate: event.enddate,
-        images: [{ url: event.imageurl, url: event.largeimageurl }],
-        location: event.venue.name,
-        address: event.venue.address,
-        city: event.venue.town,
-        country: event.venue.country,
-        latitude: event.venue.latitude,
-        longitude: event.venue.longitude,
-        resource_url: event.link,
-      };
+        endDate: event.enddate
+      });
 
-      // Save the event to the database
-      await Event.create(eventData);
+      if (existingEvent) {
+        console.error(`Event ${event.eventname} already exists. Skipping...`);
+      } else {
+        const eventData = {
+          name: event.eventname,
+          description: event.description,
+          startDate: event.startdate,
+          endDate: event.enddate,
+          images: [{ url: event.imageurl, url: event.largeimageurl }],
+          location: event.venue.name,
+          address: event.venue.address,
+          city: event.venue.town,
+          country: event.venue.country,
+          latitude: event.venue.latitude,
+          longitude: event.venue.longitude,
+          resource_url: event.link,
+        };
+
+        // Save the event to the database
+        await Event.create(eventData);
+      }
     }
 
     res.status(200).json({ message: "Filtered events saved successfully." });
