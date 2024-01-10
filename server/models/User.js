@@ -36,6 +36,7 @@ const UserSchema = new mongoose.Schema(
     },
     provider: {
       type: String,
+      default: "local",
     },
     provider_ID: {
       type: String,

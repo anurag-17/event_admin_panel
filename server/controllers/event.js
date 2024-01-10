@@ -165,7 +165,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
       {
         headers: {
           Accept: "application/json",
-          "Api-Key": "Testing12345",
+          "Api-Key": process.env.skiddleApiKey,
         },
         params: {
           // Include any other necessary parameters
@@ -191,37 +191,50 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         {
           headers: {
             Accept: "application/json",
-            "Api-Key": "Testing12345",
+            "Api-Key": process.env.skiddleApiKey,
           },
         }
       );
 
       const venueData = venueResponse.data.Venue;
 
-      // Extract relevant venue information
-      const venueInfo = {
-        city: venueData.City,
-        address: venueData.Address,
-        location: venueData.Name,
-      };
+      // Use Google Geocoding API to get latitude and longitude for the venue
+      const addressToGeocode = venueData.Address || venueData.Name;
+      const googleApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressToGeocode)}&key=${process.env.GOOGLE_MAP_KEY}`;
+      const geocodingResponse = await axios.get(googleApiUrl);
+      // const location = geocodingResponse.data.results[0].geometry.location;
 
-      // Extract relevant event information
-      const eventData = {
-        name: event.Name,
-        description: event.Description,
-        startDate: event.StartDate,
-        endDate: event.EndDate,
-        image: event.MainImageUrl,
-        price: event.CurrentPrice,
-        resource_url: event.EventDetailUrl,
-        ...venueInfo,
-      };
-
-      // Save the event to the database
-      await Event.create(eventData);
+      if (geocodingResponse.data.results && geocodingResponse.data.results.length > 0) {
+        const location = geocodingResponse.data.results[0].geometry.location;
+      
+        // Extract relevant venue information
+        const venueInfo = {
+          city: venueData.City,
+          address: venueData.Address || venueData.Name,
+          location: venueData.Name,
+          latitude: location.lat,
+          longitude: location.lng,
+        };
+      
+        // Extract relevant event information
+        const eventData = {
+          name: event.Name,
+          description: event.Description,
+          startDate: event.StartDate,
+          endDate: event.EndDate,
+          image: event.MainImageUrl,
+          price: event.CurrentPrice,
+          resource_url: event.EventDetailUrl,
+          ...venueInfo,
+        };
+      
+        // Save the event to the database
+        await Event.create(eventData);
+        res.status(200).json({ message: "Filtered events saved successfully." });
+      } else {
+        console.error("Error fetching geocoding data:", geocodingResponse.data.error_message || "Unknown error");
+      }
     }
-
-    res.status(200).json({ message: "Filtered events saved successfully." });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
