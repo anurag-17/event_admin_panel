@@ -2,6 +2,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
 
 import dashboard from "../../../../public/images/dashboard.svg";
 import eventadd from "../../../../public/images/event-add.svg";
@@ -16,6 +17,7 @@ import UpadatePassword from "../../../component/admin/setting/upadate-password";
 import Loader from "../../../component/loader";
 import Dashboard from "../../../component/dashboard";
 import AllUser from "../../../component/admin/users";
+import axios from "axios";
 
 const AdminDashboard = () => {
   const router = useRouter();
@@ -40,12 +42,43 @@ const AdminDashboard = () => {
   };
 
   const handleSignout = () => {
-    setLoader(true);
-    console.log("Logging out...");
-    localStorage.removeItem("accessToken");
-    // localStorage.removeItem("userDetails");
-    router.push("/admin-login");
-    setLoader(false);
+    // setLoader(true);
+    // console.log("Logging out...");
+    // localStorage.removeItem("accessToken");
+    // router.push("/admin-login");
+    // setLoader(false);
+    try {
+      setLoader(true);
+      const options = {
+        method: "GET",
+        url: `/api/auth/logout`,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: JSON.parse(token || ""),
+        },
+      };
+      axios
+        .request(options)
+        .then((res) => {
+          if (res.status === 200) {
+            localStorage.removeItem("accessToken");
+            toast.success("Logout!");
+            router.push("/admin-login");
+            setLoader(false);
+          } else {
+            setLoader(false);
+            return;
+          }
+        })
+        .catch((error) => {
+          setLoader(false);
+          console.error("Error:", error);
+          toast.error(error?.response?.data?.error || "server error!");
+        });
+    } catch {
+      console.log("error");
+      toast.error("server error!");
+    }
   };
 
   const menulist = [
@@ -90,7 +123,7 @@ const AdminDashboard = () => {
   return (
     <>
       {isLoader && <Loader />}
-
+      <ToastContainer />
       <section className="z-50">
         <div className="flex min-h-screen  lg:static ">
           <div
