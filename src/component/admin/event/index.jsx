@@ -1,15 +1,16 @@
-import axios from "axios";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { Transition, Dialog } from "@headlessui/react";
 import { Fragment } from "react";
+import { ToastContainer } from "react-toastify";
+import axios from "axios";
 import CreateEvent from "./create-module";
 import EditEvent from "./update-module";
 import DeleteEvent from "./delete-module";
 import Loader from "../../loader";
 import cut from "../../../../public/images/close-square.svg";
 import Pagination from "../../pagination";
-import { ToastContainer } from "react-toastify";
+import ImageModal from "./ImageModal";
 
 const Event = () => {
   const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
@@ -38,14 +39,14 @@ const Event = () => {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [subCategoryFilter, setSubCategoryFilter] = useState("");
   const [showLargeImage, setShowLargeImage] = useState(false);
-  const [largeImageSrc, setLargeImageSrc] = useState("");
+  const [largeImageSrc, setLargeImageSrc] = useState([]);
   const [eventFetch, setEventFetch] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [limit, setLimit] = useState(20);
 
-  const handleImageClick = (imageSrc) => {
-    setLargeImageSrc(imageSrc);
+  const handleImageClick = (images) => {
+    setLargeImageSrc(images);
     setShowLargeImage(true);
   };
   const handleLargeImageClose = () => {
@@ -705,7 +706,7 @@ const Event = () => {
                             <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
                               <div
                                 className="cursor-pointer "
-                                onClick={() => handleImageClick(item?._id)}
+                                onClick={() => handleImageClick(item?.images)}
                               >
                                 <img
                                   src={item?.images[0]?.url}
@@ -715,7 +716,8 @@ const Event = () => {
                                   className="w-2/4"
                                 />
                               </div>
-                              <div className="">
+                              {/* Image */}
+                              {/* <div className="">
                                 {showLargeImage && (
                                   <div className="fixed border-2 top-40 left-96 w-6/12 lg:h-[350px] xl:h-[450px] flex items-center justify-center bg-white bg-opacity-75">
                                     <div className="max-w-3xl w-full">
@@ -743,7 +745,7 @@ const Event = () => {
                                     </div>
                                   </div>
                                 )}
-                              </div>
+                              </div> */}
                             </td>
                             <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
                               <p className="w-40">{item.name}</p>
@@ -940,6 +942,46 @@ const Event = () => {
           </div>
         </Dialog>
       </Transition>
+
+      <Transition appear show={showLargeImage} as={Fragment} >
+        <Dialog
+          as="div"
+          className="relative z-[111] bg-black/70"
+          onClose = {handleLargeImageClose}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/70" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center ">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full 2xl:max-w-[700px] xl:max-w-[600px] sw-full  transform overflow-hidden rounded-[10px] bg-white py-10 px-[10px] xl:px-12 md:px-4 text-center align-middle shadow-xl transition-all relative">
+                 <ImageModal data={largeImageSrc} />
+
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      
     </>
   );
 };
