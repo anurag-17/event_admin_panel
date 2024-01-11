@@ -1,82 +1,38 @@
 "use client";
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 import dashboard from "../../../../public/images/dashboard.svg";
 import eventadd from "../../../../public/images/event-add.svg";
 import eventlist from "../../../../public/images/event-list.svg";
 import setting from "../../../../public/images/setting.svg";
 import inquiry from "../../../../public/images/close-white.svg";
 import alluser from "../../../../public/images/users-2.svg";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Category from "../../../component/admin/category";
 import SubCategoryPage from "../../../component/admin/sub-category/index";
 import Event from "../../../component/admin/event/index";
 import UpadatePassword from "../../../component/admin/setting/upadate-password";
-import { Fragment } from "react";
 import Loader from "../../../component/loader";
 import Dashboard from "../../../component/dashboard";
 import AllUser from "../../../component/admin/users";
 
-export const menulist = [
-  {
-    id: 1,
-    label: "Dashboard",
-    component: <Dashboard />,
-    icon: dashboard,
-  },
-  {
-    id: 2,
-    label: "Event",
-    component: <Event />,
-    icon: eventadd,
-  },
-  {
-    id: 3,
-    label: "Category",
-    component: <Category />,
-    icon: eventlist,
-  },
-  {
-    id: 4,
-    label: "Sub-Category",
-    component: <SubCategoryPage />,
-    icon: eventlist,
-  },
-  {
-    id: 5,
-    label: "All Users",
-    component: <AllUser />,
-    icon: alluser,
-  },
-  {
-    id: 6,
-    label: "Setting",
-    component: <UpadatePassword />,
-    icon: setting,
-  },
-];
-
 const AdminDashboard = () => {
+  const router = useRouter();
   const [ComponentId, setComponentId] = useState(1);
   const [showDrawer, setShowDrawer] = useState("");
-  const [userToken, setUserToken] = useState(null);
-  const router = useRouter();
   const [isLoader, setLoader] = useState(false);
-  const [token, setToken] = useState(localStorage?.getItem("accessToken"));
-  const [authenticated, setAuthenticated] = useState(false);
+  const [token, setToken] = useState(
+    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
+  );
   const [isRefresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const authToekn = token ? JSON.parse(token) : null;
-    console.log(authToekn);
-    if (authToekn) {
-      setAuthenticated(true);
-    } else {
-      setAuthenticated(false);
-      router.push("/admin");
+    if (!authToekn || authToekn == null) {
+      router.push("/admin-login");
     }
-  }, [isRefresh]);
+  }, []);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -86,15 +42,52 @@ const AdminDashboard = () => {
   const handleSignout = () => {
     setLoader(true);
     console.log("Logging out...");
-    setUserToken(null);
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("userDetails");
-    router.push("/admin");
+    // localStorage.removeItem("userDetails");
+    router.push("/admin-login");
     setLoader(false);
   };
 
-  return (
+  const menulist = [
+    {
+      id: 1,
+      label: "Dashboard",
+      component: <Dashboard />,
+      icon: dashboard,
+    },
+    {
+      id: 2,
+      label: "Event",
+      component: <Event />,
+      icon: eventadd,
+    },
+    {
+      id: 3,
+      label: "Category",
+      component: <Category />,
+      icon: eventlist,
+    },
+    {
+      id: 4,
+      label: "Sub-Category",
+      component: <SubCategoryPage />,
+      icon: eventlist,
+    },
+    {
+      id: 5,
+      label: "All Users",
+      component: <AllUser />,
+      icon: alluser,
+    },
+    {
+      id: 6,
+      label: "Setting",
+      component: <UpadatePassword />,
+      icon: setting,
+    },
+  ];
 
+  return (
     <>
       {isLoader && <Loader />}
 
