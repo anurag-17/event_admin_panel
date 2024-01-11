@@ -273,8 +273,8 @@ const Event = () => {
         method: "GET",
         url:
           subCategoryFilter == ""
-            ? `http://100.24.75.181:4000/api/event/getAllEvents?category=${cate}`
-            : `http://100.24.75.181:4000/api/event/getAllEvents?category=${cate}&subCategory=${subCategoryFilter}`,
+            ? `/api/event/getAllEvents?category=${cate}`
+            : `/api/event/getAllEvents?category=${cate}&subCategory=${subCategoryFilter}`,
       };
       axios
         .request(options)
@@ -303,8 +303,8 @@ const Event = () => {
         method: "GET",
         url:
           categoryFilter == ""
-            ? `http://100.24.75.181:4000/api/event/getAllEvents?subCategory=${subcate}`
-            : `http://100.24.75.181:4000/api/event/getAllEvents?subCategory=${subcate}&category=${categoryFilter}`,
+            ? `/api/event/getAllEvents?subCategory=${subcate}`
+            : `/api/event/getAllEvents?subCategory=${subcate}&category=${categoryFilter}`,
       };
       axios
         .request(options)
@@ -325,17 +325,17 @@ const Event = () => {
   const defaultEventFetch = () => {
     const options1 = {
       method: "GET",
-      url: "http://100.24.75.181:4000/api/auth/fetchEvents",
+      url: "/api/auth/fetchEvents",
     };
 
     const options2 = {
       method: "GET",
-      url: "http://100.24.75.181:4000/api/event/skiddleEvents",
+      url: "/api/event/skiddleEvents",
     };
 
     const options3 = {
       method: "GET",
-      url: "http://100.24.75.181:4000/api/event/londontheatredirect",
+      url: "/api/event/londontheatredirect",
     };
 
     axios
@@ -581,7 +581,6 @@ const Event = () => {
                     md:text-[10px] md:px-2  
                     sm:text-[8px]   
                    text-sm "
-                      onChange={handleDateSearch}
                     />
                   </div>
                 </div>
