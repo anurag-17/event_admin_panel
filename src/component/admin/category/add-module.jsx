@@ -29,7 +29,6 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
       })
         .then((res) => {
           if (res.ok) {
-            // router.push("/categories");
             refreshData();
             closeDrawer();
             setLoading(false);

@@ -121,45 +121,6 @@ const CreateEvent = ({ closeDrawer }) => {
       setImageUpload(false);
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   if (eventDetail?.images?.length<1 ) {
-  //     toast.warn("Please upload atleast 1 image");
-  //   } else {
-  //     try {
-  //       await fetch("/api/event/createEvent", {
-  //         method: "POST",
-  //         headers: {
-  //           "content-type": "application/json",
-  //           authorization: auth_token,
-  //         },
-  //         body: JSON.stringify(eventDetail),
-  //       })
-  //         .then((res) => {
-  //           if (res.status === 201) {
-  //             refreshData();
-  //             closeDrawer();
-  //             setLoading(false);
-  //             toast.success("Submit successfully!");
-  //           } else {
-  //             setLoading(false);
-  //             return;
-  //           }
-  //         })
-  //         .catch((e) => {
-  //           console.log(e);
-  //           setLoading(false);
-  //         });
-  //     } catch (error) {
-  //       console.error(error);
-  //       toast.error(error?.response?.data?.messgae || "server error");
-  //       setLoading(false);
-  //     }
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

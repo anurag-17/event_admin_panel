@@ -268,13 +268,15 @@ const Event = () => {
   const handleSearchCategories = (e) => {
     const cate = e.target.value;
 
+    setCurrentPage(1);
+
     setSubCategoryFilter("");
     setCategoryFilter(e.target.value);
     const options = {
       method: "GET",
       url: `/api/event/getAllEvents?category=${
         e.target.value
-      }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&page=${current_page}&limit=${limit}`,
+      }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&page=${1}&limit=${limit}`,
     };
     axios
       .request(options)
@@ -293,10 +295,14 @@ const Event = () => {
   const handleSearchSubCategory = (e) => {
     const subcate = e.target.value;
 
+    setCurrentPage(1);
+
     setSubCategoryFilter(e.target.value);
     const options = {
       method: "GET",
-      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${e.target.value}&startDate=${startDate}&endDate=${endDate}&page=${current_page}&limit=${limit}`,
+      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${
+        e.target.value
+      }&startDate=${startDate}&endDate=${endDate}&page=${1}&limit=${limit}`,
     };
     axios
       .request(options)
@@ -361,7 +367,7 @@ const Event = () => {
   return (
     <>
       {isLoader && <Loader />}
-      <ToastContainer />
+      <ToastContainer autoClose={1500} />
       <div>
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-10 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Event List </h2>
@@ -380,13 +386,13 @@ const Event = () => {
         </div>
 
         {/* ---------Event fetch---------- */}
-        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px]">
-          <div className="flex gap-2">
-            <div className="">
+        <div className="  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-2">
+            <div className=" flex justify-between">
+          <div className="flex flex-wrap gap-2 w-1/2">
               <div className="">
                 <div>
                   {" "}
-                  <label className=" text-gray-500 sm:text-[8px]   md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                  <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                     Start Date
                   </label>
                 </div>
@@ -397,19 +403,18 @@ const Event = () => {
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                    md:text-[10px] md:px-2  
-                    sm:text-[8px]   
-                   text-sm "
+                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+                    md:px-3 md:py-2 md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]"
                   />
                 </div>
               </div>
-            </div>
-            <div className="">
+
               <div className="">
                 <div>
                   {" "}
-                  <label className=" text-gray-500  sm:text-[8px]  md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
+                  <label className=" text-gray-500  text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                     End Date
                   </label>
                 </div>
@@ -419,73 +424,34 @@ const Event = () => {
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                    md:text-[10px] md:px-2  
-                    sm:text-[8px]  
-                   text-sm "
+                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+                    md:px-3 md:py-2 md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
                   />
                 </div>
               </div>
             </div>
-          </div>
-          <div className="">
-            <button
-              onClick={defaultEventFetch}
-              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-2 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
-            >
-              + Fetch External Event
-            </button>
+            <div className="">
+              <button
+                onClick={defaultEventFetch}
+                className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[12px] md:p-2 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
+              >
+                + Fetch External Event
+              </button>
+            </div>
           </div>
         </div>
-        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px]">
-          <div>
-            <div className="flex gap-2 lg:gap-2 xl:gap-2 2xl:gap-4">
+        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-3">
+          <div className="w-3/4">
+            <div className="flex flex-wrap  gap-2 lg:gap-3 xl:gap-3 2xl:gap-4">
               {/* -----Filter Category-------- */}
 
-              {/* <div>
-                <div className="">
-                  <div>
-                    {" "}
-                    <label className=" text-gray-500 sm:text-[8px]   md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
-                      Filter by Category
-                    </label>
-                  </div>
-
-                  <select
-                    name="category"
-                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
-                    xl:text-[12px]  xl:px-3 xl:py-[2.5px]  xl:w-28 
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
-                    md:text-[10px] md:py-1  w-full
-                    sm:text-[8px]  sm:py-1
-                   text-sm  "
-                    required
-                    minLength={3}
-                    maxLength={32}
-                    onChange={(e) => {
-                      handleSearchCategories(e);
-                      inputHandler(e);
-                    }}
-                  >
-                    <option value=""> Category</option>
-                    {getAllCate.map((item) => (
-                      <option
-                        key={item._id}
-                        value={item._id}
-                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                      >
-                        {item.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div> */}
               <div>
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by Category
                     </label>
                   </div>
@@ -495,10 +461,10 @@ const Event = () => {
                     className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                     2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24 w-28
-                     md:text-sm md:px-0 md:py-0 md:h-[25px] 
-                     sm:text-sm  sm:px-2 sm:py-0 sm:h-[30px]
-                      text-sm  px-2 pb-0 h-[24px] "
+                      lg:px-2 lg:py-1  lg:w-24 w-28
+                 md:px-0 md:py-0 md:h-[25px] 
+                      sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px]"
                     required
                     minLength={3}
                     maxLength={32}
@@ -523,53 +489,11 @@ const Event = () => {
 
               {/* -----Filter SubCategory-------- */}
 
-              {/* <div className="">
-                <div className="">
-                  <div>
-                    {" "}
-                    <label className=" text-gray-500 sm:text-[8px]   md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
-                      Filter by SubCategory
-                    </label>
-                  </div>
-                  <select
-                    name="subCategory"
-                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-40 
-                    xl:text-[12px]  xl:px-3 xl:py-[2.5px]  xl:w-28 
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
-                    md:text-[10px] md:py-1  w-full
-                    sm:text-[8px]  sm:py-1
-                   text-sm  "
-                    required
-                    minLength={3}
-                    maxLength={32}
-                    onChange={(e) => {
-                      handleSearchSubCategory(e);
-                      inputHandler(e);
-                    }}
-                  >
-                    <option value=""> SubCategory</option>
-                    {allSubCategory
-                      .filter((item, indr) => {
-                        return item?.category?._id === editCategory?.category;
-                      })
-                      .map((itemss) => (
-                        <option
-                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                          key={itemss?._id}
-                          value={itemss._id}
-                        >
-                          {itemss?.subCategory}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-              </div> */}
               <div className="">
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by SubCategory
                     </label>
                   </div>
@@ -578,10 +502,10 @@ const Event = () => {
                     className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                   md:text-sm md:px-3 md:py- md:h-[25px] 
-                   sm:text-sm  sm:px- sm:py- sm:h-[30px] 
-                   text-sm  px-2 py- h-[24px] "
+                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+                   md:px-3 md:py- md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
                     required
                     minLength={3}
                     maxLength={32}
@@ -609,34 +533,11 @@ const Event = () => {
               </div>
               {/* -----Filter Start Date-------- */}
 
-              {/* <div className="">
-                <div className="">
-                  <div>
-                    {" "}
-                    <label className=" text-gray-500  sm:text-[8px]    md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
-                      Filter by Start Date
-                    </label>
-                  </div>
-                  <div>
-                    <input
-                      type="date"
-                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                    md:text-[10px] md:px-2  
-                    sm:text-[8px]  
-                   text-sm "
-                      onChange={handleDateSearch}
-                    />
-                  </div>
-                </div>
-              </div> */}
               <div className="">
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by Start Date
                     </label>
                   </div>
@@ -647,10 +548,10 @@ const Event = () => {
                       className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
-                   text-sm  px-2 py-1 h-[24px] "
+                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+                md:px-3 md:py-2 md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
                       onChange={handleDateSearch}
                     />
                   </div>
@@ -658,34 +559,11 @@ const Event = () => {
               </div>
               {/* -----Filter End Date-------- */}
 
-              {/* <div className="">
-                <div className="">
-                  <div>
-                    {" "}
-                    <label className=" text-gray-500   sm:text-[8px]   md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[16px]">
-                      Filter by End Date
-                    </label>
-                  </div>
-                  <div>
-                    <input
-                      type="date"
-                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                    md:text-[10px] md:px-2  
-                    sm:text-[8px]   
-                   text-sm "
-                    />
-                  </div>
-                </div>
-              </div> */}
-
               <div className="">
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by End Date
                     </label>
                   </div>
@@ -696,10 +574,10 @@ const Event = () => {
                       className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
-                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
-                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
-                   text-sm  px-2 py-1 h-[24px] "
+                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+                  md:px-3 md:py-2 md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
                       onChange={handleDateSearch}
                     />
                   </div>
@@ -713,7 +591,7 @@ const Event = () => {
           <div className="">
             <button
               onClick={openDrawer}
-              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-2 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
+              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[12px] md:p-2 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
             >
               + Add Event
             </button>
@@ -770,7 +648,7 @@ const Event = () => {
         )}
         <div className=" flex mx-10 lg:mx-8  overflow-x-auto ">
           <div className=" w-full ">
-            <table className="lg:w-[130%]  border bg-white rounded-md mt-5 p-10">
+            <table className="w-[300%] sm:w-[170%] lg:w-[130%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
                 <tr
                   className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
@@ -827,7 +705,7 @@ const Event = () => {
                             <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
                               <div
                                 className="cursor-pointer "
-                                onClick={() => handleImageClick(item?.image)}
+                                onClick={() => handleImageClick(item?._id)}
                               >
                                 <img
                                   src={item?.images[0]?.url}
@@ -890,10 +768,10 @@ const Event = () => {
                                   className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                     2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
-                    md:text-[10px] md:py-1  w-full
-                    sm:text-[8px]  
-                   text-sm  "
+                    lg:text-[12px]  lg:px-2 lg:py-1 w-24
+                    md:px-0 md:py-0 md:h-[25px] 
+                      sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]"
                                   onChange={inputHandler}
                                   required
                                   minLength={3}
@@ -919,10 +797,10 @@ const Event = () => {
                                   className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                     2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
-                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24
-                    md:text-[10px] md:py-1  w-full
-                   sm:text-[8px]  
-                   text-sm  "
+                    lg:text-[12px]  lg:px-2 lg:py-1  w-24
+                    md:px-0 md:py-0 md:h-[25px] 
+                      sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]"
                                   onChange={inputHandler}
                                   required
                                   minLength={3}
