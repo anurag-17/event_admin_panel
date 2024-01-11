@@ -1,27 +1,31 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/navigation";
-import google from "../../../../public/images/google-icon.svg";
-import facebook from "../../../../public/images/facebook-icon.svg";
-import apple from "../../../../public/images/apple-icon.svg";
-import Image from "next/image";
-import Link from "next/link";
+
 import Loader from "../../../component/loader";
 
 const Login = () => {
+  const router = useRouter();
   const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+
   const handleToggle = () => {
     setShowPassword(!showPassword);
   };
-  // const base_url = process.env.NEXT_PUBLIC_base_url
-  // console.log(process.env.NEXT_PUBLIC_base_url);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("accessToken");
+    }
+  }, []);
+
   const addFormHandler = (event) => {
     event.preventDefault();
     setLoading(true);
@@ -29,23 +33,24 @@ const Login = () => {
     const options = {
       method: "POST",
       url: `/api/auth/adminLogin`,
-      data: { email: email, password: password },
+      data: { email, password },
     };
     axios
       .request(options)
       .then(function (response) {
-        if (response?.status === 201) {
+        console.log(response)
+        if (response?.status === 200) {
           localStorage.setItem(
             "accessToken",
-            JSON.stringify(response.data.token)
+            JSON.stringify(response?.data?.token)
           );
-          localStorage.setItem(
-            "userDetails",
-            JSON.stringify(response?.data?.user?._id)
-          );
+          // localStorage.setItem(
+          //   "userDetails",
+          //   JSON.stringify(response?.data?.user?._id)
+          // );
           toast.success("Success. Login Successfully!");
-          // router.push("/admin/admin-dashboard");
-          router.push("/");
+          router.push("/admin/admin-dashboard");
+          // router.push("/");
           setLoading(false);
         } else {
           setLoading(false);
@@ -54,22 +59,16 @@ const Login = () => {
       })
       .catch(function (error) {
         setLoading(false);
-        toast.error(" Login Failed!");
+        toast.error(error?.response?.data?.error || " Server error!");
         console.error(error);
       });
   };
 
-  const loginwithgoogle = () => {
-    window.open("/auth/google/callback", "_self");
-  };
-  const loginwithfacebook = () => {
-    window.open("/auth/facebook/callback", "_self");
-  };
-
   return (
     <>
-     {isLoading && <Loader />}
-<ToastContainer autoClose={1500} />
+      {isLoading ? <Loader /> : null}
+
+      <ToastContainer autoClose={1500} />
       <section className="h-screen bg-[#FCEBF2] flex items-center ">
         <div className="bg-white mx-auto flex flex-col lg:flex-row w-3/4 sm:w-2/4 lg:w-1/2 lg:rounded-r-[20px] lg:rounded-t-[20px] rounded-t-[20px] rounded-b-[20px]">
           <div className="w-full lg:w-1/2 h-[200px] lg:h-auto login-bg"></div>
@@ -142,7 +141,7 @@ const Login = () => {
                   2xl:mt-2 2xl:p-[12px] 2xl:text-[20px] 
                   w-full border rounded-md focus:outline-none "
                 />
-                  <button
+                <button
                   type="button"
                   className=" absolute  transform -translate-y-1/2 cursor-pointer 
                   top-[160px] right-6
@@ -223,39 +222,6 @@ const Login = () => {
               >
                 Login
               </button>
-
-              {/* <div className="flex justify-center gap-4 sm:gap-3 lg:gap-4 2xl:gap-5 my-1">
-                <div className="text-center">
-                  <button
-                    className="login-with-google-btn my-1"
-                    onClick={loginwithgoogle}
-                  >
-                    <Image
-                      src={google}
-                      className="w-6 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9"
-                    />
-                  </button>
-                </div>
-                <div className="text-center">
-                  <button
-                    className="login-with-facebook-btn my-1"
-                    onClick={loginwithfacebook}
-                  >
-                    <Image
-                      src={facebook}
-                      className="w-6 sm:w-5 md:w-6 lg:w-6 xl:w-7 2xl:w-9"
-                    />
-                  </button>
-                </div>
-                <div className="text-center">
-                  <button className="login-with-facebook-btn my-1">
-                    <Image
-                      src={apple}
-                      className="w-6 sm:w-5 md:w-6 xl:w-7 2xl:w-9"
-                    />
-                  </button>
-                </div>
-              </div> */}
             </form>
           </div>
         </div>
