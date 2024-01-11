@@ -41,6 +41,9 @@ const UserSchema = new mongoose.Schema(
     provider_ID: {
       type: String,
     },
+    activeToken: {
+      type: String
+    },
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,

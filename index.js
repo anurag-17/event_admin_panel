@@ -28,7 +28,7 @@ app.prepare().then(() => {
 const corsOptions = {
   origin: [
   "http://localhost:3000",
-  "http://3.90.234.160:4000",
+  "http://100.24.75.181:4000",
   "*"
 ],
   credentials: true, 
@@ -198,9 +198,9 @@ const PORT = process.env.PORT || 4000;
   console.log(`Server running on http://localhost:${PORT}`)
 );
 // DB error handler
-process.on("unhandledRejection", (err, promise) => {
-  console.log(`Log Error: ${err}`);
-  server.close(() => process.exit(1));
-});
+// process.on("unhandledRejection", (err, promise) => {
+//   console.log(`Log Error: ${err}`);
+//   server.close(() => process.exit(1));
+// });
 
 })

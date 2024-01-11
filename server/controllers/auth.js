@@ -3,7 +3,7 @@ const Event = require("../models/Event")
 const ErrorResponse = require("../utils/errorRes");
 const sendEmail = require("../utils/sendEmail");
 const validateMongoDbId = require("../utils/validateMongodbId");
-// const { generateToken } = require("../config/jwtToken");
+const { generateToken } = require("../config/jwtToken");
 const sendToken = require("../utils/jwtToken");
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -66,7 +66,28 @@ exports.login = async (req, res, next) => {
     // const isPasswordMatch = await bcrypt.compare(password, findUser.password);
 
     if (findUser && (await findUser.matchPasswords(password))) {
-      sendToken(findUser, 201, res);
+      // sendToken(findUser, 201, res);
+      const token = generateToken({ id: findUser._id });
+
+      await User.findByIdAndUpdate(
+        { _id: findUser._id?.toString() },
+        { activeToken: token },
+        { new: true }
+      );
+
+      const user = {
+        success: true,
+        user: {
+          _id: findUser._id,
+          firstname: findUser.firstname,
+          lastname: findUser.lastname,
+          email: findUser.email,
+          provider: findUser.provider,
+        },
+        token: token,
+      };
+
+      return res.status(200).json(user);
     } else {
       return next(new ErrorResponse("Invalid Credentials", 401));
     }
@@ -93,29 +114,25 @@ exports.adminLogin = async (req, res, next) => {
     }
 
     if (await findAdmin.matchPasswords(password)) {
-      // const refreshToken = await generateRefreshToken(findAdmin?._id);
-      // const updateuser = await User.findByIdAndUpdate(
-      //   findAdmin.id,
-      //   {
-      //     refreshToken: refreshToken,
-      //   },
-      //   { new: true }
-      // );
+      // sendToken(findAdmin, 201, res);
+      const token = generateToken({ id: findAdmin._id });
+      await User.findByIdAndUpdate(
+        { _id: findAdmin._id?.toString() },
+        { activeToken: token },
+        { new: true }
+      );
+      const user = {
+        success: true,
+        user: {
+          _id: findAdmin._id,
+          firstname: findAdmin.firstname,
+          lastname: findAdmin.lastname,
+          email: findAdmin.email,
+        },
+        token: token,
+      };
 
-      // res.cookie("token", generateToken(findAdmin?._id), {
-      //   httpOnly: true,
-      //   maxAge: 72 * 60 * 60 * 1000,
-      //   secure: true,
-      // });
-      sendToken(findAdmin, 201, res);
-      // res.json({
-      //   _id: findAdmin?._id,
-      //   firstname: findAdmin?.firstname,
-      //   lastname: findAdmin?.lastname,
-      //   email: findAdmin?.email,
-      //   mobile: findAdmin?.mobile,
-      //   token: generateToken(findAdmin?._id),
-      // });
+      return res.status(200).json(user);
     } else {
       throw new Error("Invalid Credentials");
     }
