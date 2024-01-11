@@ -272,7 +272,7 @@ const Event = () => {
     setCategoryFilter(e.target.value);
     const options = {
       method: "GET",
-      url: `http://localhost:4000/api/event/getAllEvents?category=${
+      url: `/api/event/getAllEvents?category=${
         e.target.value
       }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&page=${current_page}&limit=${limit}`,
     };
@@ -296,7 +296,7 @@ const Event = () => {
     setSubCategoryFilter(e.target.value);
     const options = {
       method: "GET",
-      url: `http://localhost:4000/api/event/getAllEvents?category=${categoryFilter}&subCategory=${e.target.value}&startDate=${startDate}&endDate=${endDate}&page=${current_page}&limit=${limit}`,
+      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${e.target.value}&startDate=${startDate}&endDate=${endDate}&page=${current_page}&limit=${limit}`,
     };
     axios
       .request(options)
