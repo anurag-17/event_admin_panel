@@ -224,7 +224,7 @@ const Login = () => {
                 Login
               </button>
 
-              <div className="flex justify-center gap-4 sm:gap-3 lg:gap-4 2xl:gap-5 my-1">
+              {/* <div className="flex justify-center gap-4 sm:gap-3 lg:gap-4 2xl:gap-5 my-1">
                 <div className="text-center">
                   <button
                     className="login-with-google-btn my-1"
@@ -255,7 +255,7 @@ const Login = () => {
                     />
                   </button>
                 </div>
-              </div>
+              </div> */}
             </form>
           </div>
         </div>
