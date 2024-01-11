@@ -40,7 +40,9 @@ const Event = () => {
   const [showLargeImage, setShowLargeImage] = useState(false);
   const [largeImageSrc, setLargeImageSrc] = useState("");
   const [eventFetch, setEventFetch] = useState("");
-  const visiblePageCount = 10;
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [limit, setLimit] = useState(20);
 
   const handleImageClick = (imageSrc) => {
     setLargeImageSrc(imageSrc);
@@ -104,10 +106,8 @@ const Event = () => {
   };
 
   useEffect(() => {
-    defaultEvent(current_page, pageLimit);
+    defaultEvent(current_page, limit);
   }, [current_page, isRefresh]);
-
-  const pageLimit = 20;
 
   const defaultEvent = (page, limit) => {
     setLoader(true);
@@ -117,6 +117,10 @@ const Event = () => {
       params: {
         page: page,
         limit: limit,
+        startDate,
+        endDate,
+        category: categoryFilter,
+        subCategory: subCategoryFilter,
       },
     };
     axios
@@ -263,61 +267,48 @@ const Event = () => {
   // ------ filter by category ------ //
   const handleSearchCategories = (e) => {
     const cate = e.target.value;
-    if (cate === "All") {
-      setCategoryFilter("");
-      refreshData();
-      setSelectedCategory(cate);
-    } else {
-      setCategoryFilter(e.target.value);
-      const options = {
-        method: "GET",
-        url:
-          subCategoryFilter == ""
-            ? `/api/event/getAllEvents?category=${cate}`
-            : `/api/event/getAllEvents?category=${cate}&subCategory=${subCategoryFilter}`,
-      };
-      axios
-        .request(options)
-        .then(function (response) {
-          if (response.status === 200) {
-            setAllProduct(response?.data?.events);
-            setSelectedCategory(subcate);
-          }
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    }
+
+    setSubCategoryFilter("");
+    setCategoryFilter(e.target.value);
+    const options = {
+      method: "GET",
+      url: `http://localhost:4000/api/event/getAllEvents?category=${
+        e.target.value
+      }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&page=${current_page}&limit=${limit}`,
+    };
+    axios
+      .request(options)
+      .then((response) => {
+        if (response.status === 200) {
+          setGetAllEvent(response.data.events);
+          setTotalPages(response?.data?.total_pages || 1);
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
   // ------ filter  by Sub-category ------ //
 
   const handleSearchSubCategory = (e) => {
     const subcate = e.target.value;
 
-    if (subcate === "All") {
-      setSubCategoryFilter("");
-      refreshData();
-    } else {
-      setSubCategoryFilter(subcate);
-      const options = {
-        method: "GET",
-        url:
-          categoryFilter == ""
-            ? `/api/event/getAllEvents?subCategory=${subcate}`
-            : `/api/event/getAllEvents?subCategory=${subcate}&category=${categoryFilter}`,
-      };
-      axios
-        .request(options)
-        .then(function (response) {
-          if (response.status === 200) {
-            setGetAllEvent(response?.data?.events);
-            console.log(response?.data?.events, "jj");
-          }
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    }
+    setSubCategoryFilter(e.target.value);
+    const options = {
+      method: "GET",
+      url: `http://localhost:4000/api/event/getAllEvents?category=${categoryFilter}&subCategory=${e.target.value}&startDate=${startDate}&endDate=${endDate}&page=${current_page}&limit=${limit}`,
+    };
+    axios
+      .request(options)
+      .then((response) => {
+        if (response.status === 200) {
+          setGetAllEvent(response.data.events);
+          setTotalPages(response?.data?.total_pages || 1);
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
 
   // -----------------event fetch--------------
@@ -451,7 +442,7 @@ const Event = () => {
             <div className="flex gap-2 lg:gap-2 xl:gap-2 2xl:gap-4">
               {/* -----Filter Category-------- */}
 
-              <div>
+              {/* <div>
                 <div className="">
                   <div>
                     {" "}
@@ -489,11 +480,50 @@ const Event = () => {
                     ))}
                   </select>
                 </div>
+              </div> */}
+              <div>
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by Category
+                    </label>
+                  </div>
+
+                  <select
+                    name="category"
+                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-24 w-28
+                     md:text-sm md:px-0 md:py-0 md:h-[25px] 
+                     sm:text-sm  sm:px-2 sm:py-0 sm:h-[30px]
+                      text-sm  px-2 pb-0 h-[24px] "
+                    required
+                    minLength={3}
+                    maxLength={32}
+                    onChange={(e) => {
+                      handleSearchCategories(e);
+                      inputHandler(e);
+                    }}
+                  >
+                    <option value=""> Category</option>
+                    {getAllCate.map((item) => (
+                      <option
+                        key={item._id}
+                        value={item._id}
+                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                      >
+                        {item.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* -----Filter SubCategory-------- */}
 
-              <div className="">
+              {/* <div className="">
                 <div className="">
                   <div>
                     {" "}
@@ -534,11 +564,52 @@ const Event = () => {
                       ))}
                   </select>
                 </div>
+              </div> */}
+              <div className="">
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by SubCategory
+                    </label>
+                  </div>
+                  <select
+                    name="subCategory"
+                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
+                   md:text-sm md:px-3 md:py- md:h-[25px] 
+                   sm:text-sm  sm:px- sm:py- sm:h-[30px] 
+                   text-sm  px-2 py- h-[24px] "
+                    required
+                    minLength={3}
+                    maxLength={32}
+                    onChange={(e) => {
+                      handleSearchSubCategory(e);
+                      inputHandler(e);
+                    }}
+                  >
+                    <option value=""> SubCategory</option>
+                    {allSubCategory
+                      .filter((item, indr) => {
+                        return item?.category?._id === editCategory?.category;
+                      })
+                      .map((itemss) => (
+                        <option
+                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                          key={itemss?._id}
+                          value={itemss._id}
+                        >
+                          {itemss?.subCategory}
+                        </option>
+                      ))}
+                  </select>
+                </div>
               </div>
-
               {/* -----Filter Start Date-------- */}
 
-              <div className="">
+              {/* <div className="">
                 <div className="">
                   <div>
                     {" "}
@@ -560,10 +631,34 @@ const Event = () => {
                     />
                   </div>
                 </div>
+              </div> */}
+              <div className="">
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by Start Date
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      name="startDate"
+                      type="date"
+                      className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
+                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
+                   text-sm  px-2 py-1 h-[24px] "
+                      onChange={handleDateSearch}
+                    />
+                  </div>
+                </div>
               </div>
               {/* -----Filter End Date-------- */}
 
-              <div className="">
+              {/* <div className="">
                 <div className="">
                   <div>
                     {" "}
@@ -581,6 +676,31 @@ const Event = () => {
                     md:text-[10px] md:px-2  
                     sm:text-[8px]   
                    text-sm "
+                    />
+                  </div>
+                </div>
+              </div> */}
+
+              <div className="">
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by End Date
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      name="endDate"
+                      className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[11px]  lg:px-2 lg:py-1  lg:w-32
+                   md:text-sm md:px-3 md:py-2 md:h-[25px] 
+                   sm:text-sm  sm:px-2 sm:py-1 sm:h-[30px] 
+                   text-sm  px-2 py-1 h-[24px] "
+                      onChange={handleDateSearch}
                     />
                   </div>
                 </div>
@@ -891,11 +1011,13 @@ const Event = () => {
         </div>
       </div>
 
-      <Pagination
-        total_pages={total_pages}
-        current_page={current_page}
-        onPageChange={handlePageChange}
-      />
+      {total_pages > 1 && (
+        <Pagination
+          total_pages={total_pages}
+          current_page={current_page}
+          onPageChange={handlePageChange}
+        />
+      )}
 
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className=" z-10" onClose={closeModal}>

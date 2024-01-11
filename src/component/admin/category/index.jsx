@@ -97,8 +97,8 @@ const Category = () => {
     <>
       {isLoader && <Loader />}
 <ToastContainer autoClose={1000}/>
-      <div className="z-10">
-        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border mx-10 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+      <div className="">
+        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Category List </h2>
 
           <div className="flex items-center w-[40%]">
@@ -112,7 +112,7 @@ const Category = () => {
           </div>
           <h2>Welcome Back, Admin</h2>
         </div>
-        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border ml-10 mr-4  lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
           <div className="">
             <button
               onClick={openDrawer}
@@ -125,7 +125,7 @@ const Category = () => {
         {isDrawerOpen && (
           <div
             id="drawer-form"
-            className="fixed content-center mb-5 right-5 z-40 h-[50%] lg:h-[45%] lg:w-4/12 w-6/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
+            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-[35%] sm:h-[45%] lg:h-[45%] lg:w-6/12 w-8/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
             tabIndex={-1}
             aria-labelledby="drawer-form-label"
           >
@@ -134,7 +134,7 @@ const Category = () => {
               onClick={closeDrawer}
               className="  text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" alt="close"/>
+              <img src="/images/close-square.svg" className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" alt="close"/>
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -149,7 +149,7 @@ const Category = () => {
         {isDrawerOpenO && (
           <div
             id="drawer-form"
-            className="fixed content-center mb-5 right-5 z-40 h-[50%] lg:h-[45%] lg:w-4/12 w-6/12 p-4 overflow-y-auto transition-transform -translate-x-0 bg-white "
+            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-[40%] sm:h-[45%] lg:h-[45%] lg:w-6/12 w-8/12 p-4 overflow-y-auto transition-transform -translate-x-0 bg-white "
             tabIndex={-1}
             aria-labelledby="drawer-form-label"
           >
@@ -158,7 +158,7 @@ const Category = () => {
               onClick={closeDrawerO}
               className="  shadow-2xl text-sm top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" alt="close"/>
+            <img src="/images/close-square.svg" className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" alt="close"/>
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -172,7 +172,7 @@ const Category = () => {
             </div>
           </div>
         )}
-        <div className="mx-10 lg:mx-8 ">
+        <div className="ml-10 mr-4  lg:mx-8 ">
           <table className="z-10 border w-full table-auto bg-white rounded-md mt-5      p-10">
             <thead className="">
               <tr
@@ -184,10 +184,10 @@ const Category = () => {
            sm:text-[12px] 
            text-[10px]"
               >
-                <th className="mx-5 w-2/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
+                <th className="mx-5 w-[30px] sm:w-2/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
                   S.NO
                 </th>
-                <th className="ml-10  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
+                <th className="xl:ml-10 w-6/12 sm:w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
                   EVENT NAME
                 </th>
 
@@ -203,8 +203,8 @@ const Category = () => {
                     key={index}
                     className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                   >
-                    <td className="mx-5 my-auto w-2/12">{index + 1 + "."}</td>
-                    <td className="my-auto ml-10 w-4/12">{item.title}</td>
+                    <td className="mx-5 my-auto w-[30px] sm:w-2/12">{index + 1 + "."}</td>
+                    <td className="my-auto xl:ml-10 w-6/12 sm:w-4/12">{item.title}</td>
 
                     <td className="w-3/12">
                       <div className="flex my-3 gap-3">

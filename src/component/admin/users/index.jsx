@@ -100,7 +100,7 @@ const AllUser = () => {
   return (
     <>
       <div>
-        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border mx-10 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Users List </h2>
 
           <div className="flex items-center w-[40%]">
@@ -116,7 +116,7 @@ const AllUser = () => {
           <h2>Welcome Back, Admin</h2>
         </div>
 
-        <div className=" flex mx-5 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
+        <div className=" flex mx-5 ml-10 mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
           <div className=" w-full ">
             <table className="w-[155%] sm:w-[100%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">

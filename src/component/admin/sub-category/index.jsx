@@ -119,7 +119,7 @@ const SubCategoryPage = () => {
 
       {isLoader && <Loader />}
       <section>
-        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7   border flex justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 mx-10 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7   border flex justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 ml-10 mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[60px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold "> Sub Category List </h2>
           <div className="w-[40%]">
             <input
@@ -132,7 +132,7 @@ const SubCategoryPage = () => {
           </div>
           <h2>Welcome Back, Admin</h2>
         </div>
-        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8 rounded-lg bg-white  2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border ml-10 mr-4 lg:mx-8 rounded-lg bg-white  2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
           <div className="flex justify-around">
             <button
               onClick={openSubCategory}
@@ -145,7 +145,7 @@ const SubCategoryPage = () => {
         {issubCateDrwaer && (
           <div
             id="drawer-form"
-            className=" border-2 fixed content-center mb-5 right-5 z-40 h-[380px] p-4 overflow-y-auto transition-transform -translate-x-0 bg-white lg:w-4/12 w-6/12 "
+            className=" border-2 fixed content-center mb-5 right-4 lg:right-8 z-40 h-[40%] sm:h-[45%] p-4 overflow-y-auto transition-transform -translate-x-0 bg-white lg:w-6/12 w-8/12 "
             tabIndex={-1}
             aria-labelledby="drawer-form-label"
           >
@@ -154,7 +154,7 @@ const SubCategoryPage = () => {
               onClick={closeSubCategory}
               className="  text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"  alt="close"/>
+             <img src="/images/close-square.svg" className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"  alt="close"/>
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -170,7 +170,7 @@ const SubCategoryPage = () => {
         {isDrawerOpenO && (
           <div
             id="drawer-form"
-            className="fixed content-center mb-5 right-5 z-40 h-[380px] p-4 overflow-y-auto transition-transform -translate-x-0 bg-white lg:w-4/12  w-6/12  "
+            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-[35%] sm:h-[45%] p-4 overflow-y-auto transition-transform -translate-x-0 bg-white lg:w-6/12  w-8/12  "
             tabIndex={-1}
             aria-labelledby="drawer-form-label"
           >
@@ -179,7 +179,7 @@ const SubCategoryPage = () => {
               onClick={closeDrawerO}
               className=" text-gray-400  shadow-2xl text-sm top-2  inline-flex items-center justify-center "
             >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"  alt="close"/>
+              <img src="/images/close-square.svg" className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"  alt="close"/>
 
               <span className="sr-only bg-black">Close menu</span>
             </button>

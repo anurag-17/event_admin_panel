@@ -10,8 +10,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   const [getallCategory, setGetallCategory] = useState();
   const [isLoadingBtn, setLoadingBtn] = useState(false);
   const [isRefresh, setRefresh] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"|| ""));
-
+  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
 
   const inputHandler = (e) => {
     const { name, value } = e.target;
@@ -89,7 +88,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
         px-1 h-[25px] my-2
          "
       >
-        <h2 className="2xl:text-2xl xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[10px] text-[9px] font-semibold ">
+        <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">
           Edit Sub-Category{" "}
         </h2>
         <div className="mb-3 w-[40%]"></div>
@@ -97,7 +96,6 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
 
       <div>
         <form
-        
           onSubmit={handleUpdateCategory}
           className=" bg-white border  rounded-lg 2xl:p-2 xl:p-2  lg:p-1 md:p-2 p-1  mx-auto"
         >
@@ -152,7 +150,8 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
                2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
                xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
               lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[13px] md:m-4 md:px-3 md:py-2 md:h-[30px]
+              md:text-[13px] md:m-4 md:px-3 md:py-1 md:h-[30px]
+
               sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
               text-[12px] m-2 px-2 py-1 h-[25px]
               "
@@ -167,7 +166,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
                 Select Category
               </option>
               {getallCategory?.map((item, index) => (
-                <option key={item.id}  value={editData?.category} >
+                <option key={item.id} value={editData?.category}>
                   {item?.title}
                 </option>
               ))}
@@ -177,12 +176,12 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="border bg-blue-500 hover:bg-blue-600 text-white rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
+            className="border bg-blue-500 hover:bg-blue-600 text-white md:rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
               xl:text-[14px] xl:py-2 xl:px-4  xl:m-5 xl:mt-0
               lg:text-[12px] lg:py-2 lg:px-3 lg:m-5 lg:mt-0
               md:text-[12px] md:py-1 md:px-2 md:m-4 md:mt-0
               sm:text-[11px] sm:py-1  sm:px-1 sm:m-3 sm:mt-0
-              text-[10px] py-[3px] px-1 m-2 mt-0
+              text-[10px] py-[3px] px-1 m-2 mt-0 rounded-md
                "
           >
             {isLoading ? "Loading." : "Update"}
