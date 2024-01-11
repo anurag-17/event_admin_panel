@@ -82,7 +82,7 @@ exports.getEvent = asyncHandler(async (req, res) => {
 
 exports.getAllEvents = asyncHandler(async (req, res) => {
   try {
-    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory } = req.query;
+    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city} = req.query;
 
     const currentPage = parseInt(page, 10);
     const itemsPerPage = parseInt(limit, 10);
@@ -120,6 +120,14 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
 
     if (subCategory) {
       query.subCategory = subCategory;
+    }
+
+    if (provider) {
+      query.event_provider = provider;
+    }
+
+    if (city) {
+      query.city = city;
     }
 
     const totalEvents = await Event.countDocuments(query);
@@ -221,17 +229,20 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
             latitude: location.lat,
             longitude: location.lng,
           };
-        
+          const imagesArray = Array.isArray(event.MainImageUrl)
+            ? event.MainImageUrl.map((url, index) => ({ url, position: index }))
+            : [{ url: event.MainImageUrl, position: 0 }];
           // Extract relevant event information
           const eventData = {
             name: event.Name,
             description: event.Description,
             startDate: event.StartDate,
             endDate: event.EndDate,
-            image: event.MainImageUrl,
+            images: imagesArray,
             price: event.CurrentPrice,
             resource_url: event.EventDetailUrl,
             ...venueInfo,
+            event_provider: "London Theatre Direct"
           };
         
           // Save the event to the database
@@ -249,7 +260,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
     res.status(200).json({ message: `Filtered events saved successfully. ${eventsAdded} event(s) added.` });
   } catch (error) {
     console.error("Error:", error.message);
-    res.status(500).send("Internal Server Error");
+    res.status(403).send("Internal Server Error");
   }
 });
 
@@ -265,7 +276,7 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
     endDate.setMonth(endDate.getMonth() + 1);
 
     // Fetch events data from Skiddle API
-    const skiddleApiUrl = `https://www.skiddle.com/api/v1/events/?api_key=${process.env.skiddleApiKey}`;
+    const skiddleApiUrl = `https://www.skiddle.com/api/v1/events/?api_key=${process.env.skiddleApiKey}&limit=100`;
     
     const skiddleResponse = await axios.get(skiddleApiUrl);
     const skiddleEvents = skiddleResponse.data.results;
@@ -293,12 +304,16 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
       if (existingEvent) {
         console.error(`Event ${event.eventname} already exists. Skipping...`);
       } else {
+        const imagesArray = Array.isArray(event.imageurl)
+          ? event.imageurl.map((url, index) => ({ url, position: index }))
+          : [{ url: event.imageurl, position: 0 }];
+
         const eventData = {
           name: event.eventname,
           description: event.description,
           startDate: event.startdate,
           endDate: event.enddate,
-          images: [{ url: event.imageurl, url: event.largeimageurl }],
+          images: imagesArray,
           location: event.venue.name,
           address: event.venue.address,
           city: event.venue.town,
@@ -306,6 +321,8 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           latitude: event.venue.latitude,
           longitude: event.venue.longitude,
           resource_url: event.link,
+          price: event.entryprice,
+          event_provider: "Skiddle"
         };
 
         // Save the event to the database

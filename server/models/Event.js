@@ -51,12 +51,16 @@ const EventSchema = new mongoose.Schema(
     },
     images: [
       {
-        url: { type: String }
+        url: { type: String },
+        position: { type: Number }, // Add position property for image indexing
       },
     ],
     resource_url: {
       type: String,
     },
+    event_provider: {
+      type: String
+    }
   },
   {
     timestamps: true,

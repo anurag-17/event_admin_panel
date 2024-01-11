@@ -518,6 +518,7 @@ exports.fetchEvent = async (req, res) => {
           longitude: event._embedded.venues[0].location.longitude,
         };
 
+        const imagesArray = event.images.map((image, index) => ({ url: image.url, position: index }));
         // Extract relevant event information
         const eventData = {
           name: event.name,
@@ -525,10 +526,12 @@ exports.fetchEvent = async (req, res) => {
           startDate: event.dates.start.dateTime,
           endDate: event.sales.public.endDateTime,
           // image: event.images[0].url,
-          images: event.images.map((image) => ({ url: image.url })),
-          price: 0,
+          // images: event.images.map((image) => ({ url: image.url })),
+          images: imagesArray,
+          // price: event.priceRanges.min || 0,
           resource_url: event.url,
           ...venueInfo,
+          event_provider: "Ticketmaster"
         };
 
         // Save the event to the database
