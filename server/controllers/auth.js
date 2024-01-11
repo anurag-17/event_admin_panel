@@ -7,6 +7,7 @@ const { generateToken } = require("../config/jwtToken");
 const sendToken = require("../utils/jwtToken");
 const axios = require('axios');
 const cheerio = require('cheerio');
+const jwt = require("jsonwebtoken");
 const uploadOnS3 = require("../utils/uploadImage");
 
 exports.uploadImage = async (req, res, next) => {
@@ -145,11 +146,59 @@ exports.adminLogin = async (req, res, next) => {
 };
 
 exports.logout = async (req, res) => {
-  // Clear the token cookie
-  res.clearCookie('token');
+  try {
+    const authHeader = req.headers.authorization;
 
-  // Send a response indicating successful logout
-  res.status(200).json({ success: true, message: 'Logout successful' });
+    if (authHeader) {
+      token = authHeader;
+    }
+    
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "Please login to access this resource" });
+    }
+
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userData = await User.findOne({_id:decodedData?.id});
+
+    if (userData.activeToken && userData.activeToken === token) {
+      const user = await User.findOneAndUpdate(
+        { _id: decodedData.id, activeToken: token },
+        { $unset: { activeToken: "" } }, // Unset the token
+        { new: true }
+      );
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: "Invalid session or token, please login again" });
+      }
+      return res.status(200).json({
+        message: `${userData._id} is Logout Successfully`,
+      });
+    } else {
+      return res
+        .status(401)
+        .json({ message: "Token expired, please login again" });
+    }
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ message: "Token expired, please login again" });
+    } else if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ message: "Invalid token" });
+    } else {
+      console.error("Other error:", error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  }
+  // // Clear the token cookie
+  // res.clearCookie('token');
+
+  // // Send a response indicating successful logout
+  // res.status(200).json({ success: true, message: 'Logout successful' });
 };
 
 exports.forgotPassword = async (req, res, next) => {
