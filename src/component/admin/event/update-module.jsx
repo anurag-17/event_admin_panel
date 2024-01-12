@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ToastContainer , toast} from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 import axios from "axios";
 import Image from "next/image";
@@ -27,7 +27,28 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
       setEventDetail({ ...eventDetail, [e.target.name]: e.target.value });
     }
   };
+//------- handle cover image-------
+  const handleCoverImageChange = (newPosition) => {
+    // Find the index of the image with the new position
+    const newIndex = eventDetail?.images?.length>0 && eventDetail?.images?.findIndex(image => image?.position === newPosition);
 
+    // Find the index of the current cover image
+    const currentIndex = eventDetail?.images.findIndex(image => image?.position === 0);
+
+    if (newIndex !== -1 && currentIndex !== -1) {
+      // Swap positions
+      const newImages = [...eventDetail?.images];
+     
+      newImages[currentIndex].position = newPosition;
+      newImages[newIndex].position = 0;
+
+      // setImages(newImages);
+      setEventDetail({ ...eventDetail, ['images']: newImages})
+    } else {
+      console.error("Invalid positions provided.");
+    }
+  };
+  // console.log(eventDetail)
   // --------image update --------
   const showImage = (img) => {
     setImgUrl(img);
@@ -37,7 +58,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   const handleRemoveImage = (id) => {
     let newImage =
       eventDetail?.images?.length > 0 &&
-      eventDetail?.images?.filter((items, index) => {
+      eventDetail?.images?.filter((items) => {
         return items?._id !== id;
       });
     setEventDetail({ ...eventDetail, [`images`]: newImage });
@@ -47,40 +68,39 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   // console.log(eventDetail)
 
   const uploadImage = async (e) => {
-    alert("okk")
+    alert("okk");
     setImageUpload(true);
 
     if (eventImage == "" || eventImage == undefined) {
       setImageUpload(false);
       return toast.warn("Please upload image.");
-    }
-else{
-  try {
-    const response = await axios.post("/api/auth/uploadImage", eventImage, {
-      headers: {
-        Authorization: auth_token,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    if (response.status === 200) {
-      const newImage = { url: response?.data?.url };
-      setEventDetail({
-        ...eventDetail,
-        images: [...eventDetail?.images, newImage],
-      });
-      setImageDisable(true);
-      setImageUpload(false);
     } else {
-      setEventDetail({ ...eventDetail, ["images"]: "" });
-      setImageDisable(false);
-      setImageUpload(false);
+      try {
+        const response = await axios.post("/api/auth/uploadImage", eventImage, {
+          headers: {
+            Authorization: auth_token,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (response.status === 200) {
+          const newImage = { url: response?.data?.url };
+          setEventDetail({
+            ...eventDetail,
+            images: [...eventDetail?.images, newImage],
+          });
+          setImageDisable(true);
+          setImageUpload(false);
+        } else {
+          setEventDetail({ ...eventDetail, ["images"]: "" });
+          setImageDisable(false);
+          setImageUpload(false);
+        }
+      } catch (error) {
+        console.error("Error", error);
+        setImageUpload(false);
+      }
     }
-  } catch (error) {
-    console.error("Error", error);
-    setImageUpload(false);
-  }
-}
   };
 
   const addField = async (e) => {
@@ -303,7 +323,7 @@ else{
               required
             />
           </div>
-         
+
           {/* ------10. Event price----- */}
 
           <div className="w-1/2">
@@ -352,7 +372,9 @@ else{
                 name="category"
                 className="custom_input w-full"
                 defaultValue={
-                  editData?.category ? editData?.category?._id : eventDetail?.category
+                  editData?.category
+                    ? editData?.category?._id
+                    : eventDetail?.category
                 }
                 onChange={inputHandler}
                 required
@@ -465,31 +487,51 @@ else{
 
           {eventDetail?.images?.length > 0 ? (
             <>
-              <div className="grid grid-cols-2 gap-2 w-1/2 2xl:px-10 lg:px-5 px-4 ">
-                {eventDetail?.images?.map((item, inx) => (
-                  <>
-                  {/* {console.log(item)} */}
-                    <div className="flex gap-2 items-center ">
-                      <p
-                        className="underline md:text-[18px] text-[16px] font-[400] px-4 cursor-pointer"
-                        onClick={() => showImage(item?.url)}
-                      >
-                        Image {inx + 1}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(item?._id)}
-                        className="text-[14px] font-[400] text-[red] hover:bg-[#efb3b38a]"
-                      >
-                        X
-                      </button>
-                    </div>
-                  </>
-                ))}
+              <div className="mb-4 w-1/2 2xl:px-10 lg:px-5 px-">
+                <span className="login-input-label cursor-pointer">
+                  Event Image
+                </span>
+                <div className="grid grid-cols-1 gap-2 4 ">
+                  {eventDetail?.images?.map((item, inx) => (
+                    <>
+                      {/* {console.log(item)} */}
+                      <div className="flex gap-2 items-center ">
+                        <div className="flex gap-1 items-center ">
+                          <p
+                            className="underline md:text-[18px] text-[16px] font-[400] px-4 cursor-pointer text-[blue]"
+                            onClick={() => showImage(item?.url)}
+                          >
+                            Image {inx + 1}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(item?._id)}
+                            className="text-[14px] font-[400] text-[red] hover:bg-[#efb3b38a]"
+                          >
+                            X
+                          </button>
+                        </div>
+                        {
+                          eventDetail?.images?.length>1 &&
+                            <div className="text-[14px] flex items-center gap-2">
+                              {console.log(item)}
+                                <label htmlFor={`cover${inx}`} className=""> Cover </label>
+                                <input type="radio" name="cover" id={`cover${inx}`}
+
+                                 onChange={()=> handleCoverImageChange(item?.position || inx)}/>
+                            </div>
+                        }
+                      </div>
+                    </>
+                  ))}
+                </div>
               </div>
             </>
           ) : (
             <div className="flex items-center gap-2 mt-2 w-1/2">
+              <span className="login-input-label cursor-pointer mb-2">
+                Picture
+              </span>
               <input
                 id="file"
                 type="file"
@@ -534,11 +576,40 @@ else{
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="custom_btn"
-          >
+          {/*-------cover image------- */}
+          {/* <div className="mt-2 w-1/2  mb-3 2xl:m-10 lg:m-5">
+            <span className="login-input-label cursor-pointer">
+              Cover image
+            </span>
+            <div className="flex items-center gap-2 ">
+              {Array.isArray(eventDetail?.images) &&
+              <>
+            {  eventDetail?.images?.length > 0 && (
+                <>
+                {eventDetail?.images.map((img, inx) => (
+                  <>
+                  {
+                    img?.position === 0 &&
+                    <div className="mt-4">
+                      <img
+                        src={img?.url}
+                        alt="loading.."
+                        height={100}
+                        width={100}
+                        className="w-2/4"
+                      />
+                    </div>
+                  }
+                  </>
+                ))}
+              </>
+              )}
+              </>
+                }
+            </div>
+          </div>
+<div className="w-1/2"></div> */}
+          <button type="submit" disabled={isLoading} className="custom_btn">
             {isLoading ? "Loading." : "Update"}
           </button>
         </form>
@@ -584,7 +655,7 @@ else{
                   <div className="px-5 py-4">
                     <img
                       //  src={`/utils?url=${encodeURIComponent(imgUrl)}`}
-                       src={imgUrl}
+                      src={imgUrl}
                       alt="loading.."
                       // height={300}
                       // width={300}
