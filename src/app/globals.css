@@ -53,3 +53,31 @@
     
   }
 }
+
+/* -----user----- */
+
+@media (min-width: 1024px) {
+  .userlogin-bg {
+    background-image: url(../../public/images/userlogologin.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 0px;
+   
+
+  }
+}
+
+@media (max-width: 1024px) {
+  .userlogin-bg {
+    background-image: url(../../public/images/userlogologin.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    
+  }
+}

@@ -1,7 +1,27 @@
-import React from "react";
-
 const Pagination = ({ total_pages, current_page, onPageChange }) => {
-  const pages = Array.from({ length: total_pages }, (_, index) => index + 1);
+  const renderPageButtons = () => {
+    const maxVisiblePages = 5;
+    const firstPage = Math.max(1, current_page - Math.floor(maxVisiblePages / 2));
+    const lastPage = Math.min(total_pages, firstPage + maxVisiblePages - 1);
+
+    return Array.from({ length: lastPage - firstPage + 1 }, (_, index) => (
+      <button
+        key={firstPage + index}
+        className={`relative h-10 max-h-[40px] w-10 max-w-[37px] select-none rounded-lg ${
+          firstPage + index === current_page
+            ? "bg-gray-400  text-[10px] text-black shadow-md shadow-gray-900/10"
+            : " hover:bg-gray-900/10 "
+        } text-center align-middle font-sans 2xl:text-xl xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[10px] text-[10px] font-medium uppercase transition-all disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+        type="button"
+        onClick={() => onPageChange(firstPage + index)}
+        disabled={current_page === firstPage + index}
+      >
+        <span className="absolute text-[black] transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          {firstPage + index}
+        </span>
+      </button>
+    ));
+  };
 
   return (
     <>
@@ -30,23 +50,10 @@ const Pagination = ({ total_pages, current_page, onPageChange }) => {
           Previous
         </button>
         <div className="flex items-center sm:gap-2">
-          {pages.map((page) => (
-            <button
-              key={page}
-              className={`relative h-10 max-h-[40px] w-10 max-w-[37px] select-none rounded-lg ${
-                page === current_page
-                  ? "bg-gray-400  text-[10px] text-black shadow-md shadow-gray-900/10"
-                  : " hover:bg-gray-900/10 "
-              } text-center align-middle font-sans 2xl:text-xl xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[10px] text-[10px] font-medium uppercase transition-all disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
-              type="button"
-              onClick={() => onPageChange(page)}
-              disabled={current_page === page}
-            >
-              <span className="absolute text-[black] transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                {page}
-              </span>
-            </button>
-          ))}
+          {renderPageButtons()}
+          {total_pages > 5 && current_page + 2 < total_pages && (
+            <span className="mx-2">...</span>
+          )}
         </div>
         <button
           className="flex items-center  gap-2 lg:px-6 lg:py-3 font-sans 2xl:text-xl xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[10px] text-[10px] font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
