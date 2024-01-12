@@ -9,7 +9,8 @@ const {
     getEvent,
     getAllEvents,
     londontheatredirect,
-    skiddleEvents
+    skiddleEvents,
+    getStats
 } = require("../controllers/event");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
@@ -24,6 +25,8 @@ router.post("/deleteBulkEvent", isAuthenticatedUser, authorizeRoles("admin"), de
 router.post("/getEvent", getEvent);
 
 router.get("/getAllEvents", getAllEvents);
+
+router.get("/getStats", getStats);
 
 router.get("/londontheatredirect", londontheatredirect);
 

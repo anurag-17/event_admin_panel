@@ -1,4 +1,6 @@
 const Event = require("../models/Event");
+const Category = require("../models/Category");
+const SubCategory = require("../models/subCategory");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
 const axios = require('axios');
@@ -147,6 +149,41 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
       total_pages: totalPages,
       total_items: totalEvents,
       events: allEvents,
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+exports.getStats = asyncHandler(async (req, res) => {
+  try {
+    const { category, subCategory, provider } = req.query;
+
+    let query = {};
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (subCategory) {
+      query.subCategory = subCategory;
+    }
+
+    if (provider) {
+      query.event_provider = provider;
+    }
+
+    const totalEvents = await Event.countDocuments(query);
+    const totalCategories = await Category.distinct("title", query).countDocuments();
+    const totalSubCategories = await SubCategory.distinct("subCategory", query).countDocuments();
+    // const totalProviders = await Event.distinct("event_provider", query).countDocuments();
+
+    res.json({
+      totalEvents,
+      totalCategories,
+      totalSubCategories,
+      // totalProviders,
     });
   } catch (error) {
     console.error("Error:", error.message);
