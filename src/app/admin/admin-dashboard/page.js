@@ -31,6 +31,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const authToekn = token ? JSON.parse(token) : null;
+    setToken(authToekn)
     if (!authToekn || authToekn == null) {
       router.push("/admin-login");
     }
@@ -54,17 +55,17 @@ const AdminDashboard = () => {
         url: `/api/auth/logout`,
         headers: {
           "Content-Type": "application/json",
-          authorization: JSON.parse(token || ""),
+          authorization: token,
         },
       };
       axios
         .request(options)
         .then((res) => {
           if (res.status === 200) {
-            localStorage.removeItem("accessToken");
             toast.success("Logout!");
-            router.push("/admin-login");
             setLoader(false);
+            router.push("/admin-login");
+            // localStorage.removeItem("accessToken");
           } else {
             setLoader(false);
             return;
@@ -73,7 +74,7 @@ const AdminDashboard = () => {
         .catch((error) => {
           setLoader(false);
           console.error("Error:", error);
-          toast.error(error?.response?.data?.error || "server error!");
+          toast.error(error?.response?.data?.message || "server error!");
         });
     } catch {
       console.log("error");

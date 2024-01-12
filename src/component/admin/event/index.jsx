@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Transition, Dialog } from "@headlessui/react";
 import { Fragment } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import CreateEvent from "./create-module";
 import EditEvent from "./update-module";
@@ -13,7 +13,12 @@ import Pagination from "../../pagination";
 import ImageModal from "./ImageModal";
 
 const Event = () => {
-  const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
+  const [auth_token, setAuth_token] = useState(
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("accessToken") || "")
+      : null
+  );
+  // const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
   const [getAllEvent, setGetAllEvent] = useState([]);
   const [isRefresh, setRefresh] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -43,6 +48,10 @@ const Event = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [limit, setLimit] = useState(20);
+  const [isLoading, setLoading] = useState(false);
+
+  console.log(largeImageSrc);
+
   const uniqueEvents = Array.from(
     new Set(getAllEvent.map((item) => item.city))
   );
@@ -217,28 +226,42 @@ const Event = () => {
   };
 
   const handleUpdateCategory = async (id) => {
-    editCategory._id = id;
-    try {
-      const response = await axios.put(`/api/event/updateEvent`, editCategory, {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: auth_token,
-        },
-      });
+    if (editCategory?.category === "" || editCategory?.subCategory === "") {
+      toast.warn("Please select category and subcategory both");
+    } else {
+      editCategory._id = id;
+      try {
+        setLoader(true);
+        const response = await axios.put(
+          `/api/event/updateEvent`,
+          editCategory,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: auth_token,
+            },
+          }
+        );
 
-      if (response.status === 200) {
-        closeDrawer();
-        refreshData();
-        setEditCategory({
-          _id: "",
-          category: "",
-          subCategory: "",
-        });
-      } else {
-        console.error("Server error!");
+        if (response.status === 200) {
+          closeDrawer();
+          refreshData();
+          setEditCategory({
+            _id: "",
+            category: "",
+            subCategory: "",
+          });
+          toast.success("submit successfully!");
+          setLoader(false);
+        } else {
+          console.error("Server error!");
+          setLoader(false);
+        }
+      } catch (error) {
+        console.error("Server error:", error);
+        toast.error(error?.response?.data?.message || "server error");
+        setLoader(false);
       }
-    } catch (error) {
-      console.error("Server error:", error);
     }
   };
   // ------ filter by category ------ //
@@ -531,7 +554,7 @@ const Event = () => {
         </div>
         <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white  lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-3">
           <div className="w-3/4">
-            <div className="flex flex-wrap  gap-2 lg:gap-3 xl:gap-3 2xl:gap-4">
+            <div className="flex flex-wrap items-end  gap-2 lg:gap-3 xl:gap-3 2xl:gap-4">
               {/* -----Filter Category-------- */}
 
               <div>
@@ -875,22 +898,35 @@ const Event = () => {
                             key={index}
                             className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                           >
+                            {/* {console.log(item?.images)} */}
+
                             <td className=" my-auto w-1/12">
                               {index + 1 + "."}
                             </td>
                             <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
-                              <div
-                                className="cursor-pointer "
-                                onClick={() => handleImageClick(item?.images)}
-                              >
-                                <img
-                                  src={item?.images[0]?.url}
-                                  alt="loading.."
-                                  height={100}
-                                  width={100}
-                                  className="w-2/4"
-                                />
-                              </div>
+                              <>
+                                {item?.images.map((img, inx) => (
+                                  <>
+                                  {
+                                    img?.position === 0 &&
+                                    <div
+                                      className="cursor-pointer "
+                                      onClick={() =>
+                                        handleImageClick(item?.images)
+                                      }
+                                    >
+                                      <img
+                                        src={img?.url}
+                                        alt="loading.."
+                                        height={100}
+                                        width={100}
+                                        className="w-2/4"
+                                      />
+                                    </div>
+                                  }
+                                  </>
+                                ))}
+                              </>
                             </td>
                             <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
                               <p className="w-40">{item.name}</p>
@@ -989,7 +1025,7 @@ const Event = () => {
 
                             <td className="my-auto  w-2/12 xl:pl-12 ">
                               <div className="flex my-3 gap-3 ">
-                                {console.log()}
+                                {/* {console.log()} */}
                                 <button onClick={() => openDrawerO(item?._id)}>
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -1122,7 +1158,7 @@ const Event = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full 2xl:max-w-[700px] xl:max-w-[600px] sw-full  transform overflow-hidden rounded-[10px] bg-white py-10 px-[10px] xl:px-12 md:px-4 text-center align-middle shadow-xl transition-all relative">
+                <Dialog.Panel className="w-full 2xl:max-w-[700px] xl:max-w-[600px] sw-full  transform overflow-hidden rounded-[10px] bg-white py-[30px] px-[10px] xl:px-12 md:px-4 text-center align-middle shadow-xl transition-all relative">
                   <ImageModal data={largeImageSrc} />
                 </Dialog.Panel>
               </Transition.Child>
