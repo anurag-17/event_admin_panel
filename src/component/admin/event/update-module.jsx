@@ -498,7 +498,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                       <div className="flex gap-2 items-center ">
                         <div className="flex gap-1 items-center ">
                           <p
-                            className="underline md:text-[18px] text-[16px] font-[400] px-4 cursor-pointer text-[blue]"
+                            className="underline md:text-[16px] text-[15px] font-[400] px-4 cursor-pointer text-[blue]"
                             onClick={() => showImage(item?.url)}
                           >
                             Image {inx + 1}
@@ -528,11 +528,13 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
               </div>
             </>
           ) : (
-            <div className="flex items-center gap-2 mt-2 w-1/2">
-              <span className="login-input-label cursor-pointer mb-2">
-                Picture
+            <div className="mt-2 w-1/2">
+              <span className="login-input-label cursor-pointer mb-2 w-full">
+               Event Image
               </span>
-              <input
+           
+           <div className="">
+           <input
                 id="file"
                 type="file"
                 name="images"
@@ -542,7 +544,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                 accept="image/png,image/jpg, image/jpeg , image/*"
               />
 
-              <div className="">
+              <div className="flex items-center gap-2 ">
                 {imageDisable ? (
                   <button
                     className="p-2 border h-[20px] flex justify-center items-center"
@@ -573,6 +575,7 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                   </button>
                 )}
               </div>
+           </div>
             </div>
           )}
 
