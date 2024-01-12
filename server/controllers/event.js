@@ -27,10 +27,15 @@ exports.createEvent = asyncHandler(async (req, res) => {
 
     const location = geocodingResponse.data.results[0].geometry.location;
 
+    const imagesArray = Array.isArray(req.body.imags)
+            ? req.body.imags.map((url, index) => ({ url, position: index }))
+            : [{ url: req.body.imags, position: 0 }];
+
     // Add latitude and longitude to the request body
     req.body.latitude = location.lat;
     req.body.longitude = location.lng;
-
+    req.body.images = imagesArray;
+    
     // Create the new event
     const newEvent = await Event.create(req.body);
     res.status(201).json(newEvent);
@@ -163,11 +168,21 @@ exports.getStats = asyncHandler(async (req, res) => {
     let query = {};
 
     if (category) {
-      query.category = category;
+      const categoryObject = await Category.findOne({ title: category });
+      if (categoryObject) {
+        query.category = categoryObject._id;
+      } else {
+        return res.status(404).json({ status: 'fail', message: 'Category not found' });
+      }
     }
 
     if (subCategory) {
-      query.subCategory = subCategory;
+      const subCategoryObject = await SubCategory.findOne({ subCategory });
+      if (subCategoryObject) {
+        query.subCategory = subCategoryObject._id;
+      } else {
+        return res.status(404).json({ status: 'fail', message: 'SubCategory not found' });
+      }
     }
 
     if (provider) {
@@ -175,8 +190,8 @@ exports.getStats = asyncHandler(async (req, res) => {
     }
 
     const totalEvents = await Event.countDocuments(query);
-    const totalCategories = await Category.distinct("title", query).countDocuments();
-    const totalSubCategories = await SubCategory.distinct("subCategory", query).countDocuments();
+    const totalCategories = await Category.countDocuments(query);
+    const totalSubCategories = await SubCategory.countDocuments(query);
     // const totalProviders = await Event.distinct("event_provider", query).countDocuments();
 
     res.json({
