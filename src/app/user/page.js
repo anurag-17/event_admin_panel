@@ -6,11 +6,14 @@ import Link from "next/link";
 import { ToastContainer } from "react-toastify";
 import Pagination from "../../component/pagination";
 import SingleEventPage from "../singleEvent/[slug]/page";
+import { useRouter } from "next/navigation";
+import UserProfile from "../../component/user/userProfile/page";
+import { Dialog, Transition } from "@headlessui/react";
 
 const User = () => {
   const [ComponentId, setComponentId] = useState(1);
   const [getAllEvent, setGetAllEvent] = useState([]);
-  const [getSingleEvent,setGetSingleEvent]=useState([]);
+  const [getSingleEvent, setGetSingleEvent] = useState([]);
   const [getAllCate, setGetAllCate] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -19,6 +22,7 @@ const User = () => {
   const [subCategoryFilter, setSubCategoryFilter] = useState("");
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
+  const [authenticated, setAuthenticated] = useState(false);
   const [isLoader, setLoader] = useState(false);
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [selectCategory, setSelectedCategory] = useState(null);
@@ -29,6 +33,8 @@ const User = () => {
     subCategory: "",
   });
   const [limit, setLimit] = useState(12);
+  const router = useRouter();
+  const [openAddPopup, setAddPopup] = useState(false);
 
   const menu = [
     {
@@ -57,8 +63,8 @@ const User = () => {
     },
     {
       id: 5,
-      label: "All Users",
-      component: "",
+      label: "User Profile",
+      url: "/user/userProfile",
       // icon: Users,
     },
     {
@@ -68,6 +74,20 @@ const User = () => {
       // icon: Users,
     },
   ];
+  const closeAddPopup = () => {
+    setAddPopup(false);
+  };
+  const closeAddPopupModel = () => {
+    // setOpenPopup(false);
+    setAddPopup(false);
+  };
+  const handleOpenPopup = (id) => {
+    // const selectedItemData = allData.userForm.filter((item) => item._id === id);
+    // setSelectedItem(selectedItemData);
+
+    // setUserId(id);
+    setAddPopup(true);
+  };
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -104,7 +124,6 @@ const User = () => {
     axios
       .request(option)
       .then((response) => {
-       
         setGetAllEvent(response.data.events);
         setLoader(false);
         setTotalPages(response?.data?.total_pages || 1);
@@ -114,35 +133,32 @@ const User = () => {
       });
   };
 
-// ----------get event by id----------
-// useEffect(() => {
-//   singleEvent();
-// }, [isRefresh]);
+  // ----------get event by id----------
+  // useEffect(() => {
+  //   singleEvent();
+  // }, [isRefresh]);
 
-// const singleEvent = (id) => {
-//   console.log("aaa",id)
-//   setLoader(true);
-//   const option = {
-//     method: "POST",
-//     url: "/api/event/getEvent", data: { id: id },
+  // const singleEvent = (id) => {
+  //   console.log("aaa",id)
+  //   setLoader(true);
+  //   const option = {
+  //     method: "POST",
+  //     url: "/api/event/getEvent", data: { id: id },
 
-//   };
-//   axios
-//     .request(option)
-//     .then((response) => {
-//       console.log("abc",response.data);
-//       setGetSingleEvent(response.data);
-//       // setGetAllCate(response.data);
-//       setLoader(false);
-    
-//     })
-//     .catch((err) => {
-//       console.log(err, "Error");
-//     });
-// };
+  //   };
+  //   axios
+  //     .request(option)
+  //     .then((response) => {
+  //       console.log("abc",response.data);
+  //       setGetSingleEvent(response.data);
+  //       // setGetAllCate(response.data);
+  //       setLoader(false);
 
-
-
+  //     })
+  //     .catch((err) => {
+  //       console.log(err, "Error");
+  //     });
+  // };
 
   //   -----------get All Category---------
   useEffect(() => {
@@ -318,6 +334,40 @@ const User = () => {
     }
   };
 
+  // ------verify user token-------
+  useEffect(() => {
+    const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+
+    if (auth_token) {
+      verify();
+    } else {
+      setAuthenticated(false);
+      router.push("/user/login");
+    }
+  }, []);
+
+  const verify = async () => {
+    setLoader(true);
+    try {
+      const res = await axios.get(`/api/auth/verifyUserToken/${auth_token}`);
+      if (res.status === 200) {
+        setAuthenticated(true);
+        setLoader(false);
+        console.log("authenticate", res.data);
+        return;
+      } else {
+        setAuthenticated(false);
+        router.push("/user/login");
+        setLoader(false);
+      }
+    } catch (error) {
+      setAuthenticated(false);
+      console.error("Error occurred:", error);
+      router.push("/user/login");
+      setLoader(false);
+    }
+  };
+
   return (
     <>
       <section className="bg-[#F3F3F3] ">
@@ -336,7 +386,8 @@ const User = () => {
                         }`}
                     onClick={() => handleClick(item.id)}
                   >
-                    <Link href={item.component}>
+                    {/* {console.log(item)} */}
+                    <Link href={item?.url ? item?.url : "#"}>
                       <div className="text-white">{item.label}</div>
                     </Link>
                   </li>
@@ -495,17 +546,18 @@ const User = () => {
                     {getAllEvent.map((item, index) => (
                       <div
                         key={index}
-                        className="card border hover:border-1 border-gray-300 hover:border-gray-700 rounded-md p-2 bg-white "
+                        className="card border hover:border-1 border-gray-300 hover:border-gray-700 rounded-md p-2 bg-white flex flex-col"
                       >
-                      {/* {console.log(item)} */}
-                    <Link href={`/singleEvent/${item?._id}`}>
-                        <img
-                          src={item?.images[0]?.url}
-                          alt="image"
-                          className="w-full h-48 object-fill rounded-md cursor-pointer"
-                          // onClick={()=>singleEvent(item?._id)}
-                        /></Link>
-                        <div className="container p-4">
+                        {/* {console.log(item)} */}
+                        <Link href={`/singleEvent/${item?._id}`}>
+                          <img
+                            src={item?.images[0]?.url}
+                            alt="image"
+                            className="w-full h-48 object-fill rounded-md cursor-pointer"
+                            // onClick={()=>singleEvent(item?._id)}
+                          />
+                        </Link>
+                        <div className="container p-4 flex-grow">
                           <h4 className="text-[16px] font-bold mb-2 truncate">
                             {item?.name}
                           </h4>
@@ -514,7 +566,7 @@ const User = () => {
                             {item?.category ? (
                               <p className="mb-2">{item?.category?.title}</p>
                             ) : (
-                              <p>Category not alloted</p>
+                              <p>Category not allotted</p>
                             )}
                           </div>
                           <div className="flex text-[14px]">
@@ -534,6 +586,14 @@ const User = () => {
                             )}
                           </div>
                         </div>
+                        <div className="flex justify-center items-end p-4">
+                          <button
+                            onClick={() => handleOpenPopup(item?._id)}
+                            className="px-4 py-2 border border-gray-200 rounded-md hover:bg-gray-300 hover:text-white"
+                          >
+                            Report Issue
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -550,11 +610,67 @@ const User = () => {
               onPageChange={handlePageChange}
             />
           )}
-          <SingleEventPage
-            getSingleEvent={getSingleEvent}
-          />
         </div>
       </section>
+
+      {/* ---------dialog panel------------- */}
+      <Transition appear show={openAddPopup} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeAddPopup}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white px-5  sm:pl-8 py-4 text-left align-middle shadow-2xl transition-all">
+                  <div className="flex justify-end items-end ">
+                    <button
+                      className=" cursor-pointer"
+                      onClick={closeAddPopupModel}
+                    >
+                      close
+                    </button>
+                  </div>
+                  <Dialog.Title
+                    as="h3"
+                    className="mb-4 flex justify-center lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                  >
+                    Report Issue
+                  </Dialog.Title>
+                  <textarea placeholder="Enter text here..." className="border border-gray-200" rows="4" cols="40" name="comment" form="usrform">
+                    
+                  </textarea>
+                   <div className="flex justify-end">
+                    <button className="px-2 py-1 rounded-md mr-3 hover:text-white bg-blue-300 hover:bg-blue-500">Submit</button>
+                   </div>
+                  {/* <Preview
+                    selectedItem={selectedItem}
+                    closeModal={closeAddPopupModel}
+                    refreshData={refreshData}
+                  /> */}
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </>
   );
 };
