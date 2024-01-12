@@ -27,14 +27,14 @@ exports.createEvent = asyncHandler(async (req, res) => {
 
     const location = geocodingResponse.data.results[0].geometry.location;
 
-    const imagesArray = Array.isArray(req.body.imags)
-            ? req.body.imags.map((url, index) => ({ url, position: index }))
-            : [{ url: req.body.imags, position: 0 }];
+    // const imagesArray = Array.isArray(req.body.imags)
+    //         ? req.body.imags.map((url, index) => ({ url, position: index }))
+    //         : [{ url: req.body.imags, position: 0 }];
 
     // Add latitude and longitude to the request body
     req.body.latitude = location.lat;
     req.body.longitude = location.lng;
-    req.body.images = imagesArray;
+    // req.body.images = imagesArray;
     
     // Create the new event
     const newEvent = await Event.create(req.body);
