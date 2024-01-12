@@ -97,20 +97,27 @@ const CreateEvent = ({ closeDrawer }) => {
       });
 
       if (response.status === 200) {
-        // console.log('Category added:', response?.data);
-        // setEventDetail({
-        //   ...eventDetail,
-        //   images: [...eventDetail.images, response?.data?.url],
-        // });
-        const newImage = { url: response?.data?.url };
+        const newImage = {
+          url: response?.data?.url,
+          position: eventDetail?.images?.length, 
+        };
+
+        const updatedImages = eventDetail.images.map((image, index) => ({
+          ...image,
+          position: index,
+        }));
+        
         setEventDetail({
           ...eventDetail,
-          images: [...eventDetail?.images, newImage],
+          images: [...updatedImages, newImage],
         });
+        // setEventDetail({
+        //   ...eventDetail,
+        //   images: [...eventDetail?.images, newImage],
+        // });
   
         setImageDisable(true);
         setImageUpload(false);
-        // setSubmited(true);
       } else {
         setEventDetail({ ...eventDetail, ["images"]: "" });
         setImageDisable(false);
@@ -449,7 +456,7 @@ const CreateEvent = ({ closeDrawer }) => {
           <div className="py-2 flex items-end gap-x-10 ">
             <div className="">
               <span className="login-input-label cursor-pointer mb-2">
-                Picture
+              Event Image
               </span>
               <div className="flex items-center w-full">
                 <input
