@@ -3,7 +3,7 @@ const Event = require("../models/Event")
 const ErrorResponse = require("../utils/errorRes");
 const sendEmail = require("../utils/sendEmail");
 const validateMongoDbId = require("../utils/validateMongodbId");
-const { generateToken } = require("../config/jwtToken");
+const { generateToken , verifyToken} = require("../config/jwtToken");
 const sendToken = require("../utils/jwtToken");
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -322,6 +322,25 @@ exports.resetPassword = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+exports.verifyUser = async (req, res) => {
+  const { token } = req.params;
+  // console.log(token);
+  try {
+    if (!verifyToken(token)) {
+      return res.status(401).json({ message: "Unauthorized Access" });
+    } else {
+      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+
+      const LoggedUser = await User.findOne({ _id: decodedData?.id }).select("-password -activeToken");
+
+      return res.status(200).json({ data: LoggedUser, message: "Verification Successfull" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: error.message });
   }
 };
 

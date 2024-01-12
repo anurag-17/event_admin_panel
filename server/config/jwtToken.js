@@ -4,4 +4,14 @@ const generateToken = (id) => {
   return jwt.sign(id , process.env.JWT_SECRET, { expiresIn: "2d" });
 };
 
-module.exports = { generateToken };
+const verifyToken = (token) => {
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      return decoded;
+  } catch (error) {
+      console.log(error);
+      return null;
+  }
+}
+
+module.exports = { generateToken , verifyToken };
