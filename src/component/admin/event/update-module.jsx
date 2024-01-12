@@ -1,11 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ToastContainer, toast } from "react-toastify";
-
 import axios from "axios";
-import Image from "next/image";
 
-const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
+
+const EditEvent = ({ editData, closeDrawer, refreshData }) => {
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [isLoading, setLoading] = useState(false);
   const [getallCategory, setGetallCategory] = useState([]);
@@ -27,28 +26,25 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
       setEventDetail({ ...eventDetail, [e.target.name]: e.target.value });
     }
   };
+
 //------- handle cover image-------
   const handleCoverImageChange = (newPosition) => {
-    // Find the index of the image with the new position
     const newIndex = eventDetail?.images?.length>0 && eventDetail?.images?.findIndex(image => image?.position === newPosition);
 
-    // Find the index of the current cover image
     const currentIndex = eventDetail?.images.findIndex(image => image?.position === 0);
 
     if (newIndex !== -1 && currentIndex !== -1) {
-      // Swap positions
       const newImages = [...eventDetail?.images];
      
       newImages[currentIndex].position = newPosition;
       newImages[newIndex].position = 0;
 
-      // setImages(newImages);
       setEventDetail({ ...eventDetail, ['images']: newImages})
     } else {
       console.error("Invalid positions provided.");
     }
   };
-  // console.log(eventDetail)
+
   // --------image update --------
   const showImage = (img) => {
     setImgUrl(img);
@@ -68,7 +64,6 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
   // console.log(eventDetail)
 
   const uploadImage = async (e) => {
-    alert("okk");
     setImageUpload(true);
 
     if (eventImage == "" || eventImage == undefined) {
@@ -514,11 +509,11 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
                         {
                           eventDetail?.images?.length>1 &&
                             <div className="text-[14px] flex items-center gap-2">
-                              {console.log(item)}
+                              {/* {console.log(item)} */}
                                 <label htmlFor={`cover${inx}`} className=""> Cover </label>
                                 <input type="radio" name="cover" id={`cover${inx}`}
 
-                                 onChange={()=> handleCoverImageChange(item?.position || inx)}/>
+                                 onChange={()=> handleCoverImageChange(item?.position ? item?.position : inx)}/>
                             </div>
                         }
                       </div>
@@ -529,18 +524,18 @@ const EditEvent = ({ editData, editEvent, closeDrawer, refreshData }) => {
             </>
           ) : (
             <div className="mt-2 w-1/2">
-              <span className="login-input-label cursor-pointer mb-2 w-full">
+              <span className="login-input-label cursor-pointer mb-4 w-full">
                Event Image
               </span>
            
-           <div className="">
+           <div className="flex  gap-3 items-end">
            <input
                 id="file"
                 type="file"
                 name="images"
                 disabled={imageDisable}
                 onChange={inputHandler}
-                className="w-full  border max-w-[250px]"
+                className="w-full  border max-w-[200px]"
                 accept="image/png,image/jpg, image/jpeg , image/*"
               />
 
