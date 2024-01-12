@@ -27,24 +27,28 @@ const Event = () => {
   const [total_pages, setTotalPages] = useState(1);
   const [allSubCategory, setAllSubCategory] = useState([]);
   const [getAllCate, setGetAllCate] = useState([]);
-  const [eventDetail, setEventDetail] = useState(editData);
   const [editCategory, setEditCategory] = useState({
     _id: "",
     category: "",
     subCategory: "",
   });
-  const [selectCategory, setSelectedCategory] = useState(null);
-  const [eventCategory, setEventCategory] = useState(["All"]);
-  const [eventSubCategory, setEventSubCategory] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [subCategoryFilter, setSubCategoryFilter] = useState("");
+  const [cityFilter, setCityFilter] = useState([]);
+  const [providerFilter, setProviderFilter] = useState([]);
+  const [selectedProvider, setSelectedProvider] = useState("");
   const [showLargeImage, setShowLargeImage] = useState(false);
   const [largeImageSrc, setLargeImageSrc] = useState([]);
   const [eventFetch, setEventFetch] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [limit, setLimit] = useState(20);
-
+  const uniqueEvents = Array.from(
+    new Set(getAllEvent.map((item) => item.city))
+  );
+  const uniqueEventProvider = Array.from(
+    new Set(getAllEvent.map((item) => item.event_provider))
+  );
   const handleImageClick = (images) => {
     setLargeImageSrc(images);
     setShowLargeImage(true);
@@ -158,34 +162,6 @@ const Event = () => {
     }
   };
 
-  const handleDateSearch = (e) => {
-    const startDate = e.target.value.trim();
-
-    if (startDate === "") {
-      refreshData();
-    } else {
-      const endDate = "";
-      const options = {
-        method: "GET",
-        url: `http://100.24.75.181:4000/api/event/getAllEvents`,
-        params: {
-          startDate,
-          endDate,
-        },
-      };
-      axios
-        .request(options)
-        .then(function (response) {
-          if (response.status === 200) {
-            setGetAllEvent(response.data.events);
-          }
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    }
-  };
-
   useEffect(() => {
     defaultgetAllCate();
   }, [isRefresh]);
@@ -277,7 +253,7 @@ const Event = () => {
       method: "GET",
       url: `/api/event/getAllEvents?category=${
         e.target.value
-      }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&page=${1}&limit=${limit}`,
+      }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
     };
     axios
       .request(options)
@@ -297,13 +273,120 @@ const Event = () => {
     const subcate = e.target.value;
 
     setCurrentPage(1);
-
     setSubCategoryFilter(e.target.value);
     const options = {
       method: "GET",
       url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${
         e.target.value
-      }&startDate=${startDate}&endDate=${endDate}&page=${1}&limit=${limit}`,
+      }&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
+    };
+    axios
+      .request(options)
+      .then((response) => {
+        if (response.status === 200) {
+          setGetAllEvent(response.data.events);
+          setTotalPages(response?.data?.total_pages || 1);
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  // ------ filter by Date ------ //
+
+  const handleDateSearch = (e) => {
+    setCurrentPage(1);
+    if (e.target.name === "startDate") {
+      setStartDate(e.target.value.trim());
+      const options = {
+        method: "GET",
+        url: `/api/event/getAllEvents`,
+        params: {
+          startDate: e.target.value.trim(),
+          endDate,
+          category: categoryFilter,
+          subCategory: subCategoryFilter,
+          city: cityFilter,
+          provider: providerFilter,
+          page: 1,
+          limit: limit,
+        },
+      };
+      axios
+        .request(options)
+        .then(function (response) {
+          if (response.status === 200) {
+            setGetAllEvent(response.data.events);
+            setTotalPages(response?.data?.total_pages || 1);
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
+    if (e.target.name === "endDate") {
+      setEndDate(e.target.value.trim());
+
+      const options = {
+        method: "GET",
+        url: `/api/event/getAllEvents`,
+        params: {
+          startDate,
+          endDate: e.target.value.trim(),
+          category: categoryFilter,
+          subCategory: subCategoryFilter,
+          city: cityFilter,
+          provider: providerFilter,
+          page: 1,
+          limit: limit,
+        },
+      };
+      axios
+        .request(options)
+        .then(function (response) {
+          if (response.status === 200) {
+            setGetAllEvent(response.data.events);
+            setTotalPages(response?.data?.total_pages || 1);
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
+  };
+  // ------ filter by city ------ //
+  const handleSearchCity = (e) => {
+    setCurrentPage(1);
+    setCityFilter(e.target.value);
+    const options = {
+      method: "GET",
+      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${
+        e.target.value
+      }&provider=${providerFilter}&page=${1}&limit=${limit}`,
+    };
+    axios
+      .request(options)
+      .then((response) => {
+        if (response.status === 200) {
+          setGetAllEvent(response.data.events);
+          setTotalPages(response?.data?.total_pages || 1);
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  // ------ filter by Provider ------ //
+  const handleSearchProvider = (e) => {
+    setCurrentPage(1);
+    setProviderFilter(e.target.value);
+    const options = {
+      method: "GET",
+      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${
+        e.target.value
+      }&page=${1}&limit=${limit}`,
     };
     axios
       .request(options)
@@ -365,6 +448,9 @@ const Event = () => {
       });
   };
 
+  const handleClearFilter = () => {
+    setSelectedProvider("");
+  };
   return (
     <>
       {isLoader && <Loader />}
@@ -388,8 +474,8 @@ const Event = () => {
 
         {/* ---------Event fetch---------- */}
         <div className="  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-2">
-            <div className=" flex justify-between">
-          <div className="flex flex-wrap gap-2 w-1/2">
+          <div className=" flex justify-between">
+            <div className="flex flex-wrap gap-2 w-1/2">
               <div className="">
                 <div>
                   {" "}
@@ -443,7 +529,7 @@ const Event = () => {
             </div>
           </div>
         </div>
-        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-3">
+        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white  lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-3">
           <div className="w-3/4">
             <div className="flex flex-wrap  gap-2 lg:gap-3 xl:gap-3 2xl:gap-4">
               {/* -----Filter Category-------- */}
@@ -474,7 +560,7 @@ const Event = () => {
                       inputHandler(e);
                     }}
                   >
-                    <option value=""> Category</option>
+                    <option value="">All Category</option>
                     {getAllCate.map((item) => (
                       <option
                         key={item._id}
@@ -515,7 +601,7 @@ const Event = () => {
                       inputHandler(e);
                     }}
                   >
-                    <option value=""> SubCategory</option>
+                    <option value=""> All SubCategory</option>
                     {allSubCategory
                       .filter((item, indr) => {
                         return item?.category?._id === editCategory?.category;
@@ -584,6 +670,92 @@ const Event = () => {
                   </div>
                 </div>
               </div>
+
+              {/* ----------Filter by City------------ */}
+
+              <div>
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by City
+                    </label>
+                  </div>
+
+                  <select
+                    name="city"
+                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                      lg:px-2 lg:py-1  lg:w-24 w-28
+                 md:px-0 md:py-0 md:h-[25px] 
+                      sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px]"
+                    required
+                    minLength={3}
+                    maxLength={32}
+                    onChange={(e) => {
+                      handleSearchCity(e);
+                      inputHandler(e);
+                    }}
+                  >
+                    <option value="">All City</option>
+                    {uniqueEvents.map((city) => (
+                      <option
+                        key={city}
+                        value={city}
+                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                      >
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* ----------Filter by Provider------------ */}
+
+              <div>
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                      Filter by Provider
+                    </label>
+                  </div>
+
+                  <select
+                    name="provider"
+                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 2xl:text-sm 2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 xl:text-[12px] xl:px-3 xl:py-0 xl:w-28 lg:px-2 lg:py-1 lg:w-24 w-28 md:px-0 md:py-0 md:h-[25px] sm:px-2 sm:py-0 px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px]"
+                    required
+                    minLength={3}
+                    maxLength={32}
+                    onChange={(e) => {
+                      handleSearchProvider(e);
+                      inputHandler(e);
+                    }}
+                  >
+                    <option value="">All Provider</option>
+                    {uniqueEventProvider.map((event_provider) => (
+                      <option
+                        key={event_provider}
+                        value={event_provider}
+                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                      >
+                        {event_provider}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleClearFilter}
+                className="ml-2 px-3 h-[30px] bg-gray-300 text-gray-700 rounded cursor-pointer 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px] "
+              >
+                Clear
+              </button>
             </div>
           </div>
 
@@ -683,6 +855,9 @@ const Event = () => {
                     Location
                   </th>
                   <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    Provider
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
                     Category
                   </th>
                   <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
@@ -716,36 +891,6 @@ const Event = () => {
                                   className="w-2/4"
                                 />
                               </div>
-                              {/* Image */}
-                              {/* <div className="">
-                                {showLargeImage && (
-                                  <div className="fixed border-2 top-40 left-96 w-6/12 lg:h-[350px] xl:h-[450px] flex items-center justify-center bg-white bg-opacity-75">
-                                    <div className="max-w-3xl w-full">
-                                      <div
-                                        className="flex justify-end cursor-pointer"
-                                        onClick={handleLargeImageClose}
-                                      >
-                                        <Image
-                                          src={cut}
-                                          className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14 "
-                                        />
-                                      </div>
-                                      <div
-                                        className="cursor-pointer"
-                                        onClick={() => setShowLargeImage(false)}
-                                      >
-                                        <img
-                                          src={item?.images[0]?.url}
-                                          alt="loading.."
-                                          height={240}
-                                          width={240}
-                                          className="mx-auto xl:w-[400px]"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-                              </div> */}
                             </td>
                             <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
                               <p className="w-40">{item.name}</p>
@@ -760,9 +905,14 @@ const Event = () => {
                             <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
                               {item.endDate}
                             </td>
+
                             <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-8">
                               {item.location}
                             </td>
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
+                              {item.event_provider}
+                            </td>
+
                             <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  xl:pl-7 ">
                               <div className="">
                                 <select
@@ -943,11 +1093,11 @@ const Event = () => {
         </Dialog>
       </Transition>
 
-      <Transition appear show={showLargeImage} as={Fragment} >
+      <Transition appear show={showLargeImage} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-[111] bg-black/70"
-          onClose = {handleLargeImageClose}
+          onClose={handleLargeImageClose}
         >
           <Transition.Child
             as={Fragment}
@@ -973,15 +1123,13 @@ const Event = () => {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full 2xl:max-w-[700px] xl:max-w-[600px] sw-full  transform overflow-hidden rounded-[10px] bg-white py-10 px-[10px] xl:px-12 md:px-4 text-center align-middle shadow-xl transition-all relative">
-                 <ImageModal data={largeImageSrc} />
-
+                  <ImageModal data={largeImageSrc} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
           </div>
         </Dialog>
       </Transition>
-      
     </>
   );
 };

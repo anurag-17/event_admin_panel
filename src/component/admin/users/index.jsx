@@ -20,10 +20,8 @@ const AllUser = () => {
   const defaultGetaUser = () => {
     const option = {
       method: "POST",
-      url: "http://localhost:4000/api/auth/getUserById",
-      data: {
-        _id: userId,
-      },
+      url: "/api/auth/getUserById",
+     
       headers: {
         authorization: auth_token,
       },
@@ -63,13 +61,12 @@ const AllUser = () => {
   const defaultUsers = () => {
     const option = {
       method: "GET",
-      url: "http://localhost:4000/api/auth/all-users",
+      url: "/api/auth/all-users",
     };
     axios
       .request(option)
       .then((response) => {
         setGetAllUSer(response.data.users);
-        console.log(response.data.users, "user");
       })
       .catch((error) => {
         console.log("Error", error);
@@ -83,7 +80,7 @@ const AllUser = () => {
     } else {
       const options = {
         method: "GET",
-        url: `http://localhost:4000/api/auth/all-users?search=${search}`,
+        url: `/api/auth/all-users?search=${search}`,
       };
       axios
         .request(options)
