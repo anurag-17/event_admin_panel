@@ -1,5 +1,7 @@
 const User = require("../models/User");
-const Event = require("../models/Event")
+const Event = require("../models/Event");
+const Category = require("../models/Category");
+const SubCategory = require("../models/subCategory");
 const ErrorResponse = require("../utils/errorRes");
 const sendEmail = require("../utils/sendEmail");
 const validateMongoDbId = require("../utils/validateMongodbId");
@@ -499,6 +501,7 @@ exports.fetchEvent = async (req, res) => {
       {
         params: {
           apikey: apiKey,
+          size: 200
         },
         headers: {
           Accept: "application/json",
@@ -537,6 +540,20 @@ exports.fetchEvent = async (req, res) => {
           longitude: event._embedded.venues[0].location.longitude,
         };
 
+        // Extract segment and genre information
+        const segmentName = event.classifications[0].segment.name;
+        const genreName = event.classifications[0].genre.name;
+
+        // Save segmentName as category and genreName as subCategory
+        const category = segmentName || "Other";
+        const subCategory = genreName || "Other";
+
+        // Save to Category model if not exists
+        const categoryDocument = await Category.findOneAndUpdate({ title: category }, { title: category }, { upsert: true, new: true });
+
+        // Save to SubCategory model if not exists
+        const subCategoryDocument = await SubCategory.findOneAndUpdate({ subCategory: subCategory }, { subCategory: subCategory }, { upsert: true, new: true });
+        
         const imagesArray = event.images.map((image, index) => ({ url: image.url, position: index }));
         // Extract relevant event information
         const eventData = {
@@ -550,7 +567,9 @@ exports.fetchEvent = async (req, res) => {
           // price: event.priceRanges.min || 0,
           resource_url: event.url,
           ...venueInfo,
-          event_provider: "Ticketmaster"
+          event_provider: "Ticketmaster",
+          category: categoryDocument._id,
+          subCategory: subCategoryDocument._id
         };
 
         // Save the event to the database

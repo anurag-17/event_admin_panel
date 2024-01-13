@@ -63,13 +63,13 @@ exports.deleteEvent = asyncHandler(async (req, res) => {
 
 exports.deleteBulkEvent = asyncHandler(async (req, res) => {
   try {
-    const { eventIds } = req.body;
+    // const { eventIds } = req.body;
 
-    if (!eventIds || !Array.isArray(eventIds) || eventIds.length === 0) {
-      return res.status(400).json({ error: 'Invalid eventIds array in the request body.' });
-    }
+    // if (!eventIds || !Array.isArray(eventIds) || eventIds.length === 0) {
+    //   return res.status(400).json({ error: 'Invalid eventIds array in the request body.' });
+    // }
 
-    const deleteEvents = await Event.deleteMany({ _id: { $in: eventIds } });
+    const deleteEvents = await Event.deleteMany({  });
     
     res.json({ message: `${deleteEvents.deletedCount} events deleted successfully.` });
   } catch (error) {
@@ -206,6 +206,17 @@ exports.getStats = asyncHandler(async (req, res) => {
   }
 });
 
+// Function to map EventType to Category
+function mapEventTypeToCategory(eventType, eventTypes) {
+  const eventTypeMap = {};
+
+  // Populate eventTypeMap from the eventTypes array
+  for (const type of eventTypes) {
+    eventTypeMap[type.EventTypeId] = type.EventTypeName;
+  }
+
+  return eventTypeMap[eventType] || "Other";
+};
 exports.londontheatredirect = asyncHandler(async (req, res) => {
   try {
     let { startDate, endDate } = req.query;
@@ -216,6 +227,17 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
     // Default endDate to one month after the current date if not provided
     endDate = endDate ? new Date(endDate) : new Date();
     endDate.setMonth(endDate.getMonth() + 1);
+
+    const eventTypesResponse = await axios.get(
+      "https://api.londontheatredirect.com/rest/v2/System/EventTypes",
+      {
+        headers: {
+          Accept: "application/json",
+          "Api-Key": process.env.skiddleApiKey,
+        },
+      }
+    );
+    const eventTypes = eventTypesResponse.data.EventTypes;  
 
     // Fetch events data
     const eventsResponse = await axios.get(
@@ -263,6 +285,19 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
           }
         );
 
+        const eventTypeCategory = mapEventTypeToCategory(
+          event.EventType,
+          eventTypes
+        );
+
+        // Find or create the category in the Category model
+        let category = await Category.findOne({ title: eventTypeCategory });
+
+        if (!category) {
+          // If the category doesn't exist, create it
+          category = await Category.create({ title: eventTypeCategory });
+        }
+
         const venueData = venueResponse.data.Venue;
 
         // Use Google Geocoding API to get latitude and longitude for the venue
@@ -294,7 +329,8 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
             price: event.CurrentPrice,
             resource_url: event.EventDetailUrl,
             ...venueInfo,
-            event_provider: "London Theatre Direct"
+            event_provider: "London Theatre Direct",
+            category: category._id,
           };
         
           // Save the event to the database
@@ -316,6 +352,24 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
   }
 });
 
+function mapEventCodeToCategory(eventCode) {
+  const codeToCategoryMap = {
+    FEST: "Festivals",
+    LIVE: "Live music",
+    CLUB: "Clubbing/Dance music",
+    DATE: "Dating event",
+    THEATRE: "Theatre/Dance",
+    COMEDY: "Comedy",
+    EXHIB: "Exhibitions and Attractions",
+    KIDS: "Kids/Family event",
+    BARPUB: "Bar/Pub event",
+    LGB: "Gay/Lesbian event",
+    SPORT: "Sporting event",
+    ARTS: "The Arts",
+  };
+
+  return codeToCategoryMap[eventCode] || "Other";
+}
 exports.skiddleEvents = asyncHandler(async (req, res) => {
   try {
     let { startDate, endDate } = req.query;
@@ -347,6 +401,16 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
     // Process and save each filtered event to the database
     for (const event of filteredEvents) {
       // Check if the event already exists in the database
+
+      const eventCategory = mapEventCodeToCategory(event.EventCode);
+
+      // Find or create the category in the Category model
+      const category = await Category.findOneAndUpdate(
+        { title: eventCategory },
+        { title: eventCategory },
+        { upsert: true, new: true }
+      );    
+
       const existingEvent = await Event.findOne({
         name: event.eventname,
         startDate: event.startdate,
@@ -374,7 +438,8 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           longitude: event.venue.longitude,
           resource_url: event.link,
           price: event.entryprice,
-          event_provider: "Skiddle"
+          event_provider: "Skiddle",
+          category: category._id,
         };
 
         // Save the event to the database

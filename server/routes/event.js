@@ -20,7 +20,7 @@ router.put("/updateEvent", isAuthenticatedUser, authorizeRoles("admin"), updateE
 
 router.delete("/deleteEvent", isAuthenticatedUser, authorizeRoles("admin"), deleteEvent);
 
-router.post("/deleteBulkEvent", isAuthenticatedUser, authorizeRoles("admin"), deleteBulkEvent);
+router.post("/deleteBulkEvent",  deleteBulkEvent);
 
 router.post("/getEvent", getEvent);
 
