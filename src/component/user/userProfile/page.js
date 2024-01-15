@@ -55,22 +55,23 @@ const UserProfile = () => {
  <div className=" flex items-center justify-center">
 
   <div className="bg-white border border-gray-300 p-4 mt-4 rounded-md">
+    
     {userData && (
       <div>
         <div className="flex mb-2">
-          <p className="w-26 mr-2">First Name:</p>
+          <p className="sm:w-26  mr-2">First Name:</p>
           <div>{userData?.firstname}</div>
         </div>
         <div className="flex mb-2">
-          <p className="w-26 mr-2">Last Name:</p>
+          <p className="sm:w-26 mr-2">Last Name:</p>
           <div>{userData?.lastname}</div>
         </div>
         <div className="flex mb-2">
-          <p className="w-26 mr-2">Email:</p>
+          <p className="sm:w-[87px] w-[50px] mr-2">Email:</p>
           <div>{userData?.email}</div>
         </div>
         <div className="flex mb-2">
-          <p className="w-26 mr-2">Mobile No.:</p>
+          <p className="sm:w-26 mr-2">Mobile No.:</p>
           <div>{userData?.mobile}</div>
         </div>
       </div>

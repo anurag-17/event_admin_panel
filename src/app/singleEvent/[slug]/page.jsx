@@ -39,16 +39,16 @@ const SingleEventPage = ({ params }) => {
   return (
     <>
    
-      <div className="bg-[#F3F3F3] p-10 h-screen">
-        <div className="bg-white border rounded-md border-gray-500 p-4">
+      <div className="bg-[#F3F3F3] p-10 pb-28  ">
+        <div className="bg-white border rounded-md border-gray-500 p-4 ">
           <div>
             <div className="font-bold text-[24px] flex justify-center mb-8">
               Event Details
             </div>
-            <div className="flex bg-gray-100 p-4 rounded gap-5">
+            <div className="flex sm:flex-row flex-col bg-gray-100 p-4 rounded gap-5">
               <div>
                 {eventDetails && (
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 sm:justify-start justify-center">
                     <div className="w-72">
                       {/* <img src={eventDetails?.images[0]?.url} className="w-72" alt="Event" /> */}
                       {/* Carousel */}
@@ -58,7 +58,7 @@ const SingleEventPage = ({ params }) => {
                             <img
                               src={image.url}
                               alt={`Image ${index + 1}`}
-                              className="rounded-md"
+                              className="rounded-md object-scale-down"
                             />
                           </div>
                         ))}
@@ -68,7 +68,7 @@ const SingleEventPage = ({ params }) => {
                 )}
               </div>
               <div className="space-y-4">
-                <div className="flex gap-3 border border-gray-400 p-3 text-[22px] rounded-md ">
+                <div className="flex gap-3 border border-gray-400 p-3  text-[18px] md:text-[22px] rounded-md ">
                   <p className="w-20">Title:</p>
                   <div>{eventDetails?.name}</div>
                 </div>
@@ -97,7 +97,7 @@ const SingleEventPage = ({ params }) => {
                               <Link
                                 href={eventDetails?.resource_url}
                                 target="_blank"
-                                className="px-4 py-2 border border-gray-200 rounded-md hover:bg-gray-300 hover:text-white"
+                                className="px-12 py-2 border border-gray-200 rounded-md bg-gray-300 hover:bg-gray-400 hover:text-white"
                               >
                                 Buy Now
                               </Link>

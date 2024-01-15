@@ -3,18 +3,19 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
 import Link from "next/link";
-import { ToastContainer } from "react-toastify";
+
 import Pagination from "../../component/pagination";
 import SingleEventPage from "../singleEvent/[slug]/page";
 import { useRouter } from "next/navigation";
 import UserProfile from "../../component/user/userProfile/page";
 import { Dialog, Transition } from "@headlessui/react";
 import Loader from "../../component/loader";
+import { ToastContainer, toast } from "react-toastify";
 
 const User = () => {
   const [ComponentId, setComponentId] = useState(1);
   const [getAllEvent, setGetAllEvent] = useState([]);
-  const [getSingleEvent, setGetSingleEvent] = useState([]);
+
   const [getAllCate, setGetAllCate] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -81,22 +82,15 @@ const User = () => {
   ];
   const closeAddPopup = () => {
     setAddPopup(false);
-    // setRefresh(flase);
   };
   const closeAddPopupModel = () => {
-    // setOpenPopup(false);
     setAddPopup(false);
   };
   const handleOpenPopup = (eventId) => {
-    // const selectedItemData = allData.userForm.filter((item) => item._id === id);
-    // setSelectedItem(selectedItemData);
     setEventId(eventId);
-    // setUserId(userId);
-    // setUserId(id);
+
     setAddPopup(true);
   };
-
-  
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -104,7 +98,6 @@ const User = () => {
 
   const handleClick = (id) => {
     setComponentId(id);
-    // setShowDrawer(false);
   };
   const refreshData = () => {
     setRefresh(!isRefresh);
@@ -354,12 +347,12 @@ const User = () => {
   };
 
   // ---------event isshue api----------
+
   const handleEventIssue = async (e) => {
     const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
-    console.log("tokenn",auth_token);
+   
     setLoader(true);
-    const userId = await verify();
-    // console.log("Form Dta", formData);
+    // const userId = await verify();
 
     try {
       // const userId = await verify();
@@ -378,24 +371,28 @@ const User = () => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log(response.data);
-      
-        refreshData()
+        toast.success("Submitted successfully !");
+        refreshData();
+        setIssueText("");
         // closeAddPopup();
         closeAddPopupModel();
         setLoader(false);
       } else {
         console.error("Failed to submit");
+        toast.error("Failed to submit !");
       }
     } catch (error) {
       console.error("Error in submitting:", error.message);
+      toast.error("Error in submition !");
     }
   };
 
   return (
     <>
-      {isLoader && <Loader />}
+      {isLoader && <Loader/>}
+      <ToastContainer autoClose={3000} />
       <section className="bg-[#F3F3F3] ">
         <div className="pb-4">
           <nav className="bg-black p-3">
@@ -422,11 +419,11 @@ const User = () => {
             </div>
           </nav>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 bg-white border border-gray-300 m-7 p-5 gap-3  rounded-md">
+          <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 bg-white border border-gray-300 m-7 p-5 gap-3  rounded-md">
             {/* -----Filter Category-------- */}
 
             <div>
-              <div className="">
+              <div className="flex flex-col items-center">
                 <div>
                   {" "}
                   <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
@@ -468,7 +465,7 @@ const User = () => {
             {/* -----Filter SubCategory-------- */}
 
             <div className="">
-              <div className="">
+              <div className="flex flex-col items-center">
                 <div>
                   {" "}
                   <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
@@ -513,7 +510,7 @@ const User = () => {
             {/* -----Filter Start Date-------- */}
 
             <div className="">
-              <div className="">
+              <div className="flex flex-col items-center">
                 <div>
                   {" "}
                   <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
@@ -540,7 +537,7 @@ const User = () => {
             {/* -----Filter End Date-------- */}
 
             <div className="">
-              <div className="">
+              <div className="flex flex-col items-center">
                 <div>
                   {" "}
                   <label className=" text-gray-500 text-[14px] xl:text-[12px] 2xl:text-[16px]">
@@ -565,10 +562,10 @@ const User = () => {
             </div>
           </div>
           <div className="flex justify-center">
-            <div className="p-7 sm:w-full w-[321px]  2xl:w-[80%]">
+            <div className="p-7 sm:w-full w-[321px]  xl:w-[1250px] 2xl:w-[1546px]">
               <div>
                 {getAllEvent?.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
                     {getAllEvent.map((item, index) => (
                       <div
                         key={index}
@@ -579,7 +576,7 @@ const User = () => {
                           <img
                             src={item?.images[0]?.url}
                             alt="image"
-                            className="w-full h-48 object-fill rounded-md cursor-pointer"
+                            className="w-full h-48 object-scale-down rounded-md cursor-pointer"
                             // onClick={()=>singleEvent(item?._id)}
                           />
                         </Link>
@@ -588,7 +585,7 @@ const User = () => {
                             {item?.name}
                           </h4>
                           <div className="flex text-[14px] mt-2">
-                            <p className="mr-2">Category :</p>
+                            <p className="mr-[4px] sm:mr-2">Category :</p>
                             {item?.category ? (
                               <p className="mb-2">{item?.category?.title}</p>
                             ) : (
@@ -596,15 +593,17 @@ const User = () => {
                             )}
                           </div>
                           <div className="flex text-[14px]">
-                            <p className="w-[70px] mr-2">Location :</p>
-                            <p className="mb-2 truncate">{item?.location}</p>
+                            <p className="w-1/3 mr-">Location :</p>
+                            <p className="mb-2 w-2/3 truncate ">
+                              {item?.location}
+                            </p>
                           </div>
                           <div className="flex text-[14px]">
-                            <p className="mr-10">City :</p>
+                            <p className="sm:mr-[44px] mr-[38px]">City :</p>
                             <p className="mb-2">{item?.city}</p>
                           </div>
                           <div className="flex text-[14px]">
-                            <p className="mr-9">Price :</p>
+                            <p className="mr-[32px] sm:mr-9">Price :</p>
                             {item?.price ? (
                               <p className="mb-2">{item.price}</p>
                             ) : (
@@ -612,12 +611,11 @@ const User = () => {
                             )}
                           </div>
                           <div className="flex text-[14px] justify-center">
-                            
                             {item?.resource_url ? (
                               <Link
                                 href={item?.resource_url}
                                 target="_blank"
-                                className="px-4 py-2 border border-gray-200 bg-gray-200 rounded-md hover:bg-gray-400 hover:text-white"
+                                className="px-8  py-2 border border-gray-200 bg-gray-200 rounded-md hover:bg-gray-400 hover:text-white"
                               >
                                 Buy Now
                               </Link>
@@ -685,7 +683,11 @@ const User = () => {
                       className=" cursor-pointer"
                       onClick={closeAddPopupModel}
                     >
-                      close
+                      <img
+                        className="w-7"
+                        src="/images/close-square.svg"
+                        alt="close-img"
+                      />
                     </button>
                   </div>
                   <Dialog.Title
@@ -706,13 +708,12 @@ const User = () => {
                   ></textarea>
                   <div className="flex justify-end">
                     <button
-                      onClick={() => handleEventIssue()}
+                      onClick={handleEventIssue}
                       className="px-2 py-1 rounded-md mr-3 hover:text-white bg-blue-300 hover:bg-blue-500"
                     >
                       Submit
                     </button>
                   </div>
-              
                 </Dialog.Panel>
               </Transition.Child>
             </div>
