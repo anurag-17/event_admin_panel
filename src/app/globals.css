@@ -27,6 +27,15 @@
               sm:text-[11px] sm:py-1  sm:px-1 sm:m-3 sm:mt-0
               text-[10px] py-[3px] px-1 m-2 mt-0;
 }
+.custom_select{
+  @apply rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
+  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
+  xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+  lg:text-[12px]  lg:px-2 lg:py-1  w-24
+  md:px-0 md:py-0 md:h-[25px] 
+    sm:px-2 sm:py-0 
+      px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]
+}
 
 @media (min-width: 1024px) {
   .login-bg {
@@ -82,8 +91,8 @@
     border-top-right-radius: 20px;
     
   } 
-  .carousel .slide img{
-    width: auto;
-    height: auto;
-  }
+}
+.carousel .slide img, .carousel_img , .carousel img{
+  width: auto !important;
+  height: auto !important;
 }

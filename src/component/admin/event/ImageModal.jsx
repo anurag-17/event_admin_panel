@@ -19,7 +19,7 @@ const ImageModal = ({ data }) => {
       <Carousel>
         {data.map((image, index) => (
           <div key={index}>
-            <img src={image?.url} alt={`Image ${index + 1}`} />
+            <img src={image?.url} alt={`Image ${index + 1}`} className="h-auto w-auto carousel_img" />
           </div>
         ))}
       </Carousel>
