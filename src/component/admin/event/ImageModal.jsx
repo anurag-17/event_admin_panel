@@ -3,7 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 
 const ImageModal = ({ data }) => {
   return (
-    <div>
+    <div className="p-4">
     {/* <div
       className={`grid  gap-5 justify-center items-center text-center ${
         data?.length > 2 ? "grid-cols-3" : ""
@@ -15,6 +15,7 @@ const ImageModal = ({ data }) => {
           <img src={img?.url} alt="event" className="mx-auto" />
           // </div>
         ))} */}
+     
       <Carousel>
         {data.map((image, index) => (
           <div key={index}>

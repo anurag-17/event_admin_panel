@@ -304,7 +304,7 @@ const Event = () => {
 
   const handleSearchSubCategory = (e) => {
     const subcate = e.target.value;
-
+    setLoader(true);
     setCurrentPage(1);
     setSubCategoryFilter(e.target.value);
     const options = {
@@ -319,16 +319,19 @@ const Event = () => {
         if (response.status === 200) {
           setGetAllEvent(response?.data?.events);
           setTotalPages(response?.data?.total_pages || 1);
+          setLoader(false);
         }
       })
       .catch(function (error) {
         console.error(error);
+        setLoader(false);
       });
   };
 
   // ------ filter by Date ------ //
 
   const handleDateSearch = (e) => {
+    setLoader(true);
     setCurrentPage(1);
     if (e.target.name === "startDate") {
       setStartDate(e.target.value.trim());
@@ -352,10 +355,12 @@ const Event = () => {
           if (response.status === 200) {
             setGetAllEvent(response.data.events);
             setTotalPages(response?.data?.total_pages || 1);
+            setLoader(false);
           }
         })
         .catch(function (error) {
           console.error(error);
+          setLoader(false);
         });
     }
     if (e.target.name === "endDate") {
@@ -427,7 +432,7 @@ const Event = () => {
     setCurrentPage(1);
     setProviderFilter(e.target.value);
     setLoader(true);
-    try{
+    try {
       const options = {
         method: "GET",
         url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${
@@ -441,17 +446,16 @@ const Event = () => {
             setGetAllEvent(response.data.events);
             setTotalPages(response?.data?.total_pages || 1);
             setLoader(false);
-          }
-          else{
+          } else {
             setLoader(false);
-            return
+            return;
           }
         })
         .catch(function (error) {
           console.error(error);
           setLoader(false);
         });
-    }catch (error) {
+    } catch (error) {
       console.error(error);
       setLoader(false);
     }
@@ -460,6 +464,7 @@ const Event = () => {
   // -----------------event fetch--------------
 
   const defaultEventFetch = () => {
+    setLoader(true);
     const options1 = {
       method: "GET",
       url: "/api/auth/fetchEvents",
@@ -497,15 +502,17 @@ const Event = () => {
             setEventFetch(response3.data);
             // console.log(response3.data, "londontheatredirect");
           }
+          setLoader(false);
         })
       )
       .catch(function (error) {
         console.error(error);
+        setLoader(false);
       });
   };
 
   const handleClearFilter = () => {
-    setLoader(true)
+    setLoader(true);
     setSelectedProvider("");
     setCityFilter("");
     setCategoryFilter("");
@@ -513,8 +520,8 @@ const Event = () => {
     setProviderFilter("");
     setStartDate("");
     setEndDate("");
-    refreshData()
-    setLoader(false)
+    refreshData();
+    setLoader(false);
   };
 
   // -----------cities List-----------
@@ -544,8 +551,9 @@ const Event = () => {
             }
             // setLoader(false);
 
-            
-            const providerName = res?.data?.events?.map((items) => items?.event_provider);
+            const providerName = res?.data?.events?.map(
+              (items) => items?.event_provider
+            );
             if (citiesName?.length > 0) {
               const filterproviderArr = providerName?.filter(
                 (item, index) => providerName?.indexOf(item) === index
@@ -984,7 +992,7 @@ const Event = () => {
                   {getAllEvent?.length > 0 && (
                     <tbody className="px-2 w-full">
                       <div className="w-full">
-                        {getAllEvent.map((item, index) => (
+                        {getAllEvent?.map((item, index) => (
                           <tr
                             key={index}
                             className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
@@ -996,26 +1004,24 @@ const Event = () => {
                             </td>
                             <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
                               <>
-                                {item?.images.map((img, inx) => (
-                                  <>
-                                    {img?.position === 0 && (
-                                      <div
-                                        className="cursor-pointer "
-                                        onClick={() =>
-                                          handleImageClick(item?.images)
-                                        }
-                                      >
-                                        <img
-                                          src={img?.url}
-                                          alt="loading.."
-                                          height={100}
-                                          width={100}
-                                          className="w-2/4"
-                                        />
-                                      </div>
-                                    )}
-                                  </>
-                                ))}
+                              {Array.isArray(item?.images) &&
+                  item.images.length > 0 && (
+                    <>
+                      {item.images.map((img, inx) => (
+                        <div className="mt-4" key={inx}>
+                          {(img.position === 0 || inx === 0) && (
+                            <img
+                              src={img.url}
+                              alt="loading.."
+                              height={100}
+                              width={100}
+                              className="w-2/4"
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </>
+                  )}
                               </>
                             </td>
                             <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
@@ -1248,7 +1254,18 @@ const Event = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full 2xl:max-w-[700px] xl:max-w-[600px] sw-full  transform overflow-hidden rounded-[10px] bg-white py-[30px] px-[10px] xl:px-12 md:px-4 text-center align-middle shadow-xl transition-all relative">
+                <Dialog.Panel className=" w-full 2xl:max-w-[600px] md:max-w-[500px] sw-full  transform overflow-hidden rounded-[10px] bg-white py-[30px] px-[10px] xl:px-12 md:px-4 text-center align-middle shadow-xl transition-all relative">
+                  <div
+                    className="absolute right-2 top-1 cursor-pointer px-2 py-2 mb-4"
+                    onClick={handleLargeImageClose}
+                  >
+                    <Image
+                      src="/images/close-square.svg"
+                      alt="close"
+                      height={25}
+                      width={25}
+                    />
+                  </div>
                   <ImageModal data={largeImageSrc} />
                 </Dialog.Panel>
               </Transition.Child>

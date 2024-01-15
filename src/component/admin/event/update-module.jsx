@@ -3,7 +3,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
-
 const EditEvent = ({ editData, closeDrawer, refreshData }) => {
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [isLoading, setLoading] = useState(false);
@@ -27,19 +26,25 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
     }
   };
 
-//------- handle cover image-------
+  //------- handle cover image-------
   const handleCoverImageChange = (newPosition) => {
-    const newIndex = eventDetail?.images?.length>0 && eventDetail?.images?.findIndex(image => image?.position === newPosition);
+    const newIndex =
+      eventDetail?.images?.length > 0 &&
+      eventDetail?.images?.findIndex(
+        (image) => image?.position === newPosition
+      );
 
-    const currentIndex = eventDetail?.images.findIndex(image => image?.position === 0);
+    const currentIndex = eventDetail?.images.findIndex(
+      (image) => image?.position === 0
+    );
 
     if (newIndex !== -1 && currentIndex !== -1) {
       const newImages = [...eventDetail?.images];
-     
+
       newImages[currentIndex].position = newPosition;
       newImages[newIndex].position = 0;
 
-      setEventDetail({ ...eventDetail, ['images']: newImages})
+      setEventDetail({ ...eventDetail, ["images"]: newImages });
     } else {
       console.error("Invalid positions provided.");
     }
@@ -79,10 +84,18 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
         });
 
         if (response.status === 200) {
-          const newImage = { url: response?.data?.url };
+          const newImage = {
+            url: response?.data?.url,
+            position: eventDetail?.images?.length,
+          };
+          const updatedImages = eventDetail.images.map((image, index) => ({
+            ...image,
+            position: index,
+          }));
+
           setEventDetail({
             ...eventDetail,
-            images: [...eventDetail?.images, newImage],
+            images: [...updatedImages, newImage],
           });
           setImageDisable(true);
           setImageUpload(false);
@@ -478,79 +491,116 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
               required
             />
           </div>
-          {/* ------16. Event image----- */}
 
-          {eventDetail?.images?.length > 0 ? (
-            <>
-              <div className="mb-4 w-1/2 2xl:px-10 lg:px-5 px-">
-                <span className="login-input-label cursor-pointer">
-                  Event Image
-                </span>
-                <div className="grid grid-cols-1 gap-2 4 ">
-                  {eventDetail?.images?.map((item, inx) => (
+          <div className="grid md:grid-cols-2 w-full">
+            {/*-------cover image------- */}
+            <div className="mt-2  ">
+              <span className="login-input-label 2xl:m-10 lg:m-5">
+                Cover image
+              </span>
+              <div className="flex items-center gap-2  mb-3 2xl:m-10 lg:m-5">
+                {Array.isArray(eventDetail?.images) &&
+                  eventDetail.images.length > 0 && (
                     <>
-                      {/* {console.log(item)} */}
-                      <div className="flex gap-2 items-center ">
-                        <div className="flex gap-1 items-center ">
-                          <p
-                            className="underline md:text-[16px] text-[15px] font-[400] px-4 cursor-pointer text-[blue]"
-                            onClick={() => showImage(item?.url)}
-                          >
-                            Image {inx + 1}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveImage(item?._id)}
-                            className="text-[14px] font-[400] text-[red] hover:bg-[#efb3b38a]"
-                          >
-                            X
-                          </button>
+                      {eventDetail.images.map((img, inx) => (
+                        <div className="mt-4" key={inx}>
+                          {(img.position === 0 && (
+                            <img
+                              src={img.url}
+                              alt="loading.."
+                              height={100}
+                              width={100}
+                              className="w-2/4"
+                            />
+                          )) ||
+                            (typeof img.position === "undefined" &&
+                              inx === 0 && (
+                                <img
+                                  src={img.url}
+                                  alt="loading.."
+                                  height={100}
+                                  width={100}
+                                  className="w-2/4"
+                                />
+                              ))}
                         </div>
-                        {
-                          eventDetail?.images?.length>1 &&
+                      ))}
+                    </>
+                  )}
+              </div>
+            </div>
+
+            {eventDetail?.images?.length > 0 && (
+              <>
+                <div className="mb-4 2xl:px-10 lg:px-5 px-">
+                  <span className="login-input-label cursor-pointer">
+                    Event Image
+                  </span>
+                  <div className="grid md:grid-cols-2 gap-2 4 ">
+                    {eventDetail?.images?.map((item, inx) => (
+                      <>
+                        {/* {console.log(item)} */}
+                        <div className="flex gap-2 items-center ">
+                          <div className="flex gap-1 items-center ">
+                            <p
+                              className="underline md:text-[16px] text-[15px] font-[400] px-1 cursor-pointer text-[blue]"
+                              onClick={() => showImage(item?.url)}
+                            >
+                              Image {inx + 1}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveImage(item?._id)}
+                              className="text-[14px] font-[400] text-[red] hover:bg-[#efb3b38a]"
+                            >
+                              X
+                            </button>
+                          </div>
+                          {eventDetail?.images?.length > 1 && (
                             <div className="text-[14px] flex items-center gap-2">
                               {/* {console.log(item)} */}
-                                <label htmlFor={`cover${inx}`} className=""> Cover </label>
-                                <input type="radio" name="cover" id={`cover${inx}`}
-
-                                 onChange={()=> handleCoverImageChange(item?.position ? item?.position : inx)}/>
+                              <label htmlFor={`cover${inx}`} className="">
+                                Cover{" "}
+                              </label>
+                              <input
+                                type="radio"
+                                name="cover"
+                                id={`cover${inx}`}
+                                onChange={() =>
+                                  handleCoverImageChange(
+                                    item?.position ? item?.position : inx
+                                  )
+                                }
+                              />
                             </div>
-                        }
-                      </div>
-                    </>
-                  ))}
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="mt-2 w-1/2">
-              <span className="login-input-label cursor-pointer mb-4 w-full">
-               Event Image
-              </span>
-           
-           <div className="flex  gap-3 items-end">
-           <input
-                id="file"
-                type="file"
-                name="images"
-                disabled={imageDisable}
-                onChange={inputHandler}
-                className="w-full  border max-w-[200px]"
-                accept="image/png,image/jpg, image/jpeg , image/*"
-              />
+                          )}
+                        </div>
+                      </>
+                    ))}
+                  </div>
+                  <div className="flex  gap-3 items-end mt-6">
+                    <input
+                      id="file"
+                      type="file"
+                      name="images"
+                      disabled={imageDisable}
+                      onChange={inputHandler}
+                      className="w-full  border max-w-[200px]"
+                      accept="image/png,image/jpg, image/jpeg , image/*"
+                    />
 
-              <div className="flex items-center gap-2 ">
-                {imageDisable ? (
-                  <button
-                    className="p-2 border h-[20px] flex justify-center items-center"
-                    type="button"
-                    onClick={addField}
-                  >
-                    +
-                  </button>
-                ) : (
-                  <button
-                    className={`focus-visible:outline-none  text-white text-[13px] px-4 py-1 rounded
+                    <div className="flex items-center gap-2 ">
+                      {imageDisable ? (
+                        <button
+                          className="p-2 border h-[20px] flex justify-center items-center"
+                          type="button"
+                          onClick={addField}
+                        >
+                          +
+                        </button>
+                      ) : (
+                        <button
+                          className={`focus-visible:outline-none  text-white text-[13px] px-4 py-1 rounded
                     ${
                       imageDisable
                         ? " bg-[green]"
@@ -558,55 +608,27 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
                         ? "bg-[gray]"
                         : "bg-[#070708] text-[white]"
                     }`}
-                    type="button"
-                    onClick={uploadImage}
-                    disabled={imageDisable || imageUpload}
-                  >
-                    {imageDisable
-                      ? "Uploaded"
-                      : imageUpload
-                      ? "Loading.."
-                      : "Upload"}
-                  </button>
-                )}
-              </div>
-           </div>
-            </div>
-          )}
-
-          {/*-------cover image------- */}
-          {/* <div className="mt-2 w-1/2  mb-3 2xl:m-10 lg:m-5">
-            <span className="login-input-label cursor-pointer">
-              Cover image
-            </span>
-            <div className="flex items-center gap-2 ">
-              {Array.isArray(eventDetail?.images) &&
-              <>
-            {  eventDetail?.images?.length > 0 && (
-                <>
-                {eventDetail?.images.map((img, inx) => (
-                  <>
-                  {
-                    img?.position === 0 &&
-                    <div className="mt-4">
-                      <img
-                        src={img?.url}
-                        alt="loading.."
-                        height={100}
-                        width={100}
-                        className="w-2/4"
-                      />
+                          type="button"
+                          onClick={uploadImage}
+                          disabled={imageDisable || imageUpload}
+                        >
+                          {imageDisable
+                            ? "Uploaded"
+                            : imageUpload
+                            ? "Loading.."
+                            : "Upload"}
+                        </button>
+                      )}
                     </div>
-                  }
-                  </>
-                ))}
+                  </div>
+                </div>
               </>
-              )}
-              </>
-                }
-            </div>
+            )}
           </div>
-<div className="w-1/2"></div> */}
+
+          {/* ------16. Event image----- */}
+
+          {/* <div className="w-1/2"></div> */}
           <button type="submit" disabled={isLoading} className="custom_btn">
             {isLoading ? "Loading." : "Update"}
           </button>
