@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import GetAUser from "./getauser";
+import Loader from "../../loader";
 
 const AllUser = () => {
   const [getAllUser, setGetAllUSer] = useState([]);
@@ -12,12 +13,15 @@ const AllUser = () => {
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [getaUser, setGetUser] = useState({});
   const [selectedItemData, setSelectedItemData] = useState("");
+  const [isLoader, setLoader] = useState(false);
+
 
   useEffect(() => {
     defaultGetaUser();
   }, []);
 
   const defaultGetaUser = () => {
+    setLoader(true);
     const option = {
       method: "POST",
       url: "/api/auth/getUserById",
@@ -30,7 +34,7 @@ const AllUser = () => {
       .request(option)
       .then((response) => {
         setGetUser(response?.data?.user);
-        console.log(response?.data?.user, "user");
+        setLoader(false);
       })
       .catch((error) => {
         console.log("Error", error);
@@ -59,6 +63,8 @@ const AllUser = () => {
   }, [!isRefresh]);
 
   const defaultUsers = () => {
+    setLoader(true);
+
     const option = {
       method: "GET",
       url: "/api/auth/all-users",
@@ -67,6 +73,8 @@ const AllUser = () => {
       .request(option)
       .then((response) => {
         setGetAllUSer(response.data.users);
+        setLoader(false);
+
       })
       .catch((error) => {
         console.log("Error", error);
@@ -96,6 +104,8 @@ const AllUser = () => {
   };
   return (
     <>
+    {isLoader && <Loader />}
+
       <div>
         <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Users List </h2>

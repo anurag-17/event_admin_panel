@@ -96,3 +96,7 @@
   width: auto !important;
   height: auto !important;
 }
+
+.h1_text{
+  @apply my-1  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]
+}
