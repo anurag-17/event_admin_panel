@@ -18,6 +18,8 @@ import Loader from "../../../component/loader";
 import Dashboard from "../../../component/dashboard";
 import AllUser from "../../../component/admin/users";
 import axios from "axios";
+import issue from "../../../../public/images/issue.svg";
+import UserIssue from "../../../component/admin/user-issue/index";
 
 const AdminDashboard = () => {
   const router = useRouter();
@@ -31,7 +33,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const authToekn = token ? JSON.parse(token) : null;
-    setToken(authToekn)
+    setToken(authToekn);
     if (!authToekn || authToekn == null) {
       router.push("/admin-login");
     }
@@ -117,6 +119,12 @@ const AdminDashboard = () => {
     },
     {
       id: 6,
+      label: "Users Issue",
+      component: <UserIssue />,
+      icon: issue,
+    },
+    {
+      id: 7,
       label: "Setting",
       component: <UpadatePassword />,
       icon: setting,
