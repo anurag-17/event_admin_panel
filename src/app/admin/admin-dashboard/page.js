@@ -75,10 +75,12 @@ const AdminDashboard = () => {
           setLoader(false);
           console.error("Error:", error);
           toast.error(error?.response?.data?.message || "server error!");
+          router.push("/admin-login");
         });
     } catch {
       console.log("error");
       toast.error("server error!");
+      router.push("/admin-login");
     }
   };
 
