@@ -42,7 +42,7 @@ router.post("/updatePassword", isAuthenticatedUser, updatePassword);
 router.put("/edit-user", isAuthenticatedUser, updatedUser);
 
 // Get all Users
-router.get("/all-users",  getallUser);
+router.get("/all-users", isAuthenticatedUser, authorizeRoles("admin"), getallUser);
 
 // Get a User
 router.route("/getaUser").get(isAuthenticatedUser, getaUser);
@@ -51,7 +51,7 @@ router.route("/getaUser").get(isAuthenticatedUser, getaUser);
 router.route("/getUserById").post(isAuthenticatedUser, getUserById);
 
 // Delete a user
-router.delete("/deleteaUser/:id", deleteaUser);
+router.delete("/deleteaUser/:id",isAuthenticatedUser, authorizeRoles("admin"), deleteaUser);
 
 router.route("/forgotpassword").post(forgotPassword);
 router.route("/resetpassword/:resetToken").put(resetPassword);

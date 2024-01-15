@@ -440,7 +440,7 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           country: event.venue.country,
           latitude: event.venue.latitude,
           longitude: event.venue.longitude,
-          resource_url: event.link,
+          resource_url: `${event.link}?sktag=15306`,
           price: event.entryprice,
           event_provider: "Skiddle",
           category: category._id,
