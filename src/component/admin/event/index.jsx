@@ -52,7 +52,7 @@ const Event = () => {
   const [citiesList, setCitiesList] = useState([]);
   const [providerList, setProviderList] = useState([]);
 
-  // console.log(largeImageSrc);
+  console.log(editCategory);
 
   // const uniqueEvents = Array.from(
   //   new Set(getAllEvent.map((item) => item.city))
@@ -283,7 +283,6 @@ const Event = () => {
         .request(options)
         .then((response) => {
           if (response.status === 200) {
-            
             setGetAllEvent(response?.data?.events);
             setTotalPages(response?.data?.total_pages || 1);
             setLoader(false);
@@ -944,52 +943,52 @@ const Event = () => {
         )}
         <div className=" flex mx-10 lg:mx-8  overflow-x-auto ">
           <div className=" w-full ">
-            <table className="w-[300%] sm:w-[170%] lg:w-[130%]  border bg-white rounded-md mt-5 p-10">
-              <thead className="">
-                <tr
-                  className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
+            <div className="overflow-y-scroll  ">
+              <div className="h-[300px] xl:h-[400px] 2xl:h-[500px]">
+                <table className="w-[300%] sm:w-[170%] lg:w-[130%]  border bg-white rounded-md mt-5 p-10">
+                  <thead className="">
+                    <tr
+                      className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
           2xl:text-[22px] 
           xl:text-[14px]
            lg:text-[12px] 
            md:text-[12px] 
            sm:text-[12px] 
            text-[10px] "
-                >
-                  <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
-                    S.NO
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                    Image
-                  </th>
-                  <th className="  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
-                    EVENT NAME
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                    City
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    Start Date
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    End Date
-                  </th>
+                    >
+                      <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
+                        S.NO
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                        Image
+                      </th>
+                      <th className="  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
+                        EVENT NAME
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                        City
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        Start Date
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        End Date
+                      </th>
 
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    Location
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    Provider
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    Category
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <div className="overflow-y-scroll  ">
-                <div className="h-[300px] xl:h-[400px] 2xl:h-[500px]">
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        Location
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        Provider
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        Category
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
                   {getAllEvent?.length > 0 && (
                     <tbody className="px-2 w-full">
                       <div className="w-full">
@@ -998,8 +997,6 @@ const Event = () => {
                             key={index}
                             className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                           >
-                            {/* {console.log(item?.images)} */}
-
                             <td className=" my-auto w-1/12">
                               {index + 1 + "."}
                             </td>
@@ -1057,20 +1054,13 @@ const Event = () => {
                               <div className="">
                                 <select
                                   name="category"
-                                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
-                    lg:text-[12px]  lg:px-2 lg:py-1 w-24
-                    md:px-0 md:py-0 md:h-[25px] 
-                      sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]"
-                                  onChange={inputHandler}
-                                  required
-                                  minLength={3}
-                                  maxLength={32}
                                   defaultValue={item?.category?._id}
+                                  // value={editCategory?.category}
+                                  onChange={inputHandler}
+                                  className="custom_select"
                                 >
                                   <option value="">Select Category</option>
+                                  {console.log(item?.category?.title)}
 
                                   {getAllCate.map((items) => (
                                     <option
@@ -1086,20 +1076,17 @@ const Event = () => {
                               <div className="my-1">
                                 <select
                                   name="subCategory"
-                                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
-                    lg:text-[12px]  lg:px-2 lg:py-1  w-24
-                    md:px-0 md:py-0 md:h-[25px] 
-                      sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]"
+                                  className="custom_select"
                                   onChange={inputHandler}
                                   required
                                   minLength={3}
                                   maxLength={32}
-                                  defaultValue={item?.subCategory?._id}
+                                  // defaultValue={item?.subCategory?._id}
+                                  defaultValue={String(
+                                    item?.subCategory?.title
+                                  )}
                                 >
-                                  <option value="">Select Sub Category</option>
+                                  <option value=""> Select Sub Category</option>
                                   {allSubCategory
                                     .filter((item, indr) => {
                                       return (
@@ -1174,9 +1161,9 @@ const Event = () => {
                       <hr />
                     </tbody>
                   )}
-                </div>
+                </table>
               </div>
-            </table>
+            </div>
           </div>
         </div>
       </div>
