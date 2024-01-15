@@ -89,6 +89,10 @@ exports.getEvent = asyncHandler(async (req, res) => {
 
 exports.getAllEvents = asyncHandler(async (req, res) => {
   try {
+    // Delete expired events first
+    const currentDate = new Date();
+    await Event.deleteMany({ endDate: { $lt: currentDate } });
+    
     const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city} = req.query;
 
     const currentPage = parseInt(page, 10);
