@@ -54,12 +54,12 @@ const Event = () => {
 
   // console.log(largeImageSrc);
 
-  const uniqueEvents = Array.from(
-    new Set(getAllEvent.map((item) => item.city))
-  );
-  const uniqueEventProvider = Array.from(
-    new Set(getAllEvent.map((item) => item.event_provider))
-  );
+  // const uniqueEvents = Array.from(
+  //   new Set(getAllEvent.map((item) => item.city))
+  // );
+  // const uniqueEventProvider = Array.from(
+  //   new Set(getAllEvent.map((item) => item.event_provider))
+  // );
   const handleImageClick = (images) => {
     setLargeImageSrc(images);
     setShowLargeImage(true);
@@ -283,6 +283,7 @@ const Event = () => {
         .request(options)
         .then((response) => {
           if (response.status === 200) {
+            
             setGetAllEvent(response?.data?.events);
             setTotalPages(response?.data?.total_pages || 1);
             setLoader(false);
@@ -541,7 +542,7 @@ const Event = () => {
         .request(option)
         .then((res) => {
           if (res.status === 200) {
-            console.log(res?.data?.events);
+            // console.log(res?.data?.events);
             const citiesName = res?.data?.events?.map((items) => items?.city);
             if (citiesName?.length > 0) {
               const filterCityArr = citiesName?.filter(
@@ -1004,24 +1005,31 @@ const Event = () => {
                             </td>
                             <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
                               <>
-                              {Array.isArray(item?.images) &&
-                  item.images.length > 0 && (
-                    <>
-                      {item.images.map((img, inx) => (
-                        <div className="mt-4" key={inx}>
-                          {(img.position === 0 || inx === 0) && (
-                            <img
-                              src={img.url}
-                              alt="loading.."
-                              height={100}
-                              width={100}
-                              className="w-2/4"
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </>
-                  )}
+                                {Array.isArray(item?.images) &&
+                                  item.images.length > 0 && (
+                                    <>
+                                      {item.images.map((img, inx) => (
+                                        <div
+                                          className="mt-4 cursor-pointer"
+                                          key={inx}
+                                          onClick={() =>
+                                            handleImageClick(item?.images)
+                                          }
+                                        >
+                                          {(img.position === 0 ||
+                                            inx === 0) && (
+                                            <img
+                                              src={img.url}
+                                              alt="loading.."
+                                              height={100}
+                                              width={100}
+                                              className="w-2/4"
+                                            />
+                                          )}
+                                        </div>
+                                      ))}
+                                    </>
+                                  )}
                               </>
                             </td>
                             <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">

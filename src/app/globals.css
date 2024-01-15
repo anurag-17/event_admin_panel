@@ -82,4 +82,8 @@
     border-top-right-radius: 20px;
     
   } 
+  .carousel .slide img{
+    width: auto;
+    height: auto;
+  }
 }
