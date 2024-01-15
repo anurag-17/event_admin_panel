@@ -9,6 +9,7 @@ import SingleEventPage from "../singleEvent/[slug]/page";
 import { useRouter } from "next/navigation";
 import UserProfile from "../../component/user/userProfile/page";
 import { Dialog, Transition } from "@headlessui/react";
+import Loader from "../../component/loader";
 
 const User = () => {
   const [ComponentId, setComponentId] = useState(1);
@@ -27,6 +28,7 @@ const User = () => {
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [selectCategory, setSelectedCategory] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [issueText, setIssueText] = useState("");
   const [editCategory, setEditCategory] = useState({
     _id: "",
     category: "",
@@ -35,6 +37,9 @@ const User = () => {
   const [limit, setLimit] = useState(12);
   const router = useRouter();
   const [openAddPopup, setAddPopup] = useState(false);
+
+  const [eventId, setEventId] = useState("");
+  const [userId, setUserId] = useState("");
 
   const menu = [
     {
@@ -76,18 +81,22 @@ const User = () => {
   ];
   const closeAddPopup = () => {
     setAddPopup(false);
+    // setRefresh(flase);
   };
   const closeAddPopupModel = () => {
     // setOpenPopup(false);
     setAddPopup(false);
   };
-  const handleOpenPopup = (id) => {
+  const handleOpenPopup = (eventId) => {
     // const selectedItemData = allData.userForm.filter((item) => item._id === id);
     // setSelectedItem(selectedItemData);
-
+    setEventId(eventId);
+    // setUserId(userId);
     // setUserId(id);
     setAddPopup(true);
   };
+
+  
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -124,7 +133,7 @@ const User = () => {
     axios
       .request(option)
       .then((response) => {
-        setGetAllEvent(response.data.events);
+        setGetAllEvent(response?.data?.events);
         setLoader(false);
         setTotalPages(response?.data?.total_pages || 1);
       })
@@ -132,33 +141,6 @@ const User = () => {
         console.log(err, "Error");
       });
   };
-
-  // ----------get event by id----------
-  // useEffect(() => {
-  //   singleEvent();
-  // }, [isRefresh]);
-
-  // const singleEvent = (id) => {
-  //   console.log("aaa",id)
-  //   setLoader(true);
-  //   const option = {
-  //     method: "POST",
-  //     url: "/api/event/getEvent", data: { id: id },
-
-  //   };
-  //   axios
-  //     .request(option)
-  //     .then((response) => {
-  //       console.log("abc",response.data);
-  //       setGetSingleEvent(response.data);
-  //       // setGetAllCate(response.data);
-  //       setLoader(false);
-
-  //     })
-  //     .catch((err) => {
-  //       console.log(err, "Error");
-  //     });
-  // };
 
   //   -----------get All Category---------
   useEffect(() => {
@@ -174,7 +156,7 @@ const User = () => {
     axios
       .request(option)
       .then((response) => {
-        setGetAllCate(response.data);
+        setGetAllCate(response?.data);
         console.log(response.data, "cate");
         setLoader(false);
         setTotalPages(response?.data?.total_pages || 1);
@@ -234,7 +216,7 @@ const User = () => {
       .request(options)
       .then((response) => {
         if (response.status === 200) {
-          setGetAllEvent(response.data.events);
+          setGetAllEvent(response?.data?.events);
           setTotalPages(response?.data?.total_pages || 1);
           // setSelectedCategory(subcate);
         }
@@ -267,7 +249,7 @@ const User = () => {
       .request(options)
       .then((response) => {
         if (response.status === 200) {
-          setGetAllEvent(response.data.events);
+          setGetAllEvent(response?.data?.events);
           setTotalPages(response?.data?.total_pages || 1);
           // setSelectedCategory(subcate);
         }
@@ -297,7 +279,7 @@ const User = () => {
         .request(options)
         .then(function (response) {
           if (response.status === 200) {
-            setGetAllEvent(response.data.events);
+            setGetAllEvent(response?.data?.events);
             setTotalPages(response?.data?.total_pages || 1);
           }
         })
@@ -324,7 +306,7 @@ const User = () => {
         .request(options)
         .then(function (response) {
           if (response.status === 200) {
-            setGetAllEvent(response.data.events);
+            setGetAllEvent(response?.data?.events);
             setTotalPages(response?.data?.total_pages || 1);
           }
         })
@@ -351,9 +333,12 @@ const User = () => {
     try {
       const res = await axios.get(`/api/auth/verifyUserToken/${auth_token}`);
       if (res.status === 200) {
+        const usersId = res?.data?.data?._id;
         setAuthenticated(true);
         setLoader(false);
-        console.log("authenticate", res.data);
+        setUserId(usersId);
+
+        console.log("user Id", res?.data?.data?._id);
         return;
       } else {
         setAuthenticated(false);
@@ -368,8 +353,49 @@ const User = () => {
     }
   };
 
+  // ---------event isshue api----------
+  const handleEventIssue = async (e) => {
+    const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+    console.log("tokenn",auth_token);
+    setLoader(true);
+    const userId = await verify();
+    // console.log("Form Dta", formData);
+
+    try {
+      // const userId = await verify();
+      const response = await axios.post(
+        "/api/issue/createEventIssue",
+        {
+          event: eventId,
+          issue: issueText,
+          userId: userId,
+        },
+        {
+          headers: {
+            authorization: auth_token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log(response.data);
+      
+        refreshData()
+        // closeAddPopup();
+        closeAddPopupModel();
+        setLoader(false);
+      } else {
+        console.error("Failed to submit");
+      }
+    } catch (error) {
+      console.error("Error in submitting:", error.message);
+    }
+  };
+
   return (
     <>
+      {isLoader && <Loader />}
       <section className="bg-[#F3F3F3] ">
         <div className="pb-4">
           <nav className="bg-black p-3">
@@ -377,18 +403,18 @@ const User = () => {
               <ul className="flex flex-col sm:flex-row  items-center sm:items-start">
                 {menu.map((item, index) => (
                   <li
-                    key={item.id}
+                    key={item?.id}
                     className={`px-3 py-3 mx-2 sm:mx-2 lg:mx-2 xl:mx-4 2xl:mx-5 rounded-md flex gap-x-3 items-center cursor-pointer transition-colors font-semibold dash-menu hover:transition-all ease-in delay-100 duration-300  
                         ${
                           item.id === ComponentId
                             ? "bg-[#b8bbdf47]"
                             : "hover:bg-[#b8bbdf47] hover:text-white hover:rounded-md"
                         }`}
-                    onClick={() => handleClick(item.id)}
+                    onClick={() => handleClick(item?.id)}
                   >
                     {/* {console.log(item)} */}
                     <Link href={item?.url ? item?.url : "#"}>
-                      <div className="text-white">{item.label}</div>
+                      <div className="text-white">{item?.label}</div>
                     </Link>
                   </li>
                 ))}
@@ -561,8 +587,8 @@ const User = () => {
                           <h4 className="text-[16px] font-bold mb-2 truncate">
                             {item?.name}
                           </h4>
-                          <div className="flex text-[14px] my-2">
-                            <p>Category :</p>
+                          <div className="flex text-[14px] mt-2">
+                            <p className="mr-2">Category :</p>
                             {item?.category ? (
                               <p className="mb-2">{item?.category?.title}</p>
                             ) : (
@@ -570,26 +596,40 @@ const User = () => {
                             )}
                           </div>
                           <div className="flex text-[14px]">
-                            <p>Location :</p>
+                            <p className="w-[70px] mr-2">Location :</p>
                             <p className="mb-2 truncate">{item?.location}</p>
                           </div>
                           <div className="flex text-[14px]">
-                            <p>City :</p>
+                            <p className="mr-10">City :</p>
                             <p className="mb-2">{item?.city}</p>
                           </div>
                           <div className="flex text-[14px]">
-                            <p>Price :</p>
+                            <p className="mr-9">Price :</p>
                             {item?.price ? (
                               <p className="mb-2">{item.price}</p>
                             ) : (
                               <p className="mb-2">Price not available</p>
                             )}
                           </div>
+                          <div className="flex text-[14px] justify-center">
+                            
+                            {item?.resource_url ? (
+                              <Link
+                                href={item?.resource_url}
+                                target="_blank"
+                                className="px-4 py-2 border border-gray-200 bg-gray-200 rounded-md hover:bg-gray-400 hover:text-white"
+                              >
+                                Buy Now
+                              </Link>
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         </div>
-                        <div className="flex justify-center items-end p-4">
+                        <div className="flex justify-end items-end p-4">
                           <button
                             onClick={() => handleOpenPopup(item?._id)}
-                            className="px-4 py-2 border border-gray-200 rounded-md hover:bg-gray-300 hover:text-white"
+                            className="px-4 py-2 border text-[12px] border-gray-200 rounded-md hover:bg-gray-300 hover:text-white"
                           >
                             Report Issue
                           </button>
@@ -654,17 +694,25 @@ const User = () => {
                   >
                     Report Issue
                   </Dialog.Title>
-                  <textarea placeholder="Enter text here..." className="border border-gray-200" rows="4" cols="40" name="comment" form="usrform">
-                    
-                  </textarea>
-                   <div className="flex justify-end">
-                    <button className="px-2 py-1 rounded-md mr-3 hover:text-white bg-blue-300 hover:bg-blue-500">Submit</button>
-                   </div>
-                  {/* <Preview
-                    selectedItem={selectedItem}
-                    closeModal={closeAddPopupModel}
-                    refreshData={refreshData}
-                  /> */}
+                  <textarea
+                    value={issueText}
+                    onChange={(e) => setIssueText(e.target.value)}
+                    placeholder="Enter text here..."
+                    className="border border-gray-200"
+                    rows="4"
+                    cols="40"
+                    name="comment"
+                    form="usrform"
+                  ></textarea>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => handleEventIssue()}
+                      className="px-2 py-1 rounded-md mr-3 hover:text-white bg-blue-300 hover:bg-blue-500"
+                    >
+                      Submit
+                    </button>
+                  </div>
+              
                 </Dialog.Panel>
               </Transition.Child>
             </div>

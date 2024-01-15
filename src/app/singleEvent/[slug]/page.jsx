@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Link from "next/link";
 
 const SingleEventPage = ({ params }) => {
   const router = useRouter();
@@ -11,16 +12,20 @@ const SingleEventPage = ({ params }) => {
   console.log(event_id);
 
   const [eventDetails, setEventDetails] = useState(null);
+  const  [isLoader,setIsLoader]=useState(false);
 
   const singleEvent = async (event_id) => {
+    setIsLoader(true);
     try {
       const response = await axios.post("/api/event/getEvent", {
         id: event_id,
       });
 
       console.log("abc", response.data);
-      setEventDetails(response.data);
+      setIsLoader(false);
+      setEventDetails(response?.data);
     } catch (error) {
+      setIsLoader(false);
       console.error("Error fetching event details:", error);
     }
   };
@@ -33,6 +38,7 @@ const SingleEventPage = ({ params }) => {
 
   return (
     <>
+   
       <div className="bg-[#F3F3F3] p-10 h-screen">
         <div className="bg-white border rounded-md border-gray-500 p-4">
           <div>
@@ -87,9 +93,17 @@ const SingleEventPage = ({ params }) => {
                   <div>{eventDetails?.startDate}</div>
                 </div>
                 <div className="flex justify-center">
-                  <button className="cursor-pointer hover:text-white text-[20px] border border-gray-400 px-14 py-2 rounded-md hover:bg-gray-500">
-                    Book Now
-                  </button>
+                {eventDetails?.resource_url ? (
+                              <Link
+                                href={eventDetails?.resource_url}
+                                target="_blank"
+                                className="px-4 py-2 border border-gray-200 rounded-md hover:bg-gray-300 hover:text-white"
+                              >
+                                Buy Now
+                              </Link>
+                            ) : (
+                              ""
+                            )}
                 </div>
               </div>
             </div>
