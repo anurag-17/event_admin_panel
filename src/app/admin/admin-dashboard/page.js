@@ -66,10 +66,12 @@ const AdminDashboard = () => {
           if (res.status === 200) {
             toast.success("Logout!");
             setLoader(false);
+            localStorage.removeItem("accessToken");
             router.push("/admin-login");
-            // localStorage.removeItem("accessToken");
           } else {
             setLoader(false);
+            localStorage.removeItem("accessToken");
+            router.push("/admin-login");
             return;
           }
         })
@@ -77,11 +79,13 @@ const AdminDashboard = () => {
           setLoader(false);
           console.error("Error:", error);
           toast.error(error?.response?.data?.message || "server error!");
+          localStorage.removeItem("accessToken");
           router.push("/admin-login");
         });
     } catch {
       console.log("error");
       toast.error("server error!");
+      localStorage.removeItem("accessToken");
       router.push("/admin-login");
     }
   };
