@@ -183,6 +183,9 @@ server.use("/api/subCategory", require("./server/routes/subCategory"));
 // Events
 server.use("/api/event", require("./server/routes/event"));
 
+// Events Issues 
+server.use("/api/issue", require("./server/routes/eventIssue"));
+
 server.use("/api/auth/upload", require("./server/routes/auth"));
 
 server.get('*', (req, res) => {
