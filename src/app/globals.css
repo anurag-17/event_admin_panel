@@ -53,5 +53,5 @@
 
 
 .dashboard_div {
-  @apply text-center mb-3 items-center  border ml-10 bg-white rounded-lg 2xl:h-[80px]  lg:h-[60px] md:h-[50px] xl:px-4 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px] ;
+  @apply text-center mb-3 items-center  border  w-1/4 bg-white rounded-lg 2xl:h-[80px]  lg:h-[60px] md:h-[50px] xl:px-4 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px] ;
 }
