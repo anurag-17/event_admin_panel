@@ -39,8 +39,8 @@ const Event = () => {
   });
   const [categoryFilter, setCategoryFilter] = useState("");
   const [subCategoryFilter, setSubCategoryFilter] = useState("");
-  const [cityFilter, setCityFilter] = useState([]);
-  const [providerFilter, setProviderFilter] = useState([]);
+  const [cityFilter, setCityFilter] = useState("");
+  const [providerFilter, setProviderFilter] = useState("");
   const [selectedProvider, setSelectedProvider] = useState("");
   const [showLargeImage, setShowLargeImage] = useState(false);
   const [largeImageSrc, setLargeImageSrc] = useState([]);
@@ -49,8 +49,10 @@ const Event = () => {
   const [endDate, setEndDate] = useState("");
   const [limit, setLimit] = useState(20);
   const [isLoading, setLoading] = useState(false);
+  const [citiesList, setCitiesList] = useState([]);
+  const [providerList, setProviderList] = useState([]);
 
-  console.log(largeImageSrc);
+  // console.log(largeImageSrc);
 
   const uniqueEvents = Array.from(
     new Set(getAllEvent.map((item) => item.city))
@@ -78,7 +80,7 @@ const Event = () => {
       const response = await axios.request(options);
       if (response.status === 200) {
         setEditData(response?.data);
-        console.log(response?.data, "A Event");
+        // console.log(response?.data, "A Event");
 
         setIsDrawerOpenO(true);
         setLoader(false);
@@ -140,7 +142,7 @@ const Event = () => {
     axios
       .request(option)
       .then((response) => {
-        setGetAllEvent(response.data.events);
+        setGetAllEvent(response?.data?.events);
         setLoader(false);
         setTotalPages(response?.data?.total_pages || 1);
       })
@@ -173,6 +175,8 @@ const Event = () => {
 
   useEffect(() => {
     defaultgetAllCate();
+    defaultsubCategory();
+    getAllCities(1, 10000);
   }, [isRefresh]);
 
   const defaultgetAllCate = () => {
@@ -185,17 +189,13 @@ const Event = () => {
       .request(option)
       .then((response) => {
         setGetAllCate(response.data);
-        console.log(response.data, "cate");
+        // console.log(response.data, "cate");
         setLoader(false);
       })
       .catch((err) => {
         console.log(err, "Error");
       });
   };
-
-  useEffect(() => {
-    defaultsubCategory();
-  }, [isRefresh]);
 
   const defaultsubCategory = () => {
     setLoader(true);
@@ -212,7 +212,7 @@ const Event = () => {
       .request(options)
       .then((response) => {
         setAllSubCategory(response?.data);
-        console.log(response?.data, "subb");
+        // console.log(response?.data, "subb");
         setLoader(false);
       })
       .catch((error) => {
@@ -266,29 +266,39 @@ const Event = () => {
   };
   // ------ filter by category ------ //
   const handleSearchCategories = (e) => {
-    const cate = e.target.value;
+    setLoader(true);
+    try {
+      const cate = e.target.value;
+      setCurrentPage(1);
 
-    setCurrentPage(1);
-
-    setSubCategoryFilter("");
-    setCategoryFilter(e.target.value);
-    const options = {
-      method: "GET",
-      url: `/api/event/getAllEvents?category=${
-        e.target.value
-      }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
-    };
-    axios
-      .request(options)
-      .then((response) => {
-        if (response.status === 200) {
-          setGetAllEvent(response.data.events);
-          setTotalPages(response?.data?.total_pages || 1);
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+      setSubCategoryFilter("");
+      setCategoryFilter(e.target.value);
+      const options = {
+        method: "GET",
+        url: `/api/event/getAllEvents?category=${
+          e.target.value
+        }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
+      };
+      axios
+        .request(options)
+        .then((response) => {
+          if (response.status === 200) {
+            setGetAllEvent(response?.data?.events);
+            setTotalPages(response?.data?.total_pages || 1);
+            setLoader(false);
+          } else {
+            setLoader(false);
+            return;
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+          setLoader(false);
+        });
+    } catch {
+      console.error(error);
+      setLoader(false);
+    }
   };
   // ------ filter  by Sub-category ------ //
 
@@ -307,7 +317,7 @@ const Event = () => {
       .request(options)
       .then((response) => {
         if (response.status === 200) {
-          setGetAllEvent(response.data.events);
+          setGetAllEvent(response?.data?.events);
           setTotalPages(response?.data?.total_pages || 1);
         }
       })
@@ -380,48 +390,71 @@ const Event = () => {
   };
   // ------ filter by city ------ //
   const handleSearchCity = (e) => {
+    setLoader(true);
     setCurrentPage(1);
     setCityFilter(e.target.value);
-    const options = {
-      method: "GET",
-      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${
-        e.target.value
-      }&provider=${providerFilter}&page=${1}&limit=${limit}`,
-    };
-    axios
-      .request(options)
-      .then((response) => {
-        if (response.status === 200) {
-          setGetAllEvent(response.data.events);
-          setTotalPages(response?.data?.total_pages || 1);
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+    try {
+      const options = {
+        method: "GET",
+        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${
+          e.target.value
+        }&provider=${providerFilter}&page=${1}&limit=${limit}`,
+      };
+      axios
+        .request(options)
+        .then((response) => {
+          if (response.status === 200) {
+            setGetAllEvent(response?.data?.events);
+            setTotalPages(response?.data?.total_pages || 1);
+            setLoader(false);
+          } else {
+            setLoader(false);
+            return;
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+          setLoader(false);
+        });
+    } catch (error) {
+      console.error(error);
+      setLoader(false);
+    }
   };
 
   // ------ filter by Provider ------ //
   const handleSearchProvider = (e) => {
     setCurrentPage(1);
     setProviderFilter(e.target.value);
-    const options = {
-      method: "GET",
-      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${
-        e.target.value
-      }&page=${1}&limit=${limit}`,
-    };
-    axios
-      .request(options)
-      .then((response) => {
-        if (response.status === 200) {
-          setGetAllEvent(response.data.events);
-          setTotalPages(response?.data?.total_pages || 1);
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+    setLoader(true);
+    try{
+      const options = {
+        method: "GET",
+        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${
+          e.target.value
+        }&page=${1}&limit=${limit}`,
+      };
+      axios
+        .request(options)
+        .then((response) => {
+          if (response.status === 200) {
+            setGetAllEvent(response.data.events);
+            setTotalPages(response?.data?.total_pages || 1);
+            setLoader(false);
+          }
+          else{
+            setLoader(false);
+            return
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+          setLoader(false);
+        });
+    }catch (error) {
+      console.error(error);
+      setLoader(false);
+    }
   };
 
   // -----------------event fetch--------------
@@ -452,17 +485,17 @@ const Event = () => {
         axios.spread((response1, response2, response3) => {
           if (response1.status === 200) {
             setEventFetch(response1.data);
-            console.log(response1.data, "fetchEvents");
+            // console.log(response1.data, "fetchEvents");
           }
 
           if (response2.status === 200) {
             setEventFetch(response2.data);
-            console.log(response2.data, "skiddleEvents");
+            // console.log(response2.data, "skiddleEvents");
           }
 
           if (response3.status === 200) {
             setEventFetch(response3.data);
-            console.log(response3.data, "londontheatredirect");
+            // console.log(response3.data, "londontheatredirect");
           }
         })
       )
@@ -472,8 +505,65 @@ const Event = () => {
   };
 
   const handleClearFilter = () => {
+    setLoader(true)
     setSelectedProvider("");
+    setCityFilter("");
+    setCategoryFilter("");
+    setSubCategoryFilter("");
+    setProviderFilter("");
+    setStartDate("");
+    setEndDate("");
+    refreshData()
+    setLoader(false)
   };
+
+  // -----------cities List-----------
+
+  const getAllCities = (page, limit) => {
+    setLoader(true);
+    try {
+      const option = {
+        method: "GET",
+        url: "/api/event/getAllEvents",
+        params: {
+          page: page,
+          limit: limit,
+        },
+      };
+      axios
+        .request(option)
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res?.data?.events);
+            const citiesName = res?.data?.events?.map((items) => items?.city);
+            if (citiesName?.length > 0) {
+              const filterCityArr = citiesName?.filter(
+                (item, index) => citiesName?.indexOf(item) === index
+              );
+              setCitiesList(filterCityArr);
+            }
+            // setLoader(false);
+
+            
+            const providerName = res?.data?.events?.map((items) => items?.event_provider);
+            if (citiesName?.length > 0) {
+              const filterproviderArr = providerName?.filter(
+                (item, index) => providerName?.indexOf(item) === index
+              );
+              setProviderList(filterproviderArr);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err, "Error");
+          setLoader(false);
+        });
+    } catch {
+      console.llog("error");
+      setLoader(false);
+    }
+  };
+
   return (
     <>
       {isLoader && <Loader />}
@@ -719,19 +809,20 @@ const Event = () => {
                     maxLength={32}
                     onChange={(e) => {
                       handleSearchCity(e);
-                      inputHandler(e);
+                      // inputHandler(e);
                     }}
                   >
                     <option value="">All City</option>
-                    {uniqueEvents.map((city) => (
-                      <option
-                        key={city}
-                        value={city}
-                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                      >
-                        {city}
-                      </option>
-                    ))}
+                    {citiesList?.length > 0 &&
+                      citiesList?.map((city) => (
+                        <option
+                          key={city}
+                          value={city}
+                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                        >
+                          {city}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
@@ -759,7 +850,7 @@ const Event = () => {
                     }}
                   >
                     <option value="">All Provider</option>
-                    {uniqueEventProvider.map((event_provider) => (
+                    {providerList?.map((event_provider) => (
                       <option
                         key={event_provider}
                         value={event_provider}
@@ -907,23 +998,22 @@ const Event = () => {
                               <>
                                 {item?.images.map((img, inx) => (
                                   <>
-                                  {
-                                    img?.position === 0 &&
-                                    <div
-                                      className="cursor-pointer "
-                                      onClick={() =>
-                                        handleImageClick(item?.images)
-                                      }
-                                    >
-                                      <img
-                                        src={img?.url}
-                                        alt="loading.."
-                                        height={100}
-                                        width={100}
-                                        className="w-2/4"
-                                      />
-                                    </div>
-                                  }
+                                    {img?.position === 0 && (
+                                      <div
+                                        className="cursor-pointer "
+                                        onClick={() =>
+                                          handleImageClick(item?.images)
+                                        }
+                                      >
+                                        <img
+                                          src={img?.url}
+                                          alt="loading.."
+                                          height={100}
+                                          width={100}
+                                          className="w-2/4"
+                                        />
+                                      </div>
+                                    )}
                                   </>
                                 ))}
                               </>
