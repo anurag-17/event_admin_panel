@@ -569,13 +569,13 @@ const Event = () => {
           setLoader(false);
         });
     } catch {
-      console.llog("error");
+      console.log("error");
       setLoader(false);
     }
   };
 
-  const result = formatDate("2024-01-17T12:30:00Z");
-  console.log(result);
+  // const result = formatDate("2024-01-17T12:30:00Z");
+  // console.log(result);
 
   return (
     <>
