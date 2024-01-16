@@ -101,7 +101,7 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
             lg:text-[14px] lg:mt-[10px] lg:ml-[26px]
             md:text-[13px] md:mt-2 md:ml-6
             sm:text-[11px] sm:mt-1 sm:ml-5
-            text-[10px] mt-[1px] ml-4
+            text-[10px] mt-[1px] ml-4 capitalize
             "
           >
             Sub category
@@ -111,7 +111,7 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
             value={subCategory}
             type="text"
             name="name"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
+            className="capitalize rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
             2xl:text-[18px] xl:text-[14px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
               lg:text-[12px]  lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
               md:text-[10px md:m-4 md:px-3 md:py-2 md:h-[30px]
@@ -130,7 +130,7 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
             lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
             md:text-[10px] md:mt-2 md:ml-6
             sm:text-[9px] sm:mt-1 sm:ml-5
-            text-[8px] mt-[2px] ml-4
+            text-[8px] mt-[2px] ml-4 
             "
           >
             Choose main category
@@ -145,7 +145,7 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
               lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
               md:text-[11px] md:m-4 md:px-3 md:py-2 md:h-[30px]
               text-[8px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[8px] m-2 px-2 py-1 h-[25px]
+              m-2 px-2 py-1 h-[25px] capitalize
               "
               defaultValue={category}
               value={category}

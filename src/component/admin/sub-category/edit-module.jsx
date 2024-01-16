@@ -20,7 +20,6 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
       [name]: value,
     });
   };
-
   const handleUpdateCategory = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -36,7 +35,6 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
           },
         }
       );
-
       if (response.status === 200) {
         toast.success("SubCategory Update Successfully!");
 
@@ -79,7 +77,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   return (
     <>
       <div
-        className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
+        className=" flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
         2xl:px-5  2xl:h-[50px] 2xl:my-5
         xl:px-4  xl:h-[40px] xl:my-4
         lg:px-3  lg:h-[35px] lg:my-2
@@ -107,7 +105,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
             lg:text-[14px] lg:mt-[6px] lg:ml-[26px]
             md:text-[13px] md:mt-1 md:ml-6
             sm:text-[11px] sm:mt-[2px] sm:ml-5
-            text-[10px] mt-[0px] ml-4
+            text-[10px] mt-[0px] ml-4 capitalize
             "
             >
               Sub category
@@ -123,7 +121,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
               lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
               md:text-[13px] md:m-4 md:px-3 md:py-2 md:h-[30px]
               sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[12px] m-2 px-2 py-1 h-[25px]
+              text-[12px] m-2 px-2 py-1 h-[25px] capitalize
               "
               required
             />
@@ -137,7 +135,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
             lg:text-[14px] lg:mt-[6px] lg:ml-[26px]
             md:text-[13px] md:mt-1 md:ml-6
             sm:text-[11px] sm:mt-[2px] sm:ml-5
-            text-[10px] mt-[0px] ml-4
+            text-[10px] mt-[0px] ml-4 capitalize
             "
             >
               Category:
@@ -146,28 +144,35 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
             <select
               type="text"
               name="category"
-              className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12
-               2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-               xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-              lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[13px] md:m-4 md:px-3 md:py-1 md:h-[30px]
+              className="capitalize rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12
+  2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
+  xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
+  lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
+  md:text-[13px] md:m-4 md:px-3 md:py-1 md:h-[30px]
 
-              sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[12px] m-2 px-2 py-1 h-[25px]
-              "
-              value={editData?.category}
+  sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
+  text-[12px] m-2 px-2 py-1 h-[25px]"
+              value={editData?.category?.title}
               onChange={inputHandler}
               required
               minLength={3}
               max={84}
-              selected
             >
               <option value="" disabled>
                 Select Category
               </option>
               {getallCategory?.map((item, index) => (
-                <option key={item.id} value={editData?.category}>
-                  {item?.title}
+                <option
+                  key={item.id}
+                  value={item.title}
+                  selected={item.title === editData?.category?.title}
+
+                  // selected={
+                  //           items.brand ===
+                  //           (editData?.brand || productDetails.brand)
+                  //         }
+                >
+                  {item.title}
                 </option>
               ))}
             </select>

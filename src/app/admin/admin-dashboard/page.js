@@ -138,7 +138,7 @@ const AdminDashboard = () => {
   return (
     <>
       {isLoader && <Loader />}
-      <ToastContainer />
+   
       <section className="z-50">
         <div className="flex min-h-screen  lg:static ">
           <div

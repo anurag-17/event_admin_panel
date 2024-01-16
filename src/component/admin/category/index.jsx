@@ -173,7 +173,7 @@ const Category = () => {
           </div>
         )}
         <div className="ml-10 mr-4  lg:mx-8 ">
-          <table className="z-10 border w-full table-auto bg-white rounded-md mt-5      p-10">
+          <table className="z-10 border w-full table-auto bg-white rounded-md mt-5    mb-10  p-10">
             <thead className="">
               <tr
                 className="bg-coolGray-200 text-gray-400 text-start flex border 

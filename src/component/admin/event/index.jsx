@@ -11,6 +11,7 @@ import Loader from "../../loader";
 import cut from "../../../../public/images/close-square.svg";
 import Pagination from "../../pagination";
 import ImageModal from "./ImageModal";
+import moment from "moment";
 
 const Event = () => {
   const [auth_token, setAuth_token] = useState(
@@ -18,6 +19,7 @@ const Event = () => {
       ? JSON.parse(localStorage.getItem("accessToken") || "")
       : null
   );
+
   // const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
   const [getAllEvent, setGetAllEvent] = useState([]);
   const [isRefresh, setRefresh] = useState(false);
@@ -52,14 +54,13 @@ const Event = () => {
   const [citiesList, setCitiesList] = useState([]);
   const [providerList, setProviderList] = useState([]);
 
-  console.log(editCategory);
+  //----------Date/Time Formate
+  const convertTime = (time) => {
+    const parsedDateTime = moment(time);
+    const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
+    return formattedDateTime;
+  };
 
-  // const uniqueEvents = Array.from(
-  //   new Set(getAllEvent.map((item) => item.city))
-  // );
-  // const uniqueEventProvider = Array.from(
-  //   new Set(getAllEvent.map((item) => item.event_provider))
-  // );
   const handleImageClick = (images) => {
     setLargeImageSrc(images);
     setShowLargeImage(true);
@@ -221,8 +222,12 @@ const Event = () => {
   };
 
   const inputHandler = (e) => {
-    // const { name, value } = e.target;
-    setEditCategory({ ...editCategory, [e.target.name]: e.target.value });
+    setEditCategory((prevEditCategory) => ({
+      ...prevEditCategory,
+      [e.target.name]: e.target.value,
+    }));
+    // editCategory[e.target.name] = e.target.value
+    console.log(editCategory);
   };
 
   const handleUpdateCategory = async (id) => {
@@ -569,6 +574,9 @@ const Event = () => {
     }
   };
 
+  const result = formatDate("2024-01-17T12:30:00Z");
+  console.log(result);
+
   return (
     <>
       {isLoader && <Loader />}
@@ -675,7 +683,7 @@ const Event = () => {
                     maxLength={32}
                     onChange={(e) => {
                       handleSearchCategories(e);
-                      inputHandler(e);
+                      // inputHandler(e);
                     }}
                   >
                     <option value="">All Category</option>
@@ -938,62 +946,63 @@ const Event = () => {
             </div>
           </div>
         )}
-        <div className=" flex mx-10 lg:mx-8  overflow-x-auto ">
-          <div className=" w-full ">
-            <div className="overflow-y-scroll  ">
-              <div className="h-[300px] xl:h-[400px] 2xl:h-[500px]">
-                <table className="w-[300%] sm:w-[170%] lg:w-[130%]  border bg-white rounded-md mt-5 p-10">
-                  <thead className="">
-                    <tr
-                      className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
+        <div className="relative flex mx-10 lg:mx-8  overflow-x-auto ">
+          <div className=" z-10 w-full ">
+            <table className="lg:w-[150%] xl:w-[130%]  border bg-white rounded-md mt-5 p-10">
+              <thead className="">
+                <tr
+                  className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
           2xl:text-[22px] 
           xl:text-[14px]
            lg:text-[12px] 
            md:text-[12px] 
            sm:text-[12px] 
            text-[10px] "
-                    >
-                      <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
-                        S.NO
-                      </th>
-                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                        Image
-                      </th>
-                      <th className="  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
-                        EVENT NAME
-                      </th>
-                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                        City
-                      </th>
-                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                        Start Date
-                      </th>
-                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                        End Date
-                      </th>
+                >
+                  <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
+                    S.NO
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                    IMAGE
+                  </th>
+                  <th className="xl:pl-5  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
+                    EVENT NAME
+                  </th>
+                  <th className="lg:pl-3 xl:pl-0 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                    CITY
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    START DATE
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    END DATE
+                  </th>
 
-                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                        Location
-                      </th>
-                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                        Provider
-                      </th>
-                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                        Category
-                      </th>
-                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    LOCATION
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    PROVIDER
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                    CATEGORY
+                  </th>
+                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                    ACTION
+                  </th>
+                </tr>
+              </thead>
+              <div className="overflow-y-scroll  ">
+                <div className="h-[300px] xl:h-[400px]">
                   {getAllEvent?.length > 0 && (
-                    <tbody className="px-2 w-full">
-                      <div className="w-full">
-                        {getAllEvent?.map((item, index) => (
+                    <tbody className=" w-full ">
+                      <div className="">
+                        {getAllEvent.map((item, index) => (
                           <tr
-                            key={index}
+                            key={item._id}
                             className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                           >
+                            {/* {console.log(item.category)} */}
                             <td className=" my-auto w-1/12">
                               {index + 1 + "."}
                             </td>
@@ -1026,42 +1035,44 @@ const Event = () => {
                                   )}
                               </>
                             </td>
-                            <td className="my-auto  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
+                            <td className="my-auto capitalize  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
                               <p className="w-40">{item.name}</p>
                             </td>
 
-                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-10">
+                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] 2xl:pl-0">
                               {item.city}
                             </td>
-                            <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
-                              {item.startDate}
+                            <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                              {item?.startDate
+                                ? convertTime(item.startDate)
+                                : ""}
                             </td>
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
-                              {item.endDate}
+                            <td className="my-auto w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                              {item?.endDate ? convertTime(item.endDate) : ""}
                             </td>
 
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-8">
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
                               {item.location}
                             </td>
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-7">
+                            <td className="2xl:pl-2 my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-4">
                               {item.event_provider}
                             </td>
 
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  xl:pl-7 ">
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  2xl:pl-0 ">
                               <div className="">
                                 <select
                                   name="category"
                                   defaultValue={item?.category?._id}
-                                  // value={editCategory?.category}
-                                  onChange={inputHandler}
-                                  className="custom_select"
+                                  onChange={(e) => {
+                                    inputHandler(e);
+                                  }}
+                                  className="custom_select capitalize"
                                 >
                                   <option value="">Select Category</option>
-                                  {/* {console.log(item?.category?.title)} */}
 
                                   {getAllCate.map((items) => (
                                     <option
-                                      className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                      className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                                       key={items._id}
                                       value={items._id}
                                     >
@@ -1073,7 +1084,7 @@ const Event = () => {
                               <div className="my-1">
                                 <select
                                   name="subCategory"
-                                  className="custom_select"
+                                  className="custom_select capitalize"
                                   onChange={inputHandler}
                                   required
                                   minLength={3}
@@ -1093,7 +1104,7 @@ const Event = () => {
                                     })
                                     .map((itemss) => (
                                       <option
-                                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                        className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                                         key={itemss?._id}
                                         value={itemss._id}
                                       >
@@ -1111,7 +1122,7 @@ const Event = () => {
                               </button>
                             </td>
 
-                            <td className="my-auto  w-2/12 xl:pl-12 ">
+                            <td className="my-auto  w-2/12 2xl:pl-10 ">
                               <div className="flex my-3 gap-3 ">
                                 {/* {console.log()} */}
                                 <button onClick={() => openDrawerO(item?._id)}>
@@ -1158,9 +1169,9 @@ const Event = () => {
                       <hr />
                     </tbody>
                   )}
-                </table>
+                </div>
               </div>
-            </div>
+            </table>
           </div>
         </div>
       </div>
