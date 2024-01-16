@@ -92,7 +92,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
               lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
               md:text-[13px] md:m-4 md:px-3 md:py-2 md:h-[30px]
               sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[12px] m-2 px-2 py-1 h-[25px]
+              text-[12px] m-2 px-2 py-1 h-[25px] capitalize
               "
               required
             />

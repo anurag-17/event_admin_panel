@@ -10,7 +10,7 @@ const ShowSubCategory = ({
     <>
       <div className=" flex mx-5 ml-10 mr-4  lg:mx-8  overflow-x-auto md:overscroll-none ">
         <div className=" w-full ">
-          <table className="w-[140%] md:w-full sm:w-[100%]  border bg-white rounded-md mt-5 p-10">
+          <table className="w-[140%] md:w-full sm:w-[100%]  border bg-white rounded-md mt-5 p-10 mb-10">
             <thead className="">
               <tr
                 className="bg-coolGray-200 text-gray-400 text-start flex w-full 
@@ -47,10 +47,10 @@ const ShowSubCategory = ({
                       {index + 1 + "."}
                     </td>
 
-                    <td className="my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12">
+                    <td className=" capitalize my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12">
                       {item?.subCategory ? item?.subCategory : "-"}
                     </td>
-                    <td className=" my-auto w-3/12 ml-2 ">
+                    <td className=" capitalize my-auto w-3/12 ml-2 ">
                       {item?.category?.title}
                     </td>
                     <td className="flex gap-3 my-2 lg:w-2/12">

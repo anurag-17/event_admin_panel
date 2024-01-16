@@ -90,7 +90,7 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
             lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
             md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
             sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px]
+            text-sm m-2 px-2 py-1 h-[20px] capitalize
             "
             required
           />

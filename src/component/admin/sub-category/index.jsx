@@ -145,7 +145,7 @@ const SubCategoryPage = () => {
         {issubCateDrwaer && (
           <div
             id="drawer-form"
-            className=" border-2 fixed content-center mb-5 right-4 lg:right-8 z-40 h-[40%] sm:h-[45%] p-4 overflow-y-auto transition-transform -translate-x-0 bg-white lg:w-6/12 w-8/12 "
+            className=" border-2 fixed content-center mb-5 right-4 lg:right-8 z-40 h-[40%] sm:h-[45%] lg:h-[60%] p-4 overflow-y-auto transition-transform -translate-x-0 bg-white lg:w-6/12 w-8/12 "
             tabIndex={-1}
             aria-labelledby="drawer-form-label"
           >
@@ -170,7 +170,7 @@ const SubCategoryPage = () => {
         {isDrawerOpenO && (
           <div
             id="drawer-form"
-            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-[35%] sm:h-[45%] p-4 overflow-y-auto transition-transform -translate-x-0 bg-white lg:w-6/12  w-8/12  "
+            className="border fixed content-center mb-5 right-4 lg:right-8 z-40 h-[35%] sm:h-[45%] lg:h-[58%] p-4 overflow-y-auto transition-transform -translate-x-0 bg-white lg:w-6/12  w-8/12  "
             tabIndex={-1}
             aria-labelledby="drawer-form-label"
           >

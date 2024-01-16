@@ -163,14 +163,14 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-        <div className="flex my-10 xl:my-10 2xl:my-32">
+        <div className="flex my-10 xl:my-0 2xl:my-5">
           <div className="mx-auto w-1/3">
             <img
               src="/sterna-logo.png"
               alt="me"
               width="40"
               height="40"
-              className="lg:mt-10 w-full"
+              className="lg:mt-10 w-full 2xl:w-[70%]"
             />
           </div>
         </div>
