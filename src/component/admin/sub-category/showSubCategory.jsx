@@ -25,10 +25,10 @@ const ShowSubCategory = ({
                   S.NO
                 </th>
                 <th className=" my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12">
-                  sub category
+                  SUB CATEGORY
                 </th>
                 <th className=" my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12 md:ml-3">
-                  MAIN Category
+                  MAIN CATEGORY
                 </th>
                 <th className=" my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-2/12">
                   ACTION

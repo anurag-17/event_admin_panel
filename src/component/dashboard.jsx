@@ -64,7 +64,7 @@ const Dashboard = () => {
               </div>
               <div className=" w-1/2 ">
                 <h2 className="font-semibold mt-2 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[22px] text-gray-400">
-                  Total Provider{" "}
+                  Total Providers{" "}
                 </h2>
                 <h3 className="font-semibold text-[18px] md:text-[20px] lg:text-[22px] xl:text-[25px] 2xl:text-[35px]">
                   3
@@ -125,7 +125,7 @@ const Dashboard = () => {
               </div>
               <div className=" w-1/2 ">
                 <h2 className="font-semibold mt-2 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[22px] text-gray-400">
-                  Total Category{" "}
+                  Total Categories{" "}
                 </h2>
                 <h3 className="font-semibold text-[18px] md:text-[20px] lg:text-[22px] xl:text-[25px] 2xl:text-[35px]">
                   {getAllEvent?.totalCategories}
@@ -154,7 +154,7 @@ const Dashboard = () => {
               </div>
               <div className=" w-1/2 ">
                 <h2 className="font-semibold mt-2 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[22px] text-gray-400">
-                  Total SubCategory{" "}
+                  Total SubCategories{" "}
                 </h2>
                 <h3 className="font-semibold text-[18px] md:text-[20px] lg:text-[22px] xl:text-[25px] 2xl:text-[35px]">
                   {getAllEvent?.totalSubCategories}
