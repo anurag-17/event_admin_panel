@@ -11,6 +11,9 @@ const UserProfile = () => {
   const [userData, setUserData] = useState({});
   const router = useRouter();
   
+  const goBackToUser=()=>{
+    router.push("/user");
+  }
 
   useEffect(() => {
     const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
@@ -47,10 +50,13 @@ const UserProfile = () => {
     }
   };
 
+  
+
   return (
     <>
     {isLoader && <Loader/>}
     <div className="bg-gray-100 h-screen p-4">
+    <div className="flex justify-end mb-2"><button className=" border rounded-md text-[12px] border-gray-400 px-2 py-1" onClick={goBackToUser}>Go Back</button></div>
     <div className=" bg-white border border-gray-100 rounded-md flex justify-center text-[22px] font-bold">User Profile</div>
  <div className=" flex items-center justify-center">
 

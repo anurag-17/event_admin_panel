@@ -350,7 +350,7 @@ const User = () => {
 
   const handleEventIssue = async (e) => {
     const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
-   
+
     setLoader(true);
     // const userId = await verify();
 
@@ -389,9 +389,58 @@ const User = () => {
     }
   };
 
+  // ----------Log Out Api--------------
+  const handleLogout = () => {
+    // setLoader(true);
+    // console.log("Logging out...");
+    // localStorage.removeItem("accessToken");
+    // router.push("/admin-login");
+    // setLoader(false);
+    try {
+      setLoader(true);
+      const options = {
+        method: "GET",
+        url: `/api/auth/logout`,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: auth_token,
+        },
+      };
+      axios
+        .request(options)
+        .then((res) => {
+          if (res.status === 200) {
+            toast.success("Logout!");
+            setLoader(false);
+            localStorage.removeItem("accessToken");
+            router.push("/user/login");
+            toast.success("Logout Successfully !")
+          } else {
+            setLoader(false);
+            localStorage.removeItem("accessToken");
+            router.push("/user/login");
+            return;
+          }
+        })
+        .catch((error) => {
+          setLoader(false);
+          console.error("Error:", error);
+          // toast.error( "server error!");
+          localStorage.removeItem("accessToken");
+          router.push("/user/login");
+        });
+    } catch {
+      console.log("error");
+      toast.error("server error!");
+      localStorage.removeItem("accessToken");
+      router.push("/user/login");
+    }
+  };
+
+
   return (
     <>
-      {isLoader && <Loader/>}
+      {isLoader && <Loader />}
       <ToastContainer autoClose={3000} />
       <section className="bg-[#F3F3F3] ">
         <div className="pb-4">
@@ -415,6 +464,15 @@ const User = () => {
                     </Link>
                   </li>
                 ))}
+                <li>
+                 
+                  <div
+                    onClick={handleLogout}
+                    className="px-3 py-3 mx-2 sm:mx-2 lg:mx-2 xl:mx-4 2xl:mx-5 rounded-md flex gap-x-3 items-center cursor-pointer transition-colors font-semibold dash-menu hover:transition-all ease-in delay-100 duration-300 text-white hover:bg-[#b8bbdf47]"
+                  >
+                    <p>Log Out</p>
+                  </div>
+                </li>
               </ul>
             </div>
           </nav>
@@ -498,7 +556,7 @@ const User = () => {
                       <option
                         className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                         key={itemss?._id}
-                        value={itemss._id}
+                        value={itemss?._id}
                       >
                         {itemss?.subCategory}
                       </option>
@@ -572,7 +630,10 @@ const User = () => {
                         className="card border hover:border-1 border-gray-300 hover:border-gray-700 rounded-md p-2 bg-white flex flex-col"
                       >
                         {/* {console.log(item)} */}
-                        <Link href={`/singleEvent/${item?._id}`}>
+                        <Link
+                          target="_blank"
+                          href={`/singleEvent/${item?._id}`}
+                        >
                           <img
                             src={item?.images[0]?.url}
                             alt="image"
@@ -605,7 +666,7 @@ const User = () => {
                           <div className="flex text-[14px]">
                             <p className="mr-[32px] sm:mr-9">Price :</p>
                             {item?.price ? (
-                              <p className="mb-2">{item.price}</p>
+                              <p className="mb-2">{item?.price}</p>
                             ) : (
                               <p className="mb-2">Price not available</p>
                             )}
@@ -677,14 +738,14 @@ const User = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white px-5  sm:pl-8 py-4 text-left align-middle shadow-2xl transition-all">
+                <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white px-5  sm:pl- py-4 text-left align-middle shadow-2xl transition-all">
                   <div className="flex justify-end items-end ">
                     <button
                       className=" cursor-pointer"
                       onClick={closeAddPopupModel}
                     >
                       <img
-                        className="w-7"
+                        className="w-4 sm:w-7"
                         src="/images/close-square.svg"
                         alt="close-img"
                       />
@@ -700,7 +761,7 @@ const User = () => {
                     value={issueText}
                     onChange={(e) => setIssueText(e.target.value)}
                     placeholder="Enter text here..."
-                    className="border border-gray-200"
+                    className="border border-gray-200 w-full "
                     rows="4"
                     cols="40"
                     name="comment"
@@ -709,7 +770,7 @@ const User = () => {
                   <div className="flex justify-end">
                     <button
                       onClick={handleEventIssue}
-                      className="px-2 py-1 rounded-md mr-3 hover:text-white bg-blue-300 hover:bg-blue-500"
+                      className="px-2 py-1  text-[14px] sm:text-[16px] rounded-md  hover:text-white bg-blue-300 hover:bg-blue-500"
                     >
                       Submit
                     </button>
