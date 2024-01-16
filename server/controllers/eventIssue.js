@@ -72,11 +72,39 @@ exports.getEventIssue = asyncHandler(async (req, res) => {
 });
 
 exports.getAllEventIssues = asyncHandler(async (req, res) => {
-  const getAllEventIssues = await EventIssue.find()
-    .populate("event")
-    .populate({
+  try {
+    const { page = 1, limit = 10, isResolved } = req.query;
+
+    const currentPage = parseInt(page, 10);
+    const itemsPerPage = parseInt(limit, 10);
+
+    let query = {};
+
+    if (isResolved !== undefined) {
+      query.isResolved = isResolved === 'true';
+    }
+
+    const totalEventIssues = await EventIssue.countDocuments(query);
+    const totalPages = Math.ceil(totalEventIssues / itemsPerPage);
+
+    const skip = (currentPage - 1) * itemsPerPage;
+
+    const getAllEventIssues = await EventIssue.find(query)
+      .skip(skip)
+      .limit(itemsPerPage)
+      .populate("event")
+      .populate({
         path: "userId",
         select: "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -provider_ID -role -provider -password -__v",
       });
-  res.json(getAllEventIssues);
+
+    res.json({
+      current_page: currentPage,
+      total_pages: totalPages,
+      total_items: totalEventIssues,
+      eventIssues: getAllEventIssues,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
