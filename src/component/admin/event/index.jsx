@@ -490,17 +490,14 @@ const Event = () => {
         axios.spread((response1, response2, response3) => {
           if (response1.status === 200) {
             setEventFetch(response1.data);
-            // console.log(response1.data, "fetchEvents");
           }
 
           if (response2.status === 200) {
             setEventFetch(response2.data);
-            // console.log(response2.data, "skiddleEvents");
           }
 
           if (response3.status === 200) {
             setEventFetch(response3.data);
-            // console.log(response3.data, "londontheatredirect");
           }
           setLoader(false);
         })
@@ -1060,7 +1057,7 @@ const Event = () => {
                                   className="custom_select"
                                 >
                                   <option value="">Select Category</option>
-                                  {console.log(item?.category?.title)}
+                                  {/* {console.log(item?.category?.title)} */}
 
                                   {getAllCate.map((items) => (
                                     <option

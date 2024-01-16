@@ -5,6 +5,7 @@ import { Fragment } from "react";
 import DeleteModule from "./delete-modal";
 import Loader from "../../loader";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
 
 const UserIssue = () => {
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
@@ -45,7 +46,7 @@ const UserIssue = () => {
     axios
       .request(option)
       .then((response) => {
-        setGetUserIssue(response?.data);
+        setGetUserIssue(response?.data?.eventIssues);
         setLoader(false);
       })
       .catch((error) => {
@@ -71,16 +72,17 @@ const UserIssue = () => {
           </div>
           <h2>Welcome Back, Admin</h2>
         </div>
-        {getUserIssue &&
-          getUserIssue.map((item) => (
+        {Array.isArray(getUserIssue) &&
+          getUserIssue?.map((item) => (
             <div className="border bg-white sm:ml-10 sm:mr-4 lg:mx-8 rounded-md p-3 my-4 flex flex-col sm:flex-row mx-auto justify-around ">
               <div className="w-2/12">
-               <Link href={`/eventIssue/${item?._id}`}>
-               <img
-                  src={item?.event?.images[0]?.url}
-                  className="my-3 w-14 sm:w-16 md:w-20 lg:w-16 xl:w-20 2xl:w-28"
-                />
-               </Link>
+                <Link href={`/eventIssue/${item?._id}`} target="_blank">
+                  <img
+                    src={item?.event?.images[0]?.url}
+                    alt="eventImage"
+                    className="my-3 w-14 sm:w-16 md:w-20 lg:w-16 xl:w-20 2xl:w-28"
+                  />
+                </Link>
               </div>
               <div className="w-5/12 ">
                 <h1 className="my-1 font-bold h1_text">{item?.event?.name}</h1>

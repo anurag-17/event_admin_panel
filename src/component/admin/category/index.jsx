@@ -188,7 +188,7 @@ const Category = () => {
                   S.NO
                 </th>
                 <th className="xl:ml-10 w-6/12 sm:w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
-                  EVENT NAME
+                  CATEGORY NAME
                 </th>
 
                 <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">

@@ -1,22 +1,20 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 const EditEvent = ({ editData, closeDrawer, refreshData }) => {
+  console.log(editData);
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [isLoading, setLoading] = useState(false);
   const [getallCategory, setGetallCategory] = useState([]);
   const [getallSubCategory, setGetallSubCategory] = useState([]);
   const [eventDetail, setEventDetail] = useState(editData);
-
   const [eventImage, setEventImage] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [openImgPopup, setOpenImgPopup] = useState(false);
   const [imageDisable, setImageDisable] = useState(false);
   const [imageUpload, setImageUpload] = useState(false);
-
-  // console.log("edit", editData.images);
 
   const inputHandler = (e) => {
     if (e.target.name === "images") {
@@ -66,7 +64,6 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
     setImageDisable(false);
     // refreshData();
   };
-  // console.log(eventDetail)
 
   const uploadImage = async (e) => {
     setImageUpload(true);
@@ -251,7 +248,11 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
             </label>
             <input
               onChange={inputHandler}
-              defaultValue={editData?.startDate}
+              defaultValue={
+                editData?.startDate
+                  ? new Date(editData.startDate).toISOString().slice(0, 16)
+                  : ""
+              }
               type="datetime-local"
               name="startDate"
               className="custom_input"
@@ -261,15 +262,15 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
           {/* ------4. Event endDate----- */}
 
           <div className="w-1/2">
-            <label
-              className="custom_input_label
-          "
-            >
-              Event EndDate
-            </label>
+            <label className="custom_input_label">Event EndDate</label>
+
             <input
               onChange={inputHandler}
-              defaultValue={editData?.endDate}
+              defaultValue={
+                editData?.startDate
+                  ? new Date(editData.endDate).toISOString().slice(0, 16)
+                  : ""
+              }
               type="datetime-local"
               name="endDate"
               className="custom_input"
