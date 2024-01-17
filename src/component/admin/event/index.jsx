@@ -688,7 +688,7 @@ const Event = () => {
                     }}
                   >
                     <option value="">All Category</option>
-                    {getAllCate.map((item) => (
+                    {Array.isArray(getAllCate) && getAllCate.map((item) => (
                       <option
                         key={item._id}
                         value={item._id}
@@ -729,7 +729,7 @@ const Event = () => {
                     }}
                   >
                     <option value=""> All SubCategory</option>
-                    {allSubCategory
+                    {Array.isArray(allSubCategory) && allSubCategory
                       .filter((item, indr) => {
                         return item?.category?._id === editCategory?.category;
                       })
@@ -948,7 +948,7 @@ const Event = () => {
           </div>
         )}
         <div className="relative flex mx-10 lg:mx-8  overflow-x-auto ">
-          <div className=" z-10 w-full ">
+          <div className="  w-full ">
             <table className="lg:w-[150%] xl:w-[130%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
                 <tr
@@ -1076,7 +1076,7 @@ const Event = () => {
                                   >
                                     <option value="">Select Category</option>
 
-                                    {getAllCate.map((items) => (
+                                    {Array.isArray(getAllCate) && getAllCate.map((item) => (
                                       <option
                                         className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                                         key={items._id}
@@ -1104,7 +1104,7 @@ const Event = () => {
                                       {" "}
                                       Select Sub Category
                                     </option>
-                                    {allSubCategory
+                                    {Array.isArray(allSubCategory) && allSubCategory
                                       .filter((item, indr) => {
                                         return (
                                           item?.category?._id ===
@@ -1223,7 +1223,7 @@ const Event = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"

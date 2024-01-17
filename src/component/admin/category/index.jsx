@@ -84,8 +84,7 @@ const Category = () => {
     axios
       .request(option)
       .then((response) => {
-        setGetAllCate(response.data);
-        console.log(response.data, "cate");
+        setGetAllCate(response?.data?.categories);
         setLoader(false);
       })
       .catch((err) => {
