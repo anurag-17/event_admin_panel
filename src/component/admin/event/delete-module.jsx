@@ -9,7 +9,7 @@ const DeleteEvent = ({ eventID, closeModal, refreshData }) => {
 
   const handleClose = () => {
     closeModal();
-    refreshData();
+    // refreshData();
   };
 
   const handleDelete = (e) => {
@@ -34,7 +34,7 @@ const DeleteEvent = ({ eventID, closeModal, refreshData }) => {
         console.log(response);
         if (response.status === 200) {
           setLoading(false);
-          handleClose();
+          closeModal();
           refreshData();
         } else {
           setLoading(false);

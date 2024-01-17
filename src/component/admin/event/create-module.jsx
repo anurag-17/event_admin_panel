@@ -174,7 +174,8 @@ const CreateEvent = ({ closeDrawer }) => {
     axios
       .request(option)
       .then((response) => {
-        setGetallCategory(response?.data);
+        console.log(response)
+        setGetallCategory(response?.data?.categories);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -193,7 +194,7 @@ const CreateEvent = ({ closeDrawer }) => {
     axios
       .request(option)
       .then((response) => {
-        setGetallSubCategory(response?.data);
+        setGetallSubCategory(response?.data?.subCategories);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -352,13 +353,22 @@ const CreateEvent = ({ closeDrawer }) => {
           <label className="custom_input_label" >
             Event Currency
           </label>
-          <input
+          <select name="currency" id="" required className="custom_input" onChange={inputHandler}>
+            <option value="">Select Currency</option>
+            <option value="USD">USD</option>
+            <option value="EURO">EURO</option>
+            <option value="POUND">POUND</option>
+            <option value="AED">AED</option>
+            <option value="RUPEES">RUPEES</option>
+
+          </select>
+          {/* <input
             onChange={inputHandler}
             value={eventDetail.currency}
             type="text"
             name="currency"
             className="custom_input"   required
-          />
+          /> */}
         </div>
         {/* ------12. Event category----- */}
 
@@ -380,7 +390,7 @@ const CreateEvent = ({ closeDrawer }) => {
                 <option
                   key={item.id}
                   value={item._id}
-                  selected={item._id === eventDetail.title}
+                  // selected={item._id === eventDetail.category}
                   className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                 >
                   {item.title}
@@ -406,7 +416,10 @@ const CreateEvent = ({ closeDrawer }) => {
               maxLength={64}
             >
               <option value="">Select SubCategory</option>
-              {getallSubCategory.map((item) => (
+              {getallSubCategory.filter((itemf, indexf)=>{
+                return itemf?.category?._id == eventDetail.category
+                // console.log(itemf?.category?._id);
+              }).map((item) => (
                 <option
                   key={item.id}
                   value={item._id}
@@ -447,6 +460,7 @@ const CreateEvent = ({ closeDrawer }) => {
             value={eventDetail.resource_url}
             type="text"
             name="resource_url"
+            placeholder="URL with http//: or https//:"
             className="custom_input"   required
           />
         </div>
