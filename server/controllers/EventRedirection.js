@@ -72,7 +72,12 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
 exports.getEventRedirectionById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const eventRedirection = await EventRedirection.findById(id).populate('event');
+  const eventRedirection = await EventRedirection.findById(id).populate({
+    path: "event",
+    populate: {
+      path: "category",
+    },
+  });
 
   if (!eventRedirection) {
     return res.status(404).json({ error: "EventRedirection not found" });
