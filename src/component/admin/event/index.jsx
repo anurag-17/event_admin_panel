@@ -12,6 +12,7 @@ import cut from "../../../../public/images/close-square.svg";
 import Pagination from "../../pagination";
 import ImageModal from "./ImageModal";
 import moment from "moment";
+import Topbar from "../../../app/admin/admin-dashboard/topbar";
 
 const Event = () => {
   const [auth_token, setAuth_token] = useState(
@@ -621,6 +622,7 @@ const [fetchEndDate, setFetchEndDate] = useState("")
     <>
       {isLoader && <Loader />}
       <ToastContainer autoClose={1500} />
+      <Topbar/>
       <div>
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-10 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Event List </h2>

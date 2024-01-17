@@ -4,13 +4,13 @@ import dynamic from "next/dynamic";
 import { Transition, Dialog } from "@headlessui/react";
 import { ToastContainer } from "react-toastify";
 import axios from "axios";
-
 import ShowSubCategory from "../sub-category/showSubCategory";
 import DeleteModuleC from "../sub-category/delete-module";
 import AddSubCategory from "./create-module";
 import EditSubCategory from "../sub-category/edit-module";
 import Loader from "../../loader";
 import Pagination from "../../pagination";
+import Topbar from "../../../app/admin/admin-dashboard/topbar";
 
 const SubCategoryPage = () => {
   const [isOpenDelete, setOpenDelete] = useState(false);
@@ -167,6 +167,7 @@ const SubCategoryPage = () => {
       <ToastContainer autoClose={1000} />
 
       {isLoader && <Loader />}
+      <Topbar/>
       <section>
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 ml-10 mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold whitespace-nowrap"> Sub Category List </h2>
