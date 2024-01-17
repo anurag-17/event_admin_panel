@@ -4,71 +4,59 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-const AddSubCategory = ({ closeDrawer, refreshData }) => {
+const AddSubCategory = ({
+  closeDrawer,
+  refreshData,
+  isLoadingBtn,
+  getallCategory,
+}) => {
   const [category, setCategory] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [subCategory, setSubCategory] = useState("");
-  const [getallCategory, setGetallCategory] = useState([]);
   const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
 
   const handleSubmit = async (e) => {
     e && e.preventDefault();
-    setLoading(true);
 
-    const data = {
-      category: category,
-      subCategory: subCategory,
-    };
+    if(category === ""){
+      toast.warn("Please choose category!");
+    }else{
+      setLoading(true);
 
-    try {
-      await fetch("/api/subCategory/createSubCategory", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: auth_token,
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => {
-          if (res.ok) {
-            // router.push("/categories");
-
-            refreshData();
-            closeDrawer();
-            setLoading(false);
-            toast.success("SubCategory Added Successfully!");
-          } else {
-            setLoading(false);
-            throw new Error("failed to create");
-          }
+      const data = {
+        category: category,
+        subCategory: subCategory,
+      };
+  
+      try {
+        await fetch("/api/subCategory/createSubCategory", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: auth_token,
+          },
+          body: JSON.stringify(data),
         })
-        .catch((e) => {
-          console.log(e);
-          setLoading(false);
-          toast.error("Failed. something went wrong!");
-        });
-    } catch (error) {
-      setLoading(false);
+          .then((res) => {
+            if (res.status === 200) {
+              toast.success("SubCategory Added Successfully!");
+              setLoading(false);
+              refreshData();
+              closeDrawer();
+            } else {
+              setLoading(false);
+              throw new Error("failed to create");
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            setLoading(false);
+            toast.error("Failed. something went wrong!");
+          });
+      } catch (error) {
+        setLoading(false);
+      }
     }
-  };
-
-  useEffect(() => {
-    defaultCategory();
-  }, []);
-
-  const defaultCategory = () => {
-    const option = {
-      method: "GET",
-      url: "/api/category/getallCategory",
-    };
-    axios
-      .request(option)
-      .then((response) => {
-        setGetallCategory(response?.data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
   };
 
   return (
@@ -118,6 +106,7 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
               sm:text-[9px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
               text-[8px] m-2 px-2 py-1 h-[20px]
               "
+              maxLength={84}
             required
           />
         </div>
@@ -155,15 +144,17 @@ const AddSubCategory = ({ closeDrawer, refreshData }) => {
               <option value="" disabled required>
                 Category
               </option>
-              {getallCategory?.map((item, index) => (
-                <option
-                  key={index}
-                  value={item?._id}
-                  selected={item?.title === category}
-                >
-                  {item?.title}
-                </option>
-              ))}
+              {Array.isArray(getallCategory) &&
+                getallCategory?.length > 0 &&
+                getallCategory?.map((item, index) => (
+                  <option
+                    key={index}
+                    value={item?._id}
+                    selected={item?.title === category}
+                  >
+                    {item?.title}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
