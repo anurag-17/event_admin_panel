@@ -31,6 +31,12 @@ exports.eventRedirection = asyncHandler(async (req, res) => {
 
 exports.getAllEventRedirections = asyncHandler(async (req, res) => {
   try {
+    const currentDate = new Date();
+    await EventRedirection.deleteMany({
+      event: { $exists: true },
+      "event.endDate": { $lt: currentDate },
+    });
+    
     const { page = 1, limit = 20, eventId } = req.query;
 
     const currentPage = parseInt(page, 10);
@@ -50,7 +56,13 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
     const allEventRedirections = await EventRedirection.find(query)
       .skip(skip)
       .limit(itemsPerPage)
-      .populate('event'); 
+      .populate({
+        path: 'event',
+        populate: {
+          path: 'category',
+        },
+      });
+    
 
     res.status(200).json({
       current_page: currentPage,
@@ -66,7 +78,12 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
 exports.getEventRedirectionById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const eventRedirection = await EventRedirection.findById(id).populate('event');
+  const eventRedirection = await EventRedirection.findById(id).populate({
+    path: "event",
+    populate: {
+      path: "category",
+    },
+  });
 
   if (!eventRedirection) {
     return res.status(404).json({ error: "EventRedirection not found" });
@@ -98,7 +115,7 @@ exports.deleteEventRedirectionById = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: "EventRedirection not found" });
   }
 
-  await eventRedirection.remove();
+  await EventRedirection.deleteOne({ _id: id });
 
   res.status(200).json({ message: "EventRedirection deleted successfully" });
 });

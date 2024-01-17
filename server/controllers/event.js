@@ -1,6 +1,9 @@
 const Event = require("../models/Event");
 const Category = require("../models/Category");
 const SubCategory = require("../models/subCategory");
+const User = require("../models/User");
+const EventRedirection = require("../models/EventRedirection");
+const EventIssue = require("../models/EventIssue");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
 const axios = require('axios');
@@ -196,13 +199,17 @@ exports.getStats = asyncHandler(async (req, res) => {
     const totalEvents = await Event.countDocuments(query);
     const totalCategories = await Category.countDocuments(query);
     const totalSubCategories = await SubCategory.countDocuments(query);
-    // const totalProviders = await Event.distinct("event_provider", query).countDocuments();
+    const totalUsers = await User.countDocuments(query);
+    const totalEventRedirections = await EventRedirection.countDocuments(query);
+    const totalEventIssues = await EventIssue.countDocuments(query);
 
     res.json({
       totalEvents,
       totalCategories,
       totalSubCategories,
-      // totalProviders,
+      totalUsers,
+      totalEventRedirections,
+      totalEventIssues
     });
   } catch (error) {
     console.error("Error:", error.message);

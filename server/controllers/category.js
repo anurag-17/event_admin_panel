@@ -58,10 +58,10 @@ exports.getCategory = async (req, res) => {
 
 exports.getallCategory = async (req, res) => {
   try {
-    const { page = 1, limit = 10, searchQuery } = req.query;
+    const { page, limit, searchQuery } = req.query;
 
-    const currentPage = parseInt(page, 10);
-    const itemsPerPage = parseInt(limit, 10);
+    const currentPage = parseInt(page, 10) || 1;
+    const itemsPerPage = parseInt(limit, 10) || undefined;
 
     let query = {};
 
@@ -70,9 +70,9 @@ exports.getallCategory = async (req, res) => {
     }
 
     const totalCategories = await Category.countDocuments(query);
-    const totalPages = Math.ceil(totalCategories / itemsPerPage);
+    const totalPages = itemsPerPage ? Math.ceil(totalCategories / itemsPerPage) : 1;
 
-    const skip = (currentPage - 1) * itemsPerPage;
+    const skip = itemsPerPage ? (currentPage - 1) * itemsPerPage : 0;
 
     const getallCategory = await Category.find(query)
       .skip(skip)
@@ -85,6 +85,7 @@ exports.getallCategory = async (req, res) => {
       categories: getallCategory,
     });
   } catch (error) {
+    console.log("Error:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

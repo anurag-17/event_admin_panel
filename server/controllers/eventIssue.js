@@ -73,6 +73,12 @@ exports.getEventIssue = asyncHandler(async (req, res) => {
 
 exports.getAllEventIssues = asyncHandler(async (req, res) => {
   try {
+
+    const currentDate = new Date();
+    await EventIssue.deleteMany({
+      event: { $exists: true },
+      "event.endDate": { $lt: currentDate },
+    });
     const { page = 1, limit = 10, isResolved } = req.query;
 
     const currentPage = parseInt(page, 10);
