@@ -58,9 +58,34 @@ exports.getSubCategory = async (req, res) => {
 
 exports.getallSubCategory = async (req, res) => {
   try {
-    const getallCategory = await SubCategory.find().populate("category");
-    res.json(getallCategory);
+    const { page = 1, limit = 10, searchQuery } = req.query;
+
+    const currentPage = parseInt(page, 10);
+    const itemsPerPage = parseInt(limit, 10);
+
+    let query = {};
+
+    if (searchQuery) {
+      query.subCategory = { $regex: new RegExp(searchQuery, "i") };
+    }
+
+    const totalSubCategories = await SubCategory.countDocuments(query);
+    const totalPages = Math.ceil(totalSubCategories / itemsPerPage);
+
+    const skip = (currentPage - 1) * itemsPerPage;
+
+    const getallSubCategory = await SubCategory.find(query)
+      .skip(skip)
+      .limit(itemsPerPage)
+      .populate("category");
+
+    res.status(200).json({
+      current_page: currentPage,
+      total_pages: totalPages,
+      total_items: totalSubCategories,
+      subCategories: getallSubCategory,
+    });
   } catch (error) {
-    throw new Error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
