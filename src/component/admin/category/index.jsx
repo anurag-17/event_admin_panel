@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, {Fragment, useState, useEffect} from "react";
 import axios from "axios";
-import EditCate from "./edit-module";
+import { ToastContainer } from "react-toastify";
 import { Transition, Dialog } from "@headlessui/react";
-import { Fragment } from "react";
+import EditCate from "./edit-module";
 import DeleteModuleC from "./delete-module";
 import CreateCategoryForm from "./add-module";
 import Loader from "../../loader";
-import cut from "../../../../public/images/close-square.svg";
-import Image from "next/image";
-import { ToastContainer } from "react-toastify";
+import Pagination from "../../pagination";
 
 const Category = () => {
   const [getAllCate, setGetAllCate] = useState([]);
@@ -21,6 +18,10 @@ const Category = () => {
   const [isOpenDelete, setOpenDelete] = useState(false);
   const [isRefresh, setRefresh] = useState(false);
   const [isLoader, setLoader] = useState(false);
+  const [current_page, setCurrentPage] = useState(1);
+  const [total_pages, setTotalPages] = useState(1);
+  const limit = 20;
+  const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
 
   const openDrawerO = async (_id) => {
     setLoader(true);
@@ -70,43 +71,78 @@ const Category = () => {
     setRefresh(!isRefresh);
   };
 
-  // -------GetAll category---------
-  useEffect(() => {
-    defaultgetAllCate();
-  }, [isRefresh]);
-
-  const defaultgetAllCate = () => {
+  const fetchData = async (searchTerm = "", page, limit) => {
     setLoader(true);
-    const option = {
-      method: "GET",
-      url: "/api/category/getallCategory",
-    };
-    axios
-      .request(option)
-      .then((response) => {
-        setGetAllCate(response?.data?.categories);
-        setLoader(false);
-      })
-      .catch((err) => {
-        console.log(err, "Error");
-      });
+    setLoader(true);
+  
+    try {
+      const res = await axios.get(
+        `/api/category/getallCategory?searchQuery=${searchTerm}&limit=${limit}&page=${current_page}`,
+        {
+          headers: {
+            "content-type": "application/json",
+            authorization: auth_token,
+          },
+        }
+      );
+      console.log(res.data);
+  
+      if (res.status === 200) {
+        setGetAllCate(res?.data?.categories);
+        setTotalPages(res?.data?.total_pages || 1);
+        setLoader(false)
+      } else {
+         setLoader(false)
+        console.error("Unexpected response status:", res.status);
+      }
+    } catch (error) {
+      setLoader(false)
+      console.error("Error:", error);
+    } finally {
+      setLoader(false);
+    }
   };
 
+
+  const getAllCategory = async (page, limit) => {
+    fetchData("", page, limit);
+  };
+
+  const searchDataFunc = async (searchTerm) => {
+    if (searchTerm.trim() === "") {
+      // If search term is empty, fetch data with current_page and limit
+      getAllCategory(current_page, limit);
+    } else {
+      fetchData(searchTerm);
+    }
+  };
+
+  const handleSearchChange = (event) => {
+    searchDataFunc(event.target.value);
+  };
+
+  const handlePageChange = (newPage) => {
+    // alert(newPage)
+    setCurrentPage(newPage);
+  };
+
+  useEffect(() => {
+    getAllCategory(current_page, limit);
+  }, [isRefresh, current_page]);
   return (
     <>
       {isLoader && <Loader />}
 <ToastContainer autoClose={1000}/>
       <div className="">
-        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold">Category List </h2>
+        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 ml-10 mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+          <h2 className="font-semibold whitespace-nowrap">Category List </h2>
 
           <div className="flex items-center w-[40%]">
             <input
               type="search"
-              className=" border border-gray-500 p-[2px] lg:p-[4px] 2xl:p-3 rounded-lg  w-11/12 focus:outline-none text-black"
+              className="border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
               placeholder="Search"
-              aria-label="Search"
-              aria-describedby="button-addon1"
+              onChange={handleSearchChange}
             />
           </div>
           <h2>Welcome Back, Admin</h2>
@@ -124,8 +160,8 @@ const Category = () => {
         {isDrawerOpen && (
           <div
             id="drawer-form"
-            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-[35%] sm:h-[45%] lg:h-[45%] lg:w-6/12 w-8/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
-            tabIndex={-1}
+            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-auto max-h-[400px] lg:w-6/12 w-8/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
+            tabIndex={-1} 
             aria-labelledby="drawer-form-label"
           >
             <button
@@ -148,7 +184,7 @@ const Category = () => {
         {isDrawerOpenO && (
           <div
             id="drawer-form"
-            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-[40%] sm:h-[45%] lg:h-[45%] lg:w-6/12 w-8/12 p-4 overflow-y-auto transition-transform -translate-x-0 bg-white "
+            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-auto max-h-[400px] lg:w-6/12 w-8/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
             tabIndex={-1}
             aria-labelledby="drawer-form-label"
           >
@@ -202,8 +238,10 @@ const Category = () => {
                     key={index}
                     className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                   >
-                    <td className="mx-5 my-auto w-[30px] sm:w-2/12">{index + 1 + "."}</td>
-                    <td className="my-auto xl:ml-10 w-6/12 sm:w-4/12">{item.title}</td>
+                    <td className="mx-5 my-auto w-[30px] sm:w-2/12"> {index +
+                            1 +
+                            20 * (current_page - 1)}</td>
+                    <td className="my-auto xl:ml-10 w-6/12 sm:w-4/12 capitalize">{item?.title}</td>
 
                     <td className="w-3/12">
                       <div className="flex my-3 gap-3">
@@ -250,6 +288,13 @@ const Category = () => {
             )}
           </table>
         </div>
+        {total_pages > 1 && (
+          <Pagination
+            total_pages={total_pages}
+            current_page={current_page}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>

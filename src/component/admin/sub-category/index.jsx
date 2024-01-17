@@ -1,19 +1,16 @@
 "use client";
+import React, { Fragment,useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Transition, Dialog } from "@headlessui/react";
-import { Fragment } from "react";
-import Link from "next/link";
+import { ToastContainer } from "react-toastify";
+import axios from "axios";
+
 import ShowSubCategory from "../sub-category/showSubCategory";
 import DeleteModuleC from "../sub-category/delete-module";
 import AddSubCategory from "./create-module";
 import EditSubCategory from "../sub-category/edit-module";
 import Loader from "../../loader";
-import cut from "../../../../public/images/close-square.svg";
-import Image from "next/image";
-import { ToastContainer, toast } from "react-toastify";
-
+import Pagination from "../../pagination";
 
 const SubCategoryPage = () => {
   const [isOpenDelete, setOpenDelete] = useState(false);
@@ -21,113 +18,165 @@ const SubCategoryPage = () => {
   const [isRefresh, setRefresh] = useState(false);
   const [issubCateDrwaer, setSubCateDrwaer] = useState(false);
   const [cateEdit, setCateEdit] = useState("");
-  const [editData, setEditData] = useState([]);
+  const [editData, setEditData] = useState({});
   const [isDrawerOpenO, setIsDrawerOpenO] = useState(false);
-  const [isLoadingBtn, setLoadingBtn] = useState(false);
-  const [allSubCategory, setAllCategory] = useState([]);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const [allSubCategory, setAllSubCategory] = useState([]);
   const [isLoader, setLoader] = useState(false);
+  // const [searchTerm, setSearchTerm] = useState("");
+  const [current_page, setCurrentPage] = useState(1);
+  const [total_pages, setTotalPages] = useState(1);
+  const [getallCategory, setGetallCategory] = useState([]);
+  const [isLoadingBtn, setLoadingBtn] = useState(false);
 
-  const openSubCategory = () => {
-    setSubCateDrwaer(true);
-  };
 
-  const closeSubCategory = () => {
-    setSubCateDrwaer(false);
-  };
+  const limit = 20;
+  const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
 
-  function closeModal() {
-    setOpenDelete(false);
-  }
-
-  function openModal(delId) {
+  const openSubCategory = () => setSubCateDrwaer(true);
+  const closeSubCategory = () => setSubCateDrwaer(false);
+  const closeModal = () => setOpenDelete(false);
+  const openModal = (delId) => {
     setCategoryID(delId);
     setOpenDelete(true);
-  }
+  };
 
-  useEffect(() => {
-    defaultCategory();
-  }, [isRefresh]);
-
-  const defaultCategory = () => {
+  const fetchData = async (searchTerm = "", page, limit) => {
     setLoader(true);
-
     setLoadingBtn(true);
-    const options = {
-      method: "GET",
-      url: "/api/subCategory/getallSubCategory",
-      headers: {
-        "content-type": "application/json",
-        authorization: auth_token,
-      },
-    };
-
-    axios
-      .request(options)
-      .then((response) => {
-        setAllCategory(response?.data?.subCategories);
-        setLoadingBtn(false);
-        setLoader(false);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        setLoadingBtn(false);
-      });
+  
+    try {
+      const res = await axios.get(
+        `/api/subCategory/getallSubCategory?searchQuery=${searchTerm}&limit=${limit}&page=${current_page}`,
+        {
+          headers: {
+            "content-type": "application/json",
+            authorization: auth_token,
+          },
+        }
+      );
+      console.log(res.data);
+  
+      if (res.status === 200) {
+        setAllSubCategory(res?.data?.subCategories);
+        setTotalPages(res?.data?.total_pages || 1);
+      } else {
+        console.error("Unexpected response status:", res.status);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoader(false);
+      setLoadingBtn(false);
+    }
+  };
+  
+  const getAllSubCategory = async (page, limit) => {
+    fetchData("", page, limit);
+  };
+  
+  const searchDataFunc = async (searchTerm) => {
+    if (searchTerm.trim() === "") {
+      // If search term is empty, fetch data with current_page and limit
+      getAllSubCategory(current_page, limit);
+    } else {
+      fetchData(searchTerm);
+    }
+  };
+  
+  const handleSearchChange = (event) => {
+    searchDataFunc(event.target.value);
   };
 
-  const refreshData = () => {
-    setRefresh(!isRefresh);
-  };
+
+  const refreshData = () => setRefresh(!isRefresh);
 
   const openDrawerO = async ({ subCateId }) => {
     setCateEdit(subCateId);
     setLoader(true);
 
     try {
-      const options = {
-        method: "POST",
-        url: "/api/subCategory/getSubCategory",
-        headers: {
-          authorization: auth_token,
-        },
-        data: {
-          id: subCateId,
-        },
-      };
-      const response = await axios.request(options);
-      if (response.status === 200) {
-        setEditData(response?.data);
+      const res = await axios.post(
+        "/api/subCategory/getSubCategory",
+        { id: subCateId },
+        {
+          headers: {
+            authorization: auth_token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setEditData(res?.data);
         setIsDrawerOpenO(true);
         setLoader(false);
       } else {
-        console.error("Error: Unexpected response status");
+        setLoader(false);
+        console.error("Unexpected response status:", response.status);
       }
     } catch (error) {
-      console.error(error);
+      setLoader(false);
+      console.error("Error:", error);
+    } finally {
+      setLoader(false);
     }
   };
 
-  const closeDrawerO = () => {
-    setIsDrawerOpenO(false);
+  const closeDrawerO = () => setIsDrawerOpenO(false);
+
+  const handlePageChange = (newPage) => {
+    // alert(newPage)
+    setCurrentPage(newPage);
   };
+
+  const defaultCategory = () => {
+    setLoadingBtn(true);
+    const options = {
+      method: "GET",
+      url: "/api/category/getallCategory",
+    };
+
+    axios
+      .request(options)
+      .then((res) => {
+        if (res.status == 200) {
+          setGetallCategory(res?.data?.categories);
+          setLoadingBtn(false);
+        } else {
+          setLoadingBtn(false);
+          return;
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setLoadingBtn(false);
+      });
+  };
+  useEffect(() => {
+    getAllSubCategory(current_page, limit);
+  }, [isRefresh, current_page]);
+
+
+  useEffect(() => {
+    defaultCategory();
+  }, [isRefresh]);
+
 
   // -------------search Sub Category----------
 
   return (
     <>
-    <ToastContainer autoClose={1000}/>
+      <ToastContainer autoClose={1000} />
 
       {isLoader && <Loader />}
       <section>
-        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7   border flex justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 ml-10 mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[60px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold "> Sub Category List </h2>
-          <div className="w-[40%]">
+        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 ml-10 mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+          <h2 className="font-semibold whitespace-nowrap"> Sub Category List </h2>
+          <div className="lg:w-[40%] w-full mx-auto flex flex-col items-center">
             <input
               type="search"
-              className=" border border-gray-500 p-[2px] lg:p-[4px] 2xl:p-3 rounded-lg  w-11/12 focus:outline-none "
+              className="border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
               placeholder="Search"
-              aria-label="Search"
-              aria-describedby="button-addon1"
+              // value={searchTerm}
+              onChange={handleSearchChange}
             />
           </div>
           <h2>Welcome Back, Admin</h2>
@@ -154,7 +203,11 @@ const SubCategoryPage = () => {
               onClick={closeSubCategory}
               className="  text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
             >
-             <img src="/images/close-square.svg" className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"  alt="close"/>
+              <img
+                src="/images/close-square.svg"
+                className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
+                alt="close"
+              />
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -162,6 +215,8 @@ const SubCategoryPage = () => {
               <AddSubCategory
                 closeDrawer={closeSubCategory}
                 refreshData={refreshData}
+                isLoadingBtn={isLoadingBtn}
+                getallCategory={getallCategory}
               />
             </div>
           </div>
@@ -179,7 +234,11 @@ const SubCategoryPage = () => {
               onClick={closeDrawerO}
               className=" text-gray-400  shadow-2xl text-sm top-2  inline-flex items-center justify-center "
             >
-              <img src="/images/close-square.svg" className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"  alt="close"/>
+              <img
+                src="/images/close-square.svg"
+                className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
+                alt="close"
+              />
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -189,16 +248,26 @@ const SubCategoryPage = () => {
                 editData={editData}
                 refreshData={refreshData}
                 closeDrawer={closeDrawerO}
+                isLoadingBtn={isLoadingBtn}
+                getallCategory={getallCategory}
               />
             </div>
           </div>
         )}
 
         <ShowSubCategory
+        current_page={current_page}
           allSubCategory={allSubCategory}
           openDrawerO={openDrawerO}
           openModal={openModal}
         />
+        {total_pages > 1 && (
+          <Pagination
+            total_pages={total_pages}
+            current_page={current_page}
+            onPageChange={handlePageChange}
+          />
+        )}
       </section>
 
       <Transition appear show={isOpenDelete} as={Fragment}>

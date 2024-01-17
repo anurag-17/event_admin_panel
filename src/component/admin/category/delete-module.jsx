@@ -9,7 +9,6 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
 
   const handleClose = () => {
     closeModal();
-    refreshData();
   };
 
   const handleDelete = (e) => {
@@ -54,7 +53,7 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
       {/* <ToastContainer/> */}
       <div className="mt-2">
         <p className="lg:text-[16px] text-[16px] font-normal leading-[30px] text-gray-500 mt-4">
-          Do you really want to delete these records? You cant't view this in
+          Do you really want to delete these records? You can't view this in
           your list anymore if you delete!
         </p>
       </div>
