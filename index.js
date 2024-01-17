@@ -186,6 +186,9 @@ server.use("/api/event", require("./server/routes/event"));
 // Events Issues 
 server.use("/api/issue", require("./server/routes/eventIssue"));
 
+// Events Redirection 
+server.use("/api/redirection", require("./server/routes/eventRedirection"));
+
 server.use("/api/auth/upload", require("./server/routes/auth"));
 
 server.get('*', (req, res) => {
