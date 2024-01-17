@@ -49,7 +49,8 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
 
     const allEventRedirections = await EventRedirection.find(query)
       .skip(skip)
-      .limit(itemsPerPage);
+      .limit(itemsPerPage)
+      .populate('event'); 
 
     res.status(200).json({
       current_page: currentPage,
@@ -65,7 +66,7 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
 exports.getEventRedirectionById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const eventRedirection = await EventRedirection.findById(id);
+  const eventRedirection = await EventRedirection.findById(id).populate('event');
 
   if (!eventRedirection) {
     return res.status(404).json({ error: "EventRedirection not found" });
