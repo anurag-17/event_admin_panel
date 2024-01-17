@@ -43,16 +43,16 @@ const Dashboard = () => {
         {/* ---------second-------- */}
         {getAllEvent && (
           <div className="flex justify-around gap-3 lg:gap-8 mt-16 mx-4 sm:mx-7 lg:mx-10">
-            <div className="flex justify-between border w-1/4 bg-white">
-              <div className="relative w-1/2">
-                <div className="absolute bg-[#13B9CD]  w-1/2 xl:p-4 2xl:p-5 rounded-md sm:left-2 md:left-3 lg:left-3 xl:left-5  sm:top-[-10px] md:top-[-20px] 2xl:h-[85px] xl:h-auto lg:h-[50px] md:h-[50px]  sm:h-[35px] 2xl:top-[-30px] ">
+            <div className="flex gap-3 justify-between border w-1/4 bg-white p-2  ">
+              <div className=" w-1/3">
+                <div className="  bg-[#13B9CD]  w-[55px] xl:p-4 2xl:p-5 rounded-md  py-4 ml-1 ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="mx-auto  w-4 h-4 mt-2 md:mt-[14px] xl:mt-0 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-white "
+                    className="mx-auto  w-4 h-4  xl:mt-0 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-white "
                   >
                     <path
                       strokeLinecap="round"
@@ -62,8 +62,8 @@ const Dashboard = () => {
                   </svg>
                 </div>
               </div>
-              <div className=" w-1/2 ">
-                <h2 className="font-semibold mt-2 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[22px] text-gray-400">
+              <div className=" w-2/3 ">
+                <h2 className="font-semibold  text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[20px] text-gray-400">
                   Total Providers{" "}
                 </h2>
                 <h3 className="font-semibold text-[18px] md:text-[20px] lg:text-[22px] xl:text-[25px] 2xl:text-[35px]">
@@ -71,9 +71,9 @@ const Dashboard = () => {
                 </h3>
               </div>
             </div>
-            <div className="flex flex-wrap justify-between border w-1/4 xl:h-[100px] 2xl:h-[120px] bg-white">
-              <div className="relative w-1/2 ">
-                <div className="absolute  bg-[#FD9912] w-1/2 xl:p-4 2xl:p-5 rounded-md sm:left-2 md:left-3 lg:left-3 xl:left-5 sm:top-[-10px] md:top-[-20px] 2xl:h-[85px] xl:h-auto lg:h-[50px] md:h-[50px]  sm:h-[35px] 2xl:top-[-30px]">
+            <div className="flex gap-3 justify-between border w-1/4 bg-white p-2  ">
+              <div className=" w-1/3 ">
+                <div className="  bg-[#FD9912] w-[55px] xl:p-4 2xl:p-5 rounded-md  py-4 ml-1">
                   <div className="w-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@ const Dashboard = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="mx-auto  w-4 h-4 mt-2 md:mt-[14px] xl:mt-0 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-white "
+                      className="mx-auto  w-4 h-4  xl:mt-0 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-white "
                     >
                       <path
                         strokeLinecap="round"
@@ -92,8 +92,8 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className=" w-1/2 ">
-                <h2 className="font-semibold mt-2 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[22px] text-gray-400">
+              <div className=" w-2/3 ">
+                <h2 className="font-semibold  text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[20px] text-gray-400">
                   Total Events{" "}
                 </h2>
                 <h3 className="font-semibold text-[18px] md:text-[20px] lg:text-[22px] xl:text-[25px] 2xl:text-[35px]">
@@ -101,10 +101,9 @@ const Dashboard = () => {
                 </h3>
               </div>
             </div>
-
-            <div className="flex justify-between border w-1/4 bg-white">
-              <div className="relative w-1/2">
-                <div className="absolute bg-[#50AA54] w-1/2 xl:p-4 2xl:p-5 rounded-md sm:left-2 md:left-3 lg:left-3 xl:left-5  sm:top-[-10px] md:top-[-20px] 2xl:h-[85px] xl:h-auto lg:h-[50px] md:h-[50px]  sm:h-[35px] 2xl:top-[-30px] ">
+            <div className="flex gap-3 justify-between border w-1/4 bg-white p-2  ">
+              <div className="relative w-1/3">
+                <div className="absolute bg-[#50AA54] w-[55px] xl:p-4 2xl:p-5 rounded-md  py-4 ml-1 ">
                   <div className="w-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +111,7 @@ const Dashboard = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="mx-auto  w-4 h-4 mt-2 md:mt-[14px] xl:mt-0 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-white "
+                      className="mx-auto  w-4 h-4  xl:mt-0 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-white "
                     >
                       <path
                         strokeLinecap="round"
@@ -123,8 +122,8 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className=" w-1/2 ">
-                <h2 className="font-semibold mt-2 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[22px] text-gray-400">
+              <div className=" w-2/3 ">
+                <h2 className="font-semibold  text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[20px] text-gray-400">
                   Total Categories{" "}
                 </h2>
                 <h3 className="font-semibold text-[18px] md:text-[20px] lg:text-[22px] xl:text-[25px] 2xl:text-[35px]">
@@ -133,16 +132,16 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex justify-between border w-1/4 bg-white">
-              <div className="relative w-1/2">
-                <div className="absolute bg-[#EB4844] w-1/2 xl:p-4 2xl:p-5 rounded-md sm:left-2 md:left-3 lg:left-3 xl:left-5  sm:top-[-10px] md:top-[-20px] 2xl:h-[85px] xl:h-auto lg:h-[50px] md:h-[50px]  sm:h-[35px] 2xl:top-[-30px] ">
+            <div className="flex gap-3 justify-between border w-1/4 bg-white p-2  ">
+              <div className="relative w-1/3">
+                <div className="absolute bg-[#EB4844] w-[55px] xl:p-4 2xl:p-5 rounded-md  py-4 ml-2 ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="mx-auto  w-4 h-4 mt-2 md:mt-[14px] xl:mt-0 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-white "
+                    className="mx-auto  w-4 h-4  xl:mt-0 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-9 2xl:h-9 text-white "
                   >
                     <path
                       strokeLinecap="round"
@@ -152,9 +151,9 @@ const Dashboard = () => {
                   </svg>
                 </div>
               </div>
-              <div className=" w-1/2 ">
-                <h2 className="font-semibold mt-2 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[22px] text-gray-400">
-                  Total SubCategories{" "}
+              <div className=" w-2/3 ">
+                <h2 className="font-semibold  text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[20px] text-gray-400">
+                  Total Subcategories{" "}
                 </h2>
                 <h3 className="font-semibold text-[18px] md:text-[20px] lg:text-[22px] xl:text-[25px] 2xl:text-[35px]">
                   {getAllEvent?.totalSubCategories}

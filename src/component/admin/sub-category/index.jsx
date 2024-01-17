@@ -65,7 +65,7 @@ const SubCategoryPage = () => {
     axios
       .request(options)
       .then((response) => {
-        setAllCategory(response?.data);
+        setAllCategory(response?.data?.subCategories);
         setLoadingBtn(false);
         setLoader(false);
       })
