@@ -154,7 +154,8 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
     axios
       .request(option)
       .then((response) => {
-        setGetallCategory(response?.data);
+        setGetallCategory(response?.data?.categories);
+        // setGetallCategory(response?.data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -173,7 +174,8 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
     axios
       .request(option)
       .then((response) => {
-        setGetallSubCategory(response?.data);
+        setGetallSubCategory(response?.data?.subCategories);
+        // setGetallSubCategory(response?.data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -360,14 +362,23 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
             >
               Event Currency
             </label>
-            <input
+            <select name="currency" id="" required defaultValue={editData?.currency} className="custom_input" onChange={inputHandler}>
+              <option value="">Select Currency</option>
+              <option value="USD">USD</option>
+              <option value="EURO">EURO</option>
+              <option value="POUND">POUND</option>
+              <option value="AED">AED</option>
+              <option value="RUPEES">RUPEES</option>
+
+            </select>
+            {/* <input
               onChange={inputHandler}
               defaultValue={editData?.currency}
               type="text"
               name="currency"
               className="custom_input"
               required
-            />
+            /> */}
           </div>
           {/* ------12. Event category----- */}
 
@@ -400,9 +411,9 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
                     className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                     key={item._id}
                     value={item._id}
-                    // selected={
-                    //   item._id === (editData?._id || eventDetail?.category)
-                    // }
+                  // selected={
+                  //   item._id === (editData?._id || eventDetail?.category)
+                  // }
                   >
                     {item?.title}
                   </option>
@@ -431,24 +442,23 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
                 minLength={3}
                 maxLength={32}
               >
-                {/* <option value="" disabled>
-                  {editData?.subCategory
-                    ? editData?.subCategory
-                    : eventDetail?.subCategory}
-                </option> */}
+                <option value="" >
+                  Select Sub Cateory
+                </option>
                 {getallSubCategory
                   .filter((item, indr) => {
-                    return item?.title === eventDetail?.title;
+                    // console.log(item, eventDetail);
+                    return item?.category?._id === eventDetail?.category;
                   })
                   .map((item) => (
                     <option
                       className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                       key={item?._id}
                       value={item?._id}
-                      // selected={
-                      //   item?.subCategory ===
-                      //   (editData?.subCategory || eventDetail?.subCategory)
-                      // }
+                    // selected={
+                    //   item?.subCategory ===
+                    //   (editData?.subCategory || eventDetail?.subCategory)
+                    // }
                     >
                       {item?.subCategory}
                     </option>
@@ -602,13 +612,12 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
                       ) : (
                         <button
                           className={`focus-visible:outline-none  text-white text-[13px] px-4 py-1 rounded
-                    ${
-                      imageDisable
-                        ? " bg-[green]"
-                        : imageUpload
-                        ? "bg-[gray]"
-                        : "bg-[#070708] text-[white]"
-                    }`}
+                    ${imageDisable
+                              ? " bg-[green]"
+                              : imageUpload
+                                ? "bg-[gray]"
+                                : "bg-[#070708] text-[white]"
+                            }`}
                           type="button"
                           onClick={uploadImage}
                           disabled={imageDisable || imageUpload}
@@ -616,8 +625,8 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
                           {imageDisable
                             ? "Uploaded"
                             : imageUpload
-                            ? "Loading.."
-                            : "Upload"}
+                              ? "Loading.."
+                              : "Upload"}
                         </button>
                       )}
                     </div>
@@ -678,8 +687,8 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
                       //  src={`/utils?url=${encodeURIComponent(imgUrl)}`}
                       src={imgUrl}
                       alt="loading.."
-                      // height={300}
-                      // width={300}
+                    // height={300}
+                    // width={300}
                     />
                   </div>
                 </Dialog.Panel>

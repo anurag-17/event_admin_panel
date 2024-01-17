@@ -36,7 +36,12 @@
     sm:px-2 sm:py-0 
       px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]
 }
-
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #f3f4f6; /* Adjust the background color as needed */
+  z-index: 1; /* Ensure the header stays on top of the content */
+}
 @media (min-width: 1024px) {
   .login-bg {
     background-image: url(../../public/images/event.jpg);

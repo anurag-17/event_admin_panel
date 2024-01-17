@@ -53,7 +53,10 @@ const Event = () => {
   const [isLoading, setLoading] = useState(false);
   const [citiesList, setCitiesList] = useState([]);
   const [providerList, setProviderList] = useState([]);
-
+  const [filteredCategory, setFilteredCategory] = useState("")
+const [filteredSubCategory, setFilteredSubCategory] = useState("")
+const [fetchStartDate, setFetchStartDate] = useState("")
+const [fetchEndDate, setFetchEndDate] = useState("")
   //----------Date/Time Formate
   const convertTime = (time) => {
     const parsedDateTime = moment(time);
@@ -189,8 +192,8 @@ const Event = () => {
     axios
       .request(option)
       .then((response) => {
-        setGetAllCate(response.data);
-        // console.log(response.data, "cate");
+        setGetAllCate(response?.data?.categories);
+        // console.log(response.data.categories, "cate");
         setLoader(false);
       })
       .catch((err) => {
@@ -212,8 +215,8 @@ const Event = () => {
     axios
       .request(options)
       .then((response) => {
-        setAllSubCategory(response?.data);
-        // console.log(response?.data, "subb");
+        setAllSubCategory(response?.data?.subCategories);
+        console.log(response?.data.subCategories, "subb");
         setLoader(false);
       })
       .catch((error) => {
@@ -271,6 +274,7 @@ const Event = () => {
   };
   // ------ filter by category ------ //
   const handleSearchCategories = (e) => {
+    setFilteredCategory(e.target.value)
     setLoader(true);
     try {
       const cate = e.target.value;
@@ -280,9 +284,8 @@ const Event = () => {
       setCategoryFilter(e.target.value);
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${
-          e.target.value
-        }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
+        url: `/api/event/getAllEvents?category=${e.target.value
+          }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
       };
       axios
         .request(options)
@@ -314,9 +317,8 @@ const Event = () => {
     setSubCategoryFilter(e.target.value);
     const options = {
       method: "GET",
-      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${
-        e.target.value
-      }&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
+      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${e.target.value
+        }&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
     };
     axios
       .request(options)
@@ -360,8 +362,8 @@ const Event = () => {
           if (response.status === 200) {
             setGetAllEvent(response.data.events);
             setTotalPages(response?.data?.total_pages || 1);
-            setLoader(false);
           }
+          setLoader(false);
         })
         .catch(function (error) {
           console.error(error);
@@ -392,9 +394,11 @@ const Event = () => {
             setGetAllEvent(response.data.events);
             setTotalPages(response?.data?.total_pages || 1);
           }
+          setLoader(false);
         })
         .catch(function (error) {
           console.error(error);
+          setLoader(false);
         });
     }
   };
@@ -406,9 +410,8 @@ const Event = () => {
     try {
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${
-          e.target.value
-        }&provider=${providerFilter}&page=${1}&limit=${limit}`,
+        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${e.target.value
+          }&provider=${providerFilter}&page=${1}&limit=${limit}`,
       };
       axios
         .request(options)
@@ -440,9 +443,8 @@ const Event = () => {
     try {
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${
-          e.target.value
-        }&page=${1}&limit=${limit}`,
+        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${e.target.value
+          }&page=${1}&limit=${limit}`,
       };
       axios
         .request(options)
@@ -472,45 +474,82 @@ const Event = () => {
     setLoader(true);
     const options1 = {
       method: "GET",
-      url: "/api/auth/fetchEvents",
+      url: `/api/auth/fetchEvents?startDate=${fetchStartDate}&endDate=${fetchEndDate}`,
     };
 
     const options2 = {
       method: "GET",
-      url: "/api/event/skiddleEvents",
+      url: `/api/event/skiddleEvents?startDate=${fetchStartDate}&endDate=${fetchEndDate}`,
     };
 
     const options3 = {
       method: "GET",
-      url: "/api/event/londontheatredirect",
+      url: `/api/event/londontheatredirect?startDate=${fetchStartDate}&endDate=${fetchEndDate}`,
     };
 
-    axios
-      .all([
-        axios.request(options1),
-        axios.request(options2),
-        axios.request(options3),
-      ])
-      .then(
-        axios.spread((response1, response2, response3) => {
-          if (response1.status === 200) {
-            setEventFetch(response1.data);
-          }
+    // axios
+    //   .all([
+    //     axios.request(options1),
+    //     axios.request(options2),
+    //     axios.request(options3),
+    //   ])
+    //   .then(
+    //     axios.spread((response1, response2, response3) => {
+    //       if (response1.status === 200) {
+    //         // setEventFetch(response1.data);
+    //       }
 
-          if (response2.status === 200) {
-            setEventFetch(response2.data);
-          }
+    //       if (response2.status === 200) {
+    //         // setEventFetch(response2.data);
+    //       }
 
-          if (response3.status === 200) {
-            setEventFetch(response3.data);
-          }
-          setLoader(false);
-        })
-      )
-      .catch(function (error) {
+    //       if (response3.status === 200) {
+    //         // setEventFetch(response3.data);
+    //       }
+    //       setFetchStartDate("")
+    //       setFetchEndDate("")
+    //       // setLoader(false);
+    //     })
+    //   )
+    //   .catch(function (error) {
+    //     console.error(error);
+    //   }).finally(
+    //     setLoader(false),
+    //     setFetchStartDate(""),
+    //     setFetchEndDate("")
+    //   );
+    const requests = [
+      axios.request(options1),
+      axios.request(options2),
+      axios.request(options3),
+    ];
+    
+    Promise.all(requests.map(request => request.catch(error => error)))
+      .then(responses => {
+        const [response1, response2, response3] = responses;
+    
+        if (response1.status === 200) {
+          // handle response1.data
+        }
+    
+        if (response2.status === 200) {
+          // handle response2.data
+        }
+    
+        if (response3.status === 200) {
+          // handle response3.data
+        }
+      })
+      .catch(error => {
         console.error(error);
+      })
+      .finally(() => {
+        // This block will be executed after all requests are complete, regardless of success or failure.
         setLoader(false);
+        setFetchStartDate("");
+        setFetchEndDate("");
       });
+    
   };
 
   const handleClearFilter = () => {
@@ -613,7 +652,9 @@ const Event = () => {
                 <div>
                   <input
                     type="date"
-                    value=""
+                    value={fetchStartDate}
+                    onChange={(e)=> setFetchStartDate(e.target.value)}
+                    
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -635,6 +676,8 @@ const Event = () => {
                 <div>
                   <input
                     type="date"
+                    value={fetchEndDate}
+                    onChange={(e)=> setFetchEndDate(e.target.value)}
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -682,6 +725,7 @@ const Event = () => {
                     required
                     minLength={3}
                     maxLength={32}
+                    value={categoryFilter}
                     onChange={(e) => {
                       handleSearchCategories(e);
                       // inputHandler(e);
@@ -723,15 +767,16 @@ const Event = () => {
                     required
                     minLength={3}
                     maxLength={32}
+                    value={subCategoryFilter}
                     onChange={(e) => {
                       handleSearchSubCategory(e);
-                      inputHandler(e);
+                      // inputHandler(e);
                     }}
                   >
                     <option value=""> All SubCategory</option>
                     {Array.isArray(allSubCategory) && allSubCategory
                       .filter((item, indr) => {
-                        return item?.category?._id === editCategory?.category;
+                        return item?.category?._id === filteredCategory;
                       })
                       .map((itemss) => (
                         <option
@@ -759,6 +804,7 @@ const Event = () => {
                     <input
                       name="startDate"
                       type="date"
+                      max={endDate?endDate:""}
                       className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -767,6 +813,7 @@ const Event = () => {
                    sm:px-2 sm:py-0 
                         px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
                       onChange={handleDateSearch}
+                      value={startDate}
                     />
                   </div>
                 </div>
@@ -785,6 +832,7 @@ const Event = () => {
                     <input
                       type="date"
                       name="endDate"
+                      min={startDate?startDate:""}
                       className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -793,6 +841,7 @@ const Event = () => {
                    sm:px-2 sm:py-0 
                         px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
                       onChange={handleDateSearch}
+                      value={endDate}
                     />
                   </div>
                 </div>
@@ -825,6 +874,7 @@ const Event = () => {
                       handleSearchCity(e);
                       // inputHandler(e);
                     }}
+                    value={cityFilter}
                   >
                     <option value="">All City</option>
                     {citiesList?.length > 0 &&
@@ -858,9 +908,10 @@ const Event = () => {
                     required
                     minLength={3}
                     maxLength={32}
+                    value={providerFilter}
                     onChange={(e) => {
                       handleSearchProvider(e);
-                      inputHandler(e);
+                      // inputHandler(e);
                     }}
                   >
                     <option value="">All Provider</option>
@@ -949,84 +1000,85 @@ const Event = () => {
         )}
         <div className="relative flex mx-10 lg:mx-8  overflow-x-auto ">
           <div className="  w-full ">
-            <table className="lg:w-[150%] xl:w-[130%]  border bg-white rounded-md mt-5 p-10">
-              <thead className="">
-                <tr
-                  className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
+            <div className="overflow-y-scroll  ">
+              <div className="h-[300px] xl:h-[400px]">
+                <table className="lg:w-[150%] xl:w-[130%]  border bg-white rounded-md mt-5 p-10">
+                  <thead className="sticky-header">
+                    <tr
+                      className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
           2xl:text-[22px] 
           xl:text-[14px]
            lg:text-[12px] 
            md:text-[12px] 
            sm:text-[12px] 
            text-[10px] "
-                >
-                  <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
-                    S.NO
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                    IMAGE
-                  </th>
-                  <th className="xl:pl-5  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
-                    EVENT NAME
-                  </th>
-                  <th className="lg:pl-3 xl:pl-0 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                    CITY
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    START DATE
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    END DATE
-                  </th>
+                    >
+                      <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
+                        S.NO
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                        IMAGE
+                      </th>
+                      <th className="xl:pl-5  w-4/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
+                        EVENT NAME
+                      </th>
+                      <th className="lg:pl-3 xl:pl-0 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                        CITY
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        START DATE
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        END DATE
+                      </th>
 
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    LOCATION
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    PROVIDER
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
-                    CATEGORY
-                  </th>
-                  <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                    ACTION
-                  </th>
-                </tr>
-              </thead>
-              <div className="overflow-y-scroll  ">
-                <div className="h-[300px] xl:h-[400px]">
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        LOCATION
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        PROVIDER
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        CATEGORY
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
+                        ACTION
+                      </th>
+                    </tr>
+                  </thead>
+
                   {getAllEvent?.length > 0 && (
                     <tbody className=" w-full ">
-                      <div className="">
-                        {getAllEvent.map((item, index) => {
-                     
-                          const serialNumber =
-                            ((current_page - 1) * 20 )+( index + 1);
+                      {/* <div className=""> */}
+                      {getAllEvent.map((item, index) => {
 
-                          return (
-                            <tr
-                              key={item._id}
-                              className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
-                            >
-                              {/* {console.log(item.category)} */}
-                              <td className=" my-auto w-1/12">
-                                {serialNumber + "."}
-                              </td>
-                              <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
-                                <>
-                                  {Array.isArray(item?.images) &&
-                                    item.images.length > 0 && (
-                                      <>
-                                        {item.images.map((img, inx) => (
-                                          <div
-                                            className="mt-4 cursor-pointer"
-                                            key={inx}
-                                            onClick={() =>
-                                              handleImageClick(item?.images)
-                                            }
-                                          >
-                                            {(img.position === 0 ||
-                                              inx === 0) && (
+                        const serialNumber =
+                          ((current_page - 1) * 20) + (index + 1);
+
+                        return (
+                          <tr
+                            key={item._id}
+                            className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
+                          >
+                            {/* {console.log(item.category)} */}
+                            <td className=" my-auto w-1/12">
+                              {serialNumber + "."}
+                            </td>
+                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
+                              <>
+                                {Array.isArray(item?.images) &&
+                                  item.images.length > 0 && (
+                                    <>
+                                      {item.images.map((img, inx) => (
+                                        <div
+                                          className="mt-4 cursor-pointer"
+                                          key={inx}
+                                          onClick={() =>
+                                            handleImageClick(item?.images)
+                                          }
+                                        >
+                                          {(img.position === 0 ||
+                                            inx === 0) && (
                                               <img
                                                 src={img.url}
                                                 alt="loading.."
@@ -1035,157 +1087,157 @@ const Event = () => {
                                                 className="w-2/4"
                                               />
                                             )}
-                                          </div>
-                                        ))}
-                                      </>
-                                    )}
-                                </>
-                              </td>
-                              <td className="my-auto capitalize  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
-                                <p className="w-40">{item.name}</p>
-                              </td>
+                                        </div>
+                                      ))}
+                                    </>
+                                  )}
+                              </>
+                            </td>
+                            <td className="my-auto capitalize  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
+                              <p className="w-40">{item.name}</p>
+                            </td>
 
-                              <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] 2xl:pl-0">
-                                {item.city}
-                              </td>
-                              <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
-                                {item?.startDate
-                                  ? convertTime(item.startDate)
-                                  : ""}
-                              </td>
-                              <td className="my-auto w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
-                                {item?.endDate ? convertTime(item.endDate) : ""}
-                              </td>
+                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] 2xl:pl-0">
+                              {item.city}
+                            </td>
+                            <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                              {item?.startDate
+                                ? convertTime(item.startDate)
+                                : ""}
+                            </td>
+                            <td className="my-auto w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                              {item?.endDate ? convertTime(item.endDate) : ""}
+                            </td>
 
-                              <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
-                                {item.location}
-                              </td>
-                              <td className="2xl:pl-2 my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-4">
-                                {item.event_provider}
-                              </td>
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                              {item.location}
+                            </td>
+                            <td className="2xl:pl-2 my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-4">
+                              {item.event_provider}
+                            </td>
 
-                              <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  2xl:pl-0 ">
-                                <div className="">
-                                  <select
-                                    name="category"
-                                    defaultValue={item?.category?._id}
-                                    onChange={(e) => {
-                                      inputHandler(e);
-                                    }}
-                                    className="custom_select capitalize"
-                                  >
-                                    <option value="">Select Category</option>
+                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  2xl:pl-0 ">
+                              <div className="">
+                                <select
+                                  name="category"
+                                  defaultValue={item?.category?._id}
+                                  onChange={(e) => {
+                                    inputHandler(e);
+                                  }}
+                                  className="custom_select capitalize"
+                                >
+                                  <option value="">Select Category</option>
 
-                                    {Array.isArray(getAllCate) && getAllCate.map((item) => (
+                                  {Array.isArray(getAllCate) && getAllCate.map((itemsx) => (
+                                    <option
+                                      className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                      key={itemsx._id}
+                                      value={itemsx._id}
+                                    >
+                                      {itemsx.title}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className="my-1">
+                                <select
+                                  name="subCategory"
+                                  className="custom_select capitalize"
+                                  onChange={inputHandler}
+                                  required
+                                  minLength={3}
+                                  maxLength={32}
+                                  // defaultValue={item?.subCategory?._id}
+                                  defaultValue={String(
+                                    item?.subCategory?.title
+                                  )}
+                                >
+                                  <option value="">
+                                    {" "}
+                                    Select Sub Category
+                                  </option>
+                                  {Array.isArray(allSubCategory) && allSubCategory
+                                    .filter((item, indr) => {
+                                      return (
+                                        item?.category?._id ===
+                                        editCategory?.category
+                                      );
+                                    })
+                                    .map((itemss) => (
                                       <option
                                         className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                                        key={items._id}
-                                        value={items._id}
+                                        key={itemss?._id}
+                                        value={itemss._id}
                                       >
-                                        {items.title}
+                                        {itemss?.subCategory}
                                       </option>
                                     ))}
-                                  </select>
-                                </div>
-                                <div className="my-1">
-                                  <select
-                                    name="subCategory"
-                                    className="custom_select capitalize"
-                                    onChange={inputHandler}
-                                    required
-                                    minLength={3}
-                                    maxLength={32}
-                                    // defaultValue={item?.subCategory?._id}
-                                    defaultValue={String(
-                                      item?.subCategory?.title
-                                    )}
+                                </select>
+                              </div>
+
+                              <button
+                                onClick={() =>
+                                  handleUpdateCategory(item?._id)
+                                }
+                                className="border bg-blue-500 hover:bg-blue-600 text-white py-[2px] px-1 rounded-md lg:rounded-lg ml-1 lg:ml-2"
+                              >
+                                Save
+                              </button>
+                            </td>
+
+                            <td className="my-auto  w-2/12 2xl:pl-10 ">
+                              <div className="flex my-3 gap-3 ">
+                                {/* {console.log()} */}
+                                <button
+                                  onClick={() => openDrawerO(item?._id)}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-sky-600"
                                   >
-                                    <option value="">
-                                      {" "}
-                                      Select Sub Category
-                                    </option>
-                                    {Array.isArray(allSubCategory) && allSubCategory
-                                      .filter((item, indr) => {
-                                        return (
-                                          item?.category?._id ===
-                                          editCategory?.category
-                                        );
-                                      })
-                                      .map((itemss) => (
-                                        <option
-                                          className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                                          key={itemss?._id}
-                                          value={itemss._id}
-                                        >
-                                          {itemss?.subCategory}
-                                        </option>
-                                      ))}
-                                  </select>
-                                </div>
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                    />
+                                  </svg>
+                                </button>
 
                                 <button
-                                  onClick={() =>
-                                    handleUpdateCategory(item?._id)
-                                  }
-                                  className="border bg-blue-500 hover:bg-blue-600 text-white py-[2px] px-1 rounded-md lg:rounded-lg ml-1 lg:ml-2"
+                                  onClick={() => openModal(item?._id)}
+                                  type="button"
                                 >
-                                  Save
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-red-800"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                    />
+                                  </svg>
                                 </button>
-                              </td>
-
-                              <td className="my-auto  w-2/12 2xl:pl-10 ">
-                                <div className="flex my-3 gap-3 ">
-                                  {/* {console.log()} */}
-                                  <button
-                                    onClick={() => openDrawerO(item?._id)}
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      strokeWidth={1.5}
-                                      stroke="currentColor"
-                                      className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-sky-600"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                      />
-                                    </svg>
-                                  </button>
-
-                                  <button
-                                    onClick={() => openModal(item?._id)}
-                                    type="button"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      strokeWidth={1.5}
-                                      stroke="currentColor"
-                                      className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-red-800"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </div>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {/* </div> */}
                       <hr />
                     </tbody>
                   )}
-                </div>
+                </table>
               </div>
-            </table>
+            </div>
           </div>
         </div>
       </div>
@@ -1199,7 +1251,7 @@ const Event = () => {
       )}
 
       <Transition appear show={isOpenDelete} as={Fragment}>
-        <Dialog as="div" className=" z-10" onClose={closeModal}>
+        <Dialog as="div" className="z-10 fixed" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
