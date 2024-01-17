@@ -6,7 +6,11 @@ import { useSelector } from "react-redux";
 
 const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
-  const [categoryDetails, setCategoryDetails] = useState({ id: cateEdit });
+  const [categoryDetails, setCategoryDetails] = useState({
+    id: cateEdit, 
+   category : editData?.category?._id ? editData?.category?._id : ""
+ });
+
   const [getallCategory, setGetallCategory] = useState();
   const [isLoadingBtn, setLoadingBtn] = useState(false);
   const [isRefresh, setRefresh] = useState(false);
@@ -142,40 +146,32 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData }) => {
             </label>
 
             <select
-              type="text"
-              name="category"
-              className="capitalize rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12
+ type="text"
+ name="category"
+ className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12
   2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
   xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-  lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-  md:text-[13px] md:m-4 md:px-3 md:py-1 md:h-[30px]
+ lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
+ md:text-[13px] md:m-4 md:px-3 md:py-1 md:h-[30px]
 
-  sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-  text-[12px] m-2 px-2 py-1 h-[25px]"
-              value={editData?.category?.title}
-              onChange={inputHandler}
-              required
-              minLength={3}
-              max={84}
-            >
-              <option value="" disabled>
-                Select Category
-              </option>
-              {getallCategory?.map((item, index) => (
-                <option
-                  key={item.id}
-                  value={item.title}
-                  selected={item.title === editData?.category?.title}
-
-                  // selected={
-                  //           items.brand ===
-                  //           (editData?.brand || productDetails.brand)
-                  //         }
-                >
-                  {item.title}
-                </option>
-              ))}
-            </select>
+ sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
+ text-[12px] m-2 px-2 py-1 h-[25px]
+ "
+ // defaultValue={editData?.category?.title}
+ value={categoryDetails?.category}
+ onChange={inputHandler}
+ required
+ max={84}
+>
+ <option value="" disabled>
+   Select Category
+ </option>
+ {getallCategory?.map((item, index) => (
+   <option key={item?._id} value={item?._id}>
+     {item?.title}
+   </option>
+ ))}
+</select>
           </div>
 
           <button
