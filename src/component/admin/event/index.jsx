@@ -576,7 +576,8 @@ const Event = () => {
 
   // const result = formatDate("2024-01-17T12:30:00Z");
   // console.log(result);
-
+  const [mainSno, setMainSno] = useState(0);
+  let Sno = mainSno;
   return (
     <>
       {isLoader && <Loader />}
@@ -997,174 +998,187 @@ const Event = () => {
                   {getAllEvent?.length > 0 && (
                     <tbody className=" w-full ">
                       <div className="">
-                        {getAllEvent.map((item, index) => (
-                          <tr
-                            key={item._id}
-                            className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
-                          >
-                            {/* {console.log(item.category)} */}
-                            <td className=" my-auto w-1/12">
-                              {index + 1 + "."}
-                            </td>
-                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
-                              <>
-                                {Array.isArray(item?.images) &&
-                                  item.images.length > 0 && (
-                                    <>
-                                      {item.images.map((img, inx) => (
-                                        <div
-                                          className="mt-4 cursor-pointer"
-                                          key={inx}
-                                          onClick={() =>
-                                            handleImageClick(item?.images)
-                                          }
-                                        >
-                                          {(img.position === 0 ||
-                                            inx === 0) && (
-                                            <img
-                                              src={img.url}
-                                              alt="loading.."
-                                              height={100}
-                                              width={100}
-                                              className="w-2/4"
-                                            />
-                                          )}
-                                        </div>
-                                      ))}
-                                    </>
-                                  )}
-                              </>
-                            </td>
-                            <td className="my-auto capitalize  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
-                              <p className="w-40">{item.name}</p>
-                            </td>
+                        {getAllEvent.map((item, index) => {
+                     
+                          const serialNumber =
+                            ((current_page - 1) * 20 )+( index + 1);
 
-                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] 2xl:pl-0">
-                              {item.city}
-                            </td>
-                            <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
-                              {item?.startDate
-                                ? convertTime(item.startDate)
-                                : ""}
-                            </td>
-                            <td className="my-auto w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
-                              {item?.endDate ? convertTime(item.endDate) : ""}
-                            </td>
+                          return (
+                            <tr
+                              key={item._id}
+                              className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
+                            >
+                              {/* {console.log(item.category)} */}
+                              <td className=" my-auto w-1/12">
+                                {serialNumber + "."}
+                              </td>
+                              <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
+                                <>
+                                  {Array.isArray(item?.images) &&
+                                    item.images.length > 0 && (
+                                      <>
+                                        {item.images.map((img, inx) => (
+                                          <div
+                                            className="mt-4 cursor-pointer"
+                                            key={inx}
+                                            onClick={() =>
+                                              handleImageClick(item?.images)
+                                            }
+                                          >
+                                            {(img.position === 0 ||
+                                              inx === 0) && (
+                                              <img
+                                                src={img.url}
+                                                alt="loading.."
+                                                height={100}
+                                                width={100}
+                                                className="w-2/4"
+                                              />
+                                            )}
+                                          </div>
+                                        ))}
+                                      </>
+                                    )}
+                                </>
+                              </td>
+                              <td className="my-auto capitalize  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
+                                <p className="w-40">{item.name}</p>
+                              </td>
 
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
-                              {item.location}
-                            </td>
-                            <td className="2xl:pl-2 my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-4">
-                              {item.event_provider}
-                            </td>
+                              <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] 2xl:pl-0">
+                                {item.city}
+                              </td>
+                              <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                                {item?.startDate
+                                  ? convertTime(item.startDate)
+                                  : ""}
+                              </td>
+                              <td className="my-auto w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                                {item?.endDate ? convertTime(item.endDate) : ""}
+                              </td>
 
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  2xl:pl-0 ">
-                              <div className="">
-                                <select
-                                  name="category"
-                                  defaultValue={item?.category?._id}
-                                  onChange={(e) => {
-                                    inputHandler(e);
-                                  }}
-                                  className="custom_select capitalize"
-                                >
-                                  <option value="">Select Category</option>
+                              <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                                {item.location}
+                              </td>
+                              <td className="2xl:pl-2 my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-4">
+                                {item.event_provider}
+                              </td>
 
-                                  {getAllCate.map((items) => (
-                                    <option
-                                      className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                                      key={items._id}
-                                      value={items._id}
-                                    >
-                                      {items.title}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                              <div className="my-1">
-                                <select
-                                  name="subCategory"
-                                  className="custom_select capitalize"
-                                  onChange={inputHandler}
-                                  required
-                                  minLength={3}
-                                  maxLength={32}
-                                  // defaultValue={item?.subCategory?._id}
-                                  defaultValue={String(
-                                    item?.subCategory?.title
-                                  )}
-                                >
-                                  <option value=""> Select Sub Category</option>
-                                  {allSubCategory
-                                    .filter((item, indr) => {
-                                      return (
-                                        item?.category?._id ===
-                                        editCategory?.category
-                                      );
-                                    })
-                                    .map((itemss) => (
+                              <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  2xl:pl-0 ">
+                                <div className="">
+                                  <select
+                                    name="category"
+                                    defaultValue={item?.category?._id}
+                                    onChange={(e) => {
+                                      inputHandler(e);
+                                    }}
+                                    className="custom_select capitalize"
+                                  >
+                                    <option value="">Select Category</option>
+
+                                    {getAllCate.map((items) => (
                                       <option
                                         className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                                        key={itemss?._id}
-                                        value={itemss._id}
+                                        key={items._id}
+                                        value={items._id}
                                       >
-                                        {itemss?.subCategory}
+                                        {items.title}
                                       </option>
                                     ))}
-                                </select>
-                              </div>
-
-                              <button
-                                onClick={() => handleUpdateCategory(item?._id)}
-                                className="border bg-blue-500 hover:bg-blue-600 text-white py-[2px] px-1 rounded-md lg:rounded-lg ml-1 lg:ml-2"
-                              >
-                                Save
-                              </button>
-                            </td>
-
-                            <td className="my-auto  w-2/12 2xl:pl-10 ">
-                              <div className="flex my-3 gap-3 ">
-                                {/* {console.log()} */}
-                                <button onClick={() => openDrawerO(item?._id)}>
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-sky-600"
+                                  </select>
+                                </div>
+                                <div className="my-1">
+                                  <select
+                                    name="subCategory"
+                                    className="custom_select capitalize"
+                                    onChange={inputHandler}
+                                    required
+                                    minLength={3}
+                                    maxLength={32}
+                                    // defaultValue={item?.subCategory?._id}
+                                    defaultValue={String(
+                                      item?.subCategory?.title
+                                    )}
                                   >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                    />
-                                  </svg>
-                                </button>
+                                    <option value="">
+                                      {" "}
+                                      Select Sub Category
+                                    </option>
+                                    {allSubCategory
+                                      .filter((item, indr) => {
+                                        return (
+                                          item?.category?._id ===
+                                          editCategory?.category
+                                        );
+                                      })
+                                      .map((itemss) => (
+                                        <option
+                                          className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                          key={itemss?._id}
+                                          value={itemss._id}
+                                        >
+                                          {itemss?.subCategory}
+                                        </option>
+                                      ))}
+                                  </select>
+                                </div>
 
                                 <button
-                                  onClick={() => openModal(item?._id)}
-                                  type="button"
+                                  onClick={() =>
+                                    handleUpdateCategory(item?._id)
+                                  }
+                                  className="border bg-blue-500 hover:bg-blue-600 text-white py-[2px] px-1 rounded-md lg:rounded-lg ml-1 lg:ml-2"
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-red-800"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                    />
-                                  </svg>
+                                  Save
                                 </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
+                              </td>
+
+                              <td className="my-auto  w-2/12 2xl:pl-10 ">
+                                <div className="flex my-3 gap-3 ">
+                                  {/* {console.log()} */}
+                                  <button
+                                    onClick={() => openDrawerO(item?._id)}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.5}
+                                      stroke="currentColor"
+                                      className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-sky-600"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                      />
+                                    </svg>
+                                  </button>
+
+                                  <button
+                                    onClick={() => openModal(item?._id)}
+                                    type="button"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.5}
+                                      stroke="currentColor"
+                                      className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-red-800"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                      />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </div>
                       <hr />
                     </tbody>
