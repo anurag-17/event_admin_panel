@@ -50,7 +50,13 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
     const allEventRedirections = await EventRedirection.find(query)
       .skip(skip)
       .limit(itemsPerPage)
-      .populate('event'); 
+      .populate({
+        path: 'event',
+        populate: {
+          path: 'category',
+        },
+      });
+    
 
     res.status(200).json({
       current_page: currentPage,
