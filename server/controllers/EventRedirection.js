@@ -98,7 +98,7 @@ exports.deleteEventRedirectionById = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: "EventRedirection not found" });
   }
 
-  await eventRedirection.remove();
+  await EventRedirection.deleteOne({ _id: id });
 
   res.status(200).json({ message: "EventRedirection deleted successfully" });
 });
