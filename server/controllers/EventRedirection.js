@@ -31,6 +31,12 @@ exports.eventRedirection = asyncHandler(async (req, res) => {
 
 exports.getAllEventRedirections = asyncHandler(async (req, res) => {
   try {
+    const currentDate = new Date();
+    await EventRedirection.deleteMany({
+      event: { $exists: true },
+      "event.endDate": { $lt: currentDate },
+    });
+    
     const { page = 1, limit = 20, eventId } = req.query;
 
     const currentPage = parseInt(page, 10);

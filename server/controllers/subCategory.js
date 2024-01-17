@@ -58,10 +58,10 @@ exports.getSubCategory = async (req, res) => {
 
 exports.getallSubCategory = async (req, res) => {
   try {
-    const { page = 1, limit = 10, searchQuery } = req.query;
+    const { page, limit, searchQuery } = req.query;
 
-    const currentPage = parseInt(page, 10);
-    const itemsPerPage = parseInt(limit, 10);
+    const currentPage = parseInt(page, 10) || 1;
+    const itemsPerPage = parseInt(limit, 10) || undefined;
 
     let query = {};
 
@@ -70,9 +70,9 @@ exports.getallSubCategory = async (req, res) => {
     }
 
     const totalSubCategories = await SubCategory.countDocuments(query);
-    const totalPages = Math.ceil(totalSubCategories / itemsPerPage);
+    const totalPages = itemsPerPage ? Math.ceil(totalSubCategories / itemsPerPage) : 1;
 
-    const skip = (currentPage - 1) * itemsPerPage;
+    const skip = itemsPerPage ? (currentPage - 1) * itemsPerPage : 0;
 
     const getallSubCategory = await SubCategory.find(query)
       .skip(skip)
