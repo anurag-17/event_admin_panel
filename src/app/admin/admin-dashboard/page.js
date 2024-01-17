@@ -20,9 +20,12 @@ import AllUser from "../../../component/admin/users";
 import axios from "axios";
 import issue from "../../../../public/images/issue.svg";
 import UserIssue from "../../../component/admin/user-issue/index";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const AdminDashboard = () => {
   const router = useRouter();
+
+const { adminAuthToken ,loading} = useAuth();
   const [ComponentId, setComponentId] = useState(1);
   const [showDrawer, setShowDrawer] = useState("");
   const [isLoader, setLoader] = useState(false);
@@ -31,6 +34,9 @@ const AdminDashboard = () => {
   );
   const [isRefresh, setRefresh] = useState(false);
 
+
+  // console.log(adminAuthToken)
+
   useEffect(() => {
     const authToekn = token ? JSON.parse(token) : null;
     setToken(authToekn);
@@ -38,6 +44,19 @@ const AdminDashboard = () => {
       router.push("/admin-login");
     }
   }, []);
+
+  // useEffect(() => {
+  //   if (loading) { 
+  //     setLoader(true); // Still loading, you might want to show a loading indicator
+  //     return;
+  //   }
+  
+  //   if (!adminAuthToken) {
+  //     // The user is not authenticated
+  //     router.push('/admin-login');
+
+  //   }
+  // }, [adminAuthToken,loading]);
 
   const handleClick = (id) => {
     setComponentId(id);

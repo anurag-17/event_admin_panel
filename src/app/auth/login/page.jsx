@@ -5,12 +5,14 @@ import Link from "next/link";
 
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { useAuth } from "../../../contexts/AuthContext";
+import Loader from "../../../component/loader";
 import "react-toastify/dist/ReactToastify.css";
 
-import Loader from "../../../component/loader";
 
 const Login = () => {
   const router = useRouter();
+  const { setAuthToken } = useAuth();
   const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
@@ -44,13 +46,9 @@ const Login = () => {
             "accessToken",
             JSON.stringify(response?.data?.token)
           );
-          // localStorage.setItem(
-          //   "userDetails",
-          //   JSON.stringify(response?.data?.user?._id)
-          // );
+          setAuthToken(response?.data?.token);
           toast.success("Success. Login Successfully!");
           router.push("/admin/admin-dashboard");
-          // router.push("/");
           setLoading(false);
         } else {
           setLoading(false);
