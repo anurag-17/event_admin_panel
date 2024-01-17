@@ -93,6 +93,7 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
             text-sm m-2 px-2 py-1 h-[20px] capitalize
             "
             required
+            maxLength={84}
           />
         </div>
         <button

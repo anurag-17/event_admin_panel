@@ -32,9 +32,9 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
 
       if (response.status === 200) {
         setLoading(false);
+        toast.success("Category Update Successfully!");
         closeDrawer();
         refreshData();
-        toast.success("Category Update Successfully!");
       } else {
         setLoading(false);
         toast.error("Server error !");
@@ -95,6 +95,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
               text-[12px] m-2 px-2 py-1 h-[25px] capitalize
               "
               required
+              maxLength={84}
             />
           </div>
 

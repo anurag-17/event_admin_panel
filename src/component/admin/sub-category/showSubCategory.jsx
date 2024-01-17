@@ -1,11 +1,12 @@
-import Loader from "../../loader";
 
 const ShowSubCategory = ({
   allSubCategory,
   openDrawerO,
   openModal,
   isLoader,
+  current_page
 }) => {
+
   return (
     <>
       <div className=" flex mx-5 ml-10 mr-4  lg:mx-8  overflow-x-auto md:overscroll-none ">
@@ -37,25 +38,28 @@ const ShowSubCategory = ({
             </thead>
 
             <tbody>
-              {allSubCategory?.length > 0 &&
+              {Array.isArray(allSubCategory) &&
+                allSubCategory?.length > 0 &&
                 allSubCategory?.map((item, index) => (
                   <tr
                     key={index}
                     className="text-start flex w-full 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                   >
                     <td className="mx-5 my-auto w-[30px] sm:w-2/12">
-                      {index + 1 + "."}
+                    {index +
+                            1 +
+                            20 * (current_page - 1)}
                     </td>
 
                     <td className=" capitalize my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12">
                       {item?.subCategory ? item?.subCategory : "-"}
                     </td>
-                    <td className=" capitalize my-auto w-3/12 ml-2 ">
+                    <td className=" capitalize my-auto w-3/12 ml-2  ">
                       {item?.category?.title}
                     </td>
                     <td className="flex gap-3 my-2 lg:w-2/12">
                       <button
-                        onClick={() => openDrawerO({ subCateId: item._id })}
+                        onClick={() => openDrawerO({ subCateId: item?._id })}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +76,7 @@ const ShowSubCategory = ({
                           />
                         </svg>
                       </button>
-                      <button type="button" onClick={() => openModal(item._id)}>
+                      <button type="button" onClick={() => openModal(item?._id)}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
