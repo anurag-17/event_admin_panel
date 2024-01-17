@@ -313,11 +313,12 @@ const UserIssue = () => {
               </div>
             ))}
       </div>
+      { total_pages >1 && (
       <Pagination
         total_pages={total_pages}
         current_page={current_page}
         onPageChange={handlePageChange}
-      />
+      />)}
 
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
