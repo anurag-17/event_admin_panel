@@ -24,8 +24,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 
 const AdminDashboard = () => {
   const router = useRouter();
-
-const { adminAuthToken ,loading} = useAuth();
+  const { adminAuthToken, loading } = useAuth();
   const [ComponentId, setComponentId] = useState(1);
   const [showDrawer, setShowDrawer] = useState("");
   const [isLoader, setLoader] = useState(false);
@@ -35,8 +34,6 @@ const { adminAuthToken ,loading} = useAuth();
   const [isRefresh, setRefresh] = useState(false);
 
 
-  // console.log(adminAuthToken)
-
   useEffect(() => {
     const authToekn = token ? JSON.parse(token) : null;
     setToken(authToekn);
@@ -45,30 +42,13 @@ const { adminAuthToken ,loading} = useAuth();
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (loading) { 
-  //     setLoader(true); // Still loading, you might want to show a loading indicator
-  //     return;
-  //   }
-  
-  //   if (!adminAuthToken) {
-  //     // The user is not authenticated
-  //     router.push('/admin-login');
-
-  //   }
-  // }, [adminAuthToken,loading]);
-
   const handleClick = (id) => {
     setComponentId(id);
     setShowDrawer(false);
   };
 
   const handleSignout = () => {
-    // setLoader(true);
-    // console.log("Logging out...");
-    // localStorage.removeItem("accessToken");
-    // router.push("/admin-login");
-    // setLoader(false);
+   
     try {
       setLoader(true);
       const options = {
@@ -157,8 +137,10 @@ const { adminAuthToken ,loading} = useAuth();
   return (
     <>
       {isLoader && <Loader />}
-   
+
       <section className="z-50">
+
+      
         <div className="flex min-h-screen  lg:static ">
           <div
             className="py-2 px-3  absolute top-3 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
@@ -169,7 +151,7 @@ const { adminAuthToken ,loading} = useAuth();
             <div className="bg-black h-[2px] w-[20px]"></div>
           </div>
           <div
-            className={`flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[30px] 2xl:py-[50px] py-[10px] text-white bg-black 
+            className={`flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[10px] 2xl:py-[50px] py-[10px] text-white bg-black 
         xl:w-[22%] lg:w-[23%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
                  ${
                    showDrawer
@@ -189,9 +171,15 @@ const { adminAuthToken ,loading} = useAuth();
 
             <div className="">
               <div className="flex justify-center items-center whitespace-pre-wrap lg:mt-4 xl:mt-5 2xl:mt-7 md:mt-2 mt-4">
-                <h1 className="2xl:text-[30px] lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-semibold  text-center whitespace-nowrap ">
-                  Admin Dashboard
-                </h1>
+                <div className="mx-auto w-2/3">
+                  <img
+                    src="/sterna-logo.png"
+                    alt="me"
+                    width="60"
+                    height="60"
+                    className=" w-[90%] "
+                  />
+                </div>
               </div>
             </div>
             <div className="flex flex-col 2xl:gap-6 gap-1 mt-10 lg:mt-14 xl:mt-20 2xl:mt-28">
