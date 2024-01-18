@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { Transition, Dialog } from "@headlessui/react";
@@ -75,7 +75,7 @@ const Category = () => {
   const fetchData = async (searchTerm = "", page, limit) => {
     setLoader(true);
     setLoader(true);
-  
+
     try {
       const res = await axios.get(
         `/api/category/getallCategory?searchQuery=${searchTerm}&limit=${limit}&page=${current_page}`,
@@ -87,23 +87,22 @@ const Category = () => {
         }
       );
       console.log(res.data);
-  
+
       if (res.status === 200) {
         setGetAllCate(res?.data?.categories);
         setTotalPages(res?.data?.total_pages || 1);
-        setLoader(false)
+        setLoader(false);
       } else {
-         setLoader(false)
+        setLoader(false);
         console.error("Unexpected response status:", res.status);
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.error("Error:", error);
     } finally {
       setLoader(false);
     }
   };
-
 
   const getAllCategory = async (page, limit) => {
     fetchData("", page, limit);
@@ -133,8 +132,8 @@ const Category = () => {
   return (
     <>
       {isLoader && <Loader />}
-<ToastContainer autoClose={1000}/>
-<Topbar/>
+      <ToastContainer autoClose={1000} />
+      <Topbar />
       <div className="">
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 ml-10 mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold whitespace-nowrap">Category List </h2>
@@ -163,7 +162,7 @@ const Category = () => {
           <div
             id="drawer-form"
             className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-auto max-h-[400px] lg:w-6/12 w-8/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
-            tabIndex={-1} 
+            tabIndex={-1}
             aria-labelledby="drawer-form-label"
           >
             <button
@@ -171,7 +170,11 @@ const Category = () => {
               onClick={closeDrawer}
               className="  text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
             >
-              <img src="/images/close-square.svg" className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" alt="close"/>
+              <img
+                src="/images/close-square.svg"
+                className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
+                alt="close"
+              />
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -195,7 +198,11 @@ const Category = () => {
               onClick={closeDrawerO}
               className="  shadow-2xl text-sm top-2  inline-flex items-center justify-center "
             >
-            <img src="/images/close-square.svg" className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" alt="close"/>
+              <img
+                src="/images/close-square.svg"
+                className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
+                alt="close"
+              />
 
               <span className="sr-only bg-black">Close menu</span>
             </button>
@@ -240,10 +247,13 @@ const Category = () => {
                     key={index}
                     className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                   >
-                    <td className="mx-5 my-auto w-[30px] sm:w-2/12"> {index +
-                            1 +
-                            20 * (current_page - 1)}</td>
-                    <td className="my-auto xl:ml-10 w-6/12 sm:w-4/12 capitalize">{item?.title}</td>
+                    <td className="mx-5 my-auto w-[30px] sm:w-2/12">
+                      {" "}
+                      {index + 1 + 20 * (current_page - 1)}
+                    </td>
+                    <td className="my-auto xl:ml-10 w-6/12 sm:w-4/12 capitalize">
+                      {item?.title}
+                    </td>
 
                     <td className="w-3/12">
                       <div className="flex my-3 gap-3">
