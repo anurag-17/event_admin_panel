@@ -57,7 +57,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData,isLoadin
   return (
     <>
      <div className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white px-1 h-[25px] my-2">
-        <h2 className="text-[10px] font-semibold">Edit Sub-Category</h2>
+        <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">Edit Sub-Category</h2>
         <div className="mb-3 w-[40%]"></div>
       </div>
 
@@ -70,7 +70,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData,isLoadin
               defaultValue={editData?.subCategory}
               type="text"
               name="subCategory"
-              className="custom_input capitalize"
+              className="custom_inputt capitalize"
               required
               maxLength={84}
             />
@@ -81,7 +81,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData,isLoadin
             <select
               type="text"
               name="category"
-              className="custom_input"
+              className="custom_inputt"
               value={categoryDetails?.category}
               onChange={inputHandler}
               required

@@ -77,6 +77,10 @@ const Event = () => {
   const handleLargeImageClose = () => {
     setShowLargeImage(false);
   };
+  const closeEditModal = () => {
+    setIsDrawerOpenO(false);
+  };
+
   const openDrawerO = async (_id) => {
     setLoader(true);
     try {
@@ -90,7 +94,7 @@ const Event = () => {
       const response = await axios.request(options);
       if (response.status === 200) {
         setEditData(response?.data);
-        // console.log(response?.data, "A Event");
+        console.log(response?.data, "A Event");
 
         setIsDrawerOpenO(true);
         setLoader(false);
@@ -104,12 +108,8 @@ const Event = () => {
     }
   };
 
-  const closeDrawerO = () => {
-    setIsDrawerOpenO(false);
-  };
-
-  const openDrawer = () => {
-    setIsDrawerOpen(true);
+  const openEditModal = () => {
+    setOpenEditEvent(true);
   };
 
   const closeDrawer = () => {
@@ -127,10 +127,10 @@ const Event = () => {
     setOpenAddEvent(true);
   }
 
-  function openEditModal(id) {
-    setEventId(id);
-    setOpenEditEvent(true);
-  }
+  // function openEditModal(_id) {
+  //   setEventId(id);
+  //   setOpenEditEvent(true);
+  // }
 
   function openModal(id) {
     setEventId(id);
@@ -603,7 +603,6 @@ const Event = () => {
         .request(option)
         .then((res) => {
           if (res.status === 200) {
-            // console.log(res?.data?.events);
             const citiesName = res?.data?.events?.map((items) => items?.city);
             if (citiesName?.length > 0) {
               const filterCityArr = citiesName?.filter(
@@ -611,7 +610,6 @@ const Event = () => {
               );
               setCitiesList(filterCityArr);
             }
-            // setLoader(false);
 
             const providerName = res?.data?.events?.map(
               (items) => items?.event_provider
@@ -649,12 +647,12 @@ const Event = () => {
         </div>
 
         {/* ---------Event fetch---------- */}
-        <div className="  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[70px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-2">
-          <div className=" flex  sm:items-center flex-col-reverse sm:flex-row justify-between">
-            <div className="items-center w-[50%] sm:w-[40%] my-3 sm:my-0">
+        <div className="  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white h-auto   lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-2">
+          <div className=" flex items-center sm:items-center flex-col-reverse sm:flex-row justify-between">
+            <div className=" items-center w-[50%] sm:w-[40%] my-3 ">
               <input
                 type="search"
-                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
+                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] 2xl:max-w-[440px] mx-auto md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon1"
@@ -1012,29 +1010,6 @@ const Event = () => {
             </div>
           </div>
         </div>
-        {isDrawerOpen && (
-          <div
-            id="drawer-form"
-            className="fixed content-center mb-5 z-40 h-[70%] lg:h-[80%] lg:w-8/12 w-10/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white border rounded-lg 2xl:top-32 xl:top-[85px] lg:top-[70px] right-8"
-            tabIndex={-1}
-            aria-labelledby="drawer-form-label"
-          >
-            <button
-              type="button"
-              onClick={closeDrawer}
-              className=" text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
-            >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
-              <span className="sr-only bg-black">Close menu</span>
-            </button>
-            <div>
-              <CreateEvent
-                closeDrawer={closeDrawer}
-                refreshData={refreshData}
-              />
-            </div>
-          </div>
-        )}
 
         <div className="relative flex mx-10 lg:mx-8  overflow-x-auto ">
           <div className="  w-full ">
@@ -1222,9 +1197,7 @@ const Event = () => {
                             <td className="my-auto  w-2/12 2xl:pl-10 ">
                               <div className="flex my-3 gap-3 ">
                                 {/* {console.log()} */}
-                                <button
-                                  onClick={() => openEditModal(item?._id)}
-                                >
+                                <button onClick={() => openDrawerO(item?._id)}>
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
@@ -1285,7 +1258,7 @@ const Event = () => {
       )}
 
       <Transition appear show={isOpenDelete} as={Fragment}>
-        <Dialog as="div" className="z-10 fixed" onClose={closeModal}>
+        <Dialog as="div" className="z-10 fixed" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -1329,7 +1302,7 @@ const Event = () => {
       </Transition>
 
       <Transition appear show={isOpenAddEvent} as={Fragment}>
-        <Dialog as="div" className="z-10 fixed" onClose={closeModal}>
+        <Dialog as="div" className="z-10 fixed" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -1353,7 +1326,7 @@ const Event = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-[700px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className=" w-full max-w-[540px] xl:max-w-[700px] 2xl:max-w-[900px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
@@ -1382,8 +1355,8 @@ const Event = () => {
         </Dialog>
       </Transition>
 
-      <Transition appear show={isOpenEditEvent} as={Fragment}>
-        <Dialog as="div" className="z-10 fixed" onClose={closeModal}>
+      <Transition appear show={isDrawerOpenO} as={Fragment}>
+        <Dialog as="div" className="z-10 fixed" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -1407,7 +1380,7 @@ const Event = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-[700px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className=" w-full max-w-[540px] xl:max-w-[700px] 2xl:max-w-[900px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
@@ -1415,7 +1388,7 @@ const Event = () => {
                     {" "}
                     <button
                       type="button"
-                      onClick={closeModal}
+                      onClick={closeEditModal}
                       className=" text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
                     >
                       <Image
@@ -1427,7 +1400,7 @@ const Event = () => {
                   </Dialog.Title>
                   <EditEvent
                     editEvent={editEvent}
-                    closeModal={closeModal}
+                    closeModal={closeEditModal}
                     refreshData={refreshData}
                     editData={editData}
                   />

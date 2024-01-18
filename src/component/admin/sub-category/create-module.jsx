@@ -1,13 +1,9 @@
 "use client";
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../contexts/AuthContext";
 
-const AddSubCategory = ({
-  closeDrawer,
-  refreshData,
-  getallCategory,
-}) => {
+const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
   const [category, setCategory] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [subCategory, setSubCategory] = useState("");
@@ -16,16 +12,16 @@ const AddSubCategory = ({
   const handleSubmit = async (e) => {
     e && e.preventDefault();
 
-    if(category === ""){
+    if (category === "") {
       toast.warn("Please choose category!");
-    }else{
+    } else {
       setLoading(true);
 
       const data = {
         category: category,
         subCategory: subCategory,
       };
-  
+
       try {
         await fetch("/api/subCategory/createSubCategory", {
           method: "POST",
@@ -91,23 +87,19 @@ const AddSubCategory = ({
             value={subCategory}
             type="text"
             name="name"
-            className="capitalize custom_input"
-              maxLength={100}
+            className="capitalize custom_inputt"
+            maxLength={100}
             required
           />
         </div>
         {/*------ category -----*/}
         <div className="gap-3 md:gap-5 xl:gap-6 lg:gap-6 ">
-          <label
-            className="custom_input_label"
-          >
-            Choose main category
-          </label>
+          <label className="custom_input_label">Choose main category</label>
           <div className="w-full">
             <select
               name="category"
               placeholder="Add Category"
-              className="rounded custom_input"
+              className="rounded custom_inputt"
               defaultValue={category}
               value={category}
               onChange={(e) => setCategory(e.target.value)}
