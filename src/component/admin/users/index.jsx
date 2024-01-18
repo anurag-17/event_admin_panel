@@ -24,9 +24,9 @@ const AllUser = () => {
   const [dialogMatch, setDialogMatch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
 
-  useEffect(() => {
-    defaultGetaUser();
-  }, []);
+  // useEffect(() => {
+  //   defaultGetaUser();
+  // }, []);
 
   const defaultGetaUser = () => {
     setLoader(true);
