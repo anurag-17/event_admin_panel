@@ -69,13 +69,7 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
       >
         <div>
           <label
-            className="absolute bg-white z-20 text-gray-800
-          2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-          xl:text-[14px] xl:mt-2 xl:ml-8
-          lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-          md:text-[12px] md:mt-2 md:ml-6
-          sm:text-[12px] sm:mt-1 sm:ml-5
-          text-[10px] mt-[2px] ml-4
+            className="custom_input_label
           "
           >
             Category Name
@@ -85,27 +79,14 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
             value={title}
             type="text"
             name="name"
-            className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-md xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px] capitalize
-            "
+            className="custom_input capitalize "
             required
-            maxLength={84}
+            maxLength={100}
           />
         </div>
         <button
           type="submit"
-          className="border bg-blue-500 hover:bg-blue-600 text-white md:rounded-lg bg-lightBlue-600 2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
-            xl:text-[16px] xl:p-2 xl:m-5 xl:mt-0
-            lg:text-[14px] lg:p-2 lg:m-5 lg:mt-0
-            md:text-[13px] md:p-1 md:m-4 md:mt-0
-            sm:text-[11px] sm:py-1 sm:m-3 sm:mt-0
-            text-[10px] py-1 px-2 m-2 mt-0 rounded-md
-             "
-        >
+          className="custom_btn">
           Add Category
         </button>
       </form>

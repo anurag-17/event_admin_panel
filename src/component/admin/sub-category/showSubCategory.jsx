@@ -10,9 +10,9 @@ const ShowSubCategory = ({
   return (
     <>
       <div className=" flex mx-5 ml-10 mr-4  lg:mx-8  overflow-x-auto md:overscroll-none ">
-        <div className=" w-full ">
+        <div className="ml-10 mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll  w-full ">
           <table className="w-[140%] md:w-full sm:w-[100%]  border bg-white rounded-md mt-5 p-10 mb-10">
-            <thead className="">
+            <thead className="sticky-header">
               <tr
                 className="bg-coolGray-200 text-gray-400 text-start flex w-full 
           2xl:text-[20px] 
@@ -96,6 +96,14 @@ const ShowSubCategory = ({
                   </tr>
                 ))}
             </tbody>
+
+            {
+             Array.isArray(allSubCategory) && allSubCategory?.length === 0 && 
+              <div className="py-6 px-4 border-t ">
+                <p className="text-[14px] font-medium text-center"> No Data Found </p>
+              </div>
+            }
+
           </table>
         </div>
       </div>

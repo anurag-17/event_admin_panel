@@ -38,7 +38,7 @@ const ForgotPassword = () => {
     } catch (error) {
       toast.error(error?.response?.data || "server error");
       setLoading(false);
-      setMessage("");
+      // setMessage("");
     }
   };
 

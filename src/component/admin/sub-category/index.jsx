@@ -76,7 +76,6 @@ const SubCategoryPage = () => {
   
   const searchDataFunc = async (searchTerm) => {
     if (searchTerm.trim() === "") {
-      // If search term is empty, fetch data with current_page and limit
       getAllSubCategory(current_page, limit);
     } else {
       fetchData(searchTerm);
@@ -123,7 +122,6 @@ const SubCategoryPage = () => {
   const closeDrawerO = () => setIsDrawerOpenO(false);
 
   const handlePageChange = (newPage) => {
-    // alert(newPage)
     setCurrentPage(newPage);
   };
 
@@ -180,9 +178,6 @@ const SubCategoryPage = () => {
               onChange={handleSearchChange}
             />
           </div>
-          <h2>Welcome Back, Admin</h2>
-        </div>
-        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border ml-10 mr-4 lg:mx-8 rounded-lg bg-white  2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
           <div className="flex justify-around">
             <button
               onClick={openSubCategory}
@@ -192,6 +187,16 @@ const SubCategoryPage = () => {
             </button>
           </div>
         </div>
+        {/* <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border ml-10 mr-4 lg:mx-8 rounded-lg bg-white  2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
+          <div className="flex justify-around">
+            <button
+              onClick={openSubCategory}
+              className=" rounded-md my-auto bg-lightBlue-600 border cursor-pointer 2xl:p-3  2xl:text-[18px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
+            >
+              + Add Sub category
+            </button>
+          </div>
+        </div> */}
         {issubCateDrwaer && (
           <div
             id="drawer-form"
