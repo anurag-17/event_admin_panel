@@ -189,7 +189,7 @@ const Login = () => {
                   )}
                 </button>
                 <div>
-                  <Link href="/auth/forgot-password/page">
+                  <Link href="/auth/forgot-password">
                     <p
                       className="cursor-pointer text-blue-700  xl:my-1 py-[6px] text-[13px] my-5
                sm:text-[13px] 

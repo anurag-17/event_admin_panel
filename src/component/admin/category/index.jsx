@@ -146,9 +146,6 @@ const Category = () => {
               onChange={handleSearchChange}
             />
           </div>
-          <h2>Welcome Back, Admin</h2>
-        </div>
-        <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border ml-10 mr-4  lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
           <div className="">
             <button
               onClick={openDrawer}
@@ -158,6 +155,7 @@ const Category = () => {
             </button>
           </div>
         </div>
+
         {isDrawerOpen && (
           <div
             id="drawer-form"
@@ -186,6 +184,7 @@ const Category = () => {
             </div>
           </div>
         )}
+
         {isDrawerOpenO && (
           <div
             id="drawer-form"
@@ -216,9 +215,10 @@ const Category = () => {
             </div>
           </div>
         )}
-        <div className="ml-10 mr-4  lg:mx-8 ">
-          <table className="z-10 border w-full table-auto bg-white rounded-md mt-5    mb-10  p-10">
-            <thead className="">
+
+        <div className="ml-10 mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll  ">
+          <table className="w-full border bg-white rounded-md mt-5 p-100">
+            <thead className="sticky-header">
               <tr
                 className="bg-coolGray-200 text-gray-400 text-start flex border 
           2xl:text-[22px] 
@@ -240,15 +240,14 @@ const Category = () => {
                 </th>
               </tr>
             </thead>
-            {getAllCate?.length > 0 && (
+            {Array.isArray(getAllCate) && getAllCate?.length > 0 && (
               <tbody>
-                {getAllCate.map((item, index) => (
+                {getAllCate?.map((item, index) => (
                   <tr
                     key={index}
                     className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                   >
                     <td className="mx-5 my-auto w-[30px] sm:w-2/12">
-                      {" "}
                       {index + 1 + 20 * (current_page - 1)}
                     </td>
                     <td className="my-auto xl:ml-10 w-6/12 sm:w-4/12 capitalize">
@@ -297,6 +296,15 @@ const Category = () => {
                   </tr>
                 ))}
               </tbody>
+            )}
+
+            {Array.isArray(getAllCate) && getAllCate?.length === 0 && (
+              <div className="py-6 px-4 border-t ">
+                <p className="text-[14px] font-medium text-center">
+                  {" "}
+                  No Data Found{" "}
+                </p>
+              </div>
             )}
           </table>
         </div>
@@ -356,9 +364,3 @@ const Category = () => {
 };
 
 export default Category;
-
-{
-  /* <TrashIcon className="cursor-pointer 2xl:h-8 2xl:w-8 xl:h-6 xl:w-6 md:h-6 md:w-6 h-5 w-5 text-red-800" />
-
-        <PencilSquareIcon className="cursor-pointer 2xl:h-8 2xl:w-8 xl:h-6 xl:w-6 md:h-6 md:w-6 h-5 w-5  text-lightBlue-600 m-2 " /> */
-}
