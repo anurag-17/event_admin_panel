@@ -140,14 +140,16 @@ const Category = () => {
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 ml-10 mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold whitespace-nowrap">Category List </h2>
 
-          <div className="flex items-center w-[40%]">
-            <input
-              type="search"
-              className="border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
-              placeholder="Search"
-              onChange={handleSearchChange}
-            />
-          </div>
+          <div className="items-center w-[50%] sm:w-[40%] my-3 sm:my-0">
+              <input
+                type="search"
+                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] 2xl:max-w-[440px] mx-auto md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
+                placeholder="Search"
+                aria-label="Search"
+                aria-describedby="button-addon1"
+                onChange={handleSearchChange}
+              />
+            </div>
           <div className="">
             <button
               onClick={openDrawer}
@@ -158,36 +160,9 @@ const Category = () => {
           </div>
         </div>
 
-        {isDrawerOpen && (
-          <div
-            id="drawer-form"
-            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-auto max-h-[400px] lg:w-6/12 w-8/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
-            tabIndex={-1}
-            aria-labelledby="drawer-form-label"
-          >
-            <button
-              type="button"
-              onClick={closeDrawer}
-              className="  text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
-            >
-              <img
-                src="/images/close-square.svg"
-                className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
-                alt="close"
-              />
+ 
 
-              <span className="sr-only bg-black">Close menu</span>
-            </button>
-            <div>
-              <CreateCategoryForm
-                closeDrawer={closeDrawer}
-                refreshData={refreshData}
-              />
-            </div>
-          </div>
-        )}
-
-        {isDrawerOpenO && (
+        {/* {isDrawerOpenO && (
           <div
             id="drawer-form"
             className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-auto max-h-[400px] lg:w-6/12 w-8/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
@@ -216,7 +191,7 @@ const Category = () => {
               />
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="ml-10 mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll  ">
           <table className="w-full border bg-white rounded-md mt-5 p-100">
@@ -318,6 +293,103 @@ const Category = () => {
           />
         )}
       </div>
+{/* -----------Add category Popup---------- */}
+
+<Transition appear show={isDrawerOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={()=>{}}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-1 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-6 px-12 text-left align-middle shadow-xl transition-all">
+                <div className="flex justify-end">
+                  <button onClick={closeDrawer}>
+                    <img className="w-7" src={"/images/close-square.svg"}/>
+                  </button>
+                </div>
+                  <CreateCategoryForm
+                closeDrawer={closeDrawer}
+                refreshData={refreshData}
+              />
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
+
+{/* ------------Edit popup--------- */}
+<Transition appear show={isDrawerOpenO} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={()=>{}}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-6 px-9 text-left align-middle shadow-xl transition-all">
+                <div className="flex justify-end">
+                  <button onClick={closeDrawerO}>
+                    <img className="w-7" src={"/images/close-square.svg"} alt="close-img"/>
+                    
+                  </button>
+                </div>
+                  <EditCate
+                cateEdit={cateEdit}
+                closeDrawer={closeDrawerO}
+                refreshData={refreshData}
+                editData={editData}
+              />
+                  {/* <DeleteModuleC
+                    categoryID={categoryID}
+                    closeModal={closeModal}
+                    refreshData={refreshData}
+                  /> */}
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
+
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child

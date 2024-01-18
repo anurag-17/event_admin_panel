@@ -3,6 +3,7 @@ import axios from "axios";
 import Loader from "./loader";
 import { ToastContainer, toast } from "react-toastify";
 import Topbar from "../app/admin/admin-dashboard/topbar";
+import { useAuth } from "../contexts/AuthContext";
 
 const Dashboard = () => {
   const [getAllEvent, setGetAllEvent] = useState([]);
@@ -13,6 +14,46 @@ const Dashboard = () => {
   const [total_pages, setTotalPages] = useState(1);
   const [isRefresh, setRefresh] = useState(false);
   const [limit, setLimit] =useState(5);
+  const [getAllDashEvents,setGetAllDashEvents]=useState([]);
+  const { adminAuthToken } = useAuth();
+
+  // ---------get Dash Events--------------
+  useEffect(() => {
+    handleDashEvents(5, 1); 
+  }, [ isRefresh]);
+  
+  const handleDashEvents = (limit, page) => {
+    setLoader(true);
+  
+    const options = {
+      method: "GET",
+      url: "/api/event/getDashEvents",
+      params: {
+        limit: limit,
+        page: page,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: adminAuthToken,
+      },
+    };
+  
+    axios
+      .request(options)
+      .then((response) => {
+        setGetAllDashEvents(response?.data);
+        console.log("getdash",response?.data);
+        setLoader(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+        setLoader(false);
+      });
+  };
+  
+  
+  
+ 
 
 
   useEffect(() => {
