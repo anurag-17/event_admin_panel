@@ -6,6 +6,7 @@ import GetAUser from "./getauser";
 import Loader from "../../loader";
 import Pagination from "../../pagination";
 import {useAuth} from "../../../contexts/AuthContext"
+import Topbar from "../../../app/admin/admin-dashboard/topbar";
 
 const AllUser = () => {
   const [getAllUser, setGetAllUSer] = useState([]);
@@ -164,6 +165,7 @@ const AllUser = () => {
 
   return (
     <>
+    <Topbar/>
       {isLoader && <Loader />}
 
       <div>

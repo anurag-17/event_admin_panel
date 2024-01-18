@@ -23,7 +23,6 @@ import setting from "../../../../public/images/setting.svg";
 import issue from "../../../../public/images/issue.svg";
 import protectedRoute from "../../../component/utils/withAuth";
 
-
 const AdminDashboard = () => {
   // const router = useRouter();
   const { loader, handleSignout } = useAuth();
@@ -35,7 +34,6 @@ const AdminDashboard = () => {
   //   typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
   // );
   const [isRefresh, setRefresh] = useState(false);
-
 
   // useEffect(() => {
   //   const authToekn = token ? JSON.parse(token) : null;
@@ -58,7 +56,7 @@ const AdminDashboard = () => {
   };
 
   // const handleSignout = () => {
-   
+
   //   try {
   //     setLoader(true);
   //     const options = {
@@ -146,14 +144,12 @@ const AdminDashboard = () => {
 
   return (
     <>
-     {loader  && <Loader />}
+      {loader && <Loader />}
 
       <section className="z-50">
-
-      
         <div className="flex min-h-screen  lg:static ">
           <div
-            className="py-2 px-3  absolute top-3 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
+            className="py-1 md:py-0 px-3  absolute top-2 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
             onClick={() => setShowDrawer(true)}
           >
             <div className="bg-black h-[2px] w-[20px]"></div>
@@ -162,7 +158,7 @@ const AdminDashboard = () => {
           </div>
           <div
             className={`flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[10px] 2xl:py-[50px] py-[10px] text-white bg-black 
-        xl:w-[22%] lg:w-[23%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
+         xl:w-[22%] lg:w-[23%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
                  ${
                    showDrawer
                      ? "block  absolute top-0 left-0 min-h-screen is-show"
@@ -239,4 +235,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default  protectedRoute(AdminDashboard);
+export default protectedRoute(AdminDashboard);
