@@ -75,10 +75,18 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
   try {
 
     const currentDate = new Date();
+    // await EventIssue.deleteMany({
+    //   event: { $exists: true },
+    //   "event.endDate": { $lt: currentDate },
+    // });
+
     await EventIssue.deleteMany({
-      event: { $exists: true },
-      "event.endDate": { $lt: currentDate },
+      $or: [
+        { event: null },
+        { event: { $exists: true, $ne: null }, 'event.endDate': { $lt: currentDate } },
+      ],
     });
+
     const { page = 1, limit = 10, isResolved } = req.query;
 
     const currentPage = parseInt(page, 10);
@@ -111,6 +119,7 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
       eventIssues: getAllEventIssues,
     });
   } catch (error) {
+    console.log("Error",error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

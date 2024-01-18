@@ -38,6 +38,7 @@ exports.createEvent = asyncHandler(async (req, res) => {
     req.body.latitude = location.lat;
     req.body.longitude = location.lng;
     // req.body.images = imagesArray;
+    req.body.event_provider = "Sterna";
     
     // Create the new event
     const newEvent = await Event.create(req.body);

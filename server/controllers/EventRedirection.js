@@ -32,9 +32,12 @@ exports.eventRedirection = asyncHandler(async (req, res) => {
 exports.getAllEventRedirections = asyncHandler(async (req, res) => {
   try {
     const currentDate = new Date();
+
     await EventRedirection.deleteMany({
-      event: { $exists: true },
-      "event.endDate": { $lt: currentDate },
+      $or: [
+        { event: null },
+        { event: { $exists: true, $ne: null }, 'event.endDate': { $lt: currentDate } },
+      ],
     });
     
     const { page = 1, limit = 20, eventId } = req.query;
@@ -71,6 +74,7 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
       eventRedirections: allEventRedirections,
     });
   } catch (error) {
+    console.log("EEEE",error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
