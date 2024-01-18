@@ -41,8 +41,8 @@ const Dashboard = () => {
     axios
       .request(options)
       .then((response) => {
-        setGetAllDashEvents(response?.data);
-        console.log("getdash",response?.data);
+        setGetAllDashEvents(response?.data?.events);
+        console.log("getdash",response?.data?.events);
         setLoader(false);
       })
       .catch((err) => {
@@ -79,8 +79,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    defaultgetAllCate(current_page , limit);
-  }, [current_page, isRefresh]);
+    defaultgetAllCate(5,1);
+  }, [ isRefresh]);
 
   const defaultgetAllCate = (limit, page ) => {
     setLoader(true);
@@ -92,7 +92,7 @@ const Dashboard = () => {
       .request(option)
       .then((response) => {
         setGetAllCate(response?.data?.categories);
-        setTotalPages(response?.data?.categories || 1);
+        // setTotalPages(response?.data?.categories || 1);
       })
       .catch((err) => {
         console.log(err, "Error");
@@ -357,6 +357,37 @@ const Dashboard = () => {
                   <tr className="border text-gray-500 text-start ">
                     <th className="w-1/6 border py-2 px-4 text-start ">S.no</th>
                     <th className="w-4/6 border py-2 px-4 text-start ">
+                      Dash Events Name
+                    </th>
+                   
+                  </tr>
+                </thead>
+
+                {getAllDashEvents?.length > 0 && (
+                  <tbody>
+                    {getAllDashEvents.map((item, index) => (
+                      <tr key={index} className="text-gray-500">
+                        <td className="w-1/6 border py-2 px-4 border-b text-start">
+                          {index + 1 + "."}
+                        </td>
+                        <td className="w-4/6 border py-2 px-4 border-b text-start">
+                          {item?.name}
+                        </td>
+                        
+                      </tr>
+                    ))}
+                  </tbody>
+                )}
+              </table>
+            </div>
+          </div>
+          <div className="md:w-1/2 my-4 md:my-0">
+            <div className="">
+              <table className="min-w-full  bg-white border border-gray-300 text-[12px] sm:text-[12px] md:text-[12px] lg:text-[12px] xl:text-[13px] 2xl:text-[18px] ">
+                <thead>
+                  <tr className="border text-gray-500 text-start ">
+                    <th className="w-1/6 border py-2 px-4 text-start ">S.no</th>
+                    <th className="w-4/6 border py-2 px-4 text-start ">
                       Category Name
                     </th>
                    
@@ -378,43 +409,6 @@ const Dashboard = () => {
                     ))}
                   </tbody>
                 )}
-              </table>
-            </div>
-          </div>
-          <div className="md:w-1/2 my-4 md:my-0 ">
-            <div className=" mx-auto">
-              <table className="min-w-full bg-white border border-gray-300 text-[12px] sm:text-[12px] md:text-[12px] lg:text-[12px] xl:text-[13px] 2xl:text-[18px]">
-                <thead>
-                  <tr className="border text-gray-500 text-[]">
-                    <th className="w-1/6 border py-2 px-4 text-start">S.no</th>
-                    <th className="w-2/6 border py-2 px-4 text-start">
-                      Sub Category Name
-                    </th>
-                    <th className="w-2/6 border py-2 px-4 text-start">
-                      Category Name
-                    </th>
-                   
-                  </tr>
-                </thead>
-                <tbody>
-                  {allSubCategory?.length > 0 &&
-                    allSubCategory?.map((item, index) => (
-                      <tr key={index} className="text-gray-500">
-                        <td className="w-1/6 border py-2 px-4 border-b">
-                          {" "}
-                          {index + 1 + "."}
-                        </td>
-
-                        <td className="w-2/6 border py-2 px-4 border-b">
-                          {item?.subCategory ? item?.subCategory : "-"}
-                        </td>
-                        <td className="w-2/6 border py-2 px-4 border-b">
-                          {item?.category?.title}
-                        </td>
-                       
-                      </tr>
-                    ))}
-                </tbody>
               </table>
             </div>
           </div>
