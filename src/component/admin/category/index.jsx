@@ -8,6 +8,7 @@ import CreateCategoryForm from "./add-module";
 import Loader from "../../loader";
 import Pagination from "../../pagination";
 import Topbar from "../../../app/admin/admin-dashboard/topbar";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const Category = () => {
   const [getAllCate, setGetAllCate] = useState([]);
@@ -22,7 +23,8 @@ const Category = () => {
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
   const limit = 20;
-  const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
+  // const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
+  const { adminAuthToken } = useAuth();
 
   const openDrawerO = async (_id) => {
     setLoader(true);
@@ -82,7 +84,7 @@ const Category = () => {
         {
           headers: {
             "content-type": "application/json",
-            authorization: auth_token,
+            authorization: adminAuthToken,
           },
         }
       );

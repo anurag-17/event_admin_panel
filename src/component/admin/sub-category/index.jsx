@@ -11,6 +11,7 @@ import EditSubCategory from "../sub-category/edit-module";
 import Loader from "../../loader";
 import Pagination from "../../pagination";
 import Topbar from "../../../app/admin/admin-dashboard/topbar";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const SubCategoryPage = () => {
   const [isOpenDelete, setOpenDelete] = useState(false);
@@ -30,7 +31,7 @@ const SubCategoryPage = () => {
 
 
   const limit = 20;
-  const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
+  const { adminAuthToken } = useAuth();
 
   const openSubCategory = () => setSubCateDrwaer(true);
   const closeSubCategory = () => setSubCateDrwaer(false);
@@ -50,7 +51,7 @@ const SubCategoryPage = () => {
         {
           headers: {
             "content-type": "application/json",
-            authorization: auth_token,
+            authorization: adminAuthToken,
           },
         }
       );
@@ -99,7 +100,7 @@ const SubCategoryPage = () => {
         { id: subCateId },
         {
           headers: {
-            authorization: auth_token,
+            authorization: adminAuthToken,
           },
         }
       );
@@ -277,7 +278,7 @@ const SubCategoryPage = () => {
       </section>
 
       <Transition appear show={isOpenDelete} as={Fragment}>
-        <Dialog as="div" className=" z-10" onClose={closeModal}>
+        <Dialog as="div" className=" z-[111] absolute" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

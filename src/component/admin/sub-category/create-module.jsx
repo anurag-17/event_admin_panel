@@ -1,19 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import React, {useState } from "react";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const AddSubCategory = ({
   closeDrawer,
   refreshData,
-  isLoadingBtn,
   getallCategory,
 }) => {
   const [category, setCategory] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [subCategory, setSubCategory] = useState("");
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
 
   const handleSubmit = async (e) => {
     e && e.preventDefault();
@@ -33,7 +31,7 @@ const AddSubCategory = ({
           method: "POST",
           headers: {
             "content-type": "application/json",
-            authorization: auth_token,
+            authorization: adminAuthToken,
           },
           body: JSON.stringify(data),
         })

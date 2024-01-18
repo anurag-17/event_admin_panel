@@ -1,47 +1,45 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
   const [title, setTitle] = useState("");
-  const router = useRouter();
   const [isLoading, setLoading] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
 
   const handleSubmit = async (e) => {
-    e && e.preventDefault();
-    setLoading(true);
-    const data = {
-      title: title,
-    };
-
+    e.preventDefault();
+    
     try {
-      await fetch("/api/category/createCategory", {
+      setLoading(true);
+      
+      const data = {
+        title: title,
+      };
+
+      const response = await fetch("/api/category/createCategory", {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          authorization: auth_token,
+          authorization: adminAuthToken,
         },
         body: JSON.stringify(data),
-      })
-        .then((res) => {
-          if (res.ok) {
-            refreshData();
-            closeDrawer();
-            setLoading(false);
-            toast.success("Category Added Successfully!");
-          } else {
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          toast.error(" Category Added  Failed!");
-        });
+      });
+
+      if (response.ok) {
+        refreshData();
+        closeDrawer();
+        toast.success("Category Added Successfully!");
+      } else {
+        toast.error("Category Added Failed!");
+      }
     } catch (error) {
       console.error(error);
+      toast.error("An error occurred while adding the category.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,10 +82,8 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
             maxLength={100}
           />
         </div>
-        <button
-          type="submit"
-          className="custom_btn">
-          Add Category
+        <button type="submit" className="custom_btn" disabled={isLoading}>
+          {isLoading ? "Adding Category..." : "Add Category"}
         </button>
       </form>
     </>

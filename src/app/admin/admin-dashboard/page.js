@@ -1,15 +1,9 @@
 "use client";
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 
-import dashboard from "../../../../public/images/dashboard.svg";
-import eventadd from "../../../../public/images/event-add.svg";
-import eventlist from "../../../../public/images/event-list.svg";
-import setting from "../../../../public/images/setting.svg";
-import inquiry from "../../../../public/images/close-white.svg";
-import alluser from "../../../../public/images/users-2.svg";
 import Category from "../../../component/admin/category";
 import SubCategoryPage from "../../../component/admin/sub-category/index";
 import Event from "../../../component/admin/event/index";
@@ -17,77 +11,93 @@ import UpadatePassword from "../../../component/admin/setting/upadate-password";
 import Loader from "../../../component/loader";
 import Dashboard from "../../../component/dashboard";
 import AllUser from "../../../component/admin/users";
-import axios from "axios";
-import issue from "../../../../public/images/issue.svg";
 import UserIssue from "../../../component/admin/user-issue/index";
 import { useAuth } from "../../../contexts/AuthContext";
 
+import dashboard from "../../../../public/images/dashboard.svg";
+import eventlist from "../../../../public/images/event-list.svg";
+import inquiry from "../../../../public/images/close-white.svg";
+import eventadd from "../../../../public/images/event-add.svg";
+import alluser from "../../../../public/images/users-2.svg";
+import setting from "../../../../public/images/setting.svg";
+import issue from "../../../../public/images/issue.svg";
+import protectedRoute from "../../../component/utils/withAuth";
+
+
 const AdminDashboard = () => {
-  const router = useRouter();
-  const { adminAuthToken, loading } = useAuth();
+  // const router = useRouter();
+  const { loader, handleSignout } = useAuth();
+  // const { adminAuthToken, loading } = useAuth();
   const [ComponentId, setComponentId] = useState(1);
   const [showDrawer, setShowDrawer] = useState("");
   const [isLoader, setLoader] = useState(false);
-  const [token, setToken] = useState(
-    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
-  );
+  // const [token, setToken] = useState(
+  //   typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
+  // );
   const [isRefresh, setRefresh] = useState(false);
 
 
-  useEffect(() => {
-    const authToekn = token ? JSON.parse(token) : null;
-    setToken(authToekn);
-    if (!authToekn || authToekn == null) {
-      router.push("/admin-login");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const authToekn = token ? JSON.parse(token) : null;
+  //   setToken(authToekn);
+  //   if (!authToekn || authToekn == null) {
+  //     router.push("/admin-login");
+  //   }
+  // }, []);
 
   const handleClick = (id) => {
     setComponentId(id);
     setShowDrawer(false);
   };
 
-  const handleSignout = () => {
-   
-    try {
-      setLoader(true);
-      const options = {
-        method: "GET",
-        url: `/api/auth/logout`,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: token,
-        },
-      };
-      axios
-        .request(options)
-        .then((res) => {
-          if (res.status === 200) {
-            toast.success("Logout!");
-            setLoader(false);
-            localStorage.removeItem("accessToken");
-            router.push("/admin-login");
-          } else {
-            setLoader(false);
-            localStorage.removeItem("accessToken");
-            router.push("/admin-login");
-            return;
-          }
-        })
-        .catch((error) => {
-          setLoader(false);
-          console.error("Error:", error);
-          toast.error(error?.response?.data?.message || "server error!");
-          localStorage.removeItem("accessToken");
-          router.push("/admin-login");
-        });
-    } catch {
-      console.log("error");
-      toast.error("server error!");
-      localStorage.removeItem("accessToken");
-      router.push("/admin-login");
-    }
+  const signoutFunc = () => {
+    handleSignout(
+      (message) => toast.success(message),
+      (message) => toast.error(message)
+    );
   };
+
+  // const handleSignout = () => {
+   
+  //   try {
+  //     setLoader(true);
+  //     const options = {
+  //       method: "GET",
+  //       url: `/api/auth/logout`,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         authorization: token,
+  //       },
+  //     };
+  //     axios
+  //       .request(options)
+  //       .then((res) => {
+  //         if (res.status === 200) {
+  //           toast.success("Logout!");
+  //           setLoader(false);
+  //           localStorage.removeItem("accessToken");
+  //           router.push("/admin-login");
+  //         } else {
+  //           setLoader(false);
+  //           localStorage.removeItem("accessToken");
+  //           router.push("/admin-login");
+  //           return;
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         setLoader(false);
+  //         console.error("Error:", error);
+  //         toast.error(error?.response?.data?.message || "server error!");
+  //         localStorage.removeItem("accessToken");
+  //         router.push("/admin-login");
+  //       });
+  //   } catch {
+  //     console.log("error");
+  //     toast.error("server error!");
+  //     localStorage.removeItem("accessToken");
+  //     router.push("/admin-login");
+  //   }
+  // };
 
   const menulist = [
     {
@@ -136,7 +146,7 @@ const AdminDashboard = () => {
 
   return (
     <>
-      {isLoader && <Loader />}
+     {loader  && <Loader />}
 
       <section className="z-50">
 
@@ -208,7 +218,7 @@ const AdminDashboard = () => {
             <div className="">
               <div>
                 <div
-                  onClick={handleSignout}
+                  onClick={signoutFunc}
                   className="lg:mt-10 xl:mt-14 2xl:mt-24 sm:pl-6 py-3 mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[16px] 2xl:text-[25px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]"
                 >
                   <p>Sign Out</p>
@@ -229,4 +239,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default  protectedRoute(AdminDashboard);
