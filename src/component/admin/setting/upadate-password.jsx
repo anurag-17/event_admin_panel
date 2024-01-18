@@ -1,32 +1,52 @@
-import dynamic from "next/dynamic";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
+import OpenEye from "./svg/Openeye";
+import CloseEye from "./svg/Closeeye";
+import { toast, ToastContainer } from "react-toastify";
+import Loader from "../../loader";
 
-const UpadatePassword = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const auth_token = JSON.parse(localStorage.getItem("accessToken"));
+const ChangePassword = () => {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    oldPassword: "",
+    newPassword: "",
+  });
+  const [cnfmPassword, setCnfmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isError, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const auth_token = JSON.parse(localStorage.getItem("accessToken") || null);
+
+  const togglePasswordVisibility = (passwordType) => {
+    if (passwordType === "password") {
+      setShowPassword(!showPassword);
+    } else if (passwordType === "confirmPassword") {
+      setShowConfirmPassword(!showConfirmPassword);
+    }
+  };
+
+  const InputHandler = (e) => {
+    setError("");
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (newPassword.length < 8) {
-      return;
-    } else if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    } else if (currentPassword === newPassword) {
-      setError("New password must be different from the current password");
-      return;
+    const { oldPassword, newPassword } = formData;
+
+    if (oldPassword === newPassword) {
+      setError("Old password and new password can't be the same");
+    } else if (newPassword !== cnfmPassword) {
+      setError("New password and confirm password should match");
     } else {
       try {
-        const response = await axios.post(
+        setLoading(true);
+        const res = await axios.post(
           "http://localhost:4000/api/auth/updatePassword",
-          {
-            oldPassword: currentPassword,
-            newPassword: newPassword,
-          },
+          formData,
           {
             headers: {
               "Content-Type": "application/json",
@@ -34,152 +54,171 @@ const UpadatePassword = () => {
             },
           }
         );
-        if (response.status === 200) {
-          setCurrentPassword("");
-          setNewPassword("");
-          setConfirmPassword("");
+console.log(res)
+        if (res.status === 200) {
+          setFormData({
+            oldPassword: "",
+            newPassword: "",
+          });
+          setCnfmPassword("")
           setError("");
-        } else {
+          toast.success("Password change successfully!")
+          handleSignout()
+          // router.push("/admin-login")
         }
+        else if(res.status===203){
+          setError(res?.data?.message);
+          setLoader(false);
+          return;
+        } 
       } catch (error) {
-        toast.error("Password change failed !");
+        setError("Password change failed!");
+        toast.error("Server error")
+      } finally {
+        setLoading(false);
       }
-      setError("");
     }
   };
 
+
+  const handleSignout = () => {
+    try {
+      setLoader(true);
+      const options = {
+        method: "GET",
+        url: `/api/auth/logout`,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: auth_token,
+        },
+      };
+      axios
+        .request(options)
+        .then((res) => {
+          if (res.status === 200) {
+            toast.success("Please login again!");
+            setLoader(false);
+            localStorage.removeItem("accessToken");
+            router.push("/admin-login");
+          } 
+          else {
+            setLoader(false);
+            localStorage.removeItem("accessToken");
+            router.push("/admin-login");
+            return;
+          }
+        })
+        .catch((error) => {
+          setLoader(false);
+          console.error("Error:", error);
+          toast.error(error?.response?.data?.message || "server error!");
+          localStorage.removeItem("accessToken");
+          router.push("/admin-login");
+        });
+    } catch {
+      console.log("error");
+      toast.error("server error!");
+      localStorage.removeItem("accessToken");
+      router.push("/admin-login");
+    }
+  };
   return (
     <>
-      <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-        <h2 className="font-semibold">Change Password </h2>
-
-        <div className="flex items-center w-[40%]"></div>
-        <h2>Welcome Back, Admin</h2>
-      </div>
-      <div className=" flex ml-10 mr-4    mt-4">
-        <div className="bg-white  p-5 border mx-auto">
-       
-
-          <form onSubmit={handleSubmit}>
-            <div className="">
-              <div className="">
-                <label
-                  className=" bg-white z-20 text-gray-800
-            2xl:text-[20px] 2xl:mt-5 2xl:ml-12
-            xl:text-[16px] xl:mt-[6px] xl:ml-7
-            lg:text-[14px] lg:mt-[6px] lg:ml-[26px]
-            md:text-[13px] md:mt-1 md:ml-6
-            sm:text-[11px] sm:mt-[2px] sm:ml-5
-            text-[10px] mt-[0px] ml-4
-            "
-                >
-                  Current Password
-                </label>
-                <input
-                  name="currentPassword"
-                  type="password"
-                  id="currentPassword"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none  w-10/12  lg:w-8/12
-               2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-               xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-              lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[13px] md:m-4 md:px-3 md:py-2 md:h-[30px]
-              sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[12px] m-2 px-2 py-1 h-[25px]
-              "
-                  required
-                />
-              </div>
-
-              <div className="mb-3">
-                <label
-                  className=" bg-white z-20 text-gray-800
-            2xl:text-[20px] 2xl:mt-5 2xl:ml-12
-            xl:text-[16px] xl:mt-[6px] xl:ml-7
-            lg:text-[14px] lg:mt-[6px] lg:ml-[26px]
-            md:text-[13px] md:mt-1 md:ml-6
-            sm:text-[11px] sm:mt-[2px] sm:ml-5
-            text-[10px] mt-[0px] ml-4
-            "
-                >
-                  New Password
-                </label>
-                <input
-                  name="newPassword"
-                  type="password"
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none  w-10/12  lg:w-8/12
-               2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-               xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-              lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[13px] md:m-4 md:px-3 md:py-2 md:h-[30px]
-              sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[12px] m-2 px-2 py-1 h-[25px]
-              "
-                  required
-                />
-              </div>
-
-              <div className="mb-2">
-                <label
-                  className=" bg-white z-20 text-gray-800
-            2xl:text-[20px] 2xl:mt-5 2xl:ml-12
-            xl:text-[16px] xl:mt-[6px] xl:ml-7
-            lg:text-[14px] lg:mt-[6px] lg:ml-[26px]
-            md:text-[13px] md:mt-1 md:ml-6
-            sm:text-[11px] sm:mt-[2px] sm:ml-5
-            text-[10px] mt-[0px] ml-4
-            "
-                >
-                  Confirm Password
-                </label>
-                <input
-                  name="confirmPassword"
-                  type="password"
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none  w-10/12  lg:w-8/12
-               2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-               xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-              lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[13px] md:m-4 md:px-3 md:py-2 md:h-[30px]
-              sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[12px] m-2 px-2 py-1 h-[25px]
-              "
-                  required
-                />
-                {error && (
-                  <div className="text-red-500 font-medium px-12">{error}</div>
-                )}
-              </div>
-
-              <div className="mt-4">
-                <button
-                  type="submit"
-                  className="border rounded-md md:rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2  2xl:mt-0 2xl:ml-10
-              xl:text-[14px] xl:py-2 xl:px-4  xl:mt-0 xl:ml-5
-              lg:text-[12px] lg:py-2 lg:px-3 lg:mt-0 lg:ml-5
-              md:text-[12px] md:py-2 md:px-2  md:mt-0 md:ml-4
-              sm:text-[11px] sm:py-[6px]  sm:px-1  sm:mt-0 sm:ml-3
-              text-[10px] py-[3px] px-[6px] m-2 mt-0 bg-blue-500 text-white hover:bg-blue-600 ml-2
-               "
-                >
-                  Update Password
-                </button>
-              </div>
+    { loader && <Loader/>}
+    <ToastContainer />
+      <div className="flex items-center justify-center lg:min-h-screen">
+        <div className="md:px-[50px] w-full mx-auto">
+          <div className="relative flex flex-col 2xl:gap-x-20 xl:gap-x-10 gap-x-7 min-h-screen justify-center lg:shadow-none  items-center lg:flex-row space-y-8 md:space-y-0 w-[100%] px-[10px]bg-white lg:px-[40px] py-[20px] md:py-[40px] ">
+            {/* <div
+              className="absolute right-10 top-6 bg-[#e5f0fa] hover:bg-[#c5dcf0] px-3 py-1 rounded cursor-pointer flex items-center gap-3"
+              onClick={() => router.push("/")}
+            >
+              Go back
+            </div> */}
+            <div className="w-[100%] lg:w-[60%] xl:w-[50%]">
+              <form
+                action=""
+                className=""
+                onSubmit={handleSubmit}
+              >
+                <div className="flex flex-col gap-4 justify-center p-8 lg:p-14 md:max-w-[80%] lg:w-full lg:max-w-[100%] mx-auto ">
+                  <div className="text-left ">
+                    <p className="mb-2 2xl:text-[35px] md:text-[30px] text-[24px] leading-[38px] md:font-bold font-medium whitespace-nowrap">
+                      Change password
+                    </p>
+                  </div>
+                  <div className="relative flex justify-center items-center mt-6">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="oldPassword"
+                      placeholder="Old password"
+                      className="px-4 py-3 rounded-[10px] border placeholder:text-[gray] w-full custom-input "
+                      onChange={InputHandler}
+                      minLength={8}
+                      required
+                    />
+                    <div
+                      className="absolute right-[10px] cursor-pointer"
+                      onClick={() => togglePasswordVisibility("password")}
+                    >
+                      {showPassword ? <OpenEye /> : <CloseEye />}
+                    </div>
+                  </div>
+                  <div className="relative flex justify-center items-center">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      name="newPassword"
+                      placeholder="New password"
+                      className="px-4 py-3 rounded-[10px] border placeholder:text-[gray] w-full mt-2 custom-input"
+                      onChange={InputHandler}
+                      minLength={8}
+                      required
+                    />
+                    <div
+                      className="absolute right-[10px] cursor-pointer"
+                      onClick={() => togglePasswordVisibility("confirmPassword")}
+                    >
+                      {showConfirmPassword ? <OpenEye /> : <CloseEye />}
+                    </div>
+                  </div>
+                  <div className="relative flex justify-center items-center">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirm new password "
+                      className="px-4 py-3 rounded-[10px] border placeholder:text-[gray] w-full mt-2 custom-input"
+                      onChange={(e) => setCnfmPassword(e.target.value)}
+                      minLength={8}
+                      required
+                    />
+                    <div
+                      className="absolute right-[10px] cursor-pointer"
+                      onClick={() => togglePasswordVisibility("confirmPassword")}
+                    >
+                      {showConfirmPassword ? <OpenEye /> : <CloseEye />}
+                    </div>
+                  </div>
+                  {isError && (
+                    <p className="text-[red] mt-2 px-2 text-[14px] lg:text-[13px] font-normal bg-[#f0e3e3] py-1    rounded-[4px]">
+                      {isError}
+                    </p>
+                  )}
+                  <div className="mt-4">
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full bg-[#1f2432] font-medium text-white p-2 rounded-lg hover:border hover:border-black h-[50px]  hover:bg-[#fff] hover:text-black"
+                    >
+                      {isLoading ? "Loading.." : "Change password"}
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
-
-        {/* <div className="w-6/12 my-auto"></div> */}
       </div>
-    </>
-  );
+      </>
+      );
 };
 
-export default UpadatePassword;
+export default ChangePassword;

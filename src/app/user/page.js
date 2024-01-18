@@ -26,7 +26,8 @@ const User = () => {
   const [total_pages, setTotalPages] = useState(1);
   const [authenticated, setAuthenticated] = useState(false);
   const [isLoader, setLoader] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const [auth_token, setAuth_token] = useState("")
+  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [selectCategory, setSelectedCategory] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("");
   const [issueText, setIssueText] = useState("");
@@ -102,6 +103,19 @@ const User = () => {
   const refreshData = () => {
     setRefresh(!isRefresh);
   };
+  useEffect(() => {
+    
+    if (typeof window !== undefined && window.localStorage) {
+      const token = localStorage.getItem("accessToken")
+      // console.log(token);
+      if (token) {
+        setAuth_token(JSON.parse(token))
+        console.log(token);
+        verify(JSON.parse(token))
+      }
+    }
+  }, [])
+  
 
   //   ------get all events-------
   useEffect(() => {
@@ -126,6 +140,7 @@ const User = () => {
     axios
       .request(option)
       .then((response) => {
+        console.log("chang",response?.data?.events)
         setGetAllEvent(response?.data?.events);
         setLoader(false);
         setTotalPages(response?.data?.total_pages || 1);
@@ -134,7 +149,7 @@ const User = () => {
         console.log(err, "Error");
       });
   };
-
+console.log(auth_token);
   //   -----------get All Category---------
   useEffect(() => {
     defaultgetAllCate();
@@ -310,21 +325,21 @@ const User = () => {
   };
 
   // ------verify user token-------
-  useEffect(() => {
-    const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  // useEffect(() => {
+  //   const auth_tokenA = JSON.parse(localStorage.getItem("accessToken"));
 
-    if (auth_token) {
-      verify();
-    } else {
-      setAuthenticated(false);
-      router.push("/user/login");
-    }
-  }, []);
+  //   if (auth_tokenA) {
+  //     // verify();
+  //   } else {
+  //     setAuthenticated(false);
+  //     // router.push("/user/login");
+  //   }
+  // }, []);
 
-  const verify = async () => {
+  const verify = async (tok) => {
     setLoader(true);
     try {
-      const res = await axios.get(`/api/auth/verifyUserToken/${auth_token}`);
+      const res = await axios.get(`/api/auth/verifyUserToken/${tok}`);
       if (res.status === 200) {
         const usersId = res?.data?.data?._id;
         setAuthenticated(true);
@@ -414,7 +429,7 @@ const User = () => {
             setLoader(false);
             localStorage.removeItem("accessToken");
             router.push("/user/login");
-            toast.success("Logout Successfully !")
+            toast.success("Logout Successfully !");
           } else {
             setLoader(false);
             localStorage.removeItem("accessToken");
@@ -437,6 +452,32 @@ const User = () => {
     }
   };
 
+  // ---------buy now  Event by id----------
+  const handleEventById = async (id) => {
+    try {
+      const response = await axios.post(
+        "/api/redirection/eventRedirection",
+        {
+          eventId: id,
+        },
+        {
+          headers: {
+            authorization: auth_token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        console.log(response.data);
+        toast.success("Submitted successfully !");
+      } else {
+        console.error("Failed to submit");
+      }
+    } catch (error) {
+      console.error("Error in submitting:", error.message);
+    }
+  };
 
   return (
     <>
@@ -465,7 +506,6 @@ const User = () => {
                   </li>
                 ))}
                 <li>
-                 
                   <div
                     onClick={handleLogout}
                     className="px-3 py-3 mx-2 sm:mx-2 lg:mx-2 xl:mx-4 2xl:mx-5 rounded-md flex gap-x-3 items-center cursor-pointer transition-colors font-semibold dash-menu hover:transition-all ease-in delay-100 duration-300 text-white hover:bg-[#b8bbdf47]"
@@ -507,7 +547,7 @@ const User = () => {
                   }}
                 >
                   <option value=""> Category</option>
-                  {getAllCate.map((item) => (
+                  {getAllCate?.categories?.map((item) => (
                     <option
                       key={item._id}
                       value={item._id}
@@ -548,7 +588,7 @@ const User = () => {
                   }}
                 >
                   <option value=""> SubCategory</option>
-                  {allSubCategory
+                  {Array.isArray(allSubCategory) && allSubCategory
                     .filter((item, indr) => {
                       return item?.category?._id === editCategory?.category;
                     })
@@ -624,12 +664,12 @@ const User = () => {
               <div>
                 {getAllEvent?.length > 0 && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
-                    {getAllEvent.map((item, index) => (
+                    {getAllEvent?.map((item, index) => (
                       <div
                         key={index}
                         className="card border hover:border-1 border-gray-300 hover:border-gray-700 rounded-md p-2 bg-white flex flex-col"
                       >
-                        {/* {console.log(item)} */}
+                        {/* {console.log(item?.resource_url)} */}
                         <Link
                           target="_blank"
                           href={`/singleEvent/${item?._id}`}
@@ -677,6 +717,7 @@ const User = () => {
                                 href={item?.resource_url}
                                 target="_blank"
                                 className="px-8  py-2 border border-gray-200 bg-gray-200 rounded-md hover:bg-gray-400 hover:text-white"
+                                onClick={() => handleEventById(item?._id)}
                               >
                                 Buy Now
                               </Link>
