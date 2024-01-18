@@ -109,3 +109,9 @@
 .h1_text_issue{
   @apply text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px] xl:text-[18px] 2xl:text-[20px]
 }
+
+@media screen and (min-width:1535px) and (max-width:1750px) {
+  .dashboard_box_t{
+     font-size: 10px;
+  }
+  }

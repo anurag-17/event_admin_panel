@@ -2,10 +2,14 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useAuth } from "../../../contexts/AuthContext";
+
 
 const EditEvent = ({ editData, closeDrawer, refreshData }) => {
   console.log(editData);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
+
   const [isLoading, setLoading] = useState(false);
   const [getallCategory, setGetallCategory] = useState([]);
   const [getallSubCategory, setGetallSubCategory] = useState([]);
@@ -75,7 +79,7 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
       try {
         const response = await axios.post("/api/auth/uploadImage", eventImage, {
           headers: {
-            Authorization: auth_token,
+            Authorization: adminAuthToken,
             "Content-Type": "multipart/form-data",
           },
         });
@@ -123,7 +127,7 @@ const EditEvent = ({ editData, closeDrawer, refreshData }) => {
       const response = await axios.put(`/api/event/updateEvent`, eventDetail, {
         headers: {
           "Content-Type": "application/json",
-          authorization: auth_token,
+          authorization: adminAuthToken,
         },
       });
 

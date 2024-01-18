@@ -5,15 +5,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "../../../contexts/AuthContext";
+
+
 
 const CreateEvent = ({ closeDrawer }) => {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
   const [getallSubCategory, setGetallSubCategory] = useState([]);
   const [getallCategory, setGetallCategory] = useState([]);
+  const { adminAuthToken } = useAuth();
 
   const accessTokenString = localStorage.getItem("accessToken");
-  const auth_token = accessTokenString ? JSON.parse(accessTokenString) : null;
+  // const auth_token = accessTokenString ? JSON.parse(accessTokenString) : null;
   const [eventDetail, setEventDetail] = useState({
     name: "",
     description: "",
@@ -91,7 +95,7 @@ const CreateEvent = ({ closeDrawer }) => {
     try {
       const response = await axios.post("/api/auth/uploadImage", eventImage, {
         headers: {
-          authorization: auth_token,
+          authorization:adminAuthToken ,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -141,7 +145,7 @@ const CreateEvent = ({ closeDrawer }) => {
           {
             headers: {
               "content-type": "application/json",
-              authorization: auth_token,
+              authorization: adminAuthToken,
             },
           }
         );

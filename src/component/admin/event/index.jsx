@@ -13,13 +13,16 @@ import Pagination from "../../pagination";
 import ImageModal from "./ImageModal";
 import moment from "moment";
 import Topbar from "../../../app/admin/admin-dashboard/topbar";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const Event = () => {
-  const [auth_token, setAuth_token] = useState(
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("accessToken") || "")
-      : null
-  );
+  const { adminAuthToken } = useAuth();
+
+  // const [auth_token, setAuth_token] = useState(
+  //   typeof window !== "undefined"
+  //     ? JSON.parse(localStorage.getItem("accessToken") || "")
+  //     : null
+  // );
 
   // const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
   const [getAllEvent, setGetAllEvent] = useState([]);
@@ -27,6 +30,8 @@ const Event = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isDrawerOpenO, setIsDrawerOpenO] = useState(false);
   const [isOpenDelete, setOpenDelete] = useState(false);
+  const [isOpenAddEvent, setOpenAddEvent] = useState(false);
+  const [isOpenEditEvent, setOpenEditEvent] = useState(false);
   const [eventID, setEventId] = useState("");
   const [editEvent, setEventEdit] = useState("");
   const [editData, setEditData] = useState([]);
@@ -54,10 +59,10 @@ const Event = () => {
   const [isLoading, setLoading] = useState(false);
   const [citiesList, setCitiesList] = useState([]);
   const [providerList, setProviderList] = useState([]);
-  const [filteredCategory, setFilteredCategory] = useState("")
-const [filteredSubCategory, setFilteredSubCategory] = useState("")
-const [fetchStartDate, setFetchStartDate] = useState("")
-const [fetchEndDate, setFetchEndDate] = useState("")
+  const [filteredCategory, setFilteredCategory] = useState("");
+  const [filteredSubCategory, setFilteredSubCategory] = useState("");
+  const [fetchStartDate, setFetchStartDate] = useState("");
+  const [fetchEndDate, setFetchEndDate] = useState("");
   //----------Date/Time Formate
   const convertTime = (time) => {
     const parsedDateTime = moment(time);
@@ -113,6 +118,18 @@ const [fetchEndDate, setFetchEndDate] = useState("")
 
   function closeModal() {
     setOpenDelete(false);
+    setOpenAddEvent(false);
+    setOpenEditEvent(false);
+  }
+
+  function openAddModal(id) {
+    setEventId(id);
+    setOpenAddEvent(true);
+  }
+
+  function openEditModal(id) {
+    setEventId(id);
+    setOpenEditEvent(true);
   }
 
   function openModal(id) {
@@ -247,7 +264,7 @@ const [fetchEndDate, setFetchEndDate] = useState("")
           {
             headers: {
               "Content-Type": "application/json",
-              authorization: auth_token,
+              authorization: useAuth,
             },
           }
         );
@@ -275,7 +292,7 @@ const [fetchEndDate, setFetchEndDate] = useState("")
   };
   // ------ filter by category ------ //
   const handleSearchCategories = (e) => {
-    setFilteredCategory(e.target.value)
+    setFilteredCategory(e.target.value);
     setLoader(true);
     try {
       const cate = e.target.value;
@@ -285,8 +302,9 @@ const [fetchEndDate, setFetchEndDate] = useState("")
       setCategoryFilter(e.target.value);
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${e.target.value
-          }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
+        url: `/api/event/getAllEvents?category=${
+          e.target.value
+        }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
       };
       axios
         .request(options)
@@ -318,8 +336,9 @@ const [fetchEndDate, setFetchEndDate] = useState("")
     setSubCategoryFilter(e.target.value);
     const options = {
       method: "GET",
-      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${e.target.value
-        }&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
+      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${
+        e.target.value
+      }&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
     };
     axios
       .request(options)
@@ -411,8 +430,9 @@ const [fetchEndDate, setFetchEndDate] = useState("")
     try {
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${e.target.value
-          }&provider=${providerFilter}&page=${1}&limit=${limit}`,
+        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${
+          e.target.value
+        }&provider=${providerFilter}&page=${1}&limit=${limit}`,
       };
       axios
         .request(options)
@@ -444,8 +464,9 @@ const [fetchEndDate, setFetchEndDate] = useState("")
     try {
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${e.target.value
-          }&page=${1}&limit=${limit}`,
+        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${
+          e.target.value
+        }&page=${1}&limit=${limit}`,
       };
       axios
         .request(options)
@@ -524,24 +545,24 @@ const [fetchEndDate, setFetchEndDate] = useState("")
       axios.request(options2),
       axios.request(options3),
     ];
-    
-    Promise.all(requests.map(request => request.catch(error => error)))
-      .then(responses => {
+
+    Promise.all(requests.map((request) => request.catch((error) => error)))
+      .then((responses) => {
         const [response1, response2, response3] = responses;
-    
+
         if (response1.status === 200) {
           // handle response1.data
         }
-    
+
         if (response2.status === 200) {
           // handle response2.data
         }
-    
+
         if (response3.status === 200) {
           // handle response3.data
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       })
       .finally(() => {
@@ -550,7 +571,6 @@ const [fetchEndDate, setFetchEndDate] = useState("")
         setFetchStartDate("");
         setFetchEndDate("");
       });
-    
   };
 
   const handleClearFilter = () => {
@@ -622,88 +642,101 @@ const [fetchEndDate, setFetchEndDate] = useState("")
     <>
       {isLoader && <Loader />}
       <ToastContainer autoClose={1500} />
-      <Topbar/>
+      <Topbar />
       <div>
-        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-10 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="mt-2 sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-10 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Event List </h2>
-
-          <div className="flex items-center w-[40%]">
-            <input
-              type="search"
-              className=" border border-gray-500 p-[2px] lg:p-[4px] 2xl:p-3 rounded-lg  w-11/12 focus:outline-none text-black"
-              placeholder="Search"
-              aria-label="Search"
-              aria-describedby="button-addon1"
-              onChange={handleSearch}
-            />
-          </div>
-          <h2>Welcome Back, Admin</h2>
         </div>
 
         {/* ---------Event fetch---------- */}
-        <div className="  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-2">
-          <div className=" flex justify-between">
-            <div className="flex flex-wrap gap-2 w-1/2">
-              <div className="">
-                <div>
-                  {" "}
-                  <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
-                    Start Date
-                  </label>
-                </div>
-                <div>
-                  <input
-                    type="date"
-                    value={fetchStartDate}
-                    onChange={(e)=> setFetchStartDate(e.target.value)}
-                    
-                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
+        <div className="  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[70px] lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-2">
+          <div className=" flex  sm:items-center flex-col-reverse sm:flex-row justify-between">
+            <div className="items-center w-[50%] sm:w-[40%] my-3 sm:my-0">
+              <input
+                type="search"
+                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
+                placeholder="Search"
+                aria-label="Search"
+                aria-describedby="button-addon1"
+                onChange={handleSearch}
+              />
+            </div>
+
+            <div className="flex gap-2 ">
+              <div className="flex flex-wrap gap-2 mu-auto ">
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                      Start Date
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      value={fetchStartDate}
+                      onChange={(e) => setFetchStartDate(e.target.value)}
+                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
                     lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
                     md:px-3 md:py-2 md:h-[25px] 
                    sm:px-2 sm:py-0 
                         px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]"
-                  />
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="">
-                <div>
-                  {" "}
-                  <label className=" text-gray-500  text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
-                    End Date
-                  </label>
-                </div>
-                <div>
-                  <input
-                    type="date"
-                    value={fetchEndDate}
-                    onChange={(e)=> setFetchEndDate(e.target.value)}
-                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                <div className="">
+                  <div>
+                    {" "}
+                    <label className=" text-gray-500  text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                      End Date
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      value={fetchEndDate}
+                      onChange={(e) => setFetchEndDate(e.target.value)}
+                      className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
+                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
                     lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
                     md:px-3 md:py-2 md:h-[25px] 
                    sm:px-2 sm:py-0 
                         px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
-                  />
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="">
-              <button
-                onClick={defaultEventFetch}
-                className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[12px] md:p-2 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
-              >
-                + Fetch External Event
-              </button>
+              <div className="">
+                <div>
+                  <label className=" text-gray-500  text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                    External Event
+                  </label>
+                </div>
+                <div>
+                  <button
+                    onClick={defaultEventFetch}
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px]  2xl:w-28
+                    xl:text-[12px]  xl:px-3 xl:py-0  
+                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-20
+                    md:px-3 md:py-1 md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                  >
+                    + Fetch
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white  lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-3">
-          <div className="w-3/4">
-            <div className="flex flex-wrap items-end  gap-2 lg:gap-3 xl:gap-3 2xl:gap-4">
+          <div className="">
+            <div className="flex flex-wrap items-end  gap-2 lg:gap-3 xl:gap-3 2xl:gap-4 py-4">
               {/* -----Filter Category-------- */}
 
               <div>
@@ -734,15 +767,16 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                     }}
                   >
                     <option value="">All Category</option>
-                    {Array.isArray(getAllCate) && getAllCate.map((item) => (
-                      <option
-                        key={item._id}
-                        value={item._id}
-                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                      >
-                        {item.title}
-                      </option>
-                    ))}
+                    {Array.isArray(getAllCate) &&
+                      getAllCate.map((item) => (
+                        <option
+                          key={item._id}
+                          value={item._id}
+                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                        >
+                          {item.title}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
@@ -776,19 +810,20 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                     }}
                   >
                     <option value=""> All SubCategory</option>
-                    {Array.isArray(allSubCategory) && allSubCategory
-                      .filter((item, indr) => {
-                        return item?.category?._id === filteredCategory;
-                      })
-                      .map((itemss) => (
-                        <option
-                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                          key={itemss?._id}
-                          value={itemss._id}
-                        >
-                          {itemss?.subCategory}
-                        </option>
-                      ))}
+                    {Array.isArray(allSubCategory) &&
+                      allSubCategory
+                        .filter((item, indr) => {
+                          return item?.category?._id === filteredCategory;
+                        })
+                        .map((itemss) => (
+                          <option
+                            className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                            key={itemss?._id}
+                            value={itemss._id}
+                          >
+                            {itemss?.subCategory}
+                          </option>
+                        ))}
                   </select>
                 </div>
               </div>
@@ -806,7 +841,7 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                     <input
                       name="startDate"
                       type="date"
-                      max={endDate?endDate:""}
+                      max={endDate ? endDate : ""}
                       className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -834,7 +869,7 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                     <input
                       type="date"
                       name="endDate"
-                      min={startDate?startDate:""}
+                      min={startDate ? startDate : ""}
                       className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -930,25 +965,51 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={handleClearFilter}
-                className="ml-2 px-3 h-[30px] bg-gray-300 text-gray-700 rounded cursor-pointer 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px] "
-              >
-                Clear
-              </button>
+              <div className="">
+                <div>
+                  <label className=" text-gray-500  text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                    Clear Filter
+                  </label>
+                </div>
+                <div>
+                  <button
+                    onClick={handleClearFilter}
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
+                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-24
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-16
+                    lg:text-[12px]  lg:px-2 lg:py-1   lg:w-16
+                    md:px-3 md:py-1 md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+              {/* -----Add Event-------- */}
+
+              <div className="">
+                <div>
+                  <label className=" text-gray-500  text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                    New Event
+                  </label>
+                </div>
+                <div>
+                  <button
+                    onClick={openAddModal}
+                    className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
+                  2xl:text-sm  2xl:px-0 text-center 2xl:py-2 2xl:h-[35px] 2xl:w-24
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-16
+                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-16
+                    md:px-3 md:py-1 md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                  >
+                    +Add
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* -----Add Event-------- */}
-
-          <div className="">
-            <button
-              onClick={openDrawer}
-              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[12px] md:p-2 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
-            >
-              + Add Event
-            </button>
           </div>
         </div>
         {isDrawerOpen && (
@@ -974,32 +1035,7 @@ const [fetchEndDate, setFetchEndDate] = useState("")
             </div>
           </div>
         )}
-        {isDrawerOpenO && (
-          <div
-            id="drawer-form"
-            className="border fixed content-center mb-5  z-40 h-[70%] lg:h-[80%] lg:w-8/12 w-10/12  p-4 overflow-y-auto transition-transform -translate-x-0 bg-white 2xl:top-32 xl:top-[85px] lg:top-[70px] right-8 "
-            tabIndex={-1}
-            aria-labelledby="drawer-form-label"
-          >
-            <button
-              type="button"
-              onClick={closeDrawerO}
-              className="  shadow-2xl text-sm   top-1  inline-flex items-center justify-center "
-            >
-              <Image src={cut} className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14" />
 
-              <span className="sr-only bg-black">Close menu</span>
-            </button>
-            <div>
-              <EditEvent
-                editEvent={editEvent}
-                closeDrawer={closeDrawerO}
-                refreshData={refreshData}
-                editData={editData}
-              />
-            </div>
-          </div>
-        )}
         <div className="relative flex mx-10 lg:mx-8  overflow-x-auto ">
           <div className="  w-full ">
             <div className="overflow-y-scroll  ">
@@ -1053,9 +1089,8 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                     <tbody className=" w-full ">
                       {/* <div className=""> */}
                       {getAllEvent.map((item, index) => {
-
                         const serialNumber =
-                          ((current_page - 1) * 20) + (index + 1);
+                          (current_page - 1) * 20 + (index + 1);
 
                         return (
                           <tr
@@ -1081,14 +1116,14 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                                         >
                                           {(img.position === 0 ||
                                             inx === 0) && (
-                                              <img
-                                                src={img.url}
-                                                alt="loading.."
-                                                height={100}
-                                                width={100}
-                                                className="w-2/4"
-                                              />
-                                            )}
+                                            <img
+                                              src={img.url}
+                                              alt="loading.."
+                                              height={100}
+                                              width={100}
+                                              className="w-2/4"
+                                            />
+                                          )}
                                         </div>
                                       ))}
                                     </>
@@ -1130,15 +1165,16 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                                 >
                                   <option value="">Select Category</option>
 
-                                  {Array.isArray(getAllCate) && getAllCate.map((itemsx) => (
-                                    <option
-                                      className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                                      key={itemsx._id}
-                                      value={itemsx._id}
-                                    >
-                                      {itemsx.title}
-                                    </option>
-                                  ))}
+                                  {Array.isArray(getAllCate) &&
+                                    getAllCate.map((itemsx) => (
+                                      <option
+                                        className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                        key={itemsx._id}
+                                        value={itemsx._id}
+                                      >
+                                        {itemsx.title}
+                                      </option>
+                                    ))}
                                 </select>
                               </div>
                               <div className="my-1">
@@ -1154,33 +1190,29 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                                     item?.subCategory?.title
                                   )}
                                 >
-                                  <option value="">
-                                    {" "}
-                                    Select Sub Category
-                                  </option>
-                                  {Array.isArray(allSubCategory) && allSubCategory
-                                    .filter((item, indr) => {
-                                      return (
-                                        item?.category?._id ===
-                                        editCategory?.category
-                                      );
-                                    })
-                                    .map((itemss) => (
-                                      <option
-                                        className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                                        key={itemss?._id}
-                                        value={itemss._id}
-                                      >
-                                        {itemss?.subCategory}
-                                      </option>
-                                    ))}
+                                  <option value=""> Select Sub Category</option>
+                                  {Array.isArray(allSubCategory) &&
+                                    allSubCategory
+                                      .filter((item, indr) => {
+                                        return (
+                                          item?.category?._id ===
+                                          editCategory?.category
+                                        );
+                                      })
+                                      .map((itemss) => (
+                                        <option
+                                          className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                          key={itemss?._id}
+                                          value={itemss._id}
+                                        >
+                                          {itemss?.subCategory}
+                                        </option>
+                                      ))}
                                 </select>
                               </div>
 
                               <button
-                                onClick={() =>
-                                  handleUpdateCategory(item?._id)
-                                }
+                                onClick={() => handleUpdateCategory(item?._id)}
                                 className="border bg-blue-500 hover:bg-blue-600 text-white py-[2px] px-1 rounded-md lg:rounded-lg ml-1 lg:ml-2"
                               >
                                 Save
@@ -1191,7 +1223,7 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                               <div className="flex my-3 gap-3 ">
                                 {/* {console.log()} */}
                                 <button
-                                  onClick={() => openDrawerO(item?._id)}
+                                  onClick={() => openEditModal(item?._id)}
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -1288,6 +1320,116 @@ const [fetchEndDate, setFetchEndDate] = useState("")
                     eventID={eventID}
                     closeModal={closeModal}
                     refreshData={refreshData}
+                  />
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
+      <Transition appear show={isOpenAddEvent} as={Fragment}>
+        <Dialog as="div" className="z-10 fixed" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className=" w-full max-w-[700px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                  >
+                    {" "}
+                    <button
+                      type="button"
+                      onClick={closeModal}
+                      className=" text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
+                    >
+                      <Image
+                        src={cut}
+                        className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
+                      />
+                      <span className="sr-only bg-black">Close menu</span>
+                    </button>
+                  </Dialog.Title>
+                  <CreateEvent
+                    closeModal={closeModal}
+                    refreshData={refreshData}
+                  />
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
+      <Transition appear show={isOpenEditEvent} as={Fragment}>
+        <Dialog as="div" className="z-10 fixed" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className=" w-full max-w-[700px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                  >
+                    {" "}
+                    <button
+                      type="button"
+                      onClick={closeModal}
+                      className=" text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
+                    >
+                      <Image
+                        src={cut}
+                        className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
+                      />
+                      <span className="sr-only bg-black">Close menu</span>
+                    </button>
+                  </Dialog.Title>
+                  <EditEvent
+                    editEvent={editEvent}
+                    closeModal={closeModal}
+                    refreshData={refreshData}
+                    editData={editData}
                   />
                 </Dialog.Panel>
               </Transition.Child>
