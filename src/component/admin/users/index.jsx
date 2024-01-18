@@ -169,19 +169,20 @@ const AllUser = () => {
       {isLoader && <Loader />}
 
       <div>
-        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center p-1 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   h-auto   xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="  w-[50%] sm:w-[40%] my-3 ">
           <h2 className="font-semibold">Users List </h2>
-
-          <div className="flex items-center w-[40%]">
-            <input
-              type="search"
-              className=" border text-[15px] placeholder:pl-2  border-gray-500 p-[2px] lg:p-[2px]  2xl:p-3 rounded-lg  w-11/12 focus:outline-none text-black"
-              placeholder="Search"
-              aria-label="Search"
-              aria-describedby="button-addon1"
-              onChange={handleSearch}
-            />
           </div>
+          <div className="flex justify-end  w-[50%] sm:w-[40%] my-3 ">
+              <input
+                type="search"
+                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full  max-w-[320px] 2xl:max-w-[440px]  md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
+                placeholder="Search"
+                aria-label="Search"
+                aria-describedby="button-addon1"
+                onChange={handleSearch}
+              />
+            </div>
          
         </div>
 

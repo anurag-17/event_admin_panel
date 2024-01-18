@@ -86,7 +86,7 @@ const Topbar = () => {
           <div className="my-auto">
             <Menu as="div" className="relative inline-block text-left">
               <div className="">
-                <Menu.Button className="inline-flex  w-full justify-center  text-sm font-semibold text-gray-900 shadow-sm   ring-gray-300 hover:bg-gray-50">
+                <Menu.Button className="inline-flex  w-full justify-center  text-sm font-semibold text-gray-900 hover:bg-gray-50">
                   <h1 className="text-[10px] md:text-[10px] xl:text-[12px] 2xl:text-[16px] my-auto">
                     Admin
                   </h1>
