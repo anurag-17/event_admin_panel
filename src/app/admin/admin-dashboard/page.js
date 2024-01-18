@@ -22,26 +22,15 @@ import alluser from "../../../../public/images/users-2.svg";
 import setting from "../../../../public/images/setting.svg";
 import issue from "../../../../public/images/issue.svg";
 import protectedRoute from "../../../component/utils/withAuth";
+import Setting from "../../../component/admin/setting/Setting";
+import EventRedirection from "../../event-table/page";
+
 
 const AdminDashboard = () => {
-  // const router = useRouter();
+
   const { loader, handleSignout } = useAuth();
-  // const { adminAuthToken, loading } = useAuth();
   const [ComponentId, setComponentId] = useState(1);
   const [showDrawer, setShowDrawer] = useState("");
-  const [isLoader, setLoader] = useState(false);
-  // const [token, setToken] = useState(
-  //   typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
-  // );
-  const [isRefresh, setRefresh] = useState(false);
-
-  // useEffect(() => {
-  //   const authToekn = token ? JSON.parse(token) : null;
-  //   setToken(authToekn);
-  //   if (!authToekn || authToekn == null) {
-  //     router.push("/admin-login");
-  //   }
-  // }, []);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -54,48 +43,6 @@ const AdminDashboard = () => {
       (message) => toast.error(message)
     );
   };
-
-  // const handleSignout = () => {
-
-  //   try {
-  //     setLoader(true);
-  //     const options = {
-  //       method: "GET",
-  //       url: `/api/auth/logout`,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         authorization: token,
-  //       },
-  //     };
-  //     axios
-  //       .request(options)
-  //       .then((res) => {
-  //         if (res.status === 200) {
-  //           toast.success("Logout!");
-  //           setLoader(false);
-  //           localStorage.removeItem("accessToken");
-  //           router.push("/admin-login");
-  //         } else {
-  //           setLoader(false);
-  //           localStorage.removeItem("accessToken");
-  //           router.push("/admin-login");
-  //           return;
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         setLoader(false);
-  //         console.error("Error:", error);
-  //         toast.error(error?.response?.data?.message || "server error!");
-  //         localStorage.removeItem("accessToken");
-  //         router.push("/admin-login");
-  //       });
-  //   } catch {
-  //     console.log("error");
-  //     toast.error("server error!");
-  //     localStorage.removeItem("accessToken");
-  //     router.push("/admin-login");
-  //   }
-  // };
 
   const menulist = [
     {
@@ -136,8 +83,14 @@ const AdminDashboard = () => {
     },
     {
       id: 7,
+      label: "Event Redirection",
+      component: <EventRedirection />,
+      icon: issue,
+    },
+    {
+      id: 8,
       label: "Setting",
-      component: <UpadatePassword />,
+      component: <Setting />,
       icon: setting,
     },
   ];
