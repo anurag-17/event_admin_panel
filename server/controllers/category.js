@@ -4,10 +4,19 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 
 exports.createCategory = async (req, res) => {
   try {
-    const newCategory = await Category.create(req.body);
-    res.json(newCategory);
+    const { title } = req.body;
+
+    const existingCategory = await Category.findOne({ title });
+
+    if (existingCategory) {
+      return res.status(400).json({ error: 'Category with this title already exists' });
+    }
+
+    const newCategory = await Category.create({ title });
+    res.status(201).json(newCategory);
   } catch (error) {
-    throw new Error(error);
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error', status: 500 });
   }
 };
 
