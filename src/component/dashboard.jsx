@@ -14,7 +14,9 @@ const Dashboard = () => {
   const [allSubCategory, setAllCategory] = useState([]);
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
-  const limit = 5;
+  const [isRefresh, setRefresh] = useState(false);
+  const [limit, setLimit] =useState(5);
+
 
   useEffect(() => {
     defaultEvent();
@@ -39,19 +41,20 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    defaultgetAllCate();
-  }, []);
+    defaultgetAllCate(current_page , limit);
+  }, [current_page, isRefresh]);
 
-  const defaultgetAllCate = (limit) => {
+  const defaultgetAllCate = (limit, page ) => {
     setLoader(true);
     const option = {
       method: "GET",
-      url: `/api/category/getallCategory?&limit=${limit}&page=${current_page}`,
+      url: `/api/category/getallCategory?limit=${limit}&page=${page}`,
     };
     axios
       .request(option)
       .then((response) => {
         setGetAllCate(response?.data?.categories);
+        setTotalPages(response?.data?.categories || 1);
       })
       .catch((err) => {
         console.log(err, "Error");
@@ -61,14 +64,15 @@ const Dashboard = () => {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
+  
   useEffect(() => {
-    defaultsubCategory();
-  }, []);
+    defaultsubCategory(current_page , limit);
+  }, [current_page, isRefresh]);
 
-  const defaultsubCategory = () => {
+  const defaultsubCategory = (limit, page ) => {
     const options = {
       method: "GET",
-      url: "/api/subCategory/getallSubCategory",
+      url: `/api/subCategory/getallSubCategory?limit=${limit}&page=${page}`,
       headers: {
         "content-type": "application/json",
         // authorization: auth_token,
@@ -79,12 +83,15 @@ const Dashboard = () => {
       .request(options)
       .then((response) => {
         setAllCategory(response?.data?.subCategories);
+        setTotalPages(response?.data?.subCategories || 1);
+
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
+ 
   return (
     <>
       {isLoader && <Loader />}
@@ -445,13 +452,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      {total_pages > 1 && (
-          <Pagination
-            total_pages={total_pages}
-            current_page={current_page}
-            onPageChange={handlePageChange}
-          />
-        )}
+   
     </>
   );
 };
