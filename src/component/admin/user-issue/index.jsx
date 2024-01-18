@@ -7,9 +7,11 @@ import Loader from "../../loader";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import Pagination from "../../pagination";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const UserIssue = () => {
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
+  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [getUserIssue, setGetUserIssue] = useState([]);
   const [isOpenDelete, setOpenDelete] = useState(false);
   const [isRefresh, setRefresh] = useState(false);
@@ -55,7 +57,7 @@ const UserIssue = () => {
         limit: limit,
       },
       headers: {
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
     axios
@@ -104,7 +106,7 @@ const UserIssue = () => {
         url: `/api/issue/updateEventIssue`,
         headers: {
           "Content-Type": "application/json",
-          authorization: auth_token,
+          authorization: adminAuthToken,
         },
         data: {
           _id: id,
@@ -142,7 +144,7 @@ const UserIssue = () => {
           method: "GET",
           url: `/api/issue/getAllEventIssues?isResolved=${value}`,
           headers: {
-            authorization: auth_token,
+            authorization: adminAuthToken,
           },
         };
         await axios.request(option).then((response) => {
@@ -167,17 +169,17 @@ const UserIssue = () => {
           <h2 className="font-semibold">Users Issue List </h2>
 
           <div className="">
-            <label className="text-[14px]">Issues:</label>
+            <label className="text-[16px]">Issues:</label>
             <select
-              className="text-[12px] rounded-sm border border-gray-300 ml-2"
+              className="text-[14px] rounded-sm border border-gray-300 ml-2"
               value={isResolve}
               onChange={(e) => handleFilterChange(e.target.value)}
             >
-              <option className="text-[12px]" value="">
+              <option className="text-[13px]" value="">
                 All
               </option>
-              <option className="text-[12px]" value="true">Resolved</option>
-              <option className="text-[12px]" value="false">Not Resolved</option>
+              <option className="text-[13px]" value="true">Resolved</option>
+              <option className="text-[13px]" value="false">Not Resolved</option>
             </select>
           </div>
 
@@ -284,10 +286,10 @@ const UserIssue = () => {
                   </h1>
                 </div>
 
-                <div className="w-1/12 col-span-1 my-auto  h1_text">
+                <div className="w-1/12 col-span-1   h1_text">
                   <div className="mb-2">
                     {item?.isResolved ? (
-                      <span className="border p-1 rounded-md my-1   border-green-400 text-green-700 ">
+                      <span className="border p-1 py-[6px] rounded-md    border-green-400 text-green-700 ">
                         Resolved
                       </span>
                     ) : (
@@ -295,7 +297,7 @@ const UserIssue = () => {
                         onClick={() => {
                           handleResolve(item?._id, true);
                         }}
-                        className="border p-1 rounded-md my-1 border-sky-400 text-sky-700 hover:bg-sky-200"
+                        className="border p-1 px-2 rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200"
                       >
                         Resolve
                       </button>
@@ -304,7 +306,7 @@ const UserIssue = () => {
                   <div>
                     <button
                       onClick={() => openModal(item?._id)}
-                      className="border p-1 rounded-md my-1  border-red-700 text-red-700 hover:bg-red-200 "
+                      className="border p-1 px-3 rounded-md   border-red-700 text-red-700 hover:bg-red-200 "
                     >
                       Delete
                     </button>

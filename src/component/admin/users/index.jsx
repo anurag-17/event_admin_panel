@@ -5,13 +5,15 @@ import { Transition, Dialog } from "@headlessui/react";
 import GetAUser from "./getauser";
 import Loader from "../../loader";
 import Pagination from "../../pagination";
+import {useAuth} from "../../../contexts/AuthContext"
 
 const AllUser = () => {
   const [getAllUser, setGetAllUSer] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userId, setUserID] = useState("");
   const [isRefresh, setRefresh] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
+  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [getaUser, setGetUser] = useState({});
   const [selectedItemData, setSelectedItemData] = useState("");
   const [isLoader, setLoader] = useState(false);
@@ -31,7 +33,7 @@ const AllUser = () => {
       method: "POST",
       url: "/api/auth/getUserById",
       headers: {
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
     axios
@@ -81,7 +83,7 @@ const AllUser = () => {
         limit: limit,
       },
       headers: {
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
     axios
@@ -105,7 +107,7 @@ const AllUser = () => {
         method: "GET",
         url: `/api/auth/all-users?search=${search}`,
         headers: {
-          authorization: auth_token,
+          authorization: adminAuthToken,
         },
       };
       axios
@@ -135,7 +137,7 @@ const AllUser = () => {
       
       headers: {
         "Content-Type": "application/json",
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
 
@@ -171,14 +173,14 @@ const AllUser = () => {
           <div className="flex items-center w-[40%]">
             <input
               type="search"
-              className=" border border-gray-500 p-[2px] lg:p-[4px] 2xl:p-3 rounded-lg  w-11/12 focus:outline-none text-black"
+              className=" border text-[15px] placeholder:pl-2  border-gray-500 p-[2px] lg:p-[2px]  2xl:p-3 rounded-lg  w-11/12 focus:outline-none text-black"
               placeholder="Search"
               aria-label="Search"
               aria-describedby="button-addon1"
               onChange={handleSearch}
             />
           </div>
-          <h2>Welcome Back, Admin</h2>
+         
         </div>
 
         <div className=" flex mx-5 ml-10 mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
@@ -194,7 +196,7 @@ const AllUser = () => {
            sm:text-[12px] 
            text-[10px]"
                 >
-                  <th className="mx-3 lg:mx-5 w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
+                  <th className="mx-3 lg:mx-3 w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
                     S.NO
                   </th>
                   <th className="  w-3/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
@@ -204,7 +206,7 @@ const AllUser = () => {
                     EMAIL
                   </th>
                   <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                    Provider
+                    PROVIDER
                   </th>
                   <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
                     VIEW
@@ -223,17 +225,17 @@ const AllUser = () => {
                         key={index}
                         className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[12px] text-[10px]"
                       >
-                        <td className="my-2 mx-3 lg:mx-5 w-1/12">
+                        <td className="my-auto mx-3 lg:mx-3 w-[7.5%] sm:w-1/12">
                           {serialNumber + "."}
                         </td>
-                        <td className="my-auto w-3/12">
+                        <td className="my-auto w-[22.5%] sm:w-[24%] md:w-[24%] lg:w-[24.5%] ">
                           {item.firstname} {item.lastname}
                         </td>
 
-                        <td className="my-auto w-5/12 sm:w-4/12">
+                        <td className="my-auto w-[37.7%]  sm:w-[32.33%] 2xl:w-[33%]">
                           {item.email}
                         </td>
-                        <td className="my-auto  w-2/12">{item.provider}</td>
+                        <td className="my-auto w-[15%]  sm:w-2/12">{item.provider}</td>
                         <td className="my-auto  w-1/12">
                           <button onClick={() => openModal(item?._id)}>
                             <svg
