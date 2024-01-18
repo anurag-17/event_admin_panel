@@ -5,6 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import Pagination from "../../component/pagination";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Page = () => {
   const [getAllEvent, setGetAllEvent] = useState([]);
@@ -13,7 +14,8 @@ const Page = () => {
   const [limit, setLimit] = useState(10);
   const [total_pages, setTotalPages] = useState(1);
   const [isLoader, setLoader] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
+  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [dialogMatch, setDialogMatch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
 
@@ -48,7 +50,7 @@ const Page = () => {
       },
       headers: {
         "content-type": "application/json",
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
     axios
@@ -80,7 +82,7 @@ const Page = () => {
       },
       headers: {
         "Content-Type": "application/json",
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
 
@@ -106,19 +108,19 @@ const Page = () => {
   return (
     <>
       <div className="min-h-screen bg-[#F3F3F3] pt-4">
-        <div className=" flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold">Redirected Event List </h2>
+        <div className="pt-1 flex sm:flex-row flex-col justify-items-center sm:justify-between  items-center  2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[70px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+          <h2 className="font-semibold text-[16px] sm:text-[20px] ">Redirected Event List </h2>
 
-          <div className="flex items-center w-[40%]">
+          <div className="flex items-center justify-center w-[30%] sm:w-[27%]">
             <input
               type="search"
-              className="border border-gray-500 p-[2px] lg:p-[4px] 2xl:p-3 rounded-lg w-11/12 focus:outline-none text-black"
+              className="border border-gray-500 mb-2 sm:mb-0 p-[2px] lg:p-[2px] 2xl:p-2 placeholder:pl-2 text-[14px] rounded-lg w-11/12 focus:outline-none text-black"
               placeholder="Search"
               aria-label="Search"
               aria-describedby="button-addon1"
             />
           </div>
-          <h2>Welcome Back, Admin</h2>
+          
         </div>
 
         <div className="overflow-x-scroll">
