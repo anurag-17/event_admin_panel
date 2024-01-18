@@ -3,18 +3,23 @@ import Image from "next/image";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from "../../../contexts/AuthContext";
+import Loader from "../../loader";
 
 const Profile = () => {
   
   const [verificationResult, setVerificationResult] = useState(null);
+  const [loader, setLoader] = useState(false);
   const { adminAuthToken } = useAuth();
     const verifyUserToken = async () => {
+      setLoader(true)
       try {
         const res = await axios.get(`/api/auth/verifyUserToken/${adminAuthToken}`);
 
-        console.log(res)
+        // console.log(res)
         setVerificationResult(res?.data?.data); // Assuming the API returns some data
+        setLoader(false)
       } catch (error) {
+        setLoader(false)
         console.error('Error verifying user token:', error);
         // Handle errors if needed
       }
@@ -25,6 +30,10 @@ const Profile = () => {
   }, []);
   
   return (
+    <>
+    {
+      loader && <Loader/>
+    }
     <div className="bg-[white] w-full h-full">
       <div className="py-6 px-10 shadow rounded max-w-[400px]  my-4">
         <div className="">
@@ -47,6 +56,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
