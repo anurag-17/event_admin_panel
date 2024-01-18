@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import Pagination from "../../pagination";
 import { useAuth } from "../../../contexts/AuthContext";
+import Topbar from "../../../app/admin/admin-dashboard/topbar";
 
 const UserIssue = () => {
   const { adminAuthToken } = useAuth();
@@ -73,30 +74,6 @@ const UserIssue = () => {
       });
   };
 
-  // -------------Resolved Events-----------
-  // useEffect(()=>{
-  //   handleAllResolved();
-  // },[]);
-
-  // const handleAllResolved = async () => {
-  //   try {
-  //     const option = {
-  //       method: "GET",
-  //       url: `/api/issue/getAllEventIssues?isResolved=${isResolve}`,
-  //       headers: {
-  //         authorization: auth_token,
-  //       },
-  //     };
-  //     axios.request(option).then((response) => {
-  //       console.log("All Resolved Issue", response?.data);
-  //       // refreshData();
-  //       setAllResolvedIssue(response?.data?.eventIssues || []);
-  //       setTotalPages(response?.data?.total_pages || 1);
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   // ----------All event Issue resolve----------
   const handleResolve = async (id, isResolve) => {
@@ -164,6 +141,7 @@ const UserIssue = () => {
   return (
     <>
       {isLoader && <Loader />}
+      <Topbar/>
       <div>
         <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Users Issue List </h2>

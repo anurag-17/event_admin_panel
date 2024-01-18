@@ -52,7 +52,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   return (
     <>
       <div
-        className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
+        className="flex justify-center items-center border border-[#f3f3f3] rounded-lg bg-white
         2xl:px-5  2xl:h-[50px] 2xl:my-5
         xl:px-4  xl:h-[40px] xl:my-4
         lg:px-3  lg:h-[35px] lg:my-2
@@ -64,7 +64,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
         <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">
           Edit Category{" "}
         </h2>
-        <div className="mb-3 w-[40%]"></div>
+        
       </div>
       <div>
         <form
@@ -82,19 +82,19 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
               defaultValue={editData?.title}
               type="text"
               name="name"
-              className="custom_input capitalize"
+              className="custom_inputt capitalize"
               required
               maxLength={84}
             />
           </div>
-
+         <div className="flex justify-center">
           <button
             type="submit"
             disabled={isLoading}
             className="custom_btn"
           >
             {isLoading ? "Loading." : "Update"}
-          </button>
+          </button></div>
         </form>
       </div>
     </>

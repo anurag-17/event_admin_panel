@@ -46,7 +46,7 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
   return (
     <>
       <div
-        className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
+        className="flex justify-center items-center border border-[#f3f3f3] rounded-lg bg-white
       2xl:px-5  2xl:h-[50px] 2xl:my-5
       xl:px-4  xl:h-[40px] xl:my-4
       lg:px-3  lg:h-[35px] lg:my-2
@@ -58,14 +58,14 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
         <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold  ">
           Add New Categories{" "}
         </h2>
-        <div className="mb-3 w-[40%]"></div>
+       
       </div>
 
       <form
         onSubmit={handleSubmit}
         className=" bg-white border  rounded-lg 2xl:p-2 xl:p-2  lg:p-1 md:p-2 p-1  mx-auto"
       >
-        <div>
+        <div className="">
           <label
             className="custom_input_label
           "
@@ -77,14 +77,16 @@ const CreateCategoryForm = ({ closeDrawer, refreshData }) => {
             value={title}
             type="text"
             name="name"
-            className="custom_input capitalize "
+            className="custom_inputt capitalize  "
             required
             maxLength={100}
           />
         </div>
+        <div className="flex justify-center">
         <button type="submit" className="custom_btn" disabled={isLoading}>
           {isLoading ? "Adding Category..." : "Add Category"}
         </button>
+        </div>
       </form>
     </>
   );
