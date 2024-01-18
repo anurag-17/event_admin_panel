@@ -357,7 +357,7 @@ const Dashboard = () => {
                   <tr className="border text-gray-500 text-start ">
                     <th className="w-1/6 border py-2 px-4 text-start ">S.no</th>
                     <th className="w-4/6 border py-2 px-4 text-start ">
-                      Dash Events Name
+                      Event Name
                     </th>
                    
                   </tr>
