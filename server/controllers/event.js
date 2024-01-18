@@ -169,6 +169,84 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
   }
 });
 
+exports.getDashEvents = asyncHandler(async (req, res) => {
+  try {
+    // Delete expired events first
+    const currentDate = new Date();
+    await Event.deleteMany({ endDate: { $lt: currentDate } });
+    
+    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city} = req.query;
+
+    const currentPage = parseInt(page, 10);
+    const itemsPerPage = parseInt(limit, 10);
+
+    let query = {};
+
+    if (searchQuery) {
+      query.$or = [
+        { name: { $regex: new RegExp(searchQuery, "i") } },
+        { location: { $regex: new RegExp(searchQuery, "i") } },
+        { city: { $regex: new RegExp(searchQuery, "i") } },
+        { country: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
+
+    if (startDate) {
+      const parsedStartDate = new Date(startDate);
+      if (isNaN(parsedStartDate)) {
+        return res.status(401).json({ status: 'fail', message: 'Invalid start date format' });
+      }
+      query.startDate = { $gte: parsedStartDate };
+    }
+
+    if (endDate) {
+      const parsedEndDate = new Date(endDate);
+      if (isNaN(parsedEndDate)) {
+        return res.status(401).json({ status: 'fail', message: 'Invalid end date format' });
+      }
+      query.endDate = { $lte: parsedEndDate };
+    }
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (subCategory) {
+      query.subCategory = subCategory;
+    }
+
+    if (provider) {
+      query.event_provider = provider;
+    }
+
+    if (city) {
+      query.city = city;
+    }
+
+    const totalEvents = await Event.countDocuments(query);
+    const totalPages = Math.ceil(totalEvents / itemsPerPage);
+
+    const skip = (currentPage - 1) * itemsPerPage;
+
+    const allEvents = await Event.find(query)
+      .skip(skip)
+      .limit(itemsPerPage)
+      .sort({ createdAt: -1 })
+      .populate("category")
+      .populate("subCategory");
+
+    res.json({
+      current_page: currentPage,
+      total_pages: totalPages,
+      total_items: totalEvents,
+      events: allEvents,
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 exports.getStats = asyncHandler(async (req, res) => {
   try {
     const { category, subCategory, provider } = req.query;

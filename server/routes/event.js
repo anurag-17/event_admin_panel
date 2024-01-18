@@ -8,6 +8,7 @@ const {
     deleteBulkEvent,
     getEvent,
     getAllEvents,
+    getDashEvents,
     londontheatredirect,
     skiddleEvents,
     getStats
@@ -25,6 +26,8 @@ router.post("/deleteBulkEvent",  deleteBulkEvent);
 router.post("/getEvent", getEvent);
 
 router.get("/getAllEvents", getAllEvents);
+
+router.get("/getDashEvents", getDashEvents);
 
 router.get("/getStats", getStats);
 
