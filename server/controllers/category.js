@@ -6,8 +6,8 @@ exports.createCategory = async (req, res) => {
   try {
     const { title } = req.body;
 
-    const existingCategory = await Category.findOne({ title });
-
+    const existingCategory = await Category.findOne({ title: { $regex: new RegExp(`^${title}$`, "i") } });
+    
     if (existingCategory) {
       return res.status(400).json({ error: 'Category with this title already exists' });
     }

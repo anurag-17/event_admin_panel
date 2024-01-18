@@ -8,6 +8,7 @@ const subCategorySchema = new mongoose.Schema(
     },
     subCategory: {
       type: String,
+      unique: true,
     }
   },
   {
