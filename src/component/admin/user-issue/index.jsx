@@ -43,9 +43,9 @@ const UserIssue = () => {
   }
 
   // --------get All Event Issue----------
-  useEffect(() => {
-    defaultGetIssue(current_page, limit);
-  }, [current_page, !isRefresh]);
+  // useEffect(() => {
+  //   defaultGetIssue(current_page, limit);
+  // }, [current_page, !isRefresh]);
 
   const defaultGetIssue = (page, limit) => {
     setLoader(true);
