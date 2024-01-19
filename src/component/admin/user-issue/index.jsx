@@ -224,7 +224,7 @@ const UserIssue = () => {
                 <div className="w-1/12 col-span-1 my-auto  h1_text">
                   <div className="mb-2">
                     {item?.isResolved ? (
-                      <span className="w-full border p-1 rounded-md my-1   border-green-400 text-green-700 ">
+                      <span className="w-full border p-1 px-1 rounded-md my-1   border-green-400 text-green-700 ">
                         Resolved
                       </span>
                     ) : (
@@ -289,32 +289,32 @@ const UserIssue = () => {
                   </h1>
                 </div>
 
-                <div className="flex items-center w-1/12 col-span-1 h1_text">
-                  <div className=" flex flex-col gap-2 2xl:gap-2 w-10/12">
+                <div className="flex items-center w-2/12 lg:w-1/12 col-span-1 h1_text">
+                  <div className=" flex flex-col gap-2 2xl:gap-2 w-full ">
                     <div className="">
                       {item?.isResolved ? (
-                        <div>
-                          <button className="w-full border py-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
+                        <div className="flex justify-end">
+                          <button className="w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
                             Resolved
                           </button>
                         </div>
                       ) : (
-                        <div>
+                        <div className="flex justify-end">
                           <button
                             onClick={() => {
                               handleResolve(item?._id, true);
                             }}
-                            className=" w-full border py-1  rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200"
+                            className="w-4/6 lg:w-full border p-1  rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200"
                           >
                             Resolve
                           </button>
                         </div>
                       )}
                     </div>
-                    <div>
+                    <div className="flex justify-end">
                       <button
                         onClick={() => openModal(item?._id)}
-                        className="w-full border py-1  rounded-md   border-red-700 text-red-700 hover:bg-red-200 "
+                        className=" w-4/6 lg:w-full border p-1  rounded-md   border-red-700 text-red-700 hover:bg-red-200 "
                       >
                         Delete
                       </button>
