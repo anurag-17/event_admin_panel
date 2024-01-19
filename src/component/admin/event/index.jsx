@@ -651,13 +651,12 @@ const Event = () => {
     const selectedStartDate = e.target.value;
     setFetchStartDate(selectedStartDate);
 
-  
-    const endDateInput = document.getElementById('endDateInput');
+    const endDateInput = document.getElementById("endDateInput");
     if (endDateInput) {
       endDateInput.min = selectedStartDate;
-   
+
       if (selectedStartDate > fetchEndDate) {
-        setFetchEndDate('');
+        setFetchEndDate("");
       }
     }
   };
@@ -1211,7 +1210,14 @@ const Event = () => {
                                     item?.subCategory?.title
                                   )}
                                 >
-                                  <option value=""> Select Sub Category</option>
+                                  <option value="">
+                                    {" "}
+                                    <option value="">
+                                      {item?.subCategory?.subCategory
+                                        ? item.subCategory.subCategory
+                                        : "SelectSubcategory"}
+                                    </option>
+                                  </option>
                                   {Array.isArray(allSubCategory) &&
                                     allSubCategory
                                       .filter((item, indr) => {
