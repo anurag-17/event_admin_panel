@@ -42,14 +42,10 @@ const Login = () => {
       .then(function (response) {
         console.log(response)
         if (response?.status === 200) {
-          localStorage.setItem(
-            "accessToken",
-            JSON.stringify(response?.data?.token)
-          );
-          setAuthToken(response?.data?.token);
-          toast.success("Success. Login Successfully!");
           router.push("/admin/admin-dashboard");
+          setAuthToken(response?.data?.token);
           setLoading(false);
+          toast.success("Success. Login Successfully!");
         } else {
           setLoading(false);
           return;
@@ -64,7 +60,7 @@ const Login = () => {
 
   return (
     <>
-      {isLoading ? <Loader /> : null}
+      {/* {isLoading ? <Loader /> : null} */}
 
       <ToastContainer autoClose={1500} />
       <section className="h-screen bg-[#FCEBF2] flex items-center ">
@@ -99,7 +95,7 @@ const Login = () => {
                   Username :
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   value={email}
                   onChange={(e) => setUsername(e.target.value)}
                   id="username"
@@ -111,6 +107,7 @@ const Login = () => {
                   xl:mt-[6px] xl:p-[8px] xl:text-[12px]
                   2xl:mt-2 2xl:p-[12px] 2xl:text-[20px] 
                   w-full border rounded-md focus:outline-none "
+                  required
                 />
               </div>
               <div className="xl:mb-4">
@@ -138,6 +135,7 @@ const Login = () => {
                   xl:mt-[6px] xl:p-[8px] xl:text-[12px]
                   2xl:mt-2 2xl:p-[12px] 2xl:text-[20px] 
                   w-full border rounded-md focus:outline-none "
+                  required
                 />
                 <button
                   type="button"
