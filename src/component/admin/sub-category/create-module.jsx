@@ -45,7 +45,7 @@ const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
           .catch((e) => {
             console.log(e);
             setLoading(false);
-            toast.error("Failed. something went wrong!");
+            toast.error("Subcategory already exist!");
           });
       } catch (error) {
         setLoading(false);
