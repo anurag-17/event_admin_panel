@@ -84,6 +84,7 @@ exports.getallCategory = async (req, res) => {
     const skip = itemsPerPage ? (currentPage - 1) * itemsPerPage : 0;
 
     const getallCategory = await Category.find(query)
+      .sort({ title: 1 })
       .skip(skip)
       .limit(itemsPerPage);
 

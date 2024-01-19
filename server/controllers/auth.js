@@ -384,6 +384,8 @@ exports.getallUser = async (req, res) => {
       ]);
     }
 
+    userQuery.sort({ firstname: 1 });
+
     // Pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
