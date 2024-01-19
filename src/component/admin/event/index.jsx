@@ -266,7 +266,7 @@ const Event = () => {
           {
             headers: {
               "Content-Type": "application/json",
-              authorization: useAuth,
+              authorization: adminAuthToken,
             },
           }
         );
@@ -935,12 +935,19 @@ const Event = () => {
                     value={cityFilter}
                   >
                     <option value="">All City</option>
-                    {citiesList?.length > 0 &&
-                      citiesList?.map((city) => (
+                    {citiesList
+                      ?.slice() 
+                      .sort((a, b) =>
+                        a
+                          .trim()
+                          .toLowerCase()
+                          .localeCompare(b.trim().toLowerCase())
+                      ) 
+                      .map((city) => (
                         <option
                           key={city}
                           value={city}
-                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px] capitalize"
                         >
                           {city}
                         </option>
@@ -973,15 +980,18 @@ const Event = () => {
                     }}
                   >
                     <option value="">All Provider</option>
-                    {providerList?.map((event_provider) => (
-                      <option
-                        key={event_provider}
-                        value={event_provider}
-                        className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
-                      >
-                        {event_provider}
-                      </option>
-                    ))}
+                    {providerList
+                      ?.slice()
+                      .sort((a, b) => a.localeCompare(b))
+                      .map((event_provider) => (
+                        <option
+                          key={event_provider}
+                          value={event_provider}
+                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                        >
+                          {event_provider}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
