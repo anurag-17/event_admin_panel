@@ -648,7 +648,18 @@ const Event = () => {
   }, [fetchStartDate, fetchEndDate]);
 
   const handleStartDateChange = (e) => {
-    setFetchStartDate(e.target.value);
+    const selectedStartDate = e.target.value;
+    setFetchStartDate(selectedStartDate);
+
+  
+    const endDateInput = document.getElementById('endDateInput');
+    if (endDateInput) {
+      endDateInput.min = selectedStartDate;
+   
+      if (selectedStartDate > fetchEndDate) {
+        setFetchEndDate('');
+      }
+    }
   };
 
   const handleEndDateChange = (e) => {
@@ -715,6 +726,7 @@ const Event = () => {
                       type="date"
                       value={fetchEndDate}
                       onChange={handleEndDateChange}
+                      min={fetchStartDate}
                       className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -771,7 +783,7 @@ const Event = () => {
 
                   <select
                     name="category"
-                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none 
                     2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
                       lg:px-2 lg:py-1  lg:w-24 w-28
@@ -814,7 +826,7 @@ const Event = () => {
                   </div>
                   <select
                     name="subCategory"
-                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none 
                   2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
                     lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
@@ -936,13 +948,13 @@ const Event = () => {
                   >
                     <option value="">All City</option>
                     {citiesList
-                      ?.slice() 
+                      ?.slice()
                       .sort((a, b) =>
                         a
                           .trim()
                           .toLowerCase()
                           .localeCompare(b.trim().toLowerCase())
-                      ) 
+                      )
                       .map((city) => (
                         <option
                           key={city}
@@ -1044,7 +1056,7 @@ const Event = () => {
           </div>
         </div>
 
-        <div className="relative flex mx-10 lg:mx-8  overflow-x-auto ">
+        <div className=" flex mx-10 lg:mx-8  overflow-x-auto ">
           <div className="  w-full ">
             <div className="overflow-y-scroll  ">
               <div className="h-[300px] xl:h-[400px]">

@@ -110,7 +110,7 @@ const AdminDashboard = () => {
             <div className="bg-black h-[2px] w-[20px]"></div>
           </div>
           <div
-            className={`flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[10px] 2xl:py-[30px] py-[10px] text-white bg-black 
+            className={`z-50 flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[10px] 2xl:py-[30px] py-[10px] text-white bg-black 
          xl:w-[22%] lg:w-[24%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
                  ${
                    showDrawer
