@@ -5,7 +5,7 @@ import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const EditEvent = ({ editData, closeModal, refreshData }) => {
-  console.log(editData,"tttt");
+  console.log(editData, "tttt");
   // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const { adminAuthToken } = useAuth();
 
@@ -413,11 +413,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                   minLength={3}
                   maxLength={32}
                 >
-                  {/* <option value="" disabled>
-                  {editData?.category
-                    ? editData?.category?._id
-                    : eventDetail?.category}
-                </option> */}
+                  <option value="">{editData?.category?.title}</option>
                   {getallCategory.map((item) => (
                     <option
                       className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
@@ -454,7 +450,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                   minLength={3}
                   maxLength={32}
                 >
-                  <option value="">Select Sub Cateory</option>
+                  <option value="">{eventDetail?.subCategory?.subCategory}</option>
                   {getallSubCategory
                     .filter((item, indr) => {
                       // console.log(item, eventDetail);
