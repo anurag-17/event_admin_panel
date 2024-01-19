@@ -25,10 +25,8 @@ const ChangePassword = () => {
   const togglePasswordVisibility = (passwordType) => {
     if (passwordType === "password") {
       setShowPassword(!showPassword);
-    } 
-    else if(passwordType === "newPassword"){
+    } else if (passwordType === "newPassword") {
       setShowNewPassword(!showNewPassword);
-
     } else if (passwordType === "confirmPassword") {
       setShowConfirmPassword(!showConfirmPassword);
     }
@@ -50,36 +48,31 @@ const ChangePassword = () => {
     } else {
       try {
         setLoading(true);
-        const res = await axios.post(
-          "/api/auth/updatePassword",
-          formData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              authorization: auth_token,
-            },
-          }
-        );
-// console.log(res)
+        const res = await axios.post("/api/auth/updatePassword", formData, {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: auth_token,
+          },
+        });
+        // console.log(res)
         if (res.status === 200) {
           setFormData({
             oldPassword: "",
             newPassword: "",
           });
-          setCnfmPassword("")
+          setCnfmPassword("");
           setError("");
-          toast.success("Password change successfully!")
-          handleSignout()
+          toast.success("Password change successfully!");
+          handleSignout();
           // router.push("/admin-login")
-        }
-        else if(res.status===203){
+        } else if (res.status === 203) {
           setError(res?.data?.message);
           setLoader(false);
           return;
-        } 
+        }
       } catch (error) {
         setError("Password change failed!");
-        toast.error("Server error")
+        toast.error("Server error");
       } finally {
         setLoading(false);
       }
@@ -105,8 +98,7 @@ const ChangePassword = () => {
             setLoader(false);
             localStorage.removeItem("accessToken");
             router.push("/admin-login");
-          } 
-          else {
+          } else {
             setLoader(false);
             localStorage.removeItem("accessToken");
             router.push("/admin-login");
@@ -129,8 +121,9 @@ const ChangePassword = () => {
   };
   return (
     <>
-    { loader && <Loader/>}
-    <ToastContainer />
+      {loader && <Loader />}
+
+      <ToastContainer />
       <div className="flex items-center justify-center">
         <div className="md:px-[50px] w-full mx-auto">
           <div className="relative flex flex-col 2xl:gap-x-20 xl:gap-x-10 gap-x-7 justify-center lg:shadow-none  items-center lg:flex-row space-y-8 md:space-y-0 w-[100%] px-[10px]bg-white lg:px-[40px] py-[20px] md:py-[40px] ">
@@ -141,11 +134,7 @@ const ChangePassword = () => {
               Go back
             </div> */}
             <div className="w-[100%] lg:w-[60%] xl:w-[50%]">
-              <form
-                action=""
-                className=""
-                onSubmit={handleSubmit}
-              >
+              <form action="" className="" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-4 justify-center md:max-w-[80%] lg:w-full lg:max-w-[100%] mx-auto ">
                   <div className="text-left ">
                     <p className="mb-2 2xl:text-[35px] md:text-[30px] text-[24px] leading-[38px] md:font-bold font-medium whitespace-nowrap">
@@ -197,7 +186,9 @@ const ChangePassword = () => {
                     />
                     <div
                       className="absolute right-[10px] cursor-pointer"
-                      onClick={() => togglePasswordVisibility("confirmPassword")}
+                      onClick={() =>
+                        togglePasswordVisibility("confirmPassword")
+                      }
                     >
                       {showConfirmPassword ? <OpenEye /> : <CloseEye />}
                     </div>
@@ -222,8 +213,8 @@ const ChangePassword = () => {
           </div>
         </div>
       </div>
-      </>
-      );
+    </>
+  );
 };
 
 export default ChangePassword;

@@ -63,6 +63,8 @@ const Event = () => {
   const [filteredSubCategory, setFilteredSubCategory] = useState("");
   const [fetchStartDate, setFetchStartDate] = useState("");
   const [fetchEndDate, setFetchEndDate] = useState("");
+  const [validationError, setValidationError] = useState("");
+
   //----------Date/Time Formate
   const convertTime = (time) => {
     const parsedDateTime = moment(time);
@@ -636,6 +638,22 @@ const Event = () => {
   // console.log(result);
   const [mainSno, setMainSno] = useState(0);
   let Sno = mainSno;
+
+  useEffect(() => {
+    if (fetchStartDate && fetchEndDate && fetchStartDate > fetchEndDate) {
+      alert("Start Date cannot be greater than End Date");
+    } else {
+      setValidationError("");
+    }
+  }, [fetchStartDate, fetchEndDate]);
+
+  const handleStartDateChange = (e) => {
+    setFetchStartDate(e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    setFetchEndDate(e.target.value);
+  };
   return (
     <>
       {isLoader && <Loader />}
@@ -673,7 +691,7 @@ const Event = () => {
                     <input
                       type="date"
                       value={fetchStartDate}
-                      onChange={(e) => setFetchStartDate(e.target.value)}
+                      onChange={handleStartDateChange}
                       className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -696,7 +714,7 @@ const Event = () => {
                     <input
                       type="date"
                       value={fetchEndDate}
-                      onChange={(e) => setFetchEndDate(e.target.value)}
+                      onChange={handleEndDateChange}
                       className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                    2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
@@ -707,6 +725,11 @@ const Event = () => {
                     />
                   </div>
                 </div>
+                {validationError && (
+                  <div className="text-red-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                    {validationError}
+                  </div>
+                )}
               </div>
               <div className="">
                 <div>
@@ -770,7 +793,7 @@ const Event = () => {
                         <option
                           key={item._id}
                           value={item._id}
-                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                          className="2xl:text-sm xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                         >
                           {item.title}
                         </option>
@@ -815,7 +838,7 @@ const Event = () => {
                         })
                         .map((itemss) => (
                           <option
-                            className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                            className="2xl:text-sm xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                             key={itemss?._id}
                             value={itemss._id}
                           >

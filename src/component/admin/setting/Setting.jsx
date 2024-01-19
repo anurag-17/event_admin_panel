@@ -1,10 +1,10 @@
-import React ,{useState} from "react";
+import React, { useState } from "react";
 import Accordion from "./Accordion"; // Import your Accordion component
-import Profile from "./Profile"; 
-import ChangePassword from "./upadate-password"; 
+import Profile from "./Profile";
+import ChangePassword from "./upadate-password";
+import Topbar from "../../../app/admin/admin-dashboard/topbar";
 
 const Setting = () => {
-
   const [activeIndex, setActiveIndex] = useState(0);
   const accordionData = [
     {
@@ -14,7 +14,7 @@ const Setting = () => {
     },
     {
       title: "change password",
-      content: <ChangePassword/>,
+      content: <ChangePassword />,
       index: 1,
     },
   ];
@@ -24,19 +24,21 @@ const Setting = () => {
   };
 
   return (
-    <div className="bg-[#f3f3f3] w-full h-full lg:py-[40px] py-[20px]">
-      {accordionData.map((accordion, index) => (
-        <Accordion
-          key={accordion.index}
-          title={accordion.title}
-          content={accordion.content}
-          index={index}
-          active={activeIndex === index}
-          onToggle={handleAccordionToggle}
-
-        />
-      ))}
-    </div>
+    <>
+      <Topbar />
+      <div className="bg-[#f3f3f3] w-full h-full lg:py-[40px] py-[20px]">
+        {accordionData.map((accordion, index) => (
+          <Accordion
+            key={accordion.index}
+            title={accordion.title}
+            content={accordion.content}
+            index={index}
+            active={activeIndex === index}
+            onToggle={handleAccordionToggle}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 
