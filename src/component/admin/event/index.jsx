@@ -1048,7 +1048,7 @@ const Event = () => {
           <div className="  w-full ">
             <div className="overflow-y-scroll  ">
               <div className="h-[300px] xl:h-[400px]">
-                <table className="lg:w-[150%] xl:w-[130%]  border bg-white rounded-md mt-5 p-10">
+                <table className="w-[1500px] lg:w-[150%] xl:w-[130%]  border bg-white rounded-md mt-5 p-10">
                   <thead className="sticky-header">
                     <tr
                       className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
@@ -1059,7 +1059,7 @@ const Event = () => {
            sm:text-[12px] 
            text-[10px] "
                     >
-                      <th className=" w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
+                      <th className=" w-[11%] text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
                         S.NO
                       </th>
                       <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
@@ -1106,7 +1106,7 @@ const Event = () => {
                             className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                           >
                             {/* {console.log(item.category)} */}
-                            <td className=" my-auto w-1/12">
+                            <td className=" my-auto w-[11%]">
                               {serialNumber + "."}
                             </td>
                             <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
@@ -1139,7 +1139,7 @@ const Event = () => {
                               </>
                             </td>
                             <td className="my-auto capitalize  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
-                              <p className="w-40">{item.name}</p>
+                              <p className="w-44">{item.name}</p>
                             </td>
 
                             <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] 2xl:pl-0">
