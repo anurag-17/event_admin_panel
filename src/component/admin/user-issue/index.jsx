@@ -74,7 +74,6 @@ const UserIssue = () => {
       });
   };
 
-
   // ----------All event Issue resolve----------
   const handleResolve = async (id, isResolve) => {
     try {
@@ -110,8 +109,8 @@ const UserIssue = () => {
     }
   }, [current_page, limit, isRefresh, selectedFilter]);
 
-  const handleFilterChange = async(value) => {
-    setLoader(true)
+  const handleFilterChange = async (value) => {
+    setLoader(true);
     if (value === "") {
       setSelectedFilter("all");
     } else {
@@ -135,33 +134,54 @@ const UserIssue = () => {
       }
     }
     setIsResolve(value);
-    setLoader(false)
+    setLoader(false);
   };
 
   return (
     <>
       {isLoader && <Loader />}
-      <Topbar/>
+      <Topbar />
       <div>
-        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:p-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   h-auto  xl:p-2 p-2 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold">Users Issue List </h2>
 
           <div className="">
-            <label className="text-[16px]">Issues:</label>
+            <div>
+              <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[14px] 2xl:text-[18px]">
+                Issues:
+              </label>
+            </div>
             <select
-              className="text-[14px] rounded-sm border border-gray-300 ml-2"
+              className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
+                  2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-44 
+                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
+                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+                   md:px-3 md:py-0 md:h-[25px] 
+                   sm:px-2 sm:py-0 
+                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
               value={isResolve}
               onChange={(e) => handleFilterChange(e.target.value)}
             >
-              <option className="text-[13px]" value="">
+              <option
+                className="2xl:text-sm xl:text-[12px] lg:text-[10px] md:text-[9px] text-[8px]"
+                value=""
+              >
                 All
               </option>
-              <option className="text-[13px]" value="true">Resolved</option>
-              <option className="text-[13px]" value="false">Not Resolved</option>
+              <option
+                className="2xl:text-sm xl:text-[12px] lg:text-[10px] md:text-[9px] text-[8px]"
+                value="true"
+              >
+                Resolved
+              </option>
+              <option
+                className="2xl:text-sm xl:text-[12px] lg:text-[10px] md:text-[9px] text-[8px]"
+                value="false"
+              >
+                Not Resolved
+              </option>
             </select>
           </div>
-
-          <h2>Welcome Back, Admin</h2>
         </div>
         {Array.isArray(
           selectedFilter === "resolved" ? allResolvedIssue : getUserIssue
@@ -204,7 +224,7 @@ const UserIssue = () => {
                 <div className="w-1/12 col-span-1 my-auto  h1_text">
                   <div className="mb-2">
                     {item?.isResolved ? (
-                      <span className="border p-1 rounded-md my-1   border-green-400 text-green-700 ">
+                      <span className="w-full border p-1 rounded-md my-1   border-green-400 text-green-700 ">
                         Resolved
                       </span>
                     ) : (
@@ -212,16 +232,21 @@ const UserIssue = () => {
                         onClick={() => {
                           handleResolve(item?._id, true);
                         }}
-                        className="border p-1 rounded-md my-1 border-sky-400 text-sky-700 hover:bg-sky-200"
+                        className={`w-full border p-1 rounded-md my-1 ${
+                          item?.isResolved
+                            ? "border-green-400 text-green-700"
+                            : "border-sky-400 text-sky-700 hover:bg-sky-200"
+                        }`}
                       >
                         Resolve
                       </button>
                     )}
                   </div>
-                  <div>
+
+                  <div className="">
                     <button
                       onClick={() => openModal(item?._id)}
-                      className="border p-1 rounded-md my-1  border-red-700 text-red-700 hover:bg-red-200 "
+                      className="w-full border p-1 rounded-md my-1  border-red-700 text-red-700 hover:bg-red-200 "
                     >
                       Delete
                     </button>
@@ -264,41 +289,48 @@ const UserIssue = () => {
                   </h1>
                 </div>
 
-                <div className="w-1/12 col-span-1   h1_text">
-                  <div className="mb-2">
-                    {item?.isResolved ? (
-                      <span className="border p-1 py-[6px] rounded-md    border-green-400 text-green-700 ">
-                        Resolved
-                      </span>
-                    ) : (
+                <div className="flex items-center w-1/12 col-span-1 h1_text">
+                  <div className=" flex flex-col gap-2 2xl:gap-2 w-10/12">
+                    <div className="">
+                      {item?.isResolved ? (
+                        <div>
+                          <button className="w-full border py-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
+                            Resolved
+                          </button>
+                        </div>
+                      ) : (
+                        <div>
+                          <button
+                            onClick={() => {
+                              handleResolve(item?._id, true);
+                            }}
+                            className=" w-full border py-1  rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200"
+                          >
+                            Resolve
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <div>
                       <button
-                        onClick={() => {
-                          handleResolve(item?._id, true);
-                        }}
-                        className="border p-1 px-2 rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200"
+                        onClick={() => openModal(item?._id)}
+                        className="w-full border py-1  rounded-md   border-red-700 text-red-700 hover:bg-red-200 "
                       >
-                        Resolve
+                        Delete
                       </button>
-                    )}
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => openModal(item?._id)}
-                      className="border p-1 px-3 rounded-md   border-red-700 text-red-700 hover:bg-red-200 "
-                    >
-                      Delete
-                    </button>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
       </div>
-      { total_pages >1 && (
-      <Pagination
-        total_pages={total_pages}
-        current_page={current_page}
-        onPageChange={handlePageChange}
-      />)}
+      {total_pages > 1 && (
+        <Pagination
+          total_pages={total_pages}
+          current_page={current_page}
+          onPageChange={handlePageChange}
+        />
+      )}
 
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>

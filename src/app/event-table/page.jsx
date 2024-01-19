@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import protectedRoute from "../../component/utils/withAuth";
 import Loader from "../../component/loader";
+import Topbar from "../admin/admin-dashboard/topbar";
 
 const EventRedirection = () => {
   const [getAllEvent, setGetAllEvent] = useState([]);
@@ -101,6 +102,7 @@ const EventRedirection = () => {
   return (
     <>
       {isLoader && <Loader />}
+      <Topbar/>
       <div className="min-h-screen bg-[#F3F3F3] pt-4">
         <div className="pt-1 flex sm:flex-row flex-col justify-items-center sm:justify-between  items-center  2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[70px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold text-[16px] sm:text-[20px] ">

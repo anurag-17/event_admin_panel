@@ -110,8 +110,8 @@ const AdminDashboard = () => {
             <div className="bg-black h-[2px] w-[20px]"></div>
           </div>
           <div
-            className={`flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[10px] 2xl:py-[50px] py-[10px] text-white bg-black 
-         xl:w-[22%] lg:w-[23%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
+            className={`flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[10px] 2xl:py-[30px] py-[10px] text-white bg-black 
+         xl:w-[22%] lg:w-[24%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
                  ${
                    showDrawer
                      ? "block  absolute top-0 left-0 min-h-screen is-show"
@@ -124,7 +124,7 @@ const AdminDashboard = () => {
             >
               <div className="flex justify-end">
                 {" "}
-                <Image src={inquiry} className="md:w-10 sm:w-8  w-7" />{" "}
+                <Image src={inquiry} className=" sm:w-8  w-7" />{" "}
               </div>
             </div>
 
@@ -141,11 +141,11 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col 2xl:gap-6 gap-1 mt-10 lg:mt-14 xl:mt-20 2xl:mt-28">
+            <div className="flex flex-col 2xl:gap-6 gap-1 mt-10 lg:mt-10 xl:mt-14 2xl:mt-20">
               {menulist.map((item, index) => (
                 <div
                   key={index}
-                  className={`sm:pl-6 py-3 mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[25px] xl:text-[16px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]  
+                  className={`pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px]  
                                     ${
                                       item.id === ComponentId
                                         ? "bg-gray-700"
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
               <div>
                 <div
                   onClick={signoutFunc}
-                  className="lg:mt-10 xl:mt-14 2xl:mt-24 sm:pl-6 py-3 mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[16px] 2xl:text-[25px] lg:text-[14px] md:text-[14px] sm:text-[12px] text-[11px]"
+                  className="lg:mt-5 xl:mt-7 2xl:mt-12 pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[14px] 2xl:text-[22px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px]"
                 >
                   <p>Sign Out</p>
                 </div>
