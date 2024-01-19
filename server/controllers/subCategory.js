@@ -90,6 +90,7 @@ exports.getallSubCategory = async (req, res) => {
     const skip = itemsPerPage ? (currentPage - 1) * itemsPerPage : 0;
 
     const getallSubCategory = await SubCategory.find(query)
+      .collation({ locale: "en", strength: 2 })
       .sort({ subCategory: 1 })
       .skip(skip)
       .limit(itemsPerPage)
