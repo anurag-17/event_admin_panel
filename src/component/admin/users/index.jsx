@@ -362,7 +362,7 @@ const AllUser = () => {
         <Dialog
           as="div"
           className="relative z-10"
-          onClose={() => setDialogMatch(false)}
+          onClose={() => {}}
         >
           <Transition.Child
             as={Fragment}
@@ -390,11 +390,52 @@ const AllUser = () => {
                 <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-2xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="flex justify-center lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="flex  lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>
-                  <div className="mt-3 flex justify-center gap-14">
+                  <p className="lg:text-[16px] text-[16px] font-normal leading-[30px] text-gray-500 mt-4">
+          Do you really want to delete these records? You cant't view this in
+          your list anymore if you delete!
+        </p>
+        <div className="mt-8">
+        <div className="flex justify-between gap-x-5">
+          <button
+            className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
+                              hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200"
+                              onClick={() => {
+                        setDialogMatch(false);
+                      }}
+          >
+            No, Keep It
+          </button>
+          {isLoader ? (
+            <button
+              className="w-full border border-1 rounded-md 
+                              text-sm 
+                              border-red-400 text-red-700 bg-red-200  px-2 py-3
+                              hover:border-none"
+            >
+              Loading...
+            </button>
+          ) : (
+            <button
+              className="w-full border border-1 rounded-md 
+                              text-sm 
+                              border-red-400 text-red-700 hover:bg-red-200  px-2 py-3
+                              hover:border-none"
+                              onClick={() => handleDelete(deleteId)}
+            >
+              Yes, Delete It
+            </button>
+          )}
+        </div>
+      </div>
+
+
+
+
+                  {/* <div className="mt-3 flex justify-center gap-14">
                     <button
                       className="px-5 py-1 rounded-lg border border-[green] text-[green]"
                       onClick={() => handleDelete(deleteId)}
@@ -409,7 +450,7 @@ const AllUser = () => {
                     >
                       No
                     </button>
-                  </div>
+                  </div> */}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

@@ -99,7 +99,7 @@ const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
             <select
               name="category"
               placeholder="Add Category"
-              className="rounded custom_inputt"
+              className="rounded custom_inputt capitalize"
               defaultValue={category}
               value={category}
               onChange={(e) => setCategory(e.target.value)}
