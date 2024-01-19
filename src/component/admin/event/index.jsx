@@ -703,6 +703,7 @@ const Event = () => {
                       type="date"
                       value={fetchStartDate}
                       onChange={handleStartDateChange}
+                      max={fetchEndDate}
                       className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
                   2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
                     xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
