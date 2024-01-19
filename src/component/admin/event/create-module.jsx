@@ -353,11 +353,11 @@ const CreateEvent = ({ closeModal }) => {
               onChange={inputHandler}
             >
               <option value="">Select Currency</option>
-              <option value="USD">USD</option>
+              <option value="AED">AED</option>
               <option value="EURO">EURO</option>
               <option value="POUND">POUND</option>
-              <option value="AED">AED</option>
               <option value="RUPEES">RUPEES</option>
+              <option value="USD">USD</option>
             </select>
             {/* <input
             onChange={inputHandler}

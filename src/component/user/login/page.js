@@ -106,6 +106,7 @@ const Login = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   id="username"
                   name="email"
+                  required
                   className="mt-[2px] p-[6px] text-[11px] 
                   sm:mt-[2px] sm:p-[6px] sm:text-[11px] 
                   md:mt-[2px] md:p-[6px] md:text-[12px]
@@ -133,6 +134,7 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   name="password"
+                  required
                   className="mt-[2px] p-[6px] text-[11px] 
                   sm:mt-[2px] sm:p-[6px] sm:text-[11px] 
                   md:mt-[2px] md:p-[6px] md:text-[12px] 
@@ -199,6 +201,7 @@ const Login = () => {
                lg:text-[12px] 
                xl:text-[13px]  
                  2xl:text-[20px] 2xl:my-2"
+
                     >
                       Forgot Password
                     </p>
