@@ -5,7 +5,7 @@ import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const EditEvent = ({ editData, closeModal, refreshData }) => {
-  console.log(editData);
+  console.log(editData,"tttt");
   // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const { adminAuthToken } = useAuth();
 
@@ -405,7 +405,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                   className="custom_inputt"
                   defaultValue={
                     editData?.category
-                      ? editData?.category?._id
+                      ? editData?.category?.title
                       : eventDetail?.category
                   }
                   onChange={inputHandler}
