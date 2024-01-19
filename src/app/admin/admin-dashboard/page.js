@@ -24,10 +24,9 @@ import issue from "../../../../public/images/issue.svg";
 import protectedRoute from "../../../component/utils/withAuth";
 import Setting from "../../../component/admin/setting/Setting";
 import EventRedirection from "../../event-table/page";
-
+import redirect from "../../../../public/images/redirect.svg"
 
 const AdminDashboard = () => {
-
   const { loader, handleSignout } = useAuth();
   const [ComponentId, setComponentId] = useState(1);
   const [showDrawer, setShowDrawer] = useState("");
@@ -85,7 +84,7 @@ const AdminDashboard = () => {
       id: 7,
       label: "Event Redirection",
       component: <EventRedirection />,
-      icon: issue,
+      icon: redirect,
     },
     {
       id: 8,
@@ -145,7 +144,7 @@ const AdminDashboard = () => {
               {menulist.map((item, index) => (
                 <div
                   key={index}
-                  className={`pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px]  
+                  className={`pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[20px]  xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px] dashboard_box_t 
                                     ${
                                       item.id === ComponentId
                                         ? "bg-gray-700"
@@ -168,8 +167,23 @@ const AdminDashboard = () => {
               <div>
                 <div
                   onClick={signoutFunc}
-                  className="lg:mt-5 xl:mt-7 2xl:mt-12 pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[14px] 2xl:text-[22px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px]"
+                  className="lg:mt-5 xl:mt-7 2xl:mt-12 pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[14px] 2xl:text-[20px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px] dashboard_box_t "
                 >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="h-[20px] w-[20px] xl:h-[20px] xl:w-[20px] 2xl:h-[30px] 2xl:w-[30px] "
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                    />
+                  </svg>
+
                   <p>Sign Out</p>
                 </div>
               </div>

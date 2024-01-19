@@ -13,18 +13,18 @@ const Dashboard = () => {
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
   const [isRefresh, setRefresh] = useState(false);
-  const [limit, setLimit] =useState(5);
-  const [getAllDashEvents,setGetAllDashEvents]=useState([]);
+  const [limit, setLimit] = useState(5);
+  const [getAllDashEvents, setGetAllDashEvents] = useState([]);
   const { adminAuthToken } = useAuth();
 
   // ---------get Dash Events--------------
   useEffect(() => {
-    handleDashEvents(5, 1); 
-  }, [ isRefresh]);
-  
+    handleDashEvents(5, 1);
+  }, [isRefresh]);
+
   const handleDashEvents = (limit, page) => {
     setLoader(true);
-  
+
     const options = {
       method: "GET",
       url: "/api/event/getDashEvents",
@@ -37,12 +37,12 @@ const Dashboard = () => {
         Authorization: adminAuthToken,
       },
     };
-  
+
     axios
       .request(options)
       .then((response) => {
         setGetAllDashEvents(response?.data?.events);
-        console.log("getdash",response?.data?.events);
+        console.log("getdash", response?.data?.events);
         setLoader(false);
       })
       .catch((err) => {
@@ -50,11 +50,6 @@ const Dashboard = () => {
         setLoader(false);
       });
   };
-  
-  
-  
- 
-
 
   useEffect(() => {
     defaultEvent();
@@ -79,10 +74,10 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    defaultgetAllCate(5,1);
-  }, [ isRefresh]);
+    defaultgetAllCate(5, 1);
+  }, [isRefresh]);
 
-  const defaultgetAllCate = (limit, page ) => {
+  const defaultgetAllCate = (limit, page) => {
     setLoader(true);
     const option = {
       method: "GET",
@@ -102,12 +97,12 @@ const Dashboard = () => {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
-  
+
   useEffect(() => {
-    defaultsubCategory(current_page , limit);
+    defaultsubCategory(current_page, limit);
   }, [current_page, isRefresh]);
 
-  const defaultsubCategory = (limit, page ) => {
+  const defaultsubCategory = (limit, page) => {
     const options = {
       method: "GET",
       url: `/api/subCategory/getallSubCategory?limit=${limit}&page=${page}`,
@@ -122,14 +117,12 @@ const Dashboard = () => {
       .then((response) => {
         setAllCategory(response?.data?.subCategories);
         setTotalPages(response?.data?.subCategories || 1);
-
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
- 
   return (
     <>
       {isLoader && <Loader />}
@@ -163,16 +156,16 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className=" w-3/4 ">
-                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600    dashboard_box_t">
+                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600 dashboard_box_t    dashboard_box_t">
                     Total Providers{" "}
                   </h2>
-                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10">
-                    3
+                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10 dashboard_box_num">
+                    4
                   </h3>
                 </div>
               </div>
 
-               <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
+              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -192,16 +185,16 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className=" w-3/4 ">
-                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600">
+                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600 dashboard_box_t">
                     Total Events{" "}
                   </h2>
-                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10">
+                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10 dashboard_box_num">
                     {getAllEvent?.totalEvents}
                   </h3>
                 </div>
               </div>
 
-               <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
+              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -221,16 +214,16 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className=" w-3/4 ">
-                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600 dashboard_box_t">
+                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600 dashboard_box_t dashboard_box_t">
                     Total Categories{" "}
                   </h2>
-                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10">
+                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10 dashboard_box_num">
                     {getAllEvent?.totalCategories}
                   </h3>
                 </div>
               </div>
 
-               <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
+              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -253,14 +246,14 @@ const Dashboard = () => {
                   <h2 className="  text-[10px] md:text-[8px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600 dashboard_box_t">
                     Total Subcategories{" "}
                   </h2>
-                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10">
+                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10 dashboard_box_num">
                     {getAllEvent?.totalSubCategories}
                   </h3>
                 </div>
               </div>
               {/* ---------------------//-------------- */}
 
-               <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
+              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -274,22 +267,22 @@ const Dashboard = () => {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
                       />
                     </svg>
                   </div>
                 </div>
                 <div className=" w-3/4 ">
-                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600">
+                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600 dashboard_box_t">
                     Total Event Issues{" "}
                   </h2>
-                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10">
+                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10 dashboard_box_num">
                     {getAllEvent?.totalEventIssues}
                   </h3>
                 </div>
               </div>
 
-               <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
+              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -309,16 +302,16 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className=" w-3/4 ">
-                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600">
+                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600 dashboard_box_t">
                     Event Redirections
                   </h2>
-                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10">
+                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10 dashboard_box_num">
                     {getAllEvent?.totalEventRedirections}
                   </h3>
                 </div>
               </div>
 
-               <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
+              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[31.5%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -338,10 +331,10 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className=" w-3/4 ">
-                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600">
+                  <h2 className="  text-[10px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] text-gray-600 dashboard_box_t">
                     Total Users{" "}
                   </h2>
-                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10">
+                  <h3 className="font-semibold text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[30px] lg:leading-5 xl:leading-7 2xl:leading-10 dashboard_box_num">
                     {getAllEvent?.totalUsers}
                   </h3>
                 </div>
@@ -359,7 +352,6 @@ const Dashboard = () => {
                     <th className="w-4/6 border py-2 px-4 text-start ">
                       Event Name
                     </th>
-                   
                   </tr>
                 </thead>
 
@@ -373,7 +365,6 @@ const Dashboard = () => {
                         <td className="w-4/6 border py-2 px-4 border-b text-start">
                           {item?.name}
                         </td>
-                        
                       </tr>
                     ))}
                   </tbody>
@@ -390,7 +381,6 @@ const Dashboard = () => {
                     <th className="w-4/6 border py-2 px-4 text-start ">
                       Category Name
                     </th>
-                   
                   </tr>
                 </thead>
 
@@ -404,7 +394,6 @@ const Dashboard = () => {
                         <td className="w-4/6 border py-2 px-4 border-b text-start">
                           {item.title}
                         </td>
-                        
                       </tr>
                     ))}
                   </tbody>
@@ -414,7 +403,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-   
     </>
   );
 };
