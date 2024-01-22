@@ -104,15 +104,15 @@ const EventRedirection = () => {
       {isLoader && <Loader />}
       <Topbar/>
       <div className="min-h-screen bg-[#F3F3F3] pt-4">
-        <div className="pt-1 flex sm:flex-row flex-col justify-items-center sm:justify-between  items-center  2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[70px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold text-[16px] sm:text-[20px] ">
+        <div className="pt-1 flex sm:flex-row flex-col justify-items-center sm:justify-between  items-center  2xl:pt- 2xl:px-10 border mx-4 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[70px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+          <h2 className="font-semibold custom_heading_text">
             Redirected Event List{" "}
           </h2>
 
-          <div className="flex items-center justify-center w-[30%] sm:w-[27%]">
+          <div className="flex items-center justify-center w-[165px] sm:w-[27%]">
             <input
               type="search"
-              className="border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
+              className="border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-[4px] rounded-lg w-full lg:max-w-auto  mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
               placeholder="Search"
               onChange={handleSearchChange}
             />
@@ -120,45 +120,45 @@ const EventRedirection = () => {
         </div>
 
         <div className="overflow-x-scroll">
-          <div className=" mr-4  lg:mx-8    ">
+          <div className=" mx-4 lg:mx-8    ">
             <table className="mx-auto w-full table-auto mt-[20px] ">
               <thead>
-                <tr className="border">
+                <tr className="border custom_table_text">
                   <th className="py-3 pl-5 px-2 text-left bg-[white]">
-                    <p className="block text-[12px] md:text-[14px] font-medium  text-[#72727b]">
+                    <p className="block  font-medium  text-[#72727b]">
                       S.No
                     </p>
                   </th>
                   <th className="py-3 pl-5 px-2 text-left bg-[white]">
-                    <p className="block text-[12px] md:text-[14px] font-medium  text-[#72727b]">
+                    <p className="block  font-medium  text-[#72727b]">
                       Event Name
                     </p>
                   </th>
                   <th className="py-3 px-5 text-left bg-[white] ">
-                    <p className="block text-[12px] md:text-[14px] font-medium  text-[#72727b]">
+                    <p className="block  font-medium  text-[#72727b]">
                       Category
                     </p>
                   </th>
                   <th className="py-3 px-5 text-left bg-[white]">
-                    <p className="block text-[12px] md:text-[14px] font-medium  text-[#72727b]">
+                    <p className="block  font-medium  text-[#72727b]">
                       Date
                     </p>
                   </th>
 
                   <th className="py-3 px-5 text-left bg-[white]">
-                    <p className="block text-[12px] md:text-[14px] font-medium  text-[#72727b]">
+                    <p className="block  font-medium  text-[#72727b]">
                       Venue
                     </p>
                   </th>
 
                   <th className="py-3 px-5 text-left bg-[white]">
-                    <p className="block text-[12px] md:text-[14px] font-medium  text-[#72727b]">
+                    <p className="block  font-medium  text-[#72727b]">
                       Response
                     </p>
                   </th>
 
                   <th className="py-3 px- text-left bg-[white]">
-                    <p className="block text-[12px] md:text-[14px] font-medium  text-[#72727b]">
+                    <p className="block  font-medium  text-[#72727b]">
                       Delete
                     </p>
                   </th>
@@ -166,62 +166,68 @@ const EventRedirection = () => {
               </thead>
 
               <tbody className="bg-white">
-                {Array.isArray(getAllEvent) &&
-                  getAllEvent?.length > 0 &&
-                  getAllEvent?.map((items, index) => {
-                    const serialNumber = (current_page - 1) * 10 + (index + 1);
+  {Array.isArray(getAllEvent) && getAllEvent?.length > 0 ? (
+    getAllEvent?.map((items, index) => {
+      const serialNumber = (current_page - 1) * 10 + (index + 1);
 
-                    return (
-                      <tr key={items?._id}>
-                        <td className="text-[12px] md:text-[14px] font-[400] py-3 px-5 capitalize">
-                          {serialNumber + "."}
-                        </td>
-                        <td className="text-[12px] md:text-[14px] font-[400] py-3 px-5 capitalize">
-                          {items?.event?.name}
-                        </td>
-                        <td className="text-[12px] md:text-[14px] font-[400] py-3 px-5 capitalize">
-                          {items?.event?.category?.title}
-                        </td>
-                        <td className="text-[12px] md:text-[14px] font-[400] py-3 px-5 ">
-                          {items?.event?.startDate
-                            ? convertTime(items?.event?.startDate)
-                            : ""}
-                        </td>
-                        <td className="text-[12px] md:text-[14px] font-[400] py-3 px-5 capitalize">
-                          {items?.event?.city}
-                        </td>
-                        <td className="flex justify-center text-[12px] md:text-[14px] font-[400] py-3 px-5 ">
-                          {items?.redirection}
-                        </td>
-                        <td className="text-[12px] md:text-[14px] font-[400] py-3 ">
-                          <button
-                            onClick={() => {
-                              setDialogMatch(true);
-                              setDeleteId(items?._id);
-                            }}
-                            type="button"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-red-800"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                              />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
+      return (
+        <tr key={items?._id} className="custom_table_text">
+          <td className=" font-[400] py-3 px-5 capitalize">
+            {serialNumber + "."}
+          </td>
+          <td className=" font-[400] py-3 px-5  capitalize">
+            <p className="w-[200px]">{items?.event?.name}</p>
+          </td>
+          <td className=" font-[400] py-3 px-5 capitalize">
+            {items?.event?.category?.title}
+          </td>
+          <td className=" font-[400] py-3 px-5 ">
+            {items?.event?.startDate
+              ? convertTime(items?.event?.startDate)
+              : ""}
+          </td>
+          <td className=" font-[400] py-3 px-5 capitalize">
+            {items?.event?.city}
+          </td>
+          <td className="flex justify-center  font-[400] py-3 px-5 ">
+            {items?.redirection}
+          </td>
+          <td className=" font-[400] py-3 ">
+            <button
+              onClick={() => {
+                setDialogMatch(true);
+                setDeleteId(items?._id);
+              }}
+              type="button"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8 text-red-800"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
+      );
+    })
+  ) : (
+    <div className="w-full flex justify-center">
+    <div>
+      <p className="text-[12px] sm:text-[16px] font-semibold">No data found</p>
+    </div></div>
+  )}
+</tbody>
+</table>
+
           </div>
         </div>
         {total_pages > 1 && (
