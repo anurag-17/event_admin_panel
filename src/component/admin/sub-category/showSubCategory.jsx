@@ -15,12 +15,7 @@ const ShowSubCategory = ({
             <thead className="sticky-header">
               <tr
                 className="bg-coolGray-200 text-gray-400 text-start flex w-full 
-          2xl:text-[20px] 
-           xl:text-[14px]
-           lg:text-[12px] 
-           md:text-[12px] 
-           sm:text-[12px] 
-           text-[10px]"
+                custom_table_text"
               >
                 <th className="mx-5 w-[30px] sm:w-2/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
                   S.NO
@@ -43,7 +38,7 @@ const ShowSubCategory = ({
                 allSubCategory?.map((item, index) => (
                   <tr
                     key={index}
-                    className="text-start flex w-full 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
+                    className="text-start flex w-full custom_table_text"
                   >
                     <td className="mx-5 my-auto w-[30px] sm:w-2/12">
                     {index +

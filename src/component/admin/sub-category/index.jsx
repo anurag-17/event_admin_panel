@@ -165,7 +165,7 @@ const SubCategoryPage = () => {
       <Topbar />
       <section>
         <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 ml-10 mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold whitespace-nowrap">
+          <h2 className="font-semibold whitespace-nowrap custom_heading_text">
             {" "}
             Sub Category List{" "}
           </h2>
@@ -216,13 +216,11 @@ const SubCategoryPage = () => {
                 className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
                 alt="close"
               />
-
               <span className="sr-only bg-black">Close menu</span>
             </button>
             <div></div>
           </div>
         )}
-
         <ShowSubCategory
           current_page={current_page}
           allSubCategory={allSubCategory}
@@ -266,7 +264,7 @@ const SubCategoryPage = () => {
                 <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="custom_heading_text font-semibold leading-6 text-gray-900"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>
@@ -309,7 +307,7 @@ const SubCategoryPage = () => {
                 <Dialog.Panel className="w-full xl:max-w-[500px] max-w-[450px]  2xl:max-w-[700px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="flex justify-end lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
                   >
                     <button
                       type="button"
@@ -336,7 +334,6 @@ const SubCategoryPage = () => {
           </div>
         </Dialog>
       </Transition>
-
       <Transition appear show={isDrawerOpenO} as={Fragment}>
         <Dialog as="div" className=" z-[111] absolute" onClose={closeModal}>
           <Transition.Child
@@ -365,7 +362,7 @@ const SubCategoryPage = () => {
                 <Dialog.Panel className="w-full xl:max-w-[500px] max-w-[450px]  2xl:max-w-[700px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="flex justify-end lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
                   >
                     <button
                       type="button"

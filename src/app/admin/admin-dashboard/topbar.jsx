@@ -76,7 +76,7 @@ const Topbar = () => {
     <div>
       <div className=" flex  justify-between items-center  2xl:px-10  bg-white  2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
         <div>
-          <h2 className="font-semibold ml-10 lg:ml-0"> Welcome To Admin Dashboard</h2>
+          <h2 className="font-semibold ml-10 lg:ml-0 custom_heading_text"> Welcome To Admin Dashboard</h2>
         </div>
 
         <div className="flex gap-2">
@@ -109,7 +109,7 @@ const Topbar = () => {
                 <Menu.Items className="absolute border right-0 z-10 mt-5 w-40 2xl:w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     <Menu.Item>
-                      <a className=" bg-gray-100 text-gray-900 text-[10px] md:text-[10px] xl:text-[12px] 2xl:text-[16px] block px-4 py-2 text-sm">
+                      <a className=" bg-gray-100 text-gray-900 custom_dropdown_text block px-4 py-2 text-sm">
                         Account settings
                       </a>
                     </Menu.Item>
@@ -118,7 +118,7 @@ const Topbar = () => {
                       <button
                         onClick={signoutFunc}
                         type="submit"
-                        className=" bg-gray-100 text-gray-900 block w-full px-4 py-2 text-left text-sm text-[10px] md:text-[10px] xl:text-[12px] 2xl:text-[16px]"
+                        className=" bg-gray-100 text-gray-900 block w-full px-4 py-2 text-left text-sm custom_dropdown_text"
                       >
                         Sign out
                       </button>

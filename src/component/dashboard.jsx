@@ -345,9 +345,9 @@ const Dashboard = () => {
         <div className="flex flex-col md:flex-row  justify-around my-10 xl:my-10 2xl:my-5  mx-7 gap-6 lg:gap-6">
           <div className="md:w-1/2 my-4 md:my-0">
             <div className="">
-              <table className="min-w-full  bg-white border border-gray-300 text-[12px] sm:text-[12px] md:text-[12px] lg:text-[12px] xl:text-[13px] 2xl:text-[18px] ">
+              <table className="min-w-full  bg-white border border-gray-300 custom_table_text ">
                 <thead>
-                  <tr className="border text-gray-500 text-start ">
+                  <tr className="border text-gray-500 text-start  custom_table_text">
                     <th className="w-1/6 border py-2 px-4 text-start ">S.no</th>
                     <th className="w-4/6 border py-2 px-4 text-start ">
                       Event Name
@@ -358,7 +358,7 @@ const Dashboard = () => {
                 {getAllDashEvents?.length > 0 && (
                   <tbody>
                     {getAllDashEvents.map((item, index) => (
-                      <tr key={index} className="text-gray-500">
+                      <tr key={index} className="text-gray-500 custom_table_text">
                         <td className="w-1/6 border py-2 px-4 border-b text-start">
                           {index + 1 + "."}
                         </td>
@@ -374,9 +374,9 @@ const Dashboard = () => {
           </div>
           <div className="md:w-1/2 my-4 md:my-0">
             <div className="">
-              <table className="min-w-full  bg-white border border-gray-300 text-[12px] sm:text-[12px] md:text-[12px] lg:text-[12px] xl:text-[13px] 2xl:text-[18px] ">
+              <table className="min-w-full  bg-white border border-gray-300">
                 <thead>
-                  <tr className="border text-gray-500 text-start ">
+                  <tr className="border text-gray-500 text-start custom_table_text">
                     <th className="w-1/6 border py-2 px-4 text-start ">S.no</th>
                     <th className="w-4/6 border py-2 px-4 text-start ">
                       Category Name
@@ -387,7 +387,7 @@ const Dashboard = () => {
                 {getAllCate?.length > 0 && (
                   <tbody>
                     {getAllCate.map((item, index) => (
-                      <tr key={index} className="text-gray-500">
+                      <tr key={index} className="text-gray-500 custom_table_text">
                         <td className="w-1/6 border py-2 px-4 border-b text-start">
                           {index + 1 + "."}
                         </td>

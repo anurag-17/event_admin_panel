@@ -61,7 +61,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
         px-1 h-[25px] my-2
          "
       >
-        <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">
+        <h2 className="custom_heading_text font-semibold ">
           Edit Category{" "}
         </h2>
         
