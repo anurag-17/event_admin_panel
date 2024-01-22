@@ -17,12 +17,12 @@ const Profile = () => {
       );
 
       // console.log(res)
-      setVerificationResult(res?.data?.data); // Assuming the API returns some data
+      setVerificationResult(res?.data?.data); 
       setLoader(false);
     } catch (error) {
       setLoader(false);
       console.error("Error verifying user token:", error);
-      // Handle errors if needed
+     
     }
   };
 
@@ -33,7 +33,7 @@ const Profile = () => {
   return (
     <>
       {loader && <Loader />}
-      <div className="bg-[white] w-full h-full">
+      <div className="bg-[white] w-full ">
         <div className="py-6 px-10 shadow rounded max-w-[400px]  my-4">
           <div className="">
             <Image
