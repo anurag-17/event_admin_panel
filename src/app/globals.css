@@ -10,7 +10,21 @@
   @apply text-[12px] sm:text-[14px] md:text-[16px] lg:text-[12px] xl:text-[14px] 2xl:text-[16px]
  }
  .custom_heading_text{
-  @apply text-[14px] sm:text-[18px] md:text-[14px] lg:text-[16px] xl:text-[20px] 2xl:text-[24px]
+  @apply text-[14px] sm:text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[24px]
+ }
+ @media (max-width:400px){
+  .dashboard_main{
+    margin-top: 20px !important;
+  }
+  .dashboard_boxes{
+    display: table-column !important;
+    margin: auto;
+    
+    }
+    .dashboard_box{
+      width:auto !important;
+      margin: 15px 0px;
+    }
  }
 
 
