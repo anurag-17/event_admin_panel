@@ -776,7 +776,7 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 custom_dropdown_text">
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by Category
                     </label>
                   </div>
@@ -820,7 +820,7 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 custom_dropdown_text">
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by SubCategory
                     </label>
                   </div>
@@ -923,7 +923,7 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 custom_dropdown_text">
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by City
                     </label>
                   </div>
@@ -974,7 +974,7 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 custom_dropdown_text">
+                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
                       Filter by Provider
                     </label>
                   </div>
@@ -1192,6 +1192,9 @@ const Event = () => {
                                     ))}
                                 </select>
                               </div>
+
+
+                              
                               <div className="my-1">
                                 <select
                                   name="subCategory"
@@ -1202,12 +1205,12 @@ const Event = () => {
                                   maxLength={32}
                                   // defaultValue={item?.subCategory?._id}
                                   defaultValue={String(
-                                    item?.subCategory?.title
+                                    item?.subCategory?.subCategory
                                   )}
                                 >
                                   <option value="">
                                     {" "}
-                                    <option value="">
+                                    <option value="" disabled>
                                       {item?.subCategory?.subCategory
                                         ? item.subCategory.subCategory
                                         : "SelectSubcategory"}
@@ -1281,7 +1284,7 @@ const Event = () => {
                                   </svg>
                                 </button>
                               </div>
-                            </td>
+                            </td> 
                           </tr>
                         );
                       })}
@@ -1376,7 +1379,7 @@ const Event = () => {
                 <Dialog.Panel className=" w-full max-w-[540px] xl:max-w-[700px] 2xl:max-w-[900px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="flex justify-end lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
                   >
                     {" "}
                     <button
@@ -1430,7 +1433,7 @@ const Event = () => {
                 <Dialog.Panel className=" w-full max-w-[540px] xl:max-w-[700px] 2xl:max-w-[900px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="flex justify-end lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
                   >
                     {" "}
                     <button
