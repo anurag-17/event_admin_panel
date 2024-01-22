@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const EventIssue = require("../models/EventIssue");
+const EventRedirection = require("../models/EventRedirection");
 
 const EventSchema = new mongoose.Schema(
   {
@@ -66,6 +68,22 @@ const EventSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Middleware to execute before removing an Event
+EventSchema.pre("remove", async function (next) {
+  try {
+    // Delete related EventIssues
+    await EventIssue.deleteMany({ event: this._id });
+
+    // Delete related EventRedirections
+    await EventRedirection.deleteMany({ event: this._id });
+
+    // Continue with the remove operation
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 const Event = mongoose.model("Event", EventSchema);
 

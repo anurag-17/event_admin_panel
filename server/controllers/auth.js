@@ -535,7 +535,7 @@ exports.fetchEvent = async (req, res) => {
         // Extract relevant venue information
         const venueInfo = {
           country: event._embedded.venues[0].country.name,
-          city: event._embedded.venues[0].city.name,
+          city: event._embedded.venues[0].city.name.trim(),
           address: event._embedded.venues[0].address.line1,
           location: event._embedded.venues[0].name,
           latitude: event._embedded.venues[0].location.latitude,

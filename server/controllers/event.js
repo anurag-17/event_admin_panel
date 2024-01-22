@@ -59,10 +59,30 @@ exports.updateEvent = asyncHandler(async (req, res) => {
 });
 
 exports.deleteEvent = asyncHandler(async (req, res) => {
-  const { id } = req.body;
-  validateMongoDbId(id);
-  const deletedEvent = await Event.findByIdAndDelete(id);
-  res.json(deletedEvent);
+  try {
+    const { id } = req.body;
+    validateMongoDbId(id);
+
+    const eventRedirections = await EventRedirection.find({ event: id });
+
+    for (const eventRedirection of eventRedirections) {
+      await EventRedirection.deleteOne({ _id: eventRedirection._id });
+    }
+
+    const eventIssues = await EventIssue.find({ event: id });
+
+    for (const eventIssue of eventIssues) {
+      await EventIssue.deleteOne({ _id: eventIssue._id });
+    }
+
+    // Delete the event
+    const deletedEvent = await Event.findByIdAndDelete(id);
+
+    res.json(deletedEvent);
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 exports.deleteBulkEvent = asyncHandler(async (req, res) => {
@@ -95,6 +115,24 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
   try {
     // Delete expired events first
     const currentDate = new Date();
+    // await Event.deleteMany({ endDate: { $lt: currentDate } });
+
+    const expiredEvents = await Event.find({ endDate: { $lt: currentDate } });
+
+    for (const event of expiredEvents) {
+      const eventRedirections = await EventRedirection.find({ event: event._id });
+
+      for (const eventRedirection of eventRedirections) {
+        await EventRedirection.deleteOne({ _id: eventRedirection._id });
+      }
+
+      const eventIssues = await EventIssue.find({ event: event._id });
+
+      for (const eventIssue of eventIssues) {
+        await EventIssue.deleteOne({ _id: eventIssue._id });
+      }
+    }
+
     await Event.deleteMany({ endDate: { $lt: currentDate } });
     
     const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city} = req.query;
@@ -400,7 +438,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         
           // Extract relevant venue information
           const venueInfo = {
-            city: venueData.City,
+            city: venueData.City.trim(),
             address: venueData.Address || venueData.Name,
             location: venueData.Name,
             latitude: location.lat,
@@ -522,7 +560,7 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           images: imagesArray,
           location: event.venue.name,
           address: event.venue.address,
-          city: event.venue.town,
+          city: event.venue.town.trim(),
           country: event.venue.country,
           latitude: event.venue.latitude,
           longitude: event.venue.longitude,
