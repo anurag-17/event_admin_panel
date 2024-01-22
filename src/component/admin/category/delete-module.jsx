@@ -59,7 +59,7 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
           </button>
 
           <button
-
+            className={`w-full border bg-red-200  border-red-400 text-red-500 rounded-md text-[12px] sm:text-[16px] px-2  sm:py-3
                         ${isLoading ? 'bg-gray-200' : 'hover:bg-red-200'}
                         hover:border-none`}
             onClick={handleDelete}
