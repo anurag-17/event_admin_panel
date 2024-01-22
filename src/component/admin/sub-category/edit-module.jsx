@@ -57,7 +57,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData,isLoadin
   return (
     <>
      <div className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white px-1 h-[25px] my-2">
-        <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">Edit Sub-Category</h2>
+        <h2 className="custom_heading_text font-semibold ">Edit Sub-Category</h2>
         <div className="mb-3 w-[40%]"></div>
       </div>
 
@@ -81,25 +81,25 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData,isLoadin
             <select
               type="text"
               name="category"
-              className="custom_inputt"
+              className="custom_inputt custom_dropdown_text"
               value={categoryDetails?.category}
               onChange={inputHandler}
               required
               max={84}
             >
               {isLoadingBtn ? (
-                <option value="" disabled className="text-[14px] py-5">
+                <option value="" disabled className="custom_dropdown_text py-5">
                   Loading.....
                 </option>
               ) : (
                 <>
-                  <option value="" disabled>
+                  <option value="" disabled className="custom_dropdown_text">
                     Select Category
                   </option>
                   {Array.isArray(getallCategory) &&
                     getallCategory?.length > 0 &&
                     getallCategory?.map((item) => (
-                      <option key={item?._id} value={item?._id}>
+                      <option key={item?._id} value={item?._id} className="custom_dropdown_text">
                         {item?.title}
                       </option>
                     ))}

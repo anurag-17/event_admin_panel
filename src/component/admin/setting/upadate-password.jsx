@@ -137,7 +137,7 @@ const ChangePassword = () => {
               <form action="" className="" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-4 justify-center md:max-w-[80%] lg:w-full lg:max-w-[100%] mx-auto ">
                   <div className="text-left ">
-                    <p className="mb-2 2xl:text-[35px] md:text-[30px] text-[24px] leading-[38px] md:font-bold font-medium whitespace-nowrap">
+                    <p className="mb-2 custom_heading_text leading-[38px] md:font-bold font-medium whitespace-nowrap">
                       Change password
                     </p>
                   </div>

@@ -143,7 +143,7 @@ const UserIssue = () => {
       <Topbar />
       <div>
         <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:p-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   h-auto  xl:p-2 p-2 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold">Users Issue List </h2>
+          <h2 className="font-semibold custom_heading_text">Users Issue List </h2>
 
           <div className="">
             <div>
@@ -154,30 +154,21 @@ const UserIssue = () => {
             <select
               className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
                   2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-44 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+                      xl:px-3 xl:py-0  xl:w-32
+                      lg:px-2 lg:py-1  lg:w-32
                    md:px-3 md:py-0 md:h-[25px] 
                    sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                        px-2 pb-0 h-[24px] custom_dropdown_text "
               value={isResolve}
               onChange={(e) => handleFilterChange(e.target.value)}
             >
-              <option
-                className="2xl:text-sm xl:text-[12px] lg:text-[10px] md:text-[9px] text-[8px]"
-                value=""
-              >
+              <option className="custom_dropdown_text" value="">
                 All
               </option>
-              <option
-                className="2xl:text-sm xl:text-[12px] lg:text-[10px] md:text-[9px] text-[8px]"
-                value="true"
-              >
+              <option className="custom_dropdown_text" value="true">
                 Resolved
               </option>
-              <option
-                className="2xl:text-sm xl:text-[12px] lg:text-[10px] md:text-[9px] text-[8px]"
-                value="false"
-              >
+              <option className="custom_dropdown_text" value="false">
                 Not Resolved
               </option>
             </select>
@@ -198,30 +189,36 @@ const UserIssue = () => {
                   </Link>
                 </div>
                 <div className="w-5/12 ">
-                  <h1 className="my-1 font-bold h1_text">
+                  <h1 className="my-1 font-bold custom_table_text">
                     {item?.event?.name}
                   </h1>
-                  <h1 className="my-1  h1_text">
+                  <h1 className="my-1  custom_table_text">
                     Location : {item?.event?.location}
                   </h1>
 
-                  <h1 className="my-1  h1_text">City : {item?.event?.city}</h1>
-                  <h1 className="my-1  h1_text">Issue : {item?.issue}</h1>
+                  <h1 className="my-1  custom_table_text">
+                    City : {item?.event?.city}
+                  </h1>
+                  <h1 className="my-1  custom_table_text">
+                    Issue : {item?.issue}
+                  </h1>
                 </div>
                 <div className="w-4/12">
-                  <h1 className="my-1  h1_text font-bold">Raised by :</h1>
-                  <h1 className="my-1  h1_text">
+                  <h1 className="my-1  custom_table_text font-bold">
+                    Raised by :
+                  </h1>
+                  <h1 className="my-1  custom_table_text">
                     Name : {item?.userId?.firstname} {item?.userId?.lastname}
                   </h1>
-                  <h1 className="my-1  h1_text">
+                  <h1 className="my-1  custom_table_text">
                     Email : {item?.userId?.email}{" "}
                   </h1>
-                  <h1 className="my-1  h1_text">
+                  <h1 className="my-1  custom_table_text">
                     Mobile : {item?.userId?.mobile}{" "}
                   </h1>
                 </div>
 
-                <div className="w-1/12 col-span-1 my-auto  h1_text">
+                <div className="w-1/12 col-span-1 my-auto  custom_table_text">
                   <div className="mb-2">
                     {item?.isResolved ? (
                       <span className="w-full border p-1 px-1 rounded-md my-1   border-green-400 text-green-700 ">
@@ -266,30 +263,36 @@ const UserIssue = () => {
                   </Link>
                 </div>
                 <div className="w-5/12 ">
-                  <h1 className="my-1 font-bold h1_text">
+                  <h1 className="my-1 font-bold custom_table_text">
                     {item?.event?.name}
                   </h1>
-                  <h1 className="my-1  h1_text">
+                  <h1 className="my-1  custom_table_text">
                     Location : {item?.event?.location}
                   </h1>
 
-                  <h1 className="my-1  h1_text">City : {item?.event?.city}</h1>
-                  <h1 className="my-1  h1_text">Issue : {item?.issue}</h1>
+                  <h1 className="my-1  custom_table_text">
+                    City : {item?.event?.city}
+                  </h1>
+                  <h1 className="my-1  custom_table_text">
+                    Issue : {item?.issue}
+                  </h1>
                 </div>
                 <div className="w-4/12">
-                  <h1 className="my-1  h1_text font-bold">Raised by :</h1>
-                  <h1 className="my-1  h1_text">
+                  <h1 className="my-1  custom_table_text font-bold">
+                    Raised by :
+                  </h1>
+                  <h1 className="my-1  custom_table_text">
                     Name : {item?.userId?.firstname} {item?.userId?.lastname}
                   </h1>
-                  <h1 className="my-1  h1_text">
+                  <h1 className="my-1  custom_table_text">
                     Email : {item?.userId?.email}{" "}
                   </h1>
-                  <h1 className="my-1  h1_text">
+                  <h1 className="my-1  custom_table_text">
                     Mobile : {item?.userId?.mobile}{" "}
                   </h1>
                 </div>
 
-                <div className="flex items-center w-2/12 lg:w-1/12 col-span-1 h1_text">
+                <div className="flex items-center w-2/12 lg:w-1/12 col-span-1 custom_table_text">
                   <div className=" flex flex-col gap-2 2xl:gap-2 w-full ">
                     <div className="">
                       {item?.isResolved ? (
@@ -360,7 +363,7 @@ const UserIssue = () => {
                 <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="custom_heading_text font-semibold leading-6 text-gray-900"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>

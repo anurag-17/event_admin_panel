@@ -670,8 +670,8 @@ const Event = () => {
       <ToastContainer autoClose={1500} />
       <Topbar />
       <div>
-        <div className="mt-2 sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-10 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold">Event List </h2>
+        <div className="mt-2 sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-10 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4">
+          <h2 className="font-semibold custom_heading_text">Event List </h2>
         </div>
 
         {/* ---------Event fetch---------- */}
@@ -680,7 +680,7 @@ const Event = () => {
             <div className=" items-center w-[50%] sm:w-[40%] my-3 ">
               <input
                 type="search"
-                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] 2xl:max-w-[440px] mx-auto md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
+                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] 2xl:max-w-[440px] mx-auto md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon1"
@@ -776,7 +776,7 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 custom_dropdown_text">
                       Filter by Category
                     </label>
                   </div>
@@ -784,12 +784,12 @@ const Event = () => {
                   <select
                     name="category"
                     className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none 
-                    2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                      2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 
+                     xl:px-3 xl:py-0  xl:w-28 
                       lg:px-2 lg:py-1  lg:w-24 w-28
                  md:px-0 md:py-0 md:h-[25px] 
                       sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px]"
+                        px-2 pb-0 h-[24px] custom_dropdown_text"
                     required
                     minLength={3}
                     maxLength={32}
@@ -805,7 +805,7 @@ const Event = () => {
                         <option
                           key={item._id}
                           value={item._id}
-                          className="2xl:text-sm xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                          className="custom_dropdown_text "
                         >
                           {item.title}
                         </option>
@@ -820,19 +820,19 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 custom_dropdown_text">
                       Filter by SubCategory
                     </label>
                   </div>
                   <select
                     name="subCategory"
                     className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none 
-                  2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-44 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+               2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-44 
+                     xl:px-3 xl:py-0  xl:w-32
+                     lg:px-2 lg:py-1  lg:w-32
                    md:px-3 md:py- md:h-[25px] 
                    sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                        px-2 pb-0 h-[24px]  custom_dropdown_text "
                     required
                     minLength={3}
                     maxLength={32}
@@ -850,7 +850,7 @@ const Event = () => {
                         })
                         .map((itemss) => (
                           <option
-                            className="2xl:text-sm xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                            className="custom_dropdown_text"
                             key={itemss?._id}
                             value={itemss._id}
                           >
@@ -923,7 +923,7 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 custom_dropdown_text">
                       Filter by City
                     </label>
                   </div>
@@ -931,12 +931,12 @@ const Event = () => {
                   <select
                     name="city"
                     className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
-                    2xl:text-sm  2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
+                     2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 
+                     xl:px-3 xl:py-0  xl:w-28 
                       lg:px-2 lg:py-1  lg:w-24 w-28
                  md:px-0 md:py-0 md:h-[25px] 
                       sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px]"
+                        px-2 pb-0 h-[24px]  custom_dropdown_text"
                     required
                     minLength={3}
                     maxLength={32}
@@ -959,7 +959,7 @@ const Event = () => {
                         <option
                           key={city}
                           value={city}
-                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px] capitalize"
+                          className="custom_dropdown_text capitalize"
                         >
                           {city}
                         </option>
@@ -974,14 +974,14 @@ const Event = () => {
                 <div className="">
                   <div>
                     {" "}
-                    <label className=" text-gray-500 text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[12px] 2xl:text-[16px]">
+                    <label className=" text-gray-500 custom_dropdown_text">
                       Filter by Provider
                     </label>
                   </div>
 
                   <select
                     name="provider"
-                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 2xl:text-sm 2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36 xl:text-[12px] xl:px-3 xl:py-0 xl:w-28 lg:px-2 lg:py-1 lg:w-24 w-28 md:px-0 md:py-0 md:h-[25px] sm:px-2 sm:py-0 px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px]"
+                    className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 2xl:px-3 2xl:py-0 2xl:h-[37px] 2xl:w-36  xl:px-3 xl:py-0 xl:w-28 lg:px-2 lg:py-1 lg:w-24 w-28 md:px-0 md:py-0 md:h-[25px] sm:px-2 sm:py-0 px-2 pb-0 h-[24px] custom_dropdown_text "
                     required
                     minLength={3}
                     maxLength={32}
@@ -999,7 +999,7 @@ const Event = () => {
                         <option
                           key={event_provider}
                           value={event_provider}
-                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                          className="custom_dropdown_text"
                         >
                           {event_provider}
                         </option>
@@ -1064,12 +1064,7 @@ const Event = () => {
                   <thead className="sticky-header">
                     <tr
                       className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
-          2xl:text-[22px] 
-          xl:text-[14px]
-           lg:text-[12px] 
-           md:text-[12px] 
-           sm:text-[12px] 
-           text-[10px] "
+                      custom_table_text "
                     >
                       <th className=" w-[11%] text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 ">
                         S.NO
@@ -1118,10 +1113,10 @@ const Event = () => {
                             className="  p-2 text-start flex 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[13px] text-[10px]"
                           >
                             {/* {console.log(item.category)} */}
-                            <td className=" my-auto w-[11%]">
+                            <td className=" my-auto w-[11%] custom_table_text">
                               {serialNumber + "."}
                             </td>
-                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] ">
+                            <td className="my-auto  w-2/12 custom_table_text ">
                               <>
                                 {Array.isArray(item?.images) &&
                                   item.images.length > 0 && (
@@ -1150,30 +1145,30 @@ const Event = () => {
                                   )}
                               </>
                             </td>
-                            <td className="my-auto capitalize  w-4/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-[22px]">
+                            <td className="my-auto capitalize  w-4/12  xl:pl-[22px] custom_table_text">
                               <p className="w-44">{item.name}</p>
                             </td>
 
-                            <td className="my-auto  w-2/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] 2xl:pl-0">
+                            <td className="my-auto  w-2/12 2xl:pl-0 custom_table_text">
                               {item.city}
                             </td>
-                            <td className="my-auto  w-3/12  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                            <td className="my-auto  w-3/12 custom_table_text xl:pl-0">
                               {item?.startDate
                                 ? convertTime(item.startDate)
                                 : ""}
                             </td>
-                            <td className="my-auto w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                            <td className="my-auto w-3/12 custom_table_text xl:pl-0">
                               {item?.endDate ? convertTime(item.endDate) : ""}
                             </td>
 
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-0">
+                            <td className="my-auto  w-3/12 custom_table_text xl:pl-0">
                               {item.location}
                             </td>
-                            <td className="2xl:pl-2 my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px] xl:pl-4">
+                            <td className="2xl:pl-2 my-auto  w-3/12 custom_table_text xl:pl-4">
                               {item.event_provider}
                             </td>
 
-                            <td className="my-auto  w-3/12 text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]  2xl:pl-0 ">
+                            <td className="my-auto  w-3/12 custom_table_text 2xl:pl-0 ">
                               <div className="">
                                 <select
                                   name="category"
@@ -1188,7 +1183,7 @@ const Event = () => {
                                   {Array.isArray(getAllCate) &&
                                     getAllCate.map((itemsx) => (
                                       <option
-                                        className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                        className="capitalize custom_dropdown_text"
                                         key={itemsx._id}
                                         value={itemsx._id}
                                       >
@@ -1228,7 +1223,7 @@ const Event = () => {
                                       })
                                       .map((itemss) => (
                                         <option
-                                          className="capitalize 2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                                          className="capitalize custom_dropdown_text"
                                           key={itemss?._id}
                                           value={itemss._id}
                                         >

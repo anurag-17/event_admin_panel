@@ -171,12 +171,12 @@ const AllUser = () => {
       <div>
         <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center p-1 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   h-auto   xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
         <div className="  w-[50%] sm:w-[40%] my-3 ">
-          <h2 className="font-semibold">Users List </h2>
+          <h2 className="font-semibold custom_heading_text">Users List </h2>
           </div>
           <div className="flex justify-end  w-[50%] sm:w-[40%] my-3 ">
               <input
                 type="search"
-                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full  max-w-[320px] 2xl:max-w-[440px]  md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
+                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full  max-w-[320px] 2xl:max-w-[440px]  md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon1"
@@ -192,12 +192,7 @@ const AllUser = () => {
               <thead className="">
                 <tr
                   className="bg-coolGray-200 text-gray-400 text-start flex  
-          2xl:text-[22px] 
-          xl:text-[14px]
-           lg:text-[12px] 
-           md:text-[12px] 
-           sm:text-[12px] 
-           text-[10px]"
+                  custom_table_text"
                 >
                   <th className="mx-3 lg:mx-3 w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
                     S.NO
@@ -226,7 +221,7 @@ const AllUser = () => {
                     return (
                       <tr
                         key={index}
-                        className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[12px] text-[10px]"
+                        className="text-start flex w-full custom_table_text"
                       >
                         <td className="my-auto mx-3 lg:mx-3 w-[7.5%] sm:w-1/12">
                           {serialNumber + "."}
@@ -390,7 +385,7 @@ const AllUser = () => {
                 <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-2xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="flex  lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="flex  custom_heading_text font-semibold leading-6 text-gray-900"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>

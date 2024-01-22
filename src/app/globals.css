@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.custom_table_text{
+ @apply text-[12px] sm:text-[12px] md:text-[14px] lg:text-[14px] xl:text-[14px] 2xl:text-[16px]
+}
+.custom_dropdown_text{
+  @apply text-[12px] sm:text-[14px] md:text-[16px] lg:text-[12px] xl:text-[14px] 2xl:text-[16px]
+ }
+ .custom_heading_text{
+  @apply text-[14px] sm:text-[18px] md:text-[14px] lg:text-[16px] xl:text-[20px] 2xl:text-[24px]
+ }
+
+
+ 
 .custom_input_label {
   @apply absolute bg-white z-20 text-gray-800
   2xl:text-[18px] 2xl:mt-6 2xl:ml-14
@@ -21,11 +34,11 @@
 }
 .custom_inputt {
   @apply rounded relative border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none  w-10/12  lg:w-10/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            xl:text-base xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-            lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-            md:text-sm md:m-4 md:px-3 md:py-2 md:h-[30px]
-            sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-            text-sm m-2 px-2 py-1 h-[20px];
+         xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
+             lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
+            md:m-4 md:px-3 md:py-2 md:h-[30px]
+          sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
+         m-2 px-2 py-1 h-[20px];
 }
 .custom_btn {
   @apply border hover:bg-blue-400 text-white  rounded-lg bg-blue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
@@ -37,12 +50,12 @@
 }
 .custom_select {
   @apply rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
-  xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
-  lg:text-[12px]  lg:px-2 lg:py-1  w-24
+    2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
+  xl:px-3 xl:py-0  xl:w-28 
+  lg:px-2 lg:py-1  w-24
   md:px-0 md:py-0 md:h-[25px] 
     sm:px-2 sm:py-0 
-      px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px];
+      px-2 pb-0 h-[24px] ;
 }
 .sticky-header {
   position: sticky;
