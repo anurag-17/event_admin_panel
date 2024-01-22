@@ -188,16 +188,7 @@ const SubCategoryPage = () => {
             </button>
           </div>
         </div>
-        {/* <div className=" flex justify-end  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border ml-10 mr-4 lg:mx-8 rounded-lg bg-white  2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] lg:mt-5 sm:mt-3 mt-2 h-[45px]">
-          <div className="flex justify-around">
-            <button
-              onClick={openSubCategory}
-              className=" rounded-md my-auto bg-lightBlue-600 border cursor-pointer 2xl:p-3  2xl:text-[18px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[10px]"
-            >
-              + Add Sub category
-            </button>
-          </div>
-        </div> */}
+       
 
         {isDrawerOpenO && (
           <div
@@ -261,7 +252,7 @@ const SubCategoryPage = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="  w-2/3 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-5 sm:py-10 sm:px-12 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="custom_heading_text font-semibold leading-6 text-gray-900"
