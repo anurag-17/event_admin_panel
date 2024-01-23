@@ -5,10 +5,8 @@ import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const EditEvent = ({ editData, closeModal, refreshData }) => {
-  console.log(editData, "tttt");
   // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const { adminAuthToken } = useAuth();
-
   const [isLoading, setLoading] = useState(false);
   const [getallCategory, setGetallCategory] = useState([]);
   const [getallSubCategory, setGetallSubCategory] = useState([]);
@@ -27,7 +25,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
     }
   };
 
-  //------- handle cover image-------
+  //-------handle cover image-------
   const handleCoverImageChange = (newPosition) => {
     const newIndex =
       eventDetail?.images?.length > 0 &&
@@ -404,24 +402,26 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                   name="category"
                   className="custom_inputt"
                   defaultValue={
-                    editData?.category
-                      ? editData?.category?.title
-                      : eventDetail?.category
+                    editData?.category?._id
+                      ? editData?.category?._id
+                      : eventDetail?.category?._id
                   }
                   onChange={inputHandler}
                   required
                   minLength={3}
                   maxLength={32}
+                  selected
                 >
-                  <option value="">{editData?.category?.title}</option>
+                  {console.log(editData?.category?._id, "kk")}
+                  <option value="">Select Category</option>
                   {getallCategory.map((item) => (
                     <option
                       className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                       key={item._id}
                       value={item._id}
-                      // selected={
-                      //   item._id === (editData?._id || eventDetail?.category)
-                      // }
+                      selected={
+                        item._id === (editData?._id || eventDetail?.category)
+                      }
                     >
                       {item?.title}
                     </option>
@@ -450,7 +450,9 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                   minLength={3}
                   maxLength={32}
                 >
-                  <option value="">{eventDetail?.subCategory?.subCategory}</option>
+                  <option value="">
+                    {eventDetail?.subCategory?.subCategory}
+                  </option>
                   {getallSubCategory
                     .filter((item, indr) => {
                       // console.log(item, eventDetail);

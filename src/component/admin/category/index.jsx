@@ -105,14 +105,12 @@ const Category = () => {
       setLoader(false);
     }
   };
-
   const getAllCategory = async (page, limit) => {
     fetchData("", page, limit);
   };
 
   const searchDataFunc = async (searchTerm) => {
     if (searchTerm.trim() === "") {
-      // If search term is empty, fetch data with current_page and limit
       getAllCategory(current_page, limit);
     } else {
       fetchData(searchTerm);
@@ -161,38 +159,6 @@ const Category = () => {
             </button>
           </div>
         </div>
-
-        {/* {isDrawerOpenO && (
-          <div
-            id="drawer-form"
-            className="fixed content-center mb-5 right-4 lg:right-8 z-40 h-auto max-h-[400px] lg:w-6/12 w-8/12  p-4 overflow-y-auto  transition-transform -translate-x-0 bg-white    border rounded-lg"
-            tabIndex={-1}
-            aria-labelledby="drawer-form-label"
-          >
-            <button
-              type="button"
-              onClick={closeDrawerO}
-              className="  shadow-2xl text-sm top-2  inline-flex items-center justify-center "
-            >
-              <img
-                src="/images/close-square.svg"
-                className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
-                alt="close"
-              />
-
-              <span className="sr-only bg-black">Close menu</span>
-            </button>
-            <div>
-              <EditCate
-                cateEdit={cateEdit}
-                closeDrawer={closeDrawerO}
-                refreshData={refreshData}
-                editData={editData}
-              />
-            </div>
-          </div>
-        )} */}
-
         <div className="ml-10 mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll  ">
           <table className="w-full border bg-white rounded-md mt-5 p-100">
             <thead className="sticky-header">
@@ -272,7 +238,7 @@ const Category = () => {
 
             {Array.isArray(getAllCate) && getAllCate?.length === 0 && (
               <div className="py-6 px-4 border-t ">
-                <p className="text-[14px] font-medium text-center">
+                <p className="text-[14px]  2xl:text-[20px] font-medium text-center">
                   {" "}
                   No Data Found{" "}
                 </p>
@@ -390,7 +356,7 @@ const Category = () => {
       </Transition>
 
       <Transition appear show={isOpenDelete} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={()=>{}}>
+        <Dialog as="div" className="relative z-10" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
