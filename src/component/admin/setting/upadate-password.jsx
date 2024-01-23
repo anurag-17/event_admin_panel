@@ -6,8 +6,11 @@ import CloseEye from "./svg/Closeeye";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../loader";
 import Setting from "./Setting";
+import { useAuth } from "../../../contexts/AuthContext";
+
 
 const ChangePassword = () => {
+  const { adminAuthToken } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -20,7 +23,6 @@ const ChangePassword = () => {
   const [isError, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken") || null);
 
   const togglePasswordVisibility = (passwordType) => {
     if (passwordType === "password") {
@@ -51,7 +53,7 @@ const ChangePassword = () => {
         const res = await axios.post("/api/auth/updatePassword", formData, {
           headers: {
             "Content-Type": "application/json",
-            authorization: auth_token,
+            authorization: adminAuthToken,
           },
         });
         // console.log(res)
@@ -87,7 +89,7 @@ const ChangePassword = () => {
         url: `/api/auth/logout`,
         headers: {
           "Content-Type": "application/json",
-          authorization: auth_token,
+          authorization: adminAuthToken,
         },
       };
       axios

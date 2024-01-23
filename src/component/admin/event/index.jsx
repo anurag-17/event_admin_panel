@@ -52,15 +52,12 @@ const Event = () => {
   const [selectedProvider, setSelectedProvider] = useState("");
   const [showLargeImage, setShowLargeImage] = useState(false);
   const [largeImageSrc, setLargeImageSrc] = useState([]);
-  const [eventFetch, setEventFetch] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [limit, setLimit] = useState(20);
-  const [isLoading, setLoading] = useState(false);
   const [citiesList, setCitiesList] = useState([]);
   const [providerList, setProviderList] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState("");
-  const [filteredSubCategory, setFilteredSubCategory] = useState("");
   const [fetchStartDate, setFetchStartDate] = useState("");
   const [fetchEndDate, setFetchEndDate] = useState("");
   const [validationError, setValidationError] = useState("");
@@ -236,7 +233,6 @@ const Event = () => {
       .request(options)
       .then((response) => {
         setAllSubCategory(response?.data?.subCategories);
-        console.log(response?.data.subCategories, "subb");
         setLoader(false);
       })
       .catch((error) => {
@@ -511,37 +507,6 @@ const Event = () => {
       url: `/api/event/londontheatredirect?startDate=${fetchStartDate}&endDate=${fetchEndDate}`,
     };
 
-    // axios
-    //   .all([
-    //     axios.request(options1),
-    //     axios.request(options2),
-    //     axios.request(options3),
-    //   ])
-    //   .then(
-    //     axios.spread((response1, response2, response3) => {
-    //       if (response1.status === 200) {
-    //         // setEventFetch(response1.data);
-    //       }
-
-    //       if (response2.status === 200) {
-    //         // setEventFetch(response2.data);
-    //       }
-
-    //       if (response3.status === 200) {
-    //         // setEventFetch(response3.data);
-    //       }
-    //       setFetchStartDate("")
-    //       setFetchEndDate("")
-    //       // setLoader(false);
-    //     })
-    //   )
-    //   .catch(function (error) {
-    //     console.error(error);
-    //   }).finally(
-    //     setLoader(false),
-    //     setFetchStartDate(""),
-    //     setFetchEndDate("")
-    //   );
     const requests = [
       axios.request(options1),
       axios.request(options2),
@@ -1193,8 +1158,6 @@ const Event = () => {
                                 </select>
                               </div>
 
-
-                              
                               <div className="my-1">
                                 <select
                                   name="subCategory"
@@ -1284,13 +1247,21 @@ const Event = () => {
                                   </svg>
                                 </button>
                               </div>
-                            </td> 
+                            </td>
                           </tr>
                         );
                       })}
                       {/* </div> */}
                       <hr />
                     </tbody>
+                  )}
+                  {Array.isArray(getAllEvent) && getAllEvent?.length === 0 && (
+                    <div className="py-6 px-4 border-t ">
+                      <p className="text-[14px] 2xl:text-[20px] font-medium text-center">
+                        {" "}
+                        No Data Found{" "}
+                      </p>
+                    </div>
                   )}
                 </table>
               </div>
