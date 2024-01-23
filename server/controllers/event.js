@@ -135,7 +135,7 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
 
     await Event.deleteMany({ endDate: { $lt: currentDate } });
     
-    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city} = req.query;
+    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city ,country} = req.query;
 
     const currentPage = parseInt(page, 10);
     const itemsPerPage = parseInt(limit, 10);
@@ -164,6 +164,9 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
       if (isNaN(parsedEndDate)) {
         return res.status(401).json({ status: 'fail', message: 'Invalid end date format' });
       }
+
+      parsedEndDate.setHours(23, 59, 59, 999);
+      
       query.endDate = { $lte: parsedEndDate };
     }
 
@@ -181,6 +184,10 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
 
     if (city) {
       query.city = city;
+    }
+
+    if (country) {
+      query.country = country;
     }
 
     const totalEvents = await Event.countDocuments(query);
