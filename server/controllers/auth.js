@@ -328,18 +328,24 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 exports.verifyUser = async (req, res) => {
-  const { token } = req.params;
-  // console.log(token);
+  const {token } = req.params;
+
   try {
-    if (!verifyToken(token)) {
+    const decodedData = verifyToken(token);
+
+    if (!decodedData) {
       return res.status(401).json({ message: "Unauthorized Access" });
-    } else {
-      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-
-      const LoggedUser = await User.findOne({ _id: decodedData?.id }).select("-password -activeToken");
-
-      return res.status(200).json({ data: LoggedUser, message: "Verification Successfull" });
     }
+
+    const { id } = decodedData;
+
+    const LoggedUser = await User.findOne({ _id: id, activeToken: token }).select("-password -activeToken");
+
+    if (!LoggedUser) {
+      return res.status(401).json({ message: "Unauthorized Access" });
+    }
+
+    return res.status(200).json({ data: LoggedUser, message: "Verification Successful" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });
