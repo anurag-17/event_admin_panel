@@ -5,7 +5,7 @@ import { Transition, Dialog } from "@headlessui/react";
 import GetAUser from "./getauser";
 import Loader from "../../loader";
 import Pagination from "../../pagination";
-import {useAuth} from "../../../contexts/AuthContext"
+import { useAuth } from "../../../contexts/AuthContext";
 import Topbar from "../../../app/admin/admin-dashboard/topbar";
 
 const AllUser = () => {
@@ -135,7 +135,7 @@ const AllUser = () => {
     const options = {
       method: "DELETE",
       url: `/api/auth/deleteaUser/${userId}`,
-      
+
       headers: {
         "Content-Type": "application/json",
         authorization: adminAuthToken,
@@ -161,29 +161,26 @@ const AllUser = () => {
       });
   };
 
-
-
   return (
     <>
-    <Topbar/>
+      <Topbar />
       {isLoader && <Loader />}
 
       <div>
         <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center p-1 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   h-auto   xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-        <div className="  w-[50%] sm:w-[40%] my-3 ">
-          <h2 className="font-semibold custom_heading_text">Users List </h2>
+          <div className="  w-[50%] sm:w-[40%] my-3 ">
+            <h2 className="font-semibold custom_heading_text">Users List </h2>
           </div>
           <div className="flex justify-end  w-[50%] sm:w-[40%] my-3 ">
-              <input
-                type="search"
-                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full  max-w-[320px] 2xl:max-w-[440px]  md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
-                placeholder="Search"
-                aria-label="Search"
-                aria-describedby="button-addon1"
-                onChange={handleSearch}
-              />
-            </div>
-         
+            <input
+              type="search"
+              className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full  max-w-[320px] 2xl:max-w-[440px]  md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
+              placeholder="Search"
+              aria-label="Search"
+              aria-describedby="button-addon1"
+              onChange={handleSearch}
+            />
+          </div>
         </div>
 
         <div className=" flex mx-5 ml-10 mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
@@ -233,7 +230,9 @@ const AllUser = () => {
                         <td className="my-auto w-[37.7%]  sm:w-[32.33%] 2xl:w-[33%]">
                           {item.email}
                         </td>
-                        <td className="my-auto w-[15%]  sm:w-2/12">{item.provider}</td>
+                        <td className="my-auto w-[15%]  sm:w-2/12">
+                          {item.provider}
+                        </td>
                         <td className="my-auto  w-1/12">
                           <button onClick={() => openModal(item?._id)}>
                             <svg
@@ -285,6 +284,14 @@ const AllUser = () => {
                     );
                   })}
                 </tbody>
+              )}
+              {Array.isArray(getAllUser) && getAllUser?.length === 0 && (
+                <div className="py-6 px-4 border-t ">
+                  <p className="text-[14px]  2xl:text-[20px] font-medium text-center">
+                    {" "}
+                    No Data Found{" "}
+                  </p>
+                </div>
               )}
             </table>
           </div>
@@ -354,11 +361,7 @@ const AllUser = () => {
 
       {/* --------user Delete----------- */}
       <Transition appear show={dialogMatch} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={() => {}}
-        >
+        <Dialog as="div" className="relative z-10" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -390,45 +393,42 @@ const AllUser = () => {
                     Are You Sure! Want to Delete?
                   </Dialog.Title>
                   <p className="lg:text-[16px] text-[16px] font-normal leading-[30px] text-gray-500 mt-4">
-          Do you really want to delete these records? You cant't view this in
-          your list anymore if you delete!
-        </p>
-        <div className="mt-8">
-        <div className="flex justify-between gap-x-5">
-          <button
-            className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
+                    Do you really want to delete these records? You cant't view
+                    this in your list anymore if you delete!
+                  </p>
+                  <div className="mt-8">
+                    <div className="flex justify-between gap-x-5">
+                      <button
+                        className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
                               hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200"
-                              onClick={() => {
-                        setDialogMatch(false);
-                      }}
-          >
-            No, Keep It
-          </button>
-          {isLoader ? (
-            <button
-              className="w-full border border-1 rounded-md 
+                        onClick={() => {
+                          setDialogMatch(false);
+                        }}
+                      >
+                        No, Keep It
+                      </button>
+                      {isLoader ? (
+                        <button
+                          className="w-full border border-1 rounded-md 
                               text-sm 
                               border-red-400 text-red-700 bg-red-200  px-2 py-3
                               hover:border-none"
-            >
-              Loading...
-            </button>
-          ) : (
-            <button
-              className="w-full border border-1 rounded-md 
+                        >
+                          Loading...
+                        </button>
+                      ) : (
+                        <button
+                          className="w-full border border-1 rounded-md 
                               text-sm 
                               border-red-400 text-red-700 hover:bg-red-200  px-2 py-3
                               hover:border-none"
-                              onClick={() => handleDelete(deleteId)}
-            >
-              Yes, Delete It
-            </button>
-          )}
-        </div>
-      </div>
-
-
-
+                          onClick={() => handleDelete(deleteId)}
+                        >
+                          Yes, Delete It
+                        </button>
+                      )}
+                    </div>
+                  </div>
 
                   {/* <div className="mt-3 flex justify-center gap-14">
                     <button
