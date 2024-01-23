@@ -14,13 +14,14 @@ const protectedRoute = (WrappedComponent) => {
 
     useEffect(() => {
       const checkAuth = () => {
-        if (!loading && !adminAuthToken) {
-          router.push("/admin-login");
-        }
-        if (adminAuthToken) {
-          verify();
-        } else {
-          router.push("/admin-login");
+        if (!loading) {
+          
+          if (!adminAuthToken) {
+            router.push("/admin-login");
+          }else {
+           
+            verify();
+          } 
         }
       };
 
@@ -34,11 +35,12 @@ const protectedRoute = (WrappedComponent) => {
         const response = await axios.get(
           `/api/auth/verifyUserToken/${adminAuthToken}`
         );
+        console.log(response);
         if (response?.data === null) {
           router.push("/admin-login");
           setIsLoading(false);
         }
-        if (response.status === 200) {
+        if (response.status === 200||response.status === 304)  {
           setIsAuth(true);
           setIsLoading(false);
           return;

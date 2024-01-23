@@ -182,6 +182,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
         console.error("Error:", error);
       });
   };
+  console.log(eventDetail);
 
   return (
     <>
@@ -401,10 +402,10 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                 <select
                   name="category"
                   className="custom_inputt"
-                  defaultValue={
-                    editData?.category?._id
-                      ? editData?.category?._id
-                      : eventDetail?.category?._id
+                  value={
+                    eventDetail?.category?._id
+                      ? 
+                      eventDetail?.category._id:eventDetail?.category
                   }
                   onChange={inputHandler}
                   required
@@ -414,7 +415,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                 >
                   {console.log(editData?.category?._id, "kk")}
                   <option value="">Select Category</option>
-                  {getallCategory.map((item) => (
+                  {/* {getallCategory.map((item) => (
                     <option
                       className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
                       key={item._id}
@@ -425,7 +426,25 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                     >
                       {item?.title}
                     </option>
-                  ))}
+                  ))} */}
+                  {getallCategory.map((item, index) => {
+                    console.log(item);
+                    return (
+                      <>
+                        <option
+                          className="2xl:text-[20px] xl:text-[14px] lg:text-[12px] md:text-[10px] text-[8px]"
+                          key={item._id}
+                          value={item._id}
+                          // selected={
+                          //   item._id ===
+                          //   (editData?.category?._id || eventDetail?.category)
+                          // }
+                        >
+                          {item?.title}
+                        </option>
+                      </>
+                    );
+                  })}
                 </select>
               </div>
             </div>
@@ -440,10 +459,10 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                 <select
                   name="subCategory"
                   className="custom_inputt w-full"
-                  defaultValue={
-                    editData?.subCategory
-                      ? editData?.subCategory?._id
-                      : eventDetail?.subCategory
+                   value={
+                    eventDetail?.subCategory?._id
+                      ? 
+                      eventDetail?.subCategory._id:eventDetail?.subCategory
                   }
                   onChange={inputHandler}
                   required
@@ -451,12 +470,12 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                   maxLength={32}
                 >
                   <option value="">
-                    {eventDetail?.subCategory?.subCategory}
+                    Select Sub Category 
                   </option>
                   {getallSubCategory
                     .filter((item, indr) => {
                       // console.log(item, eventDetail);
-                      return item?.category?._id === eventDetail?.category;
+                      return item?.category?._id === (eventDetail?.category?._id ? eventDetail?.category?._id: eventDetail?.category);
                     })
                     .map((item) => (
                       <option

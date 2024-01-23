@@ -81,7 +81,7 @@ const Dashboard = () => {
     setLoader(true);
     const option = {
       method: "GET",
-      url: `/api/category/getallCategory?limit=${limit}Today Work List.&page=${page}`,
+      url: `/api/category/getallCategory?limit=${limit}&page=${page}`,
     };
     axios
       .request(option)

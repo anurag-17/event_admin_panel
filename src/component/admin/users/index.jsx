@@ -106,7 +106,7 @@ const AllUser = () => {
     } else {
       const options = {
         method: "GET",
-        url: `/api/auth/all-users?search=${search}`,
+        url: `/api/auth/all-users?search=${search}&limit=${limit}&page=${currentPage}`,
         headers: {
           authorization: adminAuthToken,
         },
@@ -116,6 +116,7 @@ const AllUser = () => {
         .then(function (response) {
           if (response.status === 200) {
             setGetAllUSer(response.data.users);
+            setTotalPages(response.data.totalPages || 1);
           }
         })
         .catch(function (error) {
