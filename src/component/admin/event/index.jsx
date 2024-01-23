@@ -158,6 +158,8 @@ const Event = () => {
         endDate,
         category: categoryFilter,
         subCategory: subCategoryFilter,
+        provider: providerFilter,
+        city: cityFilter,
       },
     };
     axios
@@ -179,13 +181,14 @@ const Event = () => {
     } else {
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?searchQuery=${search}`,
+        url: `/api/event/getAllEvents?searchQuery=${search}&limit=${limit}&page=${current_page}`,
       };
       axios
         .request(options)
         .then(function (response) {
           if (response.status === 200) {
             setGetAllEvent(response.data.events);
+            setTotalPages(response?.data?.total_pages || 1);
           }
         })
         .catch(function (error) {
@@ -302,7 +305,7 @@ const Event = () => {
         method: "GET",
         url: `/api/event/getAllEvents?category=${
           e.target.value
-        }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
+        }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${providerFilter}&page=${1}&limit=${limit}`,
       };
       axios
         .request(options)
@@ -336,7 +339,7 @@ const Event = () => {
       method: "GET",
       url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${
         e.target.value
-      }&startDate=${startDate}&endDate=${endDate}&provider=${providerFilter}&page=${1}&limit=${limit}`,
+      }&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${providerFilter}&page=${1}&limit=${limit}`,
     };
     axios
       .request(options)
@@ -577,7 +580,6 @@ const Event = () => {
               );
               setCitiesList(filterCityArr);
             }
-
             const providerName = res?.data?.events?.map(
               (items) => items?.event_provider
             );
@@ -1166,25 +1168,20 @@ const Event = () => {
                                   required
                                   minLength={3}
                                   maxLength={32}
-                                  // defaultValue={item?.subCategory?._id}
-                                  defaultValue={String(
-                                    item?.subCategory?.subCategory
-                                  )}
+                                  defaultValue={item?.subCategory?._id}
+                                  // defaultValue={String(
+                                  //   item?.subCategory?.subCategory
+                                  // )}
                                 >
-                                  <option value="">
-                                    {" "}
-                                    <option value="" disabled>
-                                      {item?.subCategory?.subCategory
-                                        ? item.subCategory.subCategory
-                                        : "SelectSubcategory"}
-                                    </option>
-                                  </option>
+                                  <option value="">Select Sub category</option>
                                   {Array.isArray(allSubCategory) &&
                                     allSubCategory
-                                      .filter((item, indr) => {
+                                      .filter((itemc, indr) => {
                                         return (
-                                          item?.category?._id ===
-                                          editCategory?.category
+                                          itemc?.category?._id ===
+                                          (editCategory?.category !== ""
+                                            ? editCategory?.category
+                                            : item?.category?._id)
                                         );
                                       })
                                       .map((itemss) => (
