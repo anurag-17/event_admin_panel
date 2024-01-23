@@ -50,17 +50,21 @@ const DeleteModuleC = ({ categoryID, closeModal, refreshData }) => {
       </div>
 
       <div className="mt-8">
-        <div className="flex  justify-between gap-x-2 sm:gap-x-5">
+        <div className="flex justify-between gap-x-5">
           <button
-
+            className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
+                              hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200"
             onClick={handleClose}
           >
             No, Keep It
           </button>
 
           <button
-            className={`w-full border bg-red-200  border-red-400 text-red-500 rounded-md text-[12px] sm:text-[16px] px-2  sm:py-3
-                        ${isLoading ? 'bg-gray-200' : 'hover:bg-red-200'}
+            className={`w-full border border-1 rounded-md 
+                              text-sm 
+                              border-red-400 text-red-700 bg-red-200  px-2 py-3
+                              hover:border-none
+                        ${isLoading ? "bg-gray-200" : "hover:bg-red-200"}
                         hover:border-none`}
             onClick={handleDelete}
             disabled={isLoading}
