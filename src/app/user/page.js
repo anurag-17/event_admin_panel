@@ -1,18 +1,20 @@
 "use client";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Fragment } from "react";
 import Link from "next/link";
 
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 import Pagination from "../../component/pagination";
-import SingleEventPage from "../singleEvent/[slug]/page";
-import { useRouter } from "next/navigation";
-import UserProfile from "../../component/user/userProfile/page";
 import { Dialog, Transition } from "@headlessui/react";
 import Loader from "../../component/loader";
-import { ToastContainer, toast } from "react-toastify";
+import { useAuth } from "../../contexts/AuthContext";
+import { destroyCookie } from "nookies";
+import userRoute from "../../component/utils/userAuth";
 
 const User = () => {
+  const {userAuthToken} = useAuth() 
   const [ComponentId, setComponentId] = useState(1);
   const [getAllEvent, setGetAllEvent] = useState([]);
 
@@ -26,8 +28,6 @@ const User = () => {
   const [total_pages, setTotalPages] = useState(1);
   const [authenticated, setAuthenticated] = useState(false);
   const [isLoader, setLoader] = useState(false);
-  const [auth_token, setAuth_token] = useState("")
-  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [selectCategory, setSelectedCategory] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("");
   const [issueText, setIssueText] = useState("");
@@ -103,18 +103,6 @@ const User = () => {
   const refreshData = () => {
     setRefresh(!isRefresh);
   };
-  useEffect(() => {
-    
-    if (typeof window !== undefined && window.localStorage) {
-      const token = localStorage.getItem("accessToken")
-      // console.log(token);
-      if (token) {
-        setAuth_token(JSON.parse(token))
-        console.log(token);
-        verify(JSON.parse(token))
-      }
-    }
-  }, [])
   
 
   //   ------get all events-------
@@ -149,7 +137,6 @@ const User = () => {
         console.log(err, "Error");
       });
   };
-console.log(auth_token);
   //   -----------get All Category---------
   useEffect(() => {
     defaultgetAllCate();
@@ -188,7 +175,7 @@ console.log(auth_token);
       url: "/api/subCategory/getallSubCategory",
       headers: {
         "content-type": "application/json",
-        authorization: auth_token,
+        authorization: userAuthToken,
       },
     };
 
@@ -233,7 +220,7 @@ console.log(auth_token);
         console.error(error);
       });
   };
-  console.log(subCategoryFilter);
+  // console.log(subCategoryFilter);
 
   const inputHandler = (e) => {
     // const { name, value } = e.target;
@@ -324,37 +311,22 @@ console.log(auth_token);
     }
   };
 
-  // ------verify user token-------
-  // useEffect(() => {
-  //   const auth_tokenA = JSON.parse(localStorage.getItem("accessToken"));
+  
 
-  //   if (auth_tokenA) {
-  //     // verify();
-  //   } else {
-  //     setAuthenticated(false);
-  //     // router.push("/user/login");
-  //   }
-  // }, []);
-
-  const verify = async (tok) => {
+  const verify = async () => {
     setLoader(true);
     try {
-      const res = await axios.get(`/api/auth/verifyUserToken/${tok}`);
+      const res = await axios.get(`/api/auth/verifyUserToken/${userAuthToken}`);
       if (res.status === 200) {
         const usersId = res?.data?.data?._id;
-        setAuthenticated(true);
         setLoader(false);
         setUserId(usersId);
-
-        console.log("user Id", res?.data?.data?._id);
         return;
       } else {
-        setAuthenticated(false);
         router.push("/user/login");
         setLoader(false);
       }
     } catch (error) {
-      setAuthenticated(false);
       console.error("Error occurred:", error);
       router.push("/user/login");
       setLoader(false);
@@ -364,7 +336,6 @@ console.log(auth_token);
   // ---------event isshue api----------
 
   const handleEventIssue = async (e) => {
-    const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
 
     setLoader(true);
     // const userId = await verify();
@@ -380,14 +351,14 @@ console.log(auth_token);
         },
         {
           headers: {
-            authorization: auth_token,
+            authorization: userAuthToken,
             "Content-Type": "application/json",
           },
         }
       );
 
       if (response.status === 201) {
-        console.log(response.data);
+        // console.log(response.data);
         toast.success("Submitted successfully !");
         refreshData();
         setIssueText("");
@@ -406,11 +377,7 @@ console.log(auth_token);
 
   // ----------Log Out Api--------------
   const handleLogout = () => {
-    // setLoader(true);
-    // console.log("Logging out...");
-    // localStorage.removeItem("accessToken");
-    // router.push("/admin-login");
-    // setLoader(false);
+  
     try {
       setLoader(true);
       const options = {
@@ -418,7 +385,7 @@ console.log(auth_token);
         url: `/api/auth/logout`,
         headers: {
           "Content-Type": "application/json",
-          authorization: auth_token,
+          authorization: userAuthToken,
         },
       };
       axios
@@ -427,27 +394,26 @@ console.log(auth_token);
           if (res.status === 200) {
             toast.success("Logout!");
             setLoader(false);
-            localStorage.removeItem("accessToken");
-            router.push("/user/login");
+            destroyCookie(null, "ad_Auth", { path: "/" });
             toast.success("Logout Successfully !");
+            router.push("/user/login");
           } else {
             setLoader(false);
-            localStorage.removeItem("accessToken");
+            destroyCookie(null, "ad_Auth", { path: "/" });
             router.push("/user/login");
             return;
           }
         })
         .catch((error) => {
           setLoader(false);
+          destroyCookie(null, "ad_Auth", { path: "/" });
           console.error("Error:", error);
           // toast.error( "server error!");
-          localStorage.removeItem("accessToken");
           router.push("/user/login");
         });
     } catch {
       console.log("error");
       toast.error("server error!");
-      localStorage.removeItem("accessToken");
       router.push("/user/login");
     }
   };
@@ -462,14 +428,14 @@ console.log(auth_token);
         },
         {
           headers: {
-            authorization: auth_token,
+            authorization: userAuthToken,
             "Content-Type": "application/json",
           },
         }
       );
 
       if (response.status === 201) {
-        console.log(response.data);
+        // console.log(response.data);
         toast.success("Submitted successfully !");
       } else {
         console.error("Failed to submit");
@@ -479,6 +445,9 @@ console.log(auth_token);
     }
   };
 
+  useEffect(() => {
+    verify()
+  }, [])
   return (
     <>
       {isLoader && <Loader />}
@@ -826,4 +795,4 @@ console.log(auth_token);
   );
 };
 
-export default User;
+export default userRoute(User);

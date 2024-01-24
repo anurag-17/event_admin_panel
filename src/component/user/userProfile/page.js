@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import Loader from "../../loader";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const UserProfile = () => {
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const {userAuthToken} = useAuth() 
   const [isLoader, setIsLoader] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
   const [userData, setUserData] = useState({});
   const router = useRouter();
   
@@ -16,12 +16,10 @@ const UserProfile = () => {
   }
 
   useEffect(() => {
-    const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
 
-    if (auth_token) {
+    if (userAuthToken) {
       verify();
     } else {
-      setAuthenticated(false);
       router.push("/user/login");
     }
   }, []);
@@ -29,13 +27,10 @@ const UserProfile = () => {
   const verify = async () => {
     setIsLoader(true);
     try {
-      const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
-      const res = await axios.get(`/api/auth/verifyUserToken/${auth_token}`);
+      const res = await axios.get(`/api/auth/verifyUserToken/${userAuthToken}`);
       if (res.status === 200) {
         setAuthenticated(true);
         setIsLoader(false);
-        console.log("authenticate", res?.data?.data);
-        console.log("type", typeof res?.data?.data);
         setUserData(res?.data?.data);
       } else {
         setAuthenticated(false);
