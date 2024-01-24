@@ -31,15 +31,6 @@ exports.eventRedirection = asyncHandler(async (req, res) => {
 
 exports.getAllEventRedirections = asyncHandler(async (req, res) => {
   try {
-    const currentDate = new Date();
-
-    await EventRedirection.deleteMany({
-      $or: [
-        { event: null },
-        { event: { $exists: true, $ne: null }, 'event.endDate': { $lt: currentDate } },
-      ],
-    });
-    
     const { page = 1, limit = 20, eventId } = req.query;
 
     const currentPage = parseInt(page, 10);
@@ -50,6 +41,9 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
     if (eventId) {
       query.event = eventId;
     }
+
+    const deletionResult = await EventRedirection.deleteMany({ event: { $eq: null } });
+    console.log("Deletion result:", deletionResult);
 
     const totalEventRedirections = await EventRedirection.countDocuments(query);
     const totalPages = Math.ceil(totalEventRedirections / itemsPerPage);
@@ -65,7 +59,6 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
           path: 'category',
         },
       });
-    
 
     res.status(200).json({
       current_page: currentPage,
@@ -74,7 +67,7 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
       eventRedirections: allEventRedirections,
     });
   } catch (error) {
-    console.log("EEEE",error);
+    console.log("EEEE", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

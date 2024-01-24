@@ -400,10 +400,10 @@ exports.getallUser = async (req, res) => {
     // Calculate total pages
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    // Check if requested page exists
-    if (currentPage > totalPages) {
-      throw new Error("This Page does not exist");
-    }
+    // // Check if requested page exists
+    // if (currentPage > totalPages) {
+    //   throw new Error("This Page does not exist");
+    // }
 
     const skip = (currentPage - 1) * itemsPerPage;
     const users = await userQuery.sort({ firstname: 1 }).skip(skip).limit(itemsPerPage).exec();
