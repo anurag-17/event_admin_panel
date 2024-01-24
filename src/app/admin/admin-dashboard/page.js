@@ -128,7 +128,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="">
-              <div className="flex justify-center items-center whitespace-pre-wrap lg:mt-4 xl:mt-5 2xl:mt-7 md:mt-2 mt-4">
+              <div className="flex justify-center items-center lg:mt-4 xl:mt-5 2xl:mt-7 md:mt-2">
                 <div className="mx-auto w-2/3">
                   <img
                     src="/sterna-logo.png"
@@ -140,7 +140,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col 2xl:gap-6 gap-1 mt-10 lg:mt-10 xl:mt-14 2xl:mt-20">
+            <div className="flex flex-col 2xl:gap-6 gap-1 sm:mt-10 lg:mt-10 xl:mt-14 2xl:mt-20">
               {menulist.map((item, index) => (
                 <div
                   key={index}
