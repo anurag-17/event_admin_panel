@@ -377,7 +377,11 @@ exports.updatedUser = async (req, res) => {
 
 exports.getallUser = async (req, res) => {
   try {
+    const { page = 1, limit = 10} = req.query;
     const searchQuery = req.query.search;
+    
+    const currentPage = parseInt(page, 10);
+    const itemsPerPage = parseInt(limit, 10);
 
     const userQuery = User.find();
 
@@ -390,31 +394,24 @@ exports.getallUser = async (req, res) => {
       ]);
     }
 
-    userQuery.sort({ firstname: 1 });
-
-    // Pagination
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    userQuery.skip(skip).limit(limit);
-
-    const users = await userQuery.exec();
-
     // Count total items
-    const totalItems = await User.countDocuments();
+    const totalItems = await User.countDocuments(userQuery);
 
     // Calculate total pages
-    const totalPages = Math.ceil(totalItems / limit);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     // Check if requested page exists
-    if (page > totalPages) {
+    if (currentPage > totalPages) {
       throw new Error("This Page does not exist");
     }
+
+    const skip = (currentPage - 1) * itemsPerPage;
+    const users = await userQuery.sort({ firstname: 1 }).skip(skip).limit(itemsPerPage).exec();
 
     res.json({
       totalItems,
       totalPages,
-      currentPage: page,
+      currentPage,
       users,
     });
   } catch (error) {
