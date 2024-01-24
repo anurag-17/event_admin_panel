@@ -142,7 +142,7 @@ const UserIssue = () => {
       {isLoader && <Loader />}
       <Topbar />
       <div>
-        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:p-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   h-auto  xl:p-2 p-2 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:p-4 2xl:px-10 border sm:ml-10 mx-4 sm:mr-4 lg:mx-8  bg-white rounded-lg   h-auto  xl:p-2 p-2 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold custom_heading_text">Users Issue List </h2>
 
           <div className="">
@@ -178,7 +178,7 @@ const UserIssue = () => {
           selectedFilter === "resolved" ? allResolvedIssue : getUserIssue
         ) && selectedFilter === "resolved"
           ? allResolvedIssue?.map((item) => (
-              <div className="border bg-white sm:ml-10 sm:mr-4 lg:mx-8 rounded-md p-3 my-4 flex flex-col sm:flex-row mx-auto justify-around ">
+              <div className="border  bg-white sm:ml-10 sm:mr-4 lg:mx-8 rounded-md p-3 my-4 flex flex-col sm:flex-row mx-auto justify-around ">
                 <div className="w-2/12">
                   <Link href={`/eventIssue/${item?._id}`} target="_blank">
                     <img
@@ -252,7 +252,7 @@ const UserIssue = () => {
               </div>
             ))
           : getUserIssue?.map((item) => (
-              <div className="border bg-white sm:ml-10 sm:mr-4 lg:mx-8 rounded-md p-3 my-4 flex flex-col sm:flex-row mx-auto justify-around ">
+              <div className="border bg-white sm:ml-10  mx-4 sm:mr-4 lg:mx-8 rounded-md p-3 my-4 flex flex-col sm:flex-row  justify-around ">
                 <div className="w-2/12">
                   <Link href={`/eventIssue/${item?._id}`} target="_blank">
                     <img
@@ -292,17 +292,17 @@ const UserIssue = () => {
                   </h1>
                 </div>
 
-                <div className="flex items-center w-2/12 lg:w-1/12 col-span-1 custom_table_text">
+                <div className="flex items-center w-1/3 md:w-2/12 lg:w-1/12 col-span-1 custom_table_text">
                   <div className=" flex flex-col gap-2 2xl:gap-2 w-full ">
                     <div className="">
                       {item?.isResolved ? (
-                        <div className="flex justify-end">
+                        <div className="flex sm:justify-end">
                           <button className="w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
                             Resolved
                           </button>
                         </div>
                       ) : (
-                        <div className="flex justify-end">
+                        <div className="flex sm:justify-end">
                           <button
                             onClick={() => {
                               handleResolve(item?._id, true);
@@ -314,7 +314,7 @@ const UserIssue = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex sm:justify-end">
                       <button
                         onClick={() => openModal(item?._id)}
                         className=" w-4/6 lg:w-full border p-1  rounded-md   border-red-700 text-red-700 hover:bg-red-200 "

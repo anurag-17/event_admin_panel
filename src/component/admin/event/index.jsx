@@ -61,11 +61,11 @@ const Event = () => {
   const [fetchStartDate, setFetchStartDate] = useState("");
   const [fetchEndDate, setFetchEndDate] = useState("");
   const [validationError, setValidationError] = useState("");
-
+  const [search, setSearch] = useState("");
   //----------Date/Time Formate
   const convertTime = (time) => {
     const parsedDateTime = moment(time);
-    const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
+    const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:MM");
     return formattedDateTime;
   };
 
@@ -135,9 +135,7 @@ const Event = () => {
     setEventId(id);
     setOpenDelete(true);
   }
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
+
   const refreshData = () => {
     setRefresh(!isRefresh);
   };
@@ -160,6 +158,7 @@ const Event = () => {
         subCategory: subCategoryFilter,
         provider: providerFilter,
         city: cityFilter,
+        searchQuery: search,
       },
     };
     axios
@@ -173,15 +172,22 @@ const Event = () => {
         console.log(err, "Error");
       });
   };
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   const handleSearch = (e) => {
-    const search = e.target.value;
+    // const search = e.target.value;
+    setSearch(e.target.value);
+    setCurrentPage(1);
     if (search.trim() === "") {
       refreshData();
     } else {
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?searchQuery=${search}&limit=${limit}&page=${current_page}`,
+        url: `/api/event/getAllEvents?searchQuery=${
+          e.target.value
+        }&category=${categoryFilter}&subCategory=${subCategoryFilter}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${providerFilter}&limit=${limit}&page=${1}`,
       };
       axios
         .request(options)
@@ -303,7 +309,7 @@ const Event = () => {
       setCategoryFilter(e.target.value);
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${
+        url: `/api/event/getAllEvents?searchQuery=${search}&category=${
           e.target.value
         }&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${providerFilter}&page=${1}&limit=${limit}`,
       };
@@ -337,7 +343,7 @@ const Event = () => {
     setSubCategoryFilter(e.target.value);
     const options = {
       method: "GET",
-      url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${
+      url: `/api/event/getAllEvents?searchQuery=${search}&category=${categoryFilter}&subCategory=${
         e.target.value
       }&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${providerFilter}&page=${1}&limit=${limit}`,
     };
@@ -375,6 +381,7 @@ const Event = () => {
           provider: providerFilter,
           page: 1,
           limit: limit,
+          searchQuery: search,
         },
       };
       axios
@@ -406,6 +413,7 @@ const Event = () => {
           provider: providerFilter,
           page: 1,
           limit: limit,
+          searchQuery: search,
         },
       };
       axios
@@ -431,7 +439,7 @@ const Event = () => {
     try {
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${
+        url: `/api/event/getAllEvents?searchQuery=${search}&category=${categoryFilter}&subCategory=${subCategoryFilter}&startDate=${startDate}&endDate=${endDate}&city=${
           e.target.value
         }&provider=${providerFilter}&page=${1}&limit=${limit}`,
       };
@@ -465,7 +473,7 @@ const Event = () => {
     try {
       const options = {
         method: "GET",
-        url: `/api/event/getAllEvents?category=${categoryFilter}&subCategory=${""}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${
+        url: `/api/event/getAllEvents?searchQuery=${search}&category=${categoryFilter}&subCategory=${subCategoryFilter}&startDate=${startDate}&endDate=${endDate}&city=${cityFilter}&provider=${
           e.target.value
         }&page=${1}&limit=${limit}`,
       };
@@ -637,17 +645,17 @@ const Event = () => {
       <ToastContainer autoClose={1500} />
       <Topbar />
       <div>
-        <div className="mt-2 sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-10 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4">
+        <div className="mt-2 sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-5 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4">
           <h2 className="font-semibold custom_heading_text">Event List </h2>
         </div>
 
         {/* ---------Event fetch---------- */}
-        <div className="  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8   rounded-lg bg-white h-auto   lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-2">
+        <div className="  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-5 lg:mx-8   rounded-lg bg-white h-auto   lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-2">
           <div className=" flex items-center sm:items-center flex-col-reverse sm:flex-row justify-between">
             <div className=" items-center w-[50%] sm:w-[40%] my-3 ">
               <input
                 type="search"
-                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full lg:max-w-auto max-w-[320px] 2xl:max-w-[440px] mx-auto md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
+                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-md lg:rounded-lg w-full lg:max-w-auto max-w-[320px] 2xl:max-w-[440px] mx-auto md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon1"
@@ -734,7 +742,7 @@ const Event = () => {
             </div>
           </div>
         </div>
-        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-10 lg:mx-8    rounded-lg bg-white  lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-3">
+        <div className=" flex justify-between  items-center 2xl:px-10 xl:px-8 lg:px-5 md:px-4 sm:px-3 px-2 border mx-5 lg:mx-8    rounded-lg bg-white  lg:mt-5 sm:mt-3 mt-2 md:py-2 sm:py-[6px] py-3">
           <div className="">
             <div className="flex flex-wrap items-end  gap-2 lg:gap-3 xl:gap-3 2xl:gap-4 py-4">
               {/* -----Filter Category-------- */}
@@ -843,12 +851,12 @@ const Event = () => {
                       type="date"
                       max={endDate ? endDate : ""}
                       className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
-                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+                  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                      xl:px-3 xl:py-0  xl:w-32
+                      lg:px-2 lg:py-1  lg:w-32
                 md:px-3 md:py-2 md:h-[25px] 
                    sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                        px-2 pb-0 h-[23px] custom_dropdown_text "
                       onChange={handleDateSearch}
                       value={startDate}
                     />
@@ -871,12 +879,12 @@ const Event = () => {
                       name="endDate"
                       min={startDate ? startDate : ""}
                       className="cursor-pointer rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none relative 
-                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-32
-                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-32
+ 2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-44 
+                xl:px-3 xl:py-0  xl:w-32
+              lg:px-2 lg:py-1  lg:w-32
                   md:px-3 md:py-2 md:h-[25px] 
                    sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                        px-2 pb-0 h-[23px]  custom_dropdown_text "
                       onChange={handleDateSearch}
                       value={endDate}
                     />
@@ -985,12 +993,12 @@ const Event = () => {
                   <button
                     onClick={handleClearFilter}
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-24
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-16
-                    lg:text-[12px]  lg:px-2 lg:py-1   lg:w-16
+                  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-24
+                     xl:px-3 xl:py-0  xl:w-16
+                      lg:px-2 lg:py-1 lg:w-16
                     md:px-3 md:py-1 md:h-[25px] 
-                   sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                   sm:px-2 sm:py-0 sm:h-[23px]
+                   h-[23px] px-2 pb-0  custom_dropdown_text "
                   >
                     Clear
                   </button>
@@ -1008,12 +1016,12 @@ const Event = () => {
                   <button
                     onClick={openAddModal}
                     className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-                  2xl:text-sm  2xl:px-0 text-center 2xl:py-2 2xl:h-[35px] 2xl:w-24
-                    xl:text-[12px]  xl:px-3 xl:py-0  xl:w-16
-                    lg:text-[12px]  lg:px-2 lg:py-1  lg:w-16
+               2xl:px-0 text-center 2xl:py-2 2xl:h-[35px] 2xl:w-24
+                  xl:px-3 xl:py-0  xl:w-16
+                      lg:px-2 lg:py-1  lg:w-16
                     md:px-3 md:py-1 md:h-[25px] 
                    sm:px-2 sm:py-0 
-                        px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px] "
+                        px-2 pb-0 h-[23px] custom_dropdown_text "
                   >
                     +Add
                   </button>
@@ -1023,7 +1031,7 @@ const Event = () => {
           </div>
         </div>
 
-        <div className=" flex mx-10 lg:mx-8  overflow-x-auto ">
+        <div className=" flex mx-5 lg:mx-8  overflow-x-auto ">
           <div className="  w-full ">
             <div className="overflow-y-scroll  ">
               <div className="h-[300px] xl:h-[400px]">

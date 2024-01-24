@@ -7,10 +7,13 @@
  @apply text-[12px] sm:text-[12px] md:text-[14px] lg:text-[14px] xl:text-[14px] 2xl:text-[16px]
 }
 .custom_dropdown_text{
-  @apply text-[12px] sm:text-[14px] md:text-[16px] lg:text-[12px] xl:text-[14px] 2xl:text-[16px]
+  @apply text-[10px] sm:text-[11px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[16px]
  }
  .custom_heading_text{
   @apply text-[14px] sm:text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[24px]
+ }
+ .custom_dashboard{
+  @apply flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.7%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6
  }
  @media (max-width:400px){
   .dashboard_main{

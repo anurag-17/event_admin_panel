@@ -19,7 +19,7 @@ const AllUser = () => {
   const [selectedItemData, setSelectedItemData] = useState("");
   const [isLoader, setLoader] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, SetCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [dialogMatch, setDialogMatch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
@@ -49,7 +49,7 @@ const AllUser = () => {
   };
 
   const handlePageChange = (newPage) => {
-    SetCurrentPage(newPage);
+    setCurrentPage(newPage);
   };
 
   const refreshData = () => {
@@ -101,12 +101,13 @@ const AllUser = () => {
 
   const handleSearch = (e) => {
     const search = e.target.value;
+    setCurrentPage(1);
     if (search.trim() === "") {
       refreshData();
     } else {
       const options = {
         method: "GET",
-        url: `/api/auth/all-users?search=${search}&limit=${limit}&page=${currentPage}`,
+        url: `/api/auth/all-users?search=${search}&limit=${limit}&page=${1}`,
         headers: {
           authorization: adminAuthToken,
         },
@@ -128,10 +129,6 @@ const AllUser = () => {
   // ---------delete Api-----------
   const handleDelete = (userId) => {
     console.log(userId);
-    // ;
-    // alert("deleted successfully");
-    // setDialogMatch(false);
-    // return;
 
     const options = {
       method: "DELETE",
@@ -148,12 +145,9 @@ const AllUser = () => {
       .then(function (response) {
         console.log(response);
         if (response.status === 200) {
-          // toast.success("Deleted successfully !");
-          // handleClose();
           setDialogMatch(false);
           refreshData();
         } else {
-          // toast.error("Failed. something went wrong!");
           return;
         }
       })
@@ -167,24 +161,24 @@ const AllUser = () => {
       <Topbar />
       {isLoader && <Loader />}
 
-      <div>
-        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center p-1 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   h-auto   xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <div className="  w-[50%] sm:w-[40%] my-3 ">
-            <h2 className="font-semibold custom_heading_text">Users List </h2>
-          </div>
-          <div className="flex justify-end  w-[50%] sm:w-[40%] my-3 ">
-            <input
-              type="search"
-              className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-lg w-full  max-w-[320px] 2xl:max-w-[440px]  md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
-              placeholder="Search"
-              aria-label="Search"
-              aria-describedby="button-addon1"
-              onChange={handleSearch}
-            />
-          </div>
+      <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center p-1 2xl:px-10 border sm:ml-10 mx-4 sm:mr-4 lg:mx-8  bg-white rounded-lg   h-auto   xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="  w-[50%] sm:w-[40%] my-3 ">
+          <h2 className="font-semibold custom_heading_text">Users List </h2>
         </div>
+        <div className="flex justify-end  w-[50%] sm:w-[40%]  ">
+          <input
+            type="search"
+            className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-md lg:rounded-lg w-full  max-w-[320px] 2xl:max-w-[440px]  md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="button-addon1"
+            onChange={handleSearch}
+          />
+        </div>
+      </div>
 
-        <div className=" flex mx-5 ml-10 mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
+      <div className=" flex sm:ml-10 mx-4 sm:mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
+        <div className=" w-full ">
           <div className=" w-full ">
             <table className="w-[155%] sm:w-[100%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
@@ -297,14 +291,14 @@ const AllUser = () => {
             </table>
           </div>
         </div>
-        {totalPages > 1 && (
-          <Pagination
-            total_pages={totalPages}
-            current_page={currentPage}
-            onPageChange={handlePageChange}
-          />
-        )}
       </div>
+      {totalPages > 1 && (
+        <Pagination
+          total_pages={totalPages}
+          current_page={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
 
       <Transition appear show={isModalOpen} as={Fragment}>
         <Dialog as="div" className=" z-10" onClose={closeModal}>

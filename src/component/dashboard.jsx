@@ -135,8 +135,8 @@ const Dashboard = () => {
         {/* ---------second-------- */}
         {getAllEvent && (
           <div className="flex w-12/12 dashboard_main">
-            <div className="flex flex-wrap  gap-3 xl:gap-6 mt-8 mx-7 dashboard_boxes">
-              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6 dashboard_box">
+            <div className="flex flex-wrap  gap-2 xl:gap-6 mt-8 mx-5 dashboard_boxes">
+              <div className=" custom_dashboard dashboard_box">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -165,7 +165,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6 dashboard_box">
+              <div className=" custom_dashboard dashboard_box">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -194,7 +194,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6 dashboard_box">
+              <div className=" custom_dashboard dashboard_box">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -223,7 +223,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6 dashboard_box">
+              <div className=" custom_dashboard dashboard_box">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -252,8 +252,7 @@ const Dashboard = () => {
                 </div>
               </div>
               {/* ---------------------//-------------- */}
-
-              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6 dashboard_box">
+              <div className=" custom_dashboard dashboard_box">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -282,7 +281,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6 dashboard_box">
+              <div className=" custom_dashboard dashboard_box">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
@@ -311,7 +310,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className=" flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.5%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6 dashboard_box">
+              <div className=" custom_dashboard dashboard_box">
                 <div className=" w-1/4 ">
                   <div className=" flex items-center bg-[#374151] w-[40px] h-[40px] sm:w-[40px] sm:h-[40px] md:w-[40px] md:h-[40px] xl:h-[45px] xl:w-[45px] 2xl:h-[70px] 2xl:w-[70px] rounded-[5px] xl:ml-1 2xl:ml-0">
                     <svg
