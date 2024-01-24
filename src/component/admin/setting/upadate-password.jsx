@@ -10,7 +10,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 
 
 const ChangePassword = () => {
-  const { adminAuthToken } = useAuth();
+  const { adminAuthToken, handleSignout} = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -65,7 +65,7 @@ const ChangePassword = () => {
           setCnfmPassword("");
           setError("");
           toast.success("Password change successfully!");
-          handleSignout();
+          signoutFunc();
           // router.push("/admin-login")
         } else if (res.status === 203) {
           setError(res?.data?.message);
@@ -81,45 +81,8 @@ const ChangePassword = () => {
     }
   };
 
-  const handleSignout = () => {
-    try {
-      setLoader(true);
-      const options = {
-        method: "GET",
-        url: `/api/auth/logout`,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: adminAuthToken,
-        },
-      };
-      axios
-        .request(options)
-        .then((res) => {
-          if (res.status === 200) {
-            toast.success("Please login again!");
-            setLoader(false);
-            localStorage.removeItem("accessToken");
-            router.push("/admin-login");
-          } else {
-            setLoader(false);
-            localStorage.removeItem("accessToken");
-            router.push("/admin-login");
-            return;
-          }
-        })
-        .catch((error) => {
-          setLoader(false);
-          console.error("Error:", error);
-          toast.error(error?.response?.data?.message || "server error!");
-          localStorage.removeItem("accessToken");
-          router.push("/admin-login");
-        });
-    } catch {
-      console.log("error");
-      toast.error("server error!");
-      localStorage.removeItem("accessToken");
-      router.push("/admin-login");
-    }
+  const signoutFunc = () => {
+    handleSignout()
   };
   return (
     <>

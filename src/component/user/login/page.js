@@ -6,11 +6,13 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../../../contexts/AuthContext";
 
 // import Loader from "../../../component/loader";
 
 const Login = () => {
   const router = useRouter();
+  const {setUserAuth} = useAuth() 
   const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
@@ -20,11 +22,11 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("accessToken");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     localStorage.removeItem("accessToken");
+  //   }
+  // }, []);
 
   const addFormHandler = (event) => {
     event.preventDefault();
@@ -40,17 +42,9 @@ const Login = () => {
       .then(function (response) {
         console.log(response)
         if (response?.status === 200) {
-          localStorage.setItem(
-            "accessToken",
-            JSON.stringify(response?.data?.token)
-          );
-          // localStorage.setItem(
-          //   "userDetails",
-          //   JSON.stringify(response?.data?.user?._id)
-          // );
+          setUserAuth(response?.data?.token)
           toast.success("Success. Login Successfully!");
           router.push("/user");
-          // router.push("/");
           setLoading(false);
         } else {
           setLoading(false);

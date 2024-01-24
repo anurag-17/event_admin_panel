@@ -9,12 +9,21 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const router = useRouter();
   const [adminAuthToken, setAdminAuthToken] = useState(null);
+  const [userAuthToken, setUserAuthToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loader, setLoader] = useState(false);
 
   const setAuthToken = (newToken) => {
     setAdminAuthToken(newToken);
     setCookie(null, "ad_Auth", JSON.stringify(newToken), {
+      maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
+      path: "/",
+    });
+  };
+
+  const setUserAuth = (newToken) => {
+    setUserAuthToken(newToken);
+    setCookie(null, "us_Auth", JSON.stringify(newToken), {
       maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
       path: "/",
     });
@@ -55,6 +64,15 @@ export const AuthProvider = ({ children }) => {
   };
 
 
+  const fetchUserToken = async () => {
+    if (typeof window !== "undefined") {
+      const storedToken = parseCookies()?.us_Auth;
+      if (storedToken) {
+        setUserAuthToken(JSON.parse(storedToken));
+      }
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     const fetchToken = async () => {
       if (typeof window !== "undefined") {
@@ -67,10 +85,11 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchToken();
+    fetchUserToken()
   }, []);
 
   return (
-    <AuthContext.Provider value={{ adminAuthToken, setAuthToken, loading,handleSignout ,loader}}>
+    <AuthContext.Provider value={{ adminAuthToken, setAuthToken, loading,handleSignout ,loader,setUserAuth,userAuthToken}}>
       {children}
     </AuthContext.Provider>
   );

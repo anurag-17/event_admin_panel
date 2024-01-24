@@ -9,10 +9,10 @@ import Link from "next/link";
 const SingleEventPage = ({ params }) => {
   const router = useRouter();
   const event_id = params?.slug || "";
-  console.log(event_id);
+  // console.log(event_id);
 
   const [eventDetails, setEventDetails] = useState(null);
-  const  [isLoader,setIsLoader]=useState(false);
+  const [isLoader, setIsLoader] = useState(false);
 
   const singleEvent = async (event_id) => {
     setIsLoader(true);
@@ -21,7 +21,7 @@ const SingleEventPage = ({ params }) => {
         id: event_id,
       });
 
-      console.log("abc", response.data);
+      // console.log("abc", response.data);
       setIsLoader(false);
       setEventDetails(response?.data);
     } catch (error) {
@@ -38,7 +38,6 @@ const SingleEventPage = ({ params }) => {
 
   return (
     <>
-   
       <div className="bg-[#F3F3F3] p-10 pb-28  ">
         <div className="bg-white border rounded-md border-gray-500 p-4 ">
           <div>
@@ -53,7 +52,7 @@ const SingleEventPage = ({ params }) => {
                       {/* <img src={eventDetails?.images[0]?.url} className="w-72" alt="Event" /> */}
                       {/* Carousel */}
                       <Carousel>
-                        {eventDetails.images.map((image, index) => (
+                        {eventDetails?.images.map((image, index) => (
                           <div key={index}>
                             <img
                               src={image.url}
@@ -93,17 +92,17 @@ const SingleEventPage = ({ params }) => {
                   <div>{eventDetails?.startDate}</div>
                 </div>
                 <div className="flex justify-center">
-                {eventDetails?.resource_url ? (
-                              <Link
-                                href={eventDetails?.resource_url}
-                                target="_blank"
-                                className="px-12 py-2 border border-gray-200 rounded-md bg-gray-300 hover:bg-gray-400 hover:text-white"
-                              >
-                                Buy Now
-                              </Link>
-                            ) : (
-                              ""
-                            )}
+                  {eventDetails?.resource_url ? (
+                    <Link
+                      href={eventDetails?.resource_url}
+                      target="_blank"
+                      className="px-12 py-2 border border-gray-200 rounded-md bg-gray-300 hover:bg-gray-400 hover:text-white"
+                    >
+                      Buy Now
+                    </Link>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </div>
