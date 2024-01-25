@@ -392,7 +392,7 @@ const User = () => {
         .request(options)
         .then((res) => {
           if (res.status === 200) {
-            toast.success("Logout!");
+           
             setLoader(false);
             destroyCookie(null, "ad_Auth", { path: "/" });
             toast.success("Logout Successfully !");

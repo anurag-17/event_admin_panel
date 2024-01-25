@@ -10,6 +10,7 @@ const UserProfile = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [userData, setUserData] = useState({});
   const router = useRouter();
+  const [authenticated,setAuthenticated]=useState(false);
   
   const goBackToUser=()=>{
     router.push("/user");
