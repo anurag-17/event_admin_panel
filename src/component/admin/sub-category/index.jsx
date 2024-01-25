@@ -23,7 +23,6 @@ const SubCategoryPage = () => {
   const [isDrawerOpenO, setIsDrawerOpenO] = useState(false);
   const [allSubCategory, setAllSubCategory] = useState([]);
   const [isLoader, setLoader] = useState(false);
-  // const [searchTerm, setSearchTerm] = useState("");
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
   const [getallCategory, setGetallCategory] = useState([]);
@@ -40,50 +39,60 @@ const SubCategoryPage = () => {
     setOpenDelete(true);
   };
 
-  const fetchData = async (searchTerm = "", page, limit) => {
+  useEffect(() => {
+    defaultSubCategory(current_page, limit);
+  }, [current_page, isRefresh]);
+
+  const defaultSubCategory = (page, limit) => {
     setLoader(true);
-    setLoadingBtn(true);
-
-    try {
-      const res = await axios.get(
-        `/api/subCategory/getallSubCategory?searchQuery=${searchTerm}&limit=${limit}&page=${current_page}`,
-        {
-          headers: {
-            "content-type": "application/json",
-            authorization: adminAuthToken,
-          },
-        }
-      );
-      console.log(res.data);
-
-      if (res.status === 200) {
-        setAllSubCategory(res?.data?.subCategories);
-        setTotalPages(res?.data?.total_pages || 1);
-      } else {
-        console.error("Unexpected response status:", res.status);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoader(false);
-      setLoadingBtn(false);
-    }
+    const option = {
+      method: "GET",
+      url: "/api/subCategory/getallSubCategory",
+      params: {
+        page: page,
+        limit: limit,
+      },
+    };
+    axios
+      .request(option)
+      .then((response) => {
+        setAllSubCategory(response?.data?.subCategories);
+        setTotalPages(response?.data?.total_pages || 1);
+        console.log(response?.data, "hayhay");
+        setLoader(false);
+      })
+      .catch((error) => {
+        console.log(error, "Error");
+      });
   };
 
-  const getAllSubCategory = async (page, limit) => {
-    fetchData("", page, limit);
-  };
-
-  const searchDataFunc = async (searchTerm) => {
-    if (searchTerm.trim() === "") {
-      getAllSubCategory(current_page, limit);
+   // -------------search Sub Category----------
+   
+  const handleSearch = (e) => {
+    const search = e.target.value;
+    setCurrentPage(1);
+    if (search.trim() === "") {
+      refreshData();
     } else {
-      fetchData(searchTerm);
+      const options = {
+        method: "GET",
+        url: `/api/subCategory/getallSubCategory?searchQuery=${search}&limit=${limit}&page=${1}`,
+        headers: {
+          authorization: adminAuthToken,
+        },
+      };
+      axios
+        .request(options)
+        .then(function (response) {
+          if (response.status === 200) {
+            setAllSubCategory(response?.data?.subCategories);
+            setTotalPages(response?.data?.total_pages || 1);
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
     }
-  };
-
-  const handleSearchChange = (event) => {
-    searchDataFunc(event.target.value);
   };
 
   const refreshData = () => setRefresh(!isRefresh);
@@ -123,6 +132,9 @@ const SubCategoryPage = () => {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
+  useEffect(() => {
+    defaultCategory();
+  }, [isRefresh]);
 
   const defaultCategory = () => {
     setLoadingBtn(true);
@@ -148,14 +160,10 @@ const SubCategoryPage = () => {
       });
   };
   useEffect(() => {
-    getAllSubCategory(current_page, limit);
+    setAllSubCategory(current_page, limit);
   }, [isRefresh, current_page]);
 
-  useEffect(() => {
-    defaultCategory();
-  }, [isRefresh]);
-
-  // -------------search Sub Category----------
+ 
 
   return (
     <>
@@ -170,15 +178,15 @@ const SubCategoryPage = () => {
             Sub Category List{" "}
           </h2>
           <div className="items-center w-[50%] sm:w-[40%] sm:my-0">
-              <input
-                type="search"
-                className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-md lg:rounded-lg w-full lg:max-w-auto max-w-[320px] 2xl:max-w-[440px] mx-auto md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
-                placeholder="Search"
-                aria-label="Search"
-                aria-describedby="button-addon1"
-                onChange={handleSearchChange}
-              />
-            </div>
+            <input
+              type="search"
+              className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-md lg:rounded-lg w-full lg:max-w-auto max-w-[320px] 2xl:max-w-[440px] mx-auto md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
+              placeholder="Search"
+              aria-label="Search"
+              aria-describedby="button-addon1"
+              onChange={handleSearch}
+            />
+          </div>
           <div className="flex justify-around">
             <button
               onClick={openSubCategory}
@@ -188,7 +196,6 @@ const SubCategoryPage = () => {
             </button>
           </div>
         </div>
-       
 
         {isDrawerOpenO && (
           <div
@@ -364,7 +371,6 @@ const SubCategoryPage = () => {
                         src="/images/close-square.svg"
                         className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
                         alt="close"
-
                       />
                       <span className="sr-only bg-black">Close menu</span>
                     </button>
