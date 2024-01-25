@@ -120,8 +120,8 @@ const EventRedirection = () => {
           </div>
         </div>
 
-        <div className="overflow-x-scroll">
-          <div className=" mx-4 lg:mx-8    ">
+        <div className="overflow-x-scroll  mx-4 lg:mx-8">
+          <div className="    ">
             <table className="mx-auto w-full table-auto mt-[20px] ">
               <thead>
                 <tr className="border custom_table_text">
