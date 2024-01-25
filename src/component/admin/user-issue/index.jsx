@@ -190,7 +190,7 @@ const UserIssue = () => {
                     />
                   </Link>
                 </div>
-                <div className="w-5/12 ">
+                <div className="w-4/12 ">
                   <h1 className="my-1 font-bold custom_table_text">
                     {item?.event?.name}
                   </h1>
@@ -220,34 +220,36 @@ const UserIssue = () => {
                   </h1>
                 </div>
 
-                <div className="w-1/12 col-span-1 my-auto  custom_table_text">
+                <div className="w-2/12  col-span-1 my-auto  custom_table_text">
                   <div className="mb-2">
                     {item?.isResolved ? (
                       <div className="flex sm:justify-end w-full">
-                        <button className="w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
+                        <button className="w-4/6  border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
                           Resolved
                         </button>
                       </div>
                     ) : (
-                      <button
-                        onClick={() => {
-                          handleResolve(item?._id, true);
-                        }}
-                        className={`w-full border p-1 rounded-md my-1 ${
-                          item?.isResolved
-                            ? "border-green-400 text-green-700"
-                            : "border-sky-400 text-sky-700 hover:bg-sky-200"
-                        }`}
-                      >
-                        Resolve
-                      </button>
+                      <div>
+                        <button
+                          onClick={() => {
+                            handleResolve(item?._id, true);
+                          }}
+                          className={`w-full border p-1 rounded-md my-1 ${
+                            item?.isResolved
+                              ? "border-green-400 text-green-700"
+                              : "border-sky-400 text-sky-700 hover:bg-sky-200"
+                          }`}
+                        >
+                          Resolve
+                        </button>
+                      </div>
                     )}
                   </div>
 
-                  <div className="">
+                  <div className="flex sm:justify-end">
                     <button
                       onClick={() => openModal(item?._id)}
-                      className="w-full border p-1 rounded-md my-1  border-red-700 text-red-700 hover:bg-red-200 "
+                      className="w-4/6 border p-1 rounded-md my-1  border-red-700 text-red-700 hover:bg-red-200 "
                     >
                       Delete
                     </button>
@@ -266,7 +268,7 @@ const UserIssue = () => {
                     />
                   </Link>
                 </div>
-                <div className="w-5/12 ">
+                <div className="w-4/12 ">
                   <h1 className="my-1 font-bold custom_table_text">
                     {item?.event?.name}
                   </h1>
@@ -296,7 +298,7 @@ const UserIssue = () => {
                   </h1>
                 </div>
 
-                <div className="flex items-center w-1/3 md:w-2/12 lg:w-1/12 col-span-1 custom_table_text">
+                <div className="flex items-center w-1/3 md:w-2/12 lg:w-2/12 xl:w-1/12 col-span-1 custom_table_text">
                   <div className=" flex flex-col gap-2 2xl:gap-2 w-full ">
                     <div className="">
                       {item?.isResolved ? (
