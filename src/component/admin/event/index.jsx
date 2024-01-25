@@ -17,14 +17,6 @@ import { useAuth } from "../../../contexts/AuthContext";
 
 const Event = () => {
   const { adminAuthToken } = useAuth();
-
-  // const [auth_token, setAuth_token] = useState(
-  //   typeof window !== "undefined"
-  //     ? JSON.parse(localStorage.getItem("accessToken") || "")
-  //     : null
-  // );
-
-  // const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
   const [getAllEvent, setGetAllEvent] = useState([]);
   const [isRefresh, setRefresh] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

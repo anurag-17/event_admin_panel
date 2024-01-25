@@ -56,13 +56,11 @@ export const AuthProvider = ({ children }) => {
       customToastError(error?.response?.data?.message || "Server error!");
       setLoader(false);
     } finally {
-      // localStorage.removeItem("accessToken");
       destroyCookie(null, "ad_Auth", { path: "/" });
       router.push("/admin-login");
       setLoader(false);
     }
   };
-
 
   const fetchUserToken = async () => {
     if (typeof window !== "undefined") {
@@ -85,11 +83,21 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchToken();
-    fetchUserToken()
+    fetchUserToken();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ adminAuthToken, setAuthToken, loading,handleSignout ,loader,setUserAuth,userAuthToken}}>
+    <AuthContext.Provider
+      value={{
+        adminAuthToken,
+        setAuthToken,
+        loading,
+        handleSignout,
+        loader,
+        setUserAuth,
+        userAuthToken,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

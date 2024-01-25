@@ -14,8 +14,6 @@ const CreateEvent = ({ closeModal }) => {
   const [getallCategory, setGetallCategory] = useState([]);
   const { adminAuthToken } = useAuth();
 
-  const accessTokenString = localStorage.getItem("accessToken");
-  // const auth_token = accessTokenString ? JSON.parse(accessTokenString) : null;
   const [eventDetail, setEventDetail] = useState({
     name: "",
     description: "",

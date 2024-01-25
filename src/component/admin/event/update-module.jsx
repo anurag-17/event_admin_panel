@@ -5,7 +5,6 @@ import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const EditEvent = ({ editData, closeModal, refreshData }) => {
-  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const { adminAuthToken } = useAuth();
   const [isLoading, setLoading] = useState(false);
   const [getallCategory, setGetallCategory] = useState([]);

@@ -6,7 +6,6 @@ import { useAuth } from "../../../contexts/AuthContext";
 
 const DeleteModule = ({ issueID, closeModal, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
-  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const { adminAuthToken } = useAuth();
   const handleClose = () => {
     closeModal();

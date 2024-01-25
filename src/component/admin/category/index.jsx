@@ -23,8 +23,8 @@ const Category = () => {
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
   const limit = 20;
-  // const auth_token = JSON.parse(localStorage.getItem("accessToken") || "");
   const { adminAuthToken } = useAuth();
+  
 
   const openDrawerO = async (_id) => {
     setLoader(true);
@@ -74,61 +74,67 @@ const Category = () => {
     setRefresh(!isRefresh);
   };
 
-  const fetchData = async (searchTerm = "", page, limit) => {
-    setLoader(true);
+  useEffect(() => {
+    defaultCategory(current_page, limit);
+  }, [current_page, isRefresh]);
+
+  const defaultCategory = (page, limit) => {
     setLoader(true);
 
-    try {
-      const res = await axios.get(
-        `/api/category/getallCategory?searchQuery=${searchTerm}&limit=${limit}&page=${page}`,
-        {
-          headers: {
-            "content-type": "application/json",
-            authorization: adminAuthToken,
-          },
-        }
-      );
-      console.log(res.data);
-
-      if (res.status === 200) {
-        setGetAllCate(res?.data?.categories);
-        setTotalPages(res?.data?.total_pages || 1);
+    const option = {
+      method: "GET",
+      url: "/api/category/getallCategory",
+      params: {
+        page: page,
+        limit: limit,
+      },
+      headers: {
+        authorization: adminAuthToken,
+      },
+    };
+    axios
+      .request(option)
+      .then((response) => {
+        setGetAllCate(response.data.categories);
+        setTotalPages(response?.data?.total_pages || 1);
         setLoader(false);
-      } else {
-        setLoader(false);
-        console.error("Unexpected response status:", res.status);
-      }
-    } catch (error) {
-      setLoader(false);
-      console.error("Error:", error);
-    } finally {
-      setLoader(false);
-    }
-  };
-  const getAllCategory = async (page, limit) => {
-    fetchData("", page, limit);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
   };
 
-  const searchDataFunc = async (searchTerm) => {
-    if (searchTerm.trim() === "") {
-      getAllCategory(current_page, limit);
+  const handleSearch = (e) => {
+    const search = e.target.value;
+    setCurrentPage(1);
+    if (search.trim() === "") {
+      refreshData();
     } else {
-      fetchData(searchTerm);
+      const options = {
+        method: "GET",
+        url: `/api/category/getallCategory?searchQuery=${search}&limit=${limit}&page=${1}`,
+        headers: {
+          authorization: adminAuthToken,
+        },
+      };
+      axios
+        .request(options)
+        .then(function (response) {
+          if (response.status === 200) {
+            setGetAllCate(response?.data?.categories);
+            setTotalPages(response?.data?.total_pages || 1);
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
     }
-  };
-
-  const handleSearchChange = (event) => {
-    searchDataFunc(event.target.value);
   };
 
   const handlePageChange = (newPage) => {
-    // alert(newPage)
     setCurrentPage(newPage);
   };
 
-  useEffect(() => {
-    getAllCategory(current_page, limit);
-  }, [isRefresh, current_page]);
   return (
     <>
       {isLoader && <Loader />}
@@ -147,7 +153,7 @@ const Category = () => {
               placeholder="Search"
               aria-label="Search"
               aria-describedby="button-addon1"
-              onChange={handleSearchChange}
+              onChange={handleSearch}
             />
           </div>
           <div className="">

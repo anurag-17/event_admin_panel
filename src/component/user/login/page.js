@@ -21,13 +21,6 @@ const Login = () => {
   const handleToggle = () => {
     setShowPassword(!showPassword);
   };
-
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     localStorage.removeItem("accessToken");
-  //   }
-  // }, []);
-
   const addFormHandler = (event) => {
     event.preventDefault();
     setLoading(true);

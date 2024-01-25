@@ -7,7 +7,6 @@ import Loader from "../../../component/loader";
 const GetaEvent = ({ params }) => {
   const router = useRouter();
   const eventIssue = params?.slug || "";
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [isLoader, setLoader] = useState(false);
   const [getaEvent, setGetaEvent] = useState([]);
 
