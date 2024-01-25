@@ -12,8 +12,10 @@ const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
   const handleSubmit = async (e) => {
     e && e.preventDefault();
 
-    if (category === "") {
-      toast.warn("Please choose category!");
+    if (subCategory === "") {
+      toast.warn("Please Enter a subCategory!");
+    } else if (category === "") {
+      toast.warn("Please Select a Category!");
     } else {
       setLoading(true);
 
@@ -80,13 +82,13 @@ const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
             className="custom_input_label capitalize
             "
           >
-            Sub category
+            Sub Category
           </label>
           <input
-            onChange={(e) => setSubCategory(e.target.value)}
-            value={subCategory}
+            name="subCategory"
             type="text"
-            name="name"
+            value={subCategory}
+            onChange={(e) => setSubCategory(e.target.value)}
             className="capitalize custom_inputt"
             maxLength={100}
             required
@@ -106,7 +108,7 @@ const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
               required
             >
               <option value="" disabled required>
-                Category
+                Select Category
               </option>
               {Array.isArray(getallCategory) &&
                 getallCategory?.length > 0 &&
