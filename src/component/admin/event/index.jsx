@@ -55,13 +55,12 @@ const Event = () => {
   const [validationError, setValidationError] = useState("");
   const [search, setSearch] = useState("");
 
-  
   //----------Date/Time Formate
-  const convertTime = (time) => {
-    const parsedDateTime = moment(time);
-    const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:MM");
-    return formattedDateTime;
-  };
+  // const convertTime = (time) => {
+  //   const parsedDateTime = moment(time);
+  //   const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
+  //   return formattedDateTime;
+  // };
 
   const handleImageClick = (images) => {
     setLargeImageSrc(images);
@@ -1121,12 +1120,14 @@ const Event = () => {
                               {item.city}
                             </td>
                             <td className="my-auto  w-3/12 custom_table_text xl:pl-0">
-                              {item?.startDate
+                              {/* {item?.startDate
                                 ? convertTime(item.startDate)
-                                : ""}
+                                : ""} */}
+                                {item?.startDate}
                             </td>
                             <td className="my-auto w-3/12 custom_table_text xl:pl-0">
-                              {item?.endDate ? convertTime(item.endDate) : ""}
+                              {/* {item?.endDate ? convertTime(item.endDate) : ""} */}
+                              {item?.endDate}
                             </td>
 
                             <td className="my-auto  w-3/12 custom_table_text xl:pl-0">
