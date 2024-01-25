@@ -12,7 +12,6 @@ import Topbar from "../../../app/admin/admin-dashboard/topbar";
 
 const UserIssue = () => {
   const { adminAuthToken } = useAuth();
-  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [getUserIssue, setGetUserIssue] = useState([]);
   const [isOpenDelete, setOpenDelete] = useState(false);
   const [isRefresh, setRefresh] = useState(false);

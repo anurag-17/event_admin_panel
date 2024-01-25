@@ -9,7 +9,6 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   const [title, setTitle] = useState({
     id: cateEdit,
   });
-  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const { adminAuthToken } = useAuth();
 
   const inputHandler = (e) => {

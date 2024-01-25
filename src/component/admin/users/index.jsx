@@ -14,7 +14,6 @@ const AllUser = () => {
   const [userId, setUserID] = useState("");
   const [isRefresh, setRefresh] = useState(false);
   const { adminAuthToken } = useAuth();
-  // const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
   const [getaUser, setGetUser] = useState({});
   const [selectedItemData, setSelectedItemData] = useState("");
   const [isLoader, setLoader] = useState(false);

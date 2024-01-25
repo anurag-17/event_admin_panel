@@ -12,17 +12,7 @@ const Topbar = () => {
   const [isLoader, setLoader] = useState(false);
   const { loader, handleSignout } = useAuth();
   const { adminAuthToken } = useAuth();
-  // const [token, setToken] = useState(
-  //     typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
-  //   );
 
-  // useEffect(() => {
-  //     const authToekn = token ? JSON.parse(token) : null;
-  //     setToken(authToekn);
-  //     if (!authToekn || authToekn == null) {
-  //       router.push("/admin-login");
-  //     }
-  //   }, []);
   const signoutFunc = () => {
     handleSignout(
       (message) => toast.success(message),
@@ -30,45 +20,7 @@ const Topbar = () => {
     );
   };
 
-  // const handleSignout = () => {
-  //   try {
-  //     setLoader(true);
-  //     const options = {
-  //       method: "GET",
-  //       url: `/api/auth/logout`,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         authorization: token,
-  //       },
-  //     };
-  //     axios
-  //       .request(options)
-  //       .then((res) => {
-  //         if (res.status === 200) {
-  //           toast.success("Logout!");
-  //           setLoader(false);
-  //           localStorage.removeItem("accessToken");
-  //           router.push("/admin-login");
-  //         } else {
-  //           setLoader(false);
-  //           localStorage.removeItem("accessToken");
-  //           router.push("/admin-login");
-  //           return;
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         setLoader(false);
-  //         console.error("Error:", error);
-  //         localStorage.removeItem("accessToken");
-  //         router.push("/admin-login");
-  //       });
-  //   } catch {
-  //     console.log("error");
-  //     toast.error("server error!");
-  //     localStorage.removeItem("accessToken");
-  //     router.push("/admin-login");
-  //   }
-  // };
+ 
   return (
     <div>
       <div className=" flex  justify-between items-center  2xl:px-10  bg-white  2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
