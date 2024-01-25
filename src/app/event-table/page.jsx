@@ -110,14 +110,14 @@ const EventRedirection = () => {
             Redirected Event List{" "}
           </h2>
 
-          <div className="flex items-center justify-center w-[165px] sm:w-[27%]">
+          {/* <div className="flex items-center justify-center w-[165px] sm:w-[27%]">
             <input
               type="search"
               className="border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-[4px] rounded-lg w-full lg:max-w-auto  mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
               placeholder="Search"
               onChange={handleSearchChange}
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="overflow-x-scroll  mx-4 lg:mx-8">
