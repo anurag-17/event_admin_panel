@@ -222,18 +222,18 @@ const UserIssue = () => {
                 <div className="w-2/12  col-span-1 my-auto  custom_table_text">
                   <div className="mb-2">
                     {item?.isResolved ? (
-                      <div className="flex sm:justify-end w-full">
-                        <button className="w-4/6  border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
+                      <div className="flex sm:justify-end ">
+                        <button className="w-4/6   border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
                           Resolved
                         </button>
                       </div>
                     ) : (
-                      <div>
+                      <div className="flex sm:justify-end">
                         <button
                           onClick={() => {
                             handleResolve(item?._id, true);
                           }}
-                          className={`w-full border p-1 rounded-md my-1 ${
+                          className={`w-4/6   border p-1 rounded-md my-1 ${
                             item?.isResolved
                               ? "border-green-400 text-green-700"
                               : "border-sky-400 text-sky-700 hover:bg-sky-200"
@@ -308,7 +308,9 @@ const UserIssue = () => {
                         </div>
                       ) : (
                         <div className="flex sm:justify-end">
-                          <button className="w-4/6 lg:w-full border p-1  rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200">
+                          <button onClick={() => {
+                            handleResolve(item?._id, true);
+                          }} className="w-4/6 lg:w-full border p-1  rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200">
                             Resolve
                           </button>
                         </div>

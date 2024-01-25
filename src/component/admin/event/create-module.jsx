@@ -80,7 +80,6 @@ const CreateEvent = ({ closeModal }) => {
   };
 
   const uploadImage = async () => {
-    // alert("okk")
     setImageUpload(true);
 
     if (eventImage == "" || eventImage == undefined) {
@@ -111,10 +110,6 @@ const CreateEvent = ({ closeModal }) => {
           ...eventDetail,
           images: [...updatedImages, newImage],
         });
-        // setEventDetail({
-        //   ...eventDetail,
-        //   images: [...eventDetail?.images, newImage],
-        // });
 
         setImageDisable(true);
         setImageUpload(false);
@@ -156,8 +151,8 @@ const CreateEvent = ({ closeModal }) => {
           return;
         }
       } catch (error) {
-        console.error(error);
-        toast.error(error?.response?.data?.messgae || "server error");
+        toast.error(error?.response?.data?.error || "server error");
+
         setLoading(false);
       }
     }

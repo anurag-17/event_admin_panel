@@ -56,11 +56,11 @@ const Event = () => {
   const [search, setSearch] = useState("");
 
   //----------Date/Time Formate
-  // const convertTime = (time) => {
-  //   const parsedDateTime = moment(time);
-  //   const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
-  //   return formattedDateTime;
-  // };
+  const convertTime = (time) => {
+    const parsedDateTime = moment(time);
+    const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
+    return formattedDateTime;
+  };
 
   const handleImageClick = (images) => {
     setLargeImageSrc(images);
@@ -634,7 +634,7 @@ const Event = () => {
   return (
     <>
       {isLoader && <Loader />}
-      <ToastContainer autoClose={1500} />
+      <ToastContainer autoClose={3000} />
       <Topbar />
       <div>
         <div className="mt-2 sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-5 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4">
@@ -1123,11 +1123,11 @@ const Event = () => {
                               {/* {item?.startDate
                                 ? convertTime(item.startDate)
                                 : ""} */}
-                                {item?.startDate}
+                              {convertTime(item?.startDate)}
                             </td>
                             <td className="my-auto w-3/12 custom_table_text xl:pl-0">
                               {/* {item?.endDate ? convertTime(item.endDate) : ""} */}
-                              {item?.endDate}
+                              {convertTime(item?.endDate)}
                             </td>
 
                             <td className="my-auto  w-3/12 custom_table_text xl:pl-0">
@@ -1136,7 +1136,6 @@ const Event = () => {
                             <td className="2xl:pl-2 my-auto  w-3/12 custom_table_text xl:pl-4">
                               {item.event_provider}
                             </td>
-
                             <td className="my-auto  w-3/12 custom_table_text 2xl:pl-0 ">
                               <div className="">
                                 <select
