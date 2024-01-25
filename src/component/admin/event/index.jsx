@@ -56,12 +56,6 @@ const Event = () => {
   const [search, setSearch] = useState("");
 
   //----------Date/Time Formate
-  // const convertTime = (time) => {
-  //   const parsedDateTime = moment(time);
-  //   const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
-  //   return formattedDateTime;
-  // };
-
   const convertTime = (time) => {
     const parsedDateTime = moment.utc(time);
     const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");

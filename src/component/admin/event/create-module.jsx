@@ -13,6 +13,10 @@ const CreateEvent = ({ closeModal }) => {
   const [getallSubCategory, setGetallSubCategory] = useState([]);
   const [getallCategory, setGetallCategory] = useState([]);
   const { adminAuthToken } = useAuth();
+  const [imageMessage, setImageMessage] = useState("");
+  const [imageDisable, setImageDisable] = useState(false);
+  const [imageUpload, setImageUpload] = useState(false);
+  const [eventImage, setEventImage] = useState("");
 
   const [eventDetail, setEventDetail] = useState({
     name: "",
@@ -33,9 +37,6 @@ const CreateEvent = ({ closeModal }) => {
     resource_url: "",
   });
   // console.log(eventDetail.image, "token");
-  const [eventImage, setEventImage] = useState("");
-  const [imageDisable, setImageDisable] = useState(false);
-  const [imageUpload, setImageUpload] = useState(false);
 
   const today = new Date();
   const year = today.getFullYear();
@@ -113,6 +114,7 @@ const CreateEvent = ({ closeModal }) => {
 
         setImageDisable(true);
         setImageUpload(false);
+        setImageMessage("Image Uploaded Successfully");
       } else {
         setEventDetail({ ...eventDetail, ["images"]: "" });
         setImageDisable(false);
@@ -473,6 +475,7 @@ const CreateEvent = ({ closeModal }) => {
                     accept="image/png,image/jpg, image/jpeg , image/*"
                   />
                 </div>
+                  <p className="text-green-700 text-[8px] lg:text-[12px] 2xl:text-[14px]">   {imageMessage && <p>{imageMessage}</p>}</p>
               </div>
 
               <div className="">
@@ -505,6 +508,7 @@ const CreateEvent = ({ closeModal }) => {
                       : "Upload"}
                   </button>
                 )}
+             
               </div>
             </div>
           </div>

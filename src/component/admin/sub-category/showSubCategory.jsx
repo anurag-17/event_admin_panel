@@ -1,16 +1,14 @@
-
 const ShowSubCategory = ({
   allSubCategory,
   openDrawerO,
   openModal,
   isLoader,
-  current_page
+  current_page,
 }) => {
-
   return (
     <>
       <div className=" flex  sm:ml-10 mx-4 sm:mr-4  lg:mx-8  overflow-x-auto md:overscroll-none ">
-        <div className=" mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll  w-full ">
+        <div className="   h-[300px] xl:h-[400px] overflow-y-scroll  w-full ">
           <table className="w-[140%] md:w-full sm:w-[100%]  border bg-white rounded-md mt-5 p-10 mb-10">
             <thead className="sticky-header">
               <tr
@@ -41,16 +39,14 @@ const ShowSubCategory = ({
                     className="text-start flex w-full custom_table_text"
                   >
                     <td className="mx-5 my-auto w-[30px] sm:w-2/12">
-                    {index +
-                            1 +
-                            20 * (current_page - 1)}
+                      {index + 1 + 20 * (current_page - 1)}
                     </td>
 
                     <td className=" capitalize my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12">
                       {item?.subCategory ? item?.subCategory : "-"}
                     </td>
                     <td className=" capitalize my-auto w-3/12 ml-2  ">
-                      {item?.category?.title}
+                      {item?.category?.title ? item?.category?.title : "-"}
                     </td>
                     <td className="flex gap-3 my-2 lg:w-2/12">
                       <button
@@ -71,7 +67,10 @@ const ShowSubCategory = ({
                           />
                         </svg>
                       </button>
-                      <button type="button" onClick={() => openModal(item?._id)}>
+                      <button
+                        type="button"
+                        onClick={() => openModal(item?._id)}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -91,14 +90,14 @@ const ShowSubCategory = ({
                   </tr>
                 ))}
             </tbody>
-
-            {
-             Array.isArray(allSubCategory) && allSubCategory?.length === 0 && 
+            {Array.isArray(allSubCategory) && allSubCategory?.length === 0 && (
               <div className="py-6 px-4 border-t ">
-                <p className="text-[14px] font-medium text-center"> No Data Found </p>
+                <p className="text-[14px] font-medium text-center">
+                  {" "}
+                  No Data Found{" "}
+                </p>
               </div>
-            }
-
+            )}
           </table>
         </div>
       </div>
