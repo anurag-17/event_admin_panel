@@ -143,7 +143,9 @@ const UserIssue = () => {
       <Topbar />
       <div>
         <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:p-4 2xl:px-10 border sm:ml-10 mx-4 sm:mr-4 lg:mx-8  bg-white rounded-lg   h-auto  xl:p-2 p-2 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold custom_heading_text">Users Issue List </h2>
+          <h2 className="font-semibold custom_heading_text">
+            Users Issue List{" "}
+          </h2>
 
           <div className="">
             <div>
@@ -221,9 +223,11 @@ const UserIssue = () => {
                 <div className="w-1/12 col-span-1 my-auto  custom_table_text">
                   <div className="mb-2">
                     {item?.isResolved ? (
-                      <span className="w-full border p-1 px-1 rounded-md my-1   border-green-400 text-green-700 ">
-                        Resolved
-                      </span>
+                      <div className="flex sm:justify-end w-full">
+                        <button className="w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
+                          Resolved
+                        </button>
+                      </div>
                     ) : (
                       <button
                         onClick={() => {
@@ -296,19 +300,14 @@ const UserIssue = () => {
                   <div className=" flex flex-col gap-2 2xl:gap-2 w-full ">
                     <div className="">
                       {item?.isResolved ? (
-                        <div className="flex sm:justify-end">
+                        <div className="flex sm:justify-end w-full">
                           <button className="w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
                             Resolved
                           </button>
                         </div>
                       ) : (
                         <div className="flex sm:justify-end">
-                          <button
-                            onClick={() => {
-                              handleResolve(item?._id, true);
-                            }}
-                            className="w-4/6 lg:w-full border p-1  rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200"
-                          >
+                          <button className="w-4/6 lg:w-full border p-1  rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200">
                             Resolve
                           </button>
                         </div>

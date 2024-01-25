@@ -62,6 +62,8 @@ const Event = () => {
   const [fetchEndDate, setFetchEndDate] = useState("");
   const [validationError, setValidationError] = useState("");
   const [search, setSearch] = useState("");
+
+  
   //----------Date/Time Formate
   const convertTime = (time) => {
     const parsedDateTime = moment(time);
@@ -177,7 +179,6 @@ const Event = () => {
   };
 
   const handleSearch = (e) => {
-    // const search = e.target.value;
     setSearch(e.target.value);
     setCurrentPage(1);
     if (search.trim() === "") {
