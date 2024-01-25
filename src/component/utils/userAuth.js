@@ -36,7 +36,7 @@ const userRoute = (WrappedComponent) => {
           `/api/auth/verifyUserToken/${userAuthToken}`
         );
         if (response?.data === null) {
-          router.push("/admin-login");
+          router.push("/user/login");
           setIsLoading(false);
         }
         if (response.status === 200||response.status === 304)  {
@@ -44,13 +44,13 @@ const userRoute = (WrappedComponent) => {
           setIsLoading(false);
           return;
         } else {
-          router.push("/admin-login");
+          router.push("/user/login");
           setIsLoading(false);
         }
       } catch (error) {
         setIsLoading(false);
         console.error("Error occurred:", error);
-        router.push("/admin-login");
+        router.push("/user/login");
       }
     };
     // return userAuthToken ? <WrappedComponent {...props} /> : null;
