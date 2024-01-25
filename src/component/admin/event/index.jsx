@@ -56,8 +56,14 @@ const Event = () => {
   const [search, setSearch] = useState("");
 
   //----------Date/Time Formate
+  // const convertTime = (time) => {
+  //   const parsedDateTime = moment(time);
+  //   const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
+  //   return formattedDateTime;
+  // };
+
   const convertTime = (time) => {
-    const parsedDateTime = moment(time);
+    const parsedDateTime = moment.utc(time);
     const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
     return formattedDateTime;
   };
@@ -1120,14 +1126,14 @@ const Event = () => {
                               {item.city}
                             </td>
                             <td className="my-auto  w-3/12 custom_table_text xl:pl-0">
-                              {/* {item?.startDate
+                              {item?.startDate
                                 ? convertTime(item.startDate)
-                                : ""} */}
-                              {convertTime(item?.startDate)}
+                                : ""}
+                              {/* {item?.startDate} */}
                             </td>
                             <td className="my-auto w-3/12 custom_table_text xl:pl-0">
-                              {/* {item?.endDate ? convertTime(item.endDate) : ""} */}
-                              {convertTime(item?.endDate)}
+                              {item?.endDate ? convertTime(item.endDate) : ""}
+                              {/* {item?.endDate} */}
                             </td>
 
                             <td className="my-auto  w-3/12 custom_table_text xl:pl-0">
