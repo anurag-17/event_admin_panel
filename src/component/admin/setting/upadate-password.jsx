@@ -8,9 +8,8 @@ import Loader from "../../loader";
 import Setting from "./Setting";
 import { useAuth } from "../../../contexts/AuthContext";
 
-
 const ChangePassword = () => {
-  const { adminAuthToken, handleSignout} = useAuth();
+  const { adminAuthToken, handleSignout } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -82,36 +81,30 @@ const ChangePassword = () => {
   };
 
   const signoutFunc = () => {
-    handleSignout()
+    handleSignout();
   };
   return (
     <>
       {loader && <Loader />}
 
-      <ToastContainer />
+      <ToastContainer autoClose={3000} />
       <div className="flex items-center justify-center">
         <div className="md:px-[50px] w-full mx-auto">
           <div className="relative flex flex-col 2xl:gap-x-20 xl:gap-x-10 gap-x-7 justify-center lg:shadow-none  items-center lg:flex-row space-y-8 md:space-y-0 w-[100%] px-[10px]bg-white lg:px-[40px] py-[20px] md:py-[40px] ">
-            {/* <div
-              className="absolute right-10 top-6 bg-[#e5f0fa] hover:bg-[#c5dcf0] px-3 py-1 rounded cursor-pointer flex items-center gap-3"
-              onClick={() => router.push("/")}
-            >
-              Go back
-            </div> */}
             <div className="w-[100%] lg:w-[60%] xl:w-[50%]">
               <form action="" className="" onSubmit={handleSubmit}>
-                <div className="flex flex-col gap-4 justify-center md:max-w-[80%] lg:w-full lg:max-w-[100%] mx-auto p-4">
+                <div className="flex flex-col gap-4 justify-center md:max-w-[80%] lg:w-full lg:max-w-[100%] mx-auto px-4">
                   <div className="text-left ">
                     <p className="mb-2 custom_heading_text leading-[38px] md:font-bold font-medium whitespace-nowrap">
                       Change password
                     </p>
                   </div>
-                  <div className="relative flex justify-center items-center mt-6">
+                  <div className="relative flex justify-center items-center ">
                     <input
                       type={showPassword ? "text" : "password"}
                       name="oldPassword"
                       placeholder="Old password"
-                      className="px-4 py-4 rounded-[10px] border  placeholder:text-[gray] w-full custom-input "
+                      className="p-2 2xl:p-3 rounded-[10px] border placeholder:text-[gray] w-full custom-input "
                       onChange={InputHandler}
                       minLength={8}
                       required
@@ -128,7 +121,7 @@ const ChangePassword = () => {
                       type={showNewPassword ? "text" : "password"}
                       name="newPassword"
                       placeholder="New password"
-                      className="px-4 py-4 rounded-[10px] border  placeholder:text-[gray] w-full mt-2 custom-input"
+                      className="p-2 2xl:p-3 rounded-[10px] border placeholder:text-[gray] w-full mt-2 custom-input"
                       onChange={InputHandler}
                       minLength={8}
                       required
@@ -144,7 +137,7 @@ const ChangePassword = () => {
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm new password "
-                      className="px-4 py-4 rounded-[10px] border  placeholder:text-[gray] w-full mt-2 custom-input"
+                      className="p-2 2xl:p-3 rounded-[10px] border placeholder:text-[gray] w-full mt-2 custom-input"
                       onChange={(e) => setCnfmPassword(e.target.value)}
                       minLength={8}
                       required
@@ -159,7 +152,7 @@ const ChangePassword = () => {
                     </div>
                   </div>
                   {isError && (
-                    <p className="text-[red] mt-2 px-2 text-[14px] lg:text-[13px] font-normal bg-[#f0e3e3] py-1    rounded-[4px]">
+                    <p className="text-[red] mt-2 px-2 text-[14px] lg:text-[13px] font-normal bg-[#f0e3e3] py-1 rounded-[4px]">
                       {isError}
                     </p>
                   )}
@@ -167,7 +160,7 @@ const ChangePassword = () => {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full bg-[#1f2432] font-medium text-[15px] text-white p-2 rounded-lg hover:border hover:border-black h-[50px]  hover:bg-[#fff] hover:text-black"
+                      className="w-full bg-[#1f2432] font-medium text-[15px] text-white rounded-lg hover:border hover:border-black lg:h-[50px] h-[40px] hover:bg-[#fff] hover:text-black"
                     >
                       {isLoading ? "Loading.." : "Change password"}
                     </button>

@@ -7,7 +7,7 @@ const Accordion = ({ title, content, index, active, onToggle }) => {
 
   return (
     <div
-      className={`p-4 mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex flex-col justify-between 2xl:pt-4 2xl:px-10 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 text-black rounded-[6px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 border-[#70788575] bg-white ${
+      className={`p-0 mt-2 lg:mt-3 xl:m-4 2xl:m-7 flex flex-col justify-between 2xl:p-4 2xl:px-10 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 text-black rounded-[6px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 border-[#70788575] bg-white ${
         active ? "" : "shadow-2xl"
       }`}
     >
@@ -16,12 +16,12 @@ const Accordion = ({ title, content, index, active, onToggle }) => {
           active ? "border-[#000000cf] " : ""
         }`}
       >
-        <div className="flex justify-between items-center gap-3 my-2 ">
+        <div className="flex justify-between items-center gap-3 my-2  ">
           <p
             className={`capitalize ${
               active
                 ? "text-darkBlue text-[20px] font-bold cursor-pointer "
-                : "text-DarkGrayishBlue text-[18px] cursor-pointer"
+                : "text-DarkGrayishBlue text-[18px] cursor-pointer custom_table_text"
             }`}
             onClick={handleToggle}
           >
@@ -32,7 +32,7 @@ const Accordion = ({ title, content, index, active, onToggle }) => {
             src={`/images/down-arrow-5-.svg`}
             alt="arrow-icon"
             onClick={handleToggle}
-            className={active ? "cursor-pointer rotate-180" : "cursor-pointer"}
+            className={active ? "cursor-pointer rotate-180" : "cursor-pointer w-7 xl:w-10"}
             height={40}
             width={40}
           />
