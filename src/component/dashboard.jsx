@@ -341,7 +341,7 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-        <div className="flex flex-col md:flex-row  justify-around my-10 xl:my-10 2xl:my-5  mx-7 gap-6 lg:gap-6">
+        <div className="flex flex-col md:flex-row  justify-around my-10 xl:my-10 2xl:my-5  mx-5 gap-6 lg:gap-6">
           <div className="md:w-1/2 my-4 md:my-0">
             <div className="">
               <table className="min-w-full  bg-white border border-gray-300 custom_table_text ">

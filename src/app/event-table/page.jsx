@@ -242,7 +242,7 @@ const EventRedirection = () => {
         <Dialog
           as="div"
           className="relative z-10"
-          onClose={() => setDialogMatch(false)}
+          onClose={() => {}}
         >
           <Transition.Child
             as={Fragment}
@@ -267,7 +267,7 @@ const EventRedirection = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-2xl transition-all">
+                 <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="flex justify-center lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
@@ -275,13 +275,40 @@ const EventRedirection = () => {
                     Are You Sure! Want to Delete?
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-[16px] font-normal  md:text-gray-500 mt-4">
+                    <p className="text-[16px] font-normal  text-gray-500 mt-4">
                       Do you really want to delete these records? You can't view
                       this in your list anymore if you delete!
                     </p>
                   </div>
                   <div className="mt-8">
-                    <div className="flex justify-between gap-x-5">
+                  <div className="flex justify-between gap-x-5">
+          <button
+            className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
+                              hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200 custom_btn_d "
+                              onClick={() => {
+                          setDialogMatch(false);
+                        }}
+          >
+            No, Keep It
+          </button>
+
+          <button
+            className={`w-full  rounded-md 
+            custom_btn_d 
+                              border-red-400 text-red-700 bg-red-200  
+                              hover:border-none
+                        ${isLoader ? "bg-gray-200" : "hover:bg-red-200"}
+                        hover:border-none`}
+                        onClick={() => handleDelete(deleteId)}
+            disabled={isLoader}
+          >
+            {isLoader ? "Deleting..." : "Yes, Delete It"}
+          </button>
+        </div>
+
+
+
+                    {/* <div className="flex justify-between gap-x-5">
                       <button
                         className="w-full border rounded-md text-sm px-2 py-3
                         hover:bg-lightBlue-200 hover:border-none"
@@ -301,7 +328,7 @@ const EventRedirection = () => {
                       >
                         {isLoader ? "Deleting..." : "Yes, Delete It"}
                       </button>
-                    </div>
+                    </div> */}
                   </div>
 
                 
