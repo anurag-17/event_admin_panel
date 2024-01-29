@@ -143,7 +143,7 @@ const UserIssue = () => {
       <div>
         <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:p-4 2xl:px-10 border sm:ml-10 mx-4 sm:mr-4 lg:mx-8  bg-white rounded-lg   h-auto  xl:p-2 p-2 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold custom_heading_text">
-            Users Issue List{""}
+            Users Issue List
           </h2>
 
           <div className="">
@@ -224,9 +224,7 @@ const UserIssue = () => {
                     <div>
                       {item?.isResolved ? (
                         <div className="flex sm:justify-end ">
-                          <button className="w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
-                            Resolved
-                          </button>
+                          <button className="w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">Resolve</button>
                         </div>
                       ) : (
                         <div className="flex sm:justify-end">
@@ -245,7 +243,7 @@ const UserIssue = () => {
                         </div>
                       )}
                     </div>
-                    ￼
+
                     <div className="flex sm:justify-end">
                       <button
                         onClick={() => openModal(item?._id)}
@@ -292,10 +290,10 @@ const UserIssue = () => {
                     Name : {item?.userId?.firstname} {item?.userId?.lastname}
                   </h1>
                   <h1 className="my-1  custom_table_text">
-                    Email : {item?.userId?.email}{" "}
+                    Email : {item?.userId?.email}
                   </h1>
                   <h1 className="my-1  custom_table_text">
-                    Mobile : {item?.userId?.mobile}{" "}
+                    Mobile : {item?.userId?.mobile}
                   </h1>
                 </div>
                 <div className="flex items-center w-1/3 md:w-2/12 lg:w-2/12 xl:w-1/12 col-span-1 custom_table_text">
@@ -303,9 +301,7 @@ const UserIssue = () => {
                     <div className="a">
                       {item?.isResolved ? (
                         <div className="flex sm:justify-end w-full">
-                          <button className=" w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
-                            Resolved
-                          </button>
+                          <button className=" w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">Resolved</button>
                         </div>
                       ) : (
                         <div className="flex sm:justify-end">
@@ -314,9 +310,7 @@ const UserIssue = () => {
                               handleResolve(item?._id, true);
                             }}
                             className=" w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-sky-400 text-sky-700 hover:bg-sky-200"
-                          >
-                            Resolve
-                          </button>
+                          >Resolve</button>
                         </div>
                       )}
                     </div>
