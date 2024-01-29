@@ -221,7 +221,7 @@ const UserIssue = () => {
 
                 <div className="flex items-center w-1/3 md:w-2/12 lg:w-2/12 xl:w-1/12 col-span-1 custom_table_text">
                   <div className=" flex flex-col gap-2 2xl:gap-2 w-full ">
-                    <div className="">
+                    <div>
                       {item?.isResolved ? (
                         <div className="flex sm:justify-end ">
                           <button className="w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
@@ -234,7 +234,7 @@ const UserIssue = () => {
                             onClick={() => {
                               handleResolve(item?._id, true);
                             }}
-                            className={`w-[80px] sm:w-4/6 lg:w-full   border p-1 rounded-md my-1 ${
+                            className={`w-[80px] sm:w-4/6 lg:w-full border p-1 rounded-md my-1 ${
                               item?.isResolved
                                 ? "border-green-400 text-green-700"
                                 : "border-sky-400 text-sky-700 hover:bg-sky-200"
@@ -246,7 +246,6 @@ const UserIssue = () => {
                       )}
                     </div>
                     ￼
-
                     <div className="flex sm:justify-end">
                       <button
                         onClick={() => openModal(item?._id)}
@@ -301,7 +300,7 @@ const UserIssue = () => {
                 </div>
                 <div className="flex items-center w-1/3 md:w-2/12 lg:w-2/12 xl:w-1/12 col-span-1 custom_table_text">
                   <div className=" flex flex-col gap-2 2xl:gap-2 w-full ">
-                    <div className="">
+                    <div className="a">
                       {item?.isResolved ? (
                         <div className="flex sm:justify-end w-full">
                           <button className=" w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">
@@ -367,7 +366,7 @@ const UserIssue = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
+                 <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="custom_heading_text font-semibold leading-6 text-gray-900"

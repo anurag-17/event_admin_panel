@@ -164,7 +164,7 @@ const Category = () => {
             </button>
           </div>
         </div>
-        <div className="sm:ml-10 mx-4 sm:mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll  ">
+        <div className="sm:ml-10 mx-4 sm:mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll">
           <table className="w-full border bg-white rounded-md mt-5 p-100">
             <thead className="sticky-header">
               <tr
@@ -255,7 +255,7 @@ const Category = () => {
           <Pagination
             total_pages={total_pages}
             current_page={current_page}
-            onPageChange={handlePageChange}
+             onPageChange={handlePageChange}
           />
         )}
       </div>
