@@ -388,7 +388,7 @@ const AllUser = () => {
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-[12px] sm:text-[16px] font-normal ms:leading-[30px] text-gray-500 mt-4">
-                      Do you really want to delete these records? You cant't
+                      Do you really want to delete these records? You can't
                       view this in your list anymore if you delete!
                     </p>
                   </div>
