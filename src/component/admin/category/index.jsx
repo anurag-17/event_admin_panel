@@ -24,7 +24,6 @@ const Category = () => {
   const [total_pages, setTotalPages] = useState(1);
   const limit = 20;
   const { adminAuthToken } = useAuth();
-  
 
   const openDrawerO = async (_id) => {
     setLoader(true);

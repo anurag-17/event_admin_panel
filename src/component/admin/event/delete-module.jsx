@@ -51,7 +51,7 @@ const DeleteEvent = ({ eventID, closeModal, refreshData }) => {
 
   return (
     <>
-         <div className="mt-2">
+      <div className="mt-2">
         <p className="text-[12px] sm:text-[16px] font-normal ms:leading-[30px] text-gray-500 mt-4">
           Do you really want to delete these records? You Can't view this in
           your list anymore if you delete!
@@ -79,7 +79,6 @@ const DeleteEvent = ({ eventID, closeModal, refreshData }) => {
             </button>
           ) : (
             <button
-              // onClick={productDelete(id)}
               className="w-full
                rounded-md 
               custom_btn_d 

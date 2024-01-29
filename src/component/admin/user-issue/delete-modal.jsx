@@ -9,7 +9,6 @@ const DeleteModule = ({ issueID, closeModal, refreshData }) => {
   const { adminAuthToken } = useAuth();
   const handleClose = () => {
     closeModal();
-    refreshData();
   };
 
   const handleDelete = (e) => {
