@@ -655,8 +655,8 @@ const Event = () => {
               />
             </div>
 
-            <div className="flex gap-2 ">
-              <div className="flex flex-wrap gap-2 mu-auto ">
+            <div className="flex flex-wrap gap-2 ">
+              <div className="flex flex-wrap gap-2 ">
                 <div className="">
                   <div>
                     {" "}
@@ -1301,7 +1301,7 @@ const Event = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-xl transition-all">
+                 <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"

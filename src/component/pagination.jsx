@@ -27,7 +27,7 @@ const Pagination = ({ total_pages, current_page, onPageChange }) => {
     <>
       <div className="flex justify-end items-center gap-0 sm:gap-2 xl:gap-2 mt-5">
         <button
-          className="flex items-center sm:gap-1 xl:gap-2 px-0 sm:px-6 py-3 font-sans 2xl:text-xl xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[10px] text-[10px] font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          className="flex items-center  sm:gap-1 xl:gap-2 px-0 sm:px-6 py-3 font-sans 2xl:text-xl xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[10px] text-[10px] font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
           onClick={() => onPageChange(current_page - 1)}
           disabled={current_page === 1}
@@ -39,7 +39,7 @@ const Pagination = ({ total_pages, current_page, onPageChange }) => {
             stroke-width="2"
             stroke="currentColor"
             aria-hidden="true"
-            className="w-4 h-4"
+            className="w-4 h-4 mr-3 sm:mr-2 md:mr-2"
           >
             <path
               stroke-linecap="round"
