@@ -259,10 +259,10 @@ const SubCategoryPage = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="  w-2/3 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-5 sm:py-10 sm:px-12 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="custom_heading_text font-semibold leading-6 text-gray-900"
+                    className="custom_heading_text font-semibold leading-6 text-gray-900 mt lg:mt-5"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>
@@ -302,7 +302,7 @@ const SubCategoryPage = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full xl:max-w-[500px] max-w-[450px]  2xl:max-w-[700px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px]  transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="flex justify-end lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
@@ -357,7 +357,7 @@ const SubCategoryPage = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full xl:max-w-[500px] max-w-[450px]  2xl:max-w-[700px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px]  max-w-[450px]  2xl:max-w-[700px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="flex justify-end lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"

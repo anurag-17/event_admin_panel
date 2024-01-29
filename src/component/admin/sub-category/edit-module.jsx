@@ -58,7 +58,7 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData,isLoadin
     <>
      <div className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white px-1 h-[25px] my-2">
         <h2 className="custom_heading_text font-semibold ">Edit Sub-Category</h2>
-        <div className="mb-3 w-[40%]"></div>
+       
       </div>
 
       <div>
@@ -107,10 +107,11 @@ const EditSubCategory = ({ editData, cateEdit, closeDrawer, refreshData,isLoadin
               )}
             </select>
           </div>
-
+          <div className="flex justify-center">
           <button type="submit" disabled={isLoading} className="custom_btn">
             {isLoading ? "Loading..." : "Update"}
           </button>
+          </div>
         </form>
       </div>
     </>

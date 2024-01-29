@@ -34,7 +34,7 @@ const Profile = () => {
     <>
       {loader && <Loader />}
       <div className="bg-[white] w-full ">
-        <div className="py-6 px-10 shadow rounded max-w-[400px]  my-4">
+        <div className="p-4 sm:py-6 sm:px-10 shadow rounded max-w-[400px]  my-4">
           <div className="">
             <Image
               src="/images/profile.svg"
@@ -45,18 +45,18 @@ const Profile = () => {
           </div>
 
           <div className="flex gap-5 flex-col justify-center text-[16px]  ">
-            <div className="flex  flex-col  sm:flex-row gap-3 justify-start">
-              <p className="w-[100px]">Name :</p>
+            <div className="flex  flex-col  sm:flex-row sm:gap-3 justify-start">
+              <p className="sm:w-[100px]">Name :</p>
               <p className="font-bold">
                 {verificationResult?.firstname} {verificationResult?.lastname}
               </p>
             </div>
-            <div className="flex  flex-col  sm:flex-row gap-3 justify-start">
-              <p className="w-[100px]">Email :</p>
+            <div className="flex  flex-col  sm:flex-row sm:gap-3  justify-start">
+              <p className="sm:w-[100px]">Email :</p>
               <p className="font-bold">{verificationResult?.email}</p>
             </div>
-            <div className="flex  flex-col  sm:flex-row gap-3 justify-start">
-              <p className="w-[100px]">Number :</p>
+            <div className="flex  flex-col  sm:flex-row sm:gap-3  justify-start">
+              <p className="sm:w-[100px]">Number :</p>
               <p className="font-bold">{verificationResult?.mobile}</p>
             </div>
           </div>

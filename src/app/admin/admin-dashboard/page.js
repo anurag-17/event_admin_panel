@@ -128,7 +128,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="">
-              <div className="flex justify-center items-center lg:mt-4 xl:mt-5 2xl:mt-7 md:mt-2">
+              <div className="flex justify-center items-center lg:mt-4 xl:mt-5 2xl:mt-7 md:mt-2 mb-6 sm:mb-0">
                 <div className="mx-auto w-2/3">
                   <img
                     src="/sterna-logo.png"
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
               {menulist.map((item, index) => (
                 <div
                   key={index}
-                  className={`pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[20px]  xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px] dashboard_box_t 
+                  className={` pl-1 sm:pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded-md  flex gap-x-3 items-center cursor-pointer  transition-colors font-semibold dash-menu  hover:transition-all ease-in delay-100 duration-300  hover:bg-gray-700 2xl:text-[20px]  xl:text-[14px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px] dashboard_box_t 
                                     ${
                                       item.id === ComponentId
                                         ? "bg-gray-700"
@@ -167,7 +167,7 @@ const AdminDashboard = () => {
               <div>
                 <div
                   onClick={signoutFunc}
-                  className="lg:mt-5 xl:mt-7 2xl:mt-12 pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[14px] 2xl:text-[20px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px] dashboard_box_t "
+                  className="lg:mt-5 xl:mt-7 2xl:mt-12 pl-1 sm:pl-5 xl:pl-6 py-3 mx-3 xl:mx-5 rounded text-center cursor-pointer my-3 flex items-center transition-colors dash-menu gap-x-3  font-semibold hover:bg-menu_secondary hover:text-white hover:rounded-md  hover:bg-gray-700 xl:text-[14px] 2xl:text-[20px] lg:text-[12px] md:text-[14px] sm:text-[12px] text-[11px] dashboard_box_t "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

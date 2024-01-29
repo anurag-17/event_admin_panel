@@ -179,7 +179,7 @@ const AllUser = () => {
       <div className=" flex sm:ml-10 mx-4 sm:mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
         <div className=" w-full ">
           <div className=" w-full ">
-            <table className="w-[155%] sm:w-[100%]  border bg-white rounded-md mt-5 p-10">
+            <table className="w-[220%] sm:w-[110%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
                 <tr
                   className="bg-coolGray-200 text-gray-400 text-start flex  
@@ -324,7 +324,7 @@ const AllUser = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white pb-10 pt-5 px-12 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-5/6 sm:w-1/2 sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <div className="flex justify-end">
                     <button onClick={closeModal}>
                       <img
@@ -379,22 +379,24 @@ const AllUser = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-2xl transition-all">
+                <Dialog.Panel className=" w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-2xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="flex  custom_heading_text font-semibold leading-6 text-gray-900"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>
-                  <p className="lg:text-[16px] text-[16px] font-normal leading-[30px] text-gray-500 mt-4">
-                    Do you really want to delete these records? You cant't view
-                    this in your list anymore if you delete!
-                  </p>
-                  <div className="mt-8">
+                  <div className="mt-2">
+                    <p className="text-[12px] sm:text-[16px] font-normal ms:leading-[30px] text-gray-500 mt-4">
+                      Do you really want to delete these records? You cant't
+                      view this in your list anymore if you delete!
+                    </p>
+                  </div>
+                  <div className="mt-4 lg:mt-8">
                     <div className="flex justify-between gap-x-5">
                       <button
-                        className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
-                              hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200"
+                        className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 
+                              hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200 custom_btn_d "
                         onClick={() => {
                           setDialogMatch(false);
                         }}
@@ -404,7 +406,7 @@ const AllUser = () => {
                       {isLoader ? (
                         <button
                           className="w-full border border-1 rounded-md 
-                              text-sm 
+                          custom_btn_d  
                               border-red-400 text-red-700 bg-red-200  px-2 py-3
                               hover:border-none"
                         >
@@ -413,7 +415,7 @@ const AllUser = () => {
                       ) : (
                         <button
                           className="w-full border border-1 rounded-md 
-                              text-sm 
+                          custom_btn_d 
                               border-red-400 text-red-700 hover:bg-red-200  px-2 py-3
                               hover:border-none"
                           onClick={() => handleDelete(deleteId)}
