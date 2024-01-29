@@ -7,7 +7,7 @@ const Accordion = ({ title, content, index, active, onToggle }) => {
 
   return (
     <div
-      className={`mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex flex-col justify-between 2xl:pt-4 2xl:px-10 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 text-black rounded-[6px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 border-[#70788575] bg-white ${
+      className={`p-4 mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex flex-col justify-between 2xl:pt-4 2xl:px-10 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 text-black rounded-[6px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 border-[#70788575] bg-white ${
         active ? "" : "shadow-2xl"
       }`}
     >

@@ -70,7 +70,6 @@ const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
         <h2 className="custom_heading_text font-semibold ">
           Add New SubCategory{" "}
         </h2>
-        <div className="mb-3 w-[40%]"></div>
       </div>
 
       <form
@@ -124,7 +123,7 @@ const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
             </select>
           </div>
         </div>
-
+        <div className="flex justify-center">
         <button
           type="submit"
           className="custom_btn
@@ -136,6 +135,7 @@ const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
         >
           {isLoading ? "Loading." : " Add SubCategory"}
         </button>
+        </div>
       </form>
     </>
   );

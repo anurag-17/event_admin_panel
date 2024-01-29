@@ -287,7 +287,7 @@ const Category = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-2/3 p-2 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white sm:py-6 sm:px-12 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-2/3 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white sm:py-6 p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <div className="flex justify-end">
                     <button onClick={closeDrawer}>
                       <img
@@ -333,7 +333,7 @@ const Category = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-6 px-9 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-2/3 sm:w-full sm:max-w-[500px]  transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <div className="flex justify-end">
                     <button onClick={closeDrawerO}>
                       <img
@@ -386,10 +386,10 @@ const Category = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-8 sm:px-12 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="custom_heading_text font-semibold leading-6 text-gray-900"
+                    className="custom_heading_text font-semibold leading-6 text-gray-900 mt lg:mt-5"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>

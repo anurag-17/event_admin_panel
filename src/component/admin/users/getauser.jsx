@@ -6,7 +6,7 @@ const GetAUser = ({ selectedItemData, closeModal }) => {
     <>
       <div>
         {selectedItemData.map((item) => (
-          <div>
+          <div className="custom_table_text">
             <div>
               <div className="flex my-2">
                 <label className="w-1/3">Full Name :</label>
