@@ -196,7 +196,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
         px-1 h-[25px] my-2
          "
         >
-          <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">
+          <h2 className="custom_heading_text font-semibold ">
             Edit Event{" "}
           </h2>
           <div className="mb-3 w-[40%]"></div>
@@ -392,12 +392,12 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
             </div>
             {/* ------12. Event category----- */}
 
-            <div className="w-1/2  gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-4 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6">
+            <div className="w-1/2  gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-0 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6">
               <label htmlFor="" className="custom_input_label">
                 Event Category
               </label>
 
-              <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0 w-full">
+              <div className="col-span-8 sm:col-span-4 ml- sm:ml-0 w-full">
                 <select
                   name="category"
                   className="custom_inputt"
@@ -449,12 +449,12 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
             </div>
             {/* ------13. Event subCategory----- */}
 
-            <div className="w-1/2  gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-4 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6">
+            <div className="w-1/2  gap-1 sm:gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-0 sm:mt-0  sm:mb-2 md:mb-3 lg:mb-4  xl:mb-6">
               <label htmlFor="" className="custom_input_label">
                 Event SubCategory
               </label>
 
-              <div className="col-span-8 sm:col-span-4 ml-2 sm:ml-0 w-full">
+              <div className="col-span-8 sm:col-span-4 ml- sm:ml-0 w-full">
                 <select
                   name="subCategory"
                   className="custom_inputt w-full"
@@ -531,11 +531,11 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
 
             <div className="grid md:grid-cols-2 w-full">
               {/*-------cover image------- */}
-              <div className="mt-2  ">
-                <span className="login-input-label 2xl:m-10 lg:m-5">
+              <div className="ml-3 sm:ml-4 lg:ml-0  ">
+                <span className="login-input-label 2xl:m-10 lg:m-5 text-[12px] sm:text-[16px] font-semibold">
                   Cover image
                 </span>
-                <div className="flex items-center gap-2  mb-3 2xl:m-10 lg:m-5">
+                <div className="flex items-center gap-2  mb-3 2xl:m- lg:m-">
                   {Array.isArray(eventDetail?.images) &&
                     eventDetail.images.length > 0 && (
                       <>
@@ -547,7 +547,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                                 alt="loading.."
                                 height={100}
                                 width={100}
-                                className="w-2/4"
+                                className="w-2/4 lg:ml-5 2xl:ml-9"
                               />
                             )) ||
                               (typeof img.position === "undefined" &&
@@ -569,8 +569,8 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
 
               {eventDetail?.images?.length > 0 && (
                 <>
-                  <div className="mb-4 2xl:px-10 lg:px-5 px-">
-                    <span className="login-input-label cursor-pointer">
+                  <div className="mb-4 2xl:px-10 lg:px-5 ml-3 sm:ml-4 md:ml-0  ">
+                    <span className="login-input-label cursor-pointer text-[12px] sm:text-[16px] font-semibold">
                       Event Image
                     </span>
                     <div className="grid md:grid-cols-2 gap-2 4 ">
@@ -594,7 +594,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                               </button>
                             </div>
                             {eventDetail?.images?.length > 1 && (
-                              <div className="text-[14px] flex items-center gap-2">
+                              <div className="text-[14px]  flex items-center gap-2">
                                 {/* {console.log(item)} */}
                                 <label htmlFor={`cover${inx}`} className="">
                                   Cover{" "}
@@ -622,7 +622,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                         name="images"
                         disabled={imageDisable}
                         onChange={inputHandler}
-                        className="w-full  border max-w-[200px]"
+                        className="w-full  border max-w-[200px] text-[12px] sm:text-[13px] md:text-[12px] lg:text-[14px]"
                         accept="image/png,image/jpg, image/jpeg , image/*"
                       />
 
@@ -637,7 +637,7 @@ const EditEvent = ({ editData, closeModal, refreshData }) => {
                           </button>
                         ) : (
                           <button
-                            className={`focus-visible:outline-none  text-white text-[13px] px-4 py-1 rounded
+                            className={`focus-visible:outline-none  text-white text-[11px] sm:text-[13px] px-2 md:px-4 py-1 md:py-1 rounded 
                     ${
                       imageDisable
                         ? " bg-[green]"
