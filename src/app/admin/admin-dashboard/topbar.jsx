@@ -6,6 +6,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 const Topbar = () => {
   const router = useRouter();
@@ -61,9 +62,9 @@ const Topbar = () => {
                 <Menu.Items className="absolute border right-0 z-10 mt-5 w-40 2xl:w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     <Menu.Item>
-                      <a className="cursor-pointer bg-gray-100 text-gray-900 custom_dropdown_text block px-4 py-2 text-sm">
-                        Account settings
-                      </a>
+                      <Link href='/admin-profile' className="cursor-pointer bg-gray-100 text-gray-900 custom_dropdown_text block px-4 py-2 text-sm">
+                        Admin Profile
+                      </Link>
                     </Menu.Item>
 
                     <Menu.Item>

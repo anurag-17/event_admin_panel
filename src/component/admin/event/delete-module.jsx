@@ -58,7 +58,7 @@ const DeleteEvent = ({ eventID, closeModal, refreshData }) => {
         </p>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-4 sm:mt-8">
         <div className="flex justify-between gap-x-5">
           <button
             className="w-full rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200

@@ -224,7 +224,7 @@ const UserIssue = () => {
                     <div>
                       {item?.isResolved ? (
                         <div className="flex sm:justify-end ">
-                          <button className="w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">Resolve</button>
+                          <button className="w-[80px] sm:w-4/6 lg:w-full border p-1  rounded-md  border-green-400 text-green-700 hover:bg-green-200">Resolved</button>
                         </div>
                       ) : (
                         <div className="flex sm:justify-end">
@@ -360,7 +360,7 @@ const UserIssue = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                 <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
+                 <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-7  sm:px-8 lg:px-8 2xl:p-10  text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="custom_heading_text font-semibold leading-6 text-gray-900"
