@@ -109,19 +109,10 @@ const EventRedirection = () => {
       <ToastContainer autoClose={1000} />
       <Topbar />
       <div className="bg-[#F3F3F3] pt-4">
-        <div className="pt-1 flex sm:flex-row flex-col justify-items-center sm:justify-between  items-center  2xl:pt- 2xl:px-10 border mx-4 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[70px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="py-4 flex sm:flex-row flex-col justify-items-center sm:justify-between  items-center  2xl:pt- 2xl:px-4 border mx-4 lg:mx-8 bg-white rounded-lg  xl:px-4 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold custom_heading_text">
-            Redirected Event List{" "}
+            Redirected Event List
           </h2>
-
-          {/* <div className="flex items-center justify-center w-[165px] sm:w-[27%]">
-            <input
-              type="search"
-              className="border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-[4px] rounded-lg w-full lg:max-w-auto  mx-auto md:w-11/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px]"
-              placeholder="Search"
-              onChange={handleSearchChange}
-            />
-          </div> */}
         </div>
 
         <div className="overflow-x-scroll  mx-4 lg:mx-8">
@@ -267,15 +258,15 @@ const EventRedirection = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-7  sm:px-8 lg:px-8 2xl:p-10  text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-[90%] sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 2xl:p-10 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="flex justify-center lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="custom_heading_text font-semibold leading-6 text-gray-900 mt lg:mt-5"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-[16px] font-normal  text-gray-500 mt-4">
+                    <p className="text-[12px] sm:text-[16px] font-normal ms:leading-[30px] text-gray-500 mt-4">
                       Do you really want to delete these records? You can't view
                       this in your list anymore if you delete!
                     </p>
