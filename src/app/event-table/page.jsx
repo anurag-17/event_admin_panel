@@ -21,7 +21,11 @@ const EventRedirection = () => {
   const [dialogMatch, setDialogMatch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
 
-  const convertTime = (time) => moment(time).format("DD/MM/YYYY HH:mm");
+  const convertTime = (time) => {
+    const parsedDateTime = moment.utc(time);
+    const formattedDateTime = parsedDateTime.format("DD/MM/YYYY HH:mm");
+    return formattedDateTime;
+  };
 
   const refreshData = () => setRefresh(!isRefresh);
 
@@ -102,7 +106,7 @@ const EventRedirection = () => {
   return (
     <>
       {isLoader && <Loader />}
-      <ToastContainer autoClose={1000}/>
+      <ToastContainer autoClose={1000} />
       <Topbar />
       <div className="bg-[#F3F3F3] pt-4">
         <div className="pt-1 flex sm:flex-row flex-col justify-items-center sm:justify-between  items-center  2xl:pt- 2xl:px-10 border mx-4 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[70px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
@@ -185,7 +189,7 @@ const EventRedirection = () => {
                           {items?.event?.city}
                         </td>
                         <td className="py-3 font-[400] pt-3  pl-12  px-5 ">
-                         <div> {items?.redirection}</div>
+                          <div> {items?.redirection}</div>
                         </td>
                         <td className=" font-[400] py-3 ">
                           <button
@@ -239,11 +243,7 @@ const EventRedirection = () => {
       </div>
       {/* ------------delete popup--------- */}
       <Transition appear show={dialogMatch} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={() => {}}
-        >
+        <Dialog as="div" className="relative z-10" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -267,7 +267,7 @@ const EventRedirection = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                 <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-7  sm:px-8 lg:px-8 2xl:p-10  text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="flex justify-center lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
@@ -280,38 +280,11 @@ const EventRedirection = () => {
                       this in your list anymore if you delete!
                     </p>
                   </div>
-                  <div className="mt-8">
-                  <div className="flex justify-between gap-x-5">
-          <button
-            className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
-                              hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200 custom_btn_d "
-                              onClick={() => {
-                          setDialogMatch(false);
-                        }}
-          >
-            No, Keep It
-          </button>
-
-          <button
-            className={`w-full  rounded-md 
-            custom_btn_d 
-                              border-red-400 text-red-700 bg-red-200  
-                              hover:border-none
-                        ${isLoader ? "bg-gray-200" : "hover:bg-red-200"}
-                        hover:border-none`}
-                        onClick={() => handleDelete(deleteId)}
-            disabled={isLoader}
-          >
-            {isLoader ? "Deleting..." : "Yes, Delete It"}
-          </button>
-        </div>
-
-
-
-                    {/* <div className="flex justify-between gap-x-5">
+                  <div className="mt-4 sm:mt-8">
+                    <div className="flex justify-between gap-x-5">
                       <button
-                        className="w-full border rounded-md text-sm px-2 py-3
-                        hover:bg-lightBlue-200 hover:border-none"
+                        className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
+                              hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200 custom_btn_d "
                         onClick={() => {
                           setDialogMatch(false);
                         }}
@@ -320,7 +293,10 @@ const EventRedirection = () => {
                       </button>
 
                       <button
-                        className={`w-full border rounded-md text-sm px-2 py-3
+                        className={`w-full  rounded-md 
+            custom_btn_d 
+                              border-red-400 text-red-700 bg-red-200  
+                              hover:border-none
                         ${isLoader ? "bg-gray-200" : "hover:bg-red-200"}
                         hover:border-none`}
                         onClick={() => handleDelete(deleteId)}
@@ -328,10 +304,8 @@ const EventRedirection = () => {
                       >
                         {isLoader ? "Deleting..." : "Yes, Delete It"}
                       </button>
-                    </div> */}
+                    </div>
                   </div>
-
-                
                 </Dialog.Panel>
               </Transition.Child>
             </div>
