@@ -379,7 +379,7 @@ const AllUser = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-5/6 sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-7  sm:px-8 lg:px-8 2xl:p-10 text-left align-middle shadow-2xl transition-all">
+                <Dialog.Panel className="w-[90%] sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 2xl:p-10 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="flex  custom_heading_text font-semibold leading-6 text-gray-900"
