@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const AuthContext = createContext();
 
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Function to clear authentication token on logout
-  const handleSignout = async (customToastSuccess, customToastError) => {
+  const handleSignout = async () => {
     try {
       setLoader(true);
 
@@ -46,14 +47,14 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.request(options);
 
       if (response.status === 200) {
-        customToastSuccess("Logout!");
+        toast.success("Logout!");
       } else {
-        customToastError(response?.data?.message || "Logout failed!");
+        toast.error(response?.data?.message || "Logout failed!");
         setLoader(false);
       }
     } catch (error) {
       console.error("Error:", error);
-      customToastError(error?.response?.data?.message || "Server error!");
+      toast.error(error?.response?.data?.message || "Server error!");
       setLoader(false);
     } finally {
       destroyCookie(null, "ad_Auth", { path: "/" });
@@ -87,6 +88,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
+  <>
+  <ToastContainer/>
     <AuthContext.Provider
       value={{
         adminAuthToken,
@@ -100,6 +103,7 @@ export const AuthProvider = ({ children }) => {
     >
       {children}
     </AuthContext.Provider>
+    </>
   );
 };
 

@@ -63,7 +63,7 @@ const ChangePassword = () => {
           });
           setCnfmPassword("");
           setError("");
-          toast.success("Password change successfully!");
+          toast.success("Password changed successfully!");
           signoutFunc();
           // router.push("/admin-login")
         } else if (res.status === 203) {
