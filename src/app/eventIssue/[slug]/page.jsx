@@ -3,12 +3,14 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Loader from "../../../component/loader";
+import {useAuth} from "../../../contexts/AuthContext"
 
 const GetaEvent = ({ params }) => {
   const router = useRouter();
   const eventIssue = params?.slug || "";
   const [isLoader, setLoader] = useState(false);
   const [getaEvent, setGetaEvent] = useState([]);
+  const { adminAuthToken } = useAuth();
 
   useEffect(() => {
     defaultevent();
@@ -23,7 +25,7 @@ const GetaEvent = ({ params }) => {
         id: eventIssue,
       },
       headers: {
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
     axios
