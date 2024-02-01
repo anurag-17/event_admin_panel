@@ -73,19 +73,10 @@ exports.getEventIssue = asyncHandler(async (req, res) => {
 
 exports.getAllEventIssues = asyncHandler(async (req, res) => {
   try {
-
-    const currentDate = new Date();
-    // await EventIssue.deleteMany({
-    //   event: { $exists: true },
-    //   "event.endDate": { $lt: currentDate },
-    // });
-
-    await EventIssue.deleteMany({
-      $or: [
-        { event: null },
-        { event: { $exists: true, $ne: null }, 'event.endDate': { $lt: currentDate } },
-      ],
+    const deletionResult = await EventRedirection.deleteMany({
+      event: { $exists: false },
     });
+    console.log(deletionResult);
 
     const { page = 1, limit = 10, isResolved } = req.query;
 
@@ -95,7 +86,7 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
     let query = {};
 
     if (isResolved !== undefined) {
-      query.isResolved = isResolved === 'true';
+      query.isResolved = isResolved === "true";
     }
 
     const totalEventIssues = await EventIssue.countDocuments(query);
@@ -109,7 +100,8 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
       .populate("event")
       .populate({
         path: "userId",
-        select: "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -provider_ID -role -provider -password -__v",
+        select:
+          "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -provider_ID -role -provider -password -__v",
       });
 
     res.json({
@@ -119,7 +111,7 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
       eventIssues: getAllEventIssues,
     });
   } catch (error) {
-    console.log("Error",error);
+    console.log("Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

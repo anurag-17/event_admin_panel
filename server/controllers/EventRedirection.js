@@ -42,7 +42,8 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
       query.event = eventId;
     }
 
-    const deletionResult = await EventRedirection.deleteMany({ event: { $eq: null } });
+    const deletionResult = await EventRedirection.deleteMany({ $or: [{ event: null }, { event: { $exists: false } }] });
+
     console.log("Deletion result:", deletionResult);
 
     const totalEventRedirections = await EventRedirection.countDocuments(query);
