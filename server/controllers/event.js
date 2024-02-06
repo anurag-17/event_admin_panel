@@ -368,7 +368,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
       {
         headers: {
           Accept: "application/json",
-          "Api-Key": process.env.skiddleApiKey,
+          "Api-Key": process.env.londontheatredirectkey,
         },
       }
     );
@@ -380,7 +380,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
       {
         headers: {
           Accept: "application/json",
-          "Api-Key": process.env.skiddleApiKey,
+          "Api-Key": process.env.londontheatredirectkey,
         },
         params: {
           // Include any other necessary parameters
@@ -415,7 +415,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
           {
             headers: {
               Accept: "application/json",
-              "Api-Key": process.env.skiddleApiKey,
+              "Api-Key": process.env.londontheatredirectkey,
             },
           }
         );
