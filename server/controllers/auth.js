@@ -37,7 +37,7 @@ exports.register = async (req, res, next) => {
   if (existingUser) {
     return res
       .status(203)
-      .json({ error: "User with this email or mobile number already exists." });
+      .json({ error: "User with this email already exists." });
   }
 
   const userData = {
