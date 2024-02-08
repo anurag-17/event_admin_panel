@@ -7,6 +7,7 @@ const EventIssue = require("../models/EventIssue");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
 const axios = require('axios');
+const { parseString } = require('xml2js');
 
 exports.createEvent = asyncHandler(async (req, res) => {
   try {
@@ -589,5 +590,113 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+exports.giganticEvents = asyncHandler(async (req, res) => {
+  try {
+    let { startDate, endDate } = req.query;
+    
+    // Default startDate to the current date if not provided
+    startDate = startDate ? new Date(startDate) : new Date();
+
+    // Default endDate to one month after the startDate if not provided
+    endDate = endDate ? new Date(endDate) : new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const formattedStartDate = Math.floor(startDate.getTime() / 1000);
+    const formattedEndDate = Math.floor(endDate.getTime() / 1000);
+
+    const response = await axios.get(`https://www.gigantic.com/feeds/get_feed.php?affiliate_tag=sterna&available_from=${formattedStartDate}&available_to=${formattedEndDate}`);
+    const xmlData = response.data;
+
+    // Parse XML
+    parseString(xmlData, async (err, result) => {
+      if (err) throw err;
+      
+      const campaigns = result.campaigns.campaign;
+      
+      for (const campaign of campaigns) {
+        const genres = campaign.genres[0].genre.map(genre => genre.trim()); // Extract and format genre values
+        
+        // Create or find categories for each genre
+        const categoryIds = [];
+        for (const genre of genres) {
+          let category = await Category.findOne({ title: genre });
+
+          if (!category) {
+              // If the category doesn't exist, create it
+              category = await Category.create({ title: genre });
+          }
+
+          // Push category _id into categoryIds array
+          categoryIds.push(category._id);
+        }
+
+        const events = campaign.events[0].event;
+        for (const event of events) {
+
+console.log(category);
+          // Extract relevant information
+          const name = event.eventtitle[0] || 'Not Available';
+          const description = event.eventsubtitle ? (event.eventsubtitle[0] || 'Not Available') : 'Not Available';
+          const endDate  = event.eventdoortime[0] ? new Date(event.eventdoortime[0]) : 'Not Available';
+          const startDate  = event.eventonsaletime[0] ? new Date(event.eventonsaletime[0]) : 'Not Available';
+          const location = event.venue[0].venuetitle[0] || 'Not Available';
+          const city = event.venue[0].venuelocation[0] || 'Not Available';
+          const country = event.venue[0].venuecountry[0] || 'Not Available';
+          const latitude = event.venue[0].venuelatitude[0] || 'Not Available';
+          const longitude = event.venue[0].venuelongitude[0] || 'Not Available';
+          const ticketType = event.tickettypes?.[0]?.tickettype?.[0];
+          const price = ticketType ? (ticketType.tickettypefacevalue[0]?._ || 'Not Available') : 'Not Available';
+          const currency = ticketType ? (ticketType.tickettypefacevalue[0]?.$?.currency || 'Not Available') : 'Not Available';
+          const resource_url = event.eventurl[0] || 'Not Available';
+          const event_provider =  'Gigantic';
+
+          // // Extract category IDs for the event
+          // const categoryIds = genres.map(genre => category._id); 
+
+          // Check if the event already exists in the database
+          const existingEvent = await Event.findOne({ name: name, startDate: startDate });
+
+          if (existingEvent) {
+            console.error(`Event ${name} already exists. Skipping...`);
+            continue;
+          }
+
+          // Extract campaign images
+          const images = [];
+          if (campaign.campaignmainimage && campaign.campaignmainimage[0]) {
+            images.push({ url: campaign.campaignmainimage[0], position: 0 });
+          }  
+          if (campaign.campaigncoverimage && campaign.campaigncoverimage[0]) {
+            images.push({ url: campaign.campaigncoverimage[0], position: 1 });
+          }
+
+          await Event.create({
+            name,
+            description,
+            images,
+            startDate,
+            endDate,
+            location,
+            city,
+            country,
+            latitude,
+            longitude,
+            price,
+            currency,
+            resource_url,
+            event_provider,
+            category: categoryIds,
+          });
+        }
+      }
+      
+      console.log('Data saved successfully.');
+      res.status(200).json({ message: 'Data saved successfully.'})
+    });
+  } catch (error) {
+    console.error('Error:', error.message);
   }
 });

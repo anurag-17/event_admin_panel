@@ -73,7 +73,7 @@ exports.getEventIssue = asyncHandler(async (req, res) => {
 
 exports.getAllEventIssues = asyncHandler(async (req, res) => {
   try {
-    const deletionResult = await EventRedirection.deleteMany({
+    const deletionResult = await EventIssue.deleteMany({
       event: { $exists: false },
     });
     console.log(deletionResult);

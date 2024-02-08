@@ -11,7 +11,8 @@ const {
     getDashEvents,
     londontheatredirect,
     skiddleEvents,
-    getStats
+    getStats,
+    giganticEvents
 } = require("../controllers/event");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
@@ -34,5 +35,7 @@ router.get("/getStats", getStats);
 router.get("/londontheatredirect", londontheatredirect);
 
 router.get("/skiddleEvents", skiddleEvents);
+
+router.get("/giganticEvents", giganticEvents);
 
 module.exports = router;

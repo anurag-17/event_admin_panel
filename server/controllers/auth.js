@@ -30,9 +30,9 @@ exports.uploadImage = async (req, res, next) => {
 };
 
 exports.register = async (req, res, next) => {
-  const { email, mobile } = req.body;
+  const { email } = req.body;
 
-  const existingUser = await User.findOne({ $or: [{ email }, { mobile }] });
+  const existingUser = await User.findOne({ email });
 
   if (existingUser) {
     return res
@@ -42,7 +42,7 @@ exports.register = async (req, res, next) => {
 
   const userData = {
     email,
-    mobile,
+    // mobile,
     // role: req.body.role,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
