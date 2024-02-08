@@ -617,26 +617,23 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
       const campaigns = result.campaigns.campaign;
       
       for (const campaign of campaigns) {
-        const genres = campaign.genres[0].genre.map(genre => genre.trim()); // Extract and format genre values
-        
-        // Create or find categories for each genre
-        const categoryIds = [];
-        for (const genre of genres) {
-          let category = await Category.findOne({ title: genre });
 
-          if (!category) {
-              // If the category doesn't exist, create it
-              category = await Category.create({ title: genre });
-          }
+        let genre = 'Other';
 
-          // Push category _id into categoryIds array
-          categoryIds.push(category._id);
+        if (campaign.genres && campaign.genres[0] && campaign.genres[0].genre && campaign.genres[0].genre[0]) {
+          genre = campaign.genres[0].genre[0].trim(); 
         }
+
+        // Save genre as category
+        let category = await Category.findOne({ title: genre });
+        if (!category) {
+          category = await Category.create({ title: genre });
+        }
+        const categoryId = category._id;
 
         const events = campaign.events[0].event;
         for (const event of events) {
 
-console.log(category);
           // Extract relevant information
           const name = event.eventtitle[0] || 'Not Available';
           const description = event.eventsubtitle ? (event.eventsubtitle[0] || 'Not Available') : 'Not Available';
@@ -652,9 +649,6 @@ console.log(category);
           const currency = ticketType ? (ticketType.tickettypefacevalue[0]?.$?.currency || 'Not Available') : 'Not Available';
           const resource_url = event.eventurl[0] || 'Not Available';
           const event_provider =  'Gigantic';
-
-          // // Extract category IDs for the event
-          // const categoryIds = genres.map(genre => category._id); 
 
           // Check if the event already exists in the database
           const existingEvent = await Event.findOne({ name: name, startDate: startDate });
@@ -688,7 +682,7 @@ console.log(category);
             currency,
             resource_url,
             event_provider,
-            category: categoryIds,
+            category: categoryId
           });
         }
       }
