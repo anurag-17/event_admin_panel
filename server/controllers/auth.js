@@ -425,7 +425,13 @@ exports.getaUser = async (req, res) => {
   validateMongoDbId(_id);
 
   try {
-    const getaUser = await User.findById(_id);
+    const getaUser = await User.findById(_id).populate({
+      path: 'favoriteEvents',
+      populate: {
+        path: 'event',
+        model: 'Event',
+      }
+    });
     res.json({
       getaUser,
     });

@@ -42,6 +42,16 @@ exports.getAllEventRedirections = asyncHandler(async (req, res) => {
       query.event = eventId;
     }
 
+    // Filter out non-existing events 
+    const favoriteEvents = await EventRedirection.find();
+    const idsToRemove = favoriteEvents
+      .filter((fav) => fav.event === null)
+      .map((fav) => fav._id);
+
+      if (idsToRemove.length > 0) {
+        await EventRedirection.deleteMany({ _id: { $in: idsToRemove } });
+      }
+
     const deletionResult = await EventRedirection.deleteMany({ $or: [{ event: null }, { event: { $exists: false } }] });
 
     console.log("Deletion result:", deletionResult);

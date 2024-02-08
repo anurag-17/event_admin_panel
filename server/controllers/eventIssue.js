@@ -89,6 +89,16 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
       query.isResolved = isResolved === "true";
     }
 
+    // Filter out non-existing events 
+    const favoriteEvents = await EventIssue.find();
+    const idsToRemove = favoriteEvents
+      .filter((fav) => fav.event === null)
+      .map((fav) => fav._id);
+
+      if (idsToRemove.length > 0) {
+        await EventIssue.deleteMany({ _id: { $in: idsToRemove } });
+      }
+
     const totalEventIssues = await EventIssue.countDocuments(query);
     const totalPages = Math.ceil(totalEventIssues / itemsPerPage);
 
