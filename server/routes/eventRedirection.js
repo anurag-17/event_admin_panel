@@ -10,7 +10,7 @@ getAllEventRedirections,
 } = require("../controllers/EventRedirection");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
-router.post("/eventRedirection", isAuthenticatedUser ,eventRedirection);
+router.post("/eventRedirection",eventRedirection);
 
 router.put("/updateEventRedirectionById", isAuthenticatedUser, updateEventRedirectionById);
 
@@ -18,6 +18,6 @@ router.delete("/deleteEventRedirection", isAuthenticatedUser, authorizeRoles("ad
 
 router.get("/getEventRedirectionById/:id", isAuthenticatedUser, getEventRedirectionById);
 
-router.get("/getAllEventRedirections", isAuthenticatedUser, getAllEventRedirections);
+router.get("/getAllEventRedirections",  getAllEventRedirections);
 
 module.exports = router;
