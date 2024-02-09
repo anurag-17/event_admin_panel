@@ -5,14 +5,13 @@ exports.addToFavourite = async (req, res) => {
   try {
     const { userId, eventId } = req.body;
 
-    // Check if the user has any favorite events
     let favorite = await FavoriteEvent.findOne({ user: userId });
 
     if (!favorite) {
-      // If no favorite events exist, create a new favorite entry
+      
       favorite = new FavoriteEvent({ user: userId, events: [eventId] });
     } else {
-      // If the user already has favorite events, add the new event to the array
+      
       if (!favorite.events.includes(eventId)) {
         favorite.events.push(eventId);
       } else {
@@ -60,7 +59,6 @@ exports.getFavouriteEvent = async (req, res) => {
       return res.status(404).json({ message: "No favorite events found for the user" });
     }
 
-    // Since favorite.events is an array, you can directly operate on it
     const filteredEvents = favorite.events.filter(event => event !== null);
 
     const idsToRemove = favorite.events
@@ -71,11 +69,18 @@ exports.getFavouriteEvent = async (req, res) => {
       await FavoriteEvent.findOneAndUpdate(
         { user: userId },
         { $pull: { events: { $in: idsToRemove } } },
-        { new: true } // to return the updated document after update
+        { new: true }
       );
     }
 
-    res.status(200).json(filteredEvents);
+    const responseData = {
+      user: {
+        ...favorite.user.toObject(), 
+        events: filteredEvents
+      }
+    };
+
+    res.status(200).json(responseData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
