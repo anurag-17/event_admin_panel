@@ -136,7 +136,7 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
 
     await Event.deleteMany({ endDate: { $lt: currentDate } });
     
-    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city ,country} = req.query;
+    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city ,country, latitude ,longitude} = req.query;
 
     const currentPage = parseInt(page, 10);
     const itemsPerPage = parseInt(limit, 10);
@@ -190,7 +190,18 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     if (country) {
       query.country = country;
     }
+//     // Geospatial query to find events within 5 km radius
+//     if (latitude && longitude) {
+//       const maxDistanceInDegrees = 5 / 111.12; // 1 degree is approximately 111.12 km
 
+// query.location = {
+//   $geoWithin: {
+//     $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], maxDistanceInDegrees],
+//   },
+// };
+//     }
+    
+// console.log(query);
     const totalEvents = await Event.countDocuments(query);
     const totalPages = Math.ceil(totalEvents / itemsPerPage);
 

@@ -5,10 +5,10 @@ const FavoriteEventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User model
   },
-  event: {
+  events: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Event", // Reference to the Event model
-  },
+  }],
 });
 
 const FavoriteEvent = mongoose.model("FavoriteEvent", FavoriteEventSchema);

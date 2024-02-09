@@ -5,21 +5,22 @@ exports.addToFavourite = async (req, res) => {
   try {
     const { userId, eventId } = req.body;
 
-    const existingFavorite = await FavoriteEvent.findOne({
-      user: userId,
-      event: eventId,
-    });
+    // Check if the user has any favorite events
+    let favorite = await FavoriteEvent.findOne({ user: userId });
 
-    if (existingFavorite) {
-      return res.status(400).json({ message: "Event already in favorites" });
+    if (!favorite) {
+      // If no favorite events exist, create a new favorite entry
+      favorite = new FavoriteEvent({ user: userId, events: [eventId] });
+    } else {
+      // If the user already has favorite events, add the new event to the array
+      if (!favorite.events.includes(eventId)) {
+        favorite.events.push(eventId);
+      } else {
+        return res.status(400).json({ message: "Event already in favorites" });
+      }
     }
 
-    const favorite = new FavoriteEvent({ user: userId, event: eventId });
     await favorite.save();
-
-    await User.findByIdAndUpdate(userId, {
-      $push: { favoriteEvents: favorite._id },
-    });
 
     res
       .status(201)
@@ -34,11 +35,10 @@ exports.deleteFavouriteEvent = async (req, res) => {
   try {
     const { userId, eventId } = req.body;
 
-    await FavoriteEvent.findOneAndDelete({ user: userId, event: eventId });
-
-    await User.findByIdAndUpdate(userId, {
-      $pull: { favoriteEvents: eventId },
-    });
+    await FavoriteEvent.findOneAndUpdate(
+      { user: userId },
+      { $pull: { events: eventId } }
+    );
 
     res.status(200).json({ message: "Event removed from favorites" });
   } catch (error) {
@@ -51,27 +51,31 @@ exports.getFavouriteEvent = async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    const favoriteEvents = await FavoriteEvent.find({ user: userId })
-      .populate("event")
-      .populate({
-        path: "user",
-        select:
-          "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -role -password -__v",
-      });
+    const favorite = await FavoriteEvent.findOne({ user: userId }).populate("events").populate({
+      path: "user",
+      select: "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -role -password -__v",
+    });
 
-    const filteredFavorites = favoriteEvents.filter(
-      (fav) => fav.event !== null
-    );
-
-    const idsToRemove = favoriteEvents
-      .filter((fav) => fav.event === null)
-      .map((fav) => fav._id);
-
-    if (idsToRemove.length > 0) {
-      await FavoriteEvent.deleteMany({ _id: { $in: idsToRemove } });
+    if (!favorite) {
+      return res.status(404).json({ message: "No favorite events found for the user" });
     }
 
-    res.status(200).json(filteredFavorites);
+    // Since favorite.events is an array, you can directly operate on it
+    const filteredEvents = favorite.events.filter(event => event !== null);
+
+    const idsToRemove = favorite.events
+      .filter(event => event === null)
+      .map(event => event._id);
+
+    if (idsToRemove.length > 0) {
+      await FavoriteEvent.findOneAndUpdate(
+        { user: userId },
+        { $pull: { events: { $in: idsToRemove } } },
+        { new: true } // to return the updated document after update
+      );
+    }
+
+    res.status(200).json(filteredEvents);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
