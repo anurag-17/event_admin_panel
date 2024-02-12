@@ -112,6 +112,20 @@ exports.getEvent = asyncHandler(async (req, res) => {
   res.json(getEvent);
 });
 
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180); // Convert degrees to radians
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  return distance;
+}
 exports.getAllEvents = asyncHandler(async (req, res) => {
   try {
     // Delete expired events first
@@ -121,7 +135,9 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     const expiredEvents = await Event.find({ endDate: { $lt: currentDate } });
 
     for (const event of expiredEvents) {
-      const eventRedirections = await EventRedirection.find({ event: event._id });
+      const eventRedirections = await EventRedirection.find({
+        event: event._id,
+      });
 
       for (const eventRedirection of eventRedirections) {
         await EventRedirection.deleteOne({ _id: eventRedirection._id });
@@ -135,8 +151,22 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     }
 
     await Event.deleteMany({ endDate: { $lt: currentDate } });
-    
-    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city ,country, latitude ,longitude, price} = req.query;
+
+    const {
+      page = 1,
+      limit = 20,
+      searchQuery,
+      startDate,
+      endDate,
+      category,
+      subCategory,
+      provider,
+      city,
+      country,
+      latitude,
+      longitude,
+      price,
+    } = req.query;
 
     const currentPage = parseInt(page, 10);
     const itemsPerPage = parseInt(limit, 10);
@@ -155,7 +185,9 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     if (startDate) {
       const parsedStartDate = new Date(startDate);
       if (isNaN(parsedStartDate)) {
-        return res.status(401).json({ status: 'fail', message: 'Invalid start date format' });
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid start date format" });
       }
       query.startDate = { $gte: parsedStartDate };
     }
@@ -163,11 +195,13 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     if (endDate) {
       const parsedEndDate = new Date(endDate);
       if (isNaN(parsedEndDate)) {
-        return res.status(401).json({ status: 'fail', message: 'Invalid end date format' });
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid end date format" });
       }
 
       parsedEndDate.setHours(23, 59, 59, 999);
-      
+
       query.endDate = { $lte: parsedEndDate };
     }
 
@@ -195,36 +229,58 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
       query.price = { $gte: price.min, $lte: price.max };
     }
 
-//     // Geospatial query to find events within 5 km radius
-//     if (latitude && longitude) {
-//       const maxDistanceInDegrees = 5 / 111.12; // 1 degree is approximately 111.12 km
+    // Calculate distance for each event and filter by 5km range
+    if (latitude && longitude) {
+      query.latitude = { $exists: true };
+      query.longitude = { $exists: true };
+      const allEvents = await Event.find(query)
+        .populate("category")
+        .populate("subCategory");
 
-// query.location = {
-//   $geoWithin: {
-//     $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], maxDistanceInDegrees],
-//   },
-// };
-//     }
-    
-// console.log(query);
-    const totalEvents = await Event.countDocuments(query);
-    const totalPages = Math.ceil(totalEvents / itemsPerPage);
+      // Filter events based on distance within 5km range
+      const filteredEvents = allEvents.filter((event) => {
+        const distance = calculateDistance(
+          latitude,
+          longitude,
+          event.latitude,
+          event.longitude
+        );
+        return distance <= 5;
+      });
 
-    const skip = (currentPage - 1) * itemsPerPage;
+      const totalEvents = filteredEvents.length;
+      const totalPages = Math.ceil(totalEvents / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, totalEvents);
 
-    const allEvents = await Event.find(query)
-      .skip(skip)
-      .limit(itemsPerPage)
-      .sort({ endDate: 1 })
-      .populate("category")
-      .populate("subCategory");
+      const pageEvents = filteredEvents.slice(startIndex, endIndex);
 
-    res.json({
-      current_page: currentPage,
-      total_pages: totalPages,
-      total_items: totalEvents,
-      events: allEvents,
-    });
+      res.json({
+        current_page: currentPage,
+        total_pages: totalPages,
+        total_items: totalEvents,
+        events: pageEvents,
+      });
+    } else {
+      // If latitude and longitude are not provided, perform regular pagination
+      const totalEvents = await Event.countDocuments(query);
+      const totalPages = Math.ceil(totalEvents / itemsPerPage);
+      const skip = (currentPage - 1) * itemsPerPage;
+
+      const allEvents = await Event.find(query)
+        .skip(skip)
+        .limit(itemsPerPage)
+        .sort({ endDate: 1 })
+        .populate("category")
+        .populate("subCategory");
+
+      res.json({
+        current_page: currentPage,
+        total_pages: totalPages,
+        total_items: totalEvents,
+        events: allEvents,
+      });
+    }
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
