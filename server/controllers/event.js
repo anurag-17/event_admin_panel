@@ -653,8 +653,8 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
           const location = event.venue[0].venuetitle[0] || 'Not Available';
           const city = event.venue[0].venuelocation[0] || 'Not Available';
           const country = event.venue[0].venuecountry[0] || 'Not Available';
-          const latitude = event.venue[0].venuelatitude[0] || 'Not Available';
-          const longitude = event.venue[0].venuelongitude[0] || 'Not Available';
+          // const latitude = event.venue[0].venuelatitude[0] || 'Not Available';
+          // const longitude = event.venue[0].venuelongitude[0] || 'Not Available';
           const ticketType = event.tickettypes?.[0]?.tickettype?.[0];
           const price = ticketType ? (ticketType.tickettypefacevalue[0]?._ || 'Not Available') : 'Not Available';
           const currency = ticketType ? (ticketType.tickettypefacevalue[0]?.$?.currency || 'Not Available') : 'Not Available';
@@ -669,6 +669,21 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
             continue;
           }
 
+          // Convert latitude and longitude to numbers if available, otherwise set them to null
+let latitude, longitude;
+if (event.venue[0].venuelatitude[0] && event.venue[0].venuelongitude[0]) {
+  latitude = parseFloat(event.venue[0].venuelatitude[0]);
+  longitude = parseFloat(event.venue[0].venuelongitude[0]);
+} else {
+  latitude = null;
+  longitude = null;
+}
+
+// Check if the latitude and longitude are valid numbers
+if (isNaN(latitude) || isNaN(longitude)) {
+  console.error(`Invalid latitude or longitude for event ${name}. Skipping...`);
+  continue;
+}
           // Extract campaign images
           const images = [];
           if (campaign.campaignmainimage && campaign.campaignmainimage[0]) {
