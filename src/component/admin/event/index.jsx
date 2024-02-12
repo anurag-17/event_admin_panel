@@ -510,15 +510,21 @@ const Event = () => {
       url: `/api/event/londontheatredirect?startDate=${fetchStartDate}&endDate=${fetchEndDate}`,
     };
 
+    const options4 = {
+      method: "GET",
+      url: `/api/event/giganticEvents?startDate=${fetchStartDate}&endDate=${fetchEndDate}`,
+    };
+
     const requests = [
       axios.request(options1),
       axios.request(options2),
       axios.request(options3),
+      axios.request(options4),
     ];
 
     Promise.all(requests.map((request) => request.catch((error) => error)))
       .then((responses) => {
-        const [response1, response2, response3] = responses;
+        const [response1, response2, response3, response4] = responses;
 
         if (response1.status === 200) {
           // handle response1.data
@@ -529,6 +535,10 @@ const Event = () => {
         }
 
         if (response3.status === 200) {
+          // handle response3.data
+        }
+
+        if (response4.status === 200) {
           // handle response3.data
         }
       })
