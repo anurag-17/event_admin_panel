@@ -49,11 +49,22 @@ exports.deleteFavouriteEvent = async (req, res) => {
 exports.getFavouriteEvent = async (req, res) => {
   try {
     const userId = req.params.userId;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
 
-    const favorite = await FavoriteEvent.findOne({ user: userId }).populate("events").populate({
-      path: "user",
-      select: "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -role -password -__v",
-    });
+    const favorite = await FavoriteEvent.findOne({ user: userId })
+      .populate({
+        path: "events",
+        options: { skip: (page - 1) * limit, limit: limit },
+        populate: [
+          { path: "category" },
+          { path: "subCategory" }
+        ]
+      })
+      .populate({
+        path: "user",
+        select: "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -role -password -__v",
+      });
 
     if (!favorite) {
       return res.status(404).json({ message: "No favorite events found for the user" });
@@ -73,11 +84,14 @@ exports.getFavouriteEvent = async (req, res) => {
       );
     }
 
+    const totalEvents = filteredEvents.length;
+    const totalPages = Math.ceil(totalEvents / limit);
+
     const responseData = {
-      user: {
-        ...favorite.user.toObject(), 
-        events: filteredEvents
-      }
+      current_page: page,
+      total_pages: totalPages,
+      total_items: totalEvents,
+      events: filteredEvents,
     };
 
     res.status(200).json(responseData);
