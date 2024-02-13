@@ -127,3 +127,32 @@ exports.deleteEventRedirectionById = asyncHandler(async (req, res) => {
 
   res.status(200).json({ message: "EventRedirection deleted successfully" });
 });
+
+exports.getRedirectedEvents = asyncHandler(async (req, res) => {
+  try {
+    const { page = 1, limit = 20 } = req.query;
+    const currentPage = parseInt(page, 10);
+    const itemsPerPage = parseInt(limit, 10);
+
+    const events = await EventRedirection.find()
+      .populate("event")
+      .sort({ redirection: -1 })
+      .skip((currentPage - 1) * itemsPerPage)
+      .limit(itemsPerPage)
+      .exec();
+
+    const totalEvents = await EventRedirection.countDocuments();
+
+    const totalPages = Math.ceil(totalEvents / itemsPerPage);
+
+    res.json({
+      current_page: currentPage,
+      total_pages: totalPages,
+      total_items: totalEvents,
+      events: events,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
