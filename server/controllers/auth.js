@@ -8,6 +8,7 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 const { generateToken , verifyToken} = require("../config/jwtToken");
 const sendToken = require("../utils/jwtToken");
 const axios = require('axios');
+const bcrypt = require("bcryptjs");
 const cheerio = require('cheerio');
 const jwt = require("jsonwebtoken");
 const uploadOnS3 = require("../utils/uploadImage");
@@ -30,24 +31,27 @@ exports.uploadImage = async (req, res, next) => {
 };
 
 exports.register = async (req, res, next) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
 
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    return res
-      .status(203)
-      .json({ error: "User with this email already exists." });
+    return res.status(203).json({ error: "User with this email already exists." });
   }
 
   const userData = {
     email,
-    // mobile,
-    // role: req.body.role,
+    provider_ID: req.body.provider_ID,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
-    password: req.body.password,
+    provider: req.body.provider
   };
+
+  if (password) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    userData.password = hashedPassword;
+  }
 
   try {
     const newUser = await User.create(userData);
@@ -60,16 +64,40 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return next(new ErrorResponse("Please provide Email and Password", 400));
+  if (!email) {
+    return next(new ErrorResponse("Please provide Email", 400));
   }
 
   try {
     const findUser = await User.findOne({ email }).select("+password");
-    // const isPasswordMatch = await bcrypt.compare(password, findUser.password);
 
+    // If user exists and is authenticated via a third-party provider
+    if (findUser && !findUser.password) {
+      const token = generateToken({ id: findUser._id });
+
+      await User.findByIdAndUpdate(
+        { _id: findUser._id?.toString() },
+        { activeToken: token },
+        { new: true }
+      );
+
+      const user = {
+        success: true,
+        user: {
+          _id: findUser._id,
+          firstname: findUser.firstname,
+          lastname: findUser.lastname,
+          email: findUser.email,
+          provider: findUser.provider,
+        },
+        token: token,
+      };
+
+      return res.status(200).json(user);
+    }
+
+    // If user exists and has a password, continue with password-based authentication
     if (findUser && (await findUser.matchPasswords(password))) {
-      // sendToken(findUser, 201, res);
       const token = generateToken({ id: findUser._id });
 
       await User.findByIdAndUpdate(
