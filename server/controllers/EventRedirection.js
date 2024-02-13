@@ -135,7 +135,13 @@ exports.getRedirectedEvents = asyncHandler(async (req, res) => {
     const itemsPerPage = parseInt(limit, 10);
 
     const events = await EventRedirection.find()
-      .populate("event")
+      .populate({
+        path: "event",
+        populate: [
+          { path: "category" },
+          { path: "subCategory" }
+        ]
+      })
       .sort({ redirection: -1 })
       .skip((currentPage - 1) * itemsPerPage)
       .limit(itemsPerPage)
@@ -145,11 +151,34 @@ exports.getRedirectedEvents = asyncHandler(async (req, res) => {
 
     const totalPages = Math.ceil(totalEvents / itemsPerPage);
 
+    // Formatting events to include redirection count
+    const formattedEvents = events.map(event => ({
+      _id: event.event._id,
+      name: event.event.name,
+      description: event.event.description,
+      startDate: event.event.startDate,
+      endDate: event.event.endDate,
+      location: event.event.location,
+      city: event.event.city,
+      address: event.event.address,
+      latitude: event.event.latitude,
+      longitude: event.event.longitude,
+      price: event.event.price,
+      category: event.event.category,
+      subCategory: event.event.subCategory,
+      images: event.event.images,
+      resource_url: event.event.resource_url,
+      event_provider: event.event.event_provider,
+      createdAt: event.event.createdAt,
+      updatedAt: event.event.updatedAt,
+      redirection_count: event.redirection 
+    }));
+
     res.json({
       current_page: currentPage,
       total_pages: totalPages,
       total_items: totalEvents,
-      events: events,
+      events: formattedEvents,
     });
   } catch (err) {
     console.error(err);
