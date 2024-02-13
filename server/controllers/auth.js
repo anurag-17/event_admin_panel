@@ -324,7 +324,9 @@ exports.forgotPassword = async (req, res, next) => {
 
       await user.save();
 
-      return res.status(500).json("Email could not be sent");
+      return res
+        .status(500)
+        .json({ success: false, data: "Email could not be sent" });
     }
   } catch (error) {
     next(error);
