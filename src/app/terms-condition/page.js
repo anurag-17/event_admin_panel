@@ -10,7 +10,7 @@ const Page = () => {
           </h1>
         
           <p className="text-[#6d6c6c] leading-7  2xl:text-[20px] 2xl:my-3 my-2 text-[15px] 2xl:leading-8">
-            Last updated: 19-02-23
+            Last updated: 19-02-24
           </p>
           <p className="text-[#6d6c6c] leading-7 2xl:text-[20px] 2xl:my-10 my-8 text-[15px] 2xl:leading-8">
             This Privacy Policy describes how Suli Teas (the "Site", "we", "us",
