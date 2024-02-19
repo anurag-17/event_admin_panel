@@ -112,6 +112,20 @@ exports.getEvent = asyncHandler(async (req, res) => {
   res.json(getEvent);
 });
 
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180); // Convert degrees to radians
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  return distance;
+}
 exports.getAllEvents = asyncHandler(async (req, res) => {
   try {
     // Delete expired events first
@@ -121,7 +135,9 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     const expiredEvents = await Event.find({ endDate: { $lt: currentDate } });
 
     for (const event of expiredEvents) {
-      const eventRedirections = await EventRedirection.find({ event: event._id });
+      const eventRedirections = await EventRedirection.find({
+        event: event._id,
+      });
 
       for (const eventRedirection of eventRedirections) {
         await EventRedirection.deleteOne({ _id: eventRedirection._id });
@@ -135,8 +151,22 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     }
 
     await Event.deleteMany({ endDate: { $lt: currentDate } });
-    
-    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city ,country} = req.query;
+
+    const {
+      page = 1,
+      limit = 20,
+      searchQuery,
+      startDate,
+      endDate,
+      category,
+      subCategory,
+      provider,
+      city,
+      country,
+      latitude,
+      longitude,
+      price,
+    } = req.query;
 
     const currentPage = parseInt(page, 10);
     const itemsPerPage = parseInt(limit, 10);
@@ -155,7 +185,9 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     if (startDate) {
       const parsedStartDate = new Date(startDate);
       if (isNaN(parsedStartDate)) {
-        return res.status(401).json({ status: 'fail', message: 'Invalid start date format' });
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid start date format" });
       }
       query.startDate = { $gte: parsedStartDate };
     }
@@ -163,11 +195,13 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     if (endDate) {
       const parsedEndDate = new Date(endDate);
       if (isNaN(parsedEndDate)) {
-        return res.status(401).json({ status: 'fail', message: 'Invalid end date format' });
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid end date format" });
       }
 
       parsedEndDate.setHours(23, 59, 59, 999);
-      
+
       query.endDate = { $lte: parsedEndDate };
     }
 
@@ -191,24 +225,62 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
       query.country = country;
     }
 
-    const totalEvents = await Event.countDocuments(query);
-    const totalPages = Math.ceil(totalEvents / itemsPerPage);
+    if (price && typeof price === "object" && price.min && price.max) {
+      query.price = { $gte: price.min, $lte: price.max };
+    }
 
-    const skip = (currentPage - 1) * itemsPerPage;
+    // Calculate distance for each event and filter by 5km range
+    if (latitude && longitude) {
+      query.latitude = { $exists: true };
+      query.longitude = { $exists: true };
+      const allEvents = await Event.find(query)
+        .populate("category")
+        .populate("subCategory");
 
-    const allEvents = await Event.find(query)
-      .skip(skip)
-      .limit(itemsPerPage)
-      .sort({ endDate: 1 })
-      .populate("category")
-      .populate("subCategory");
+      // Filter events based on distance within 5km range
+      const filteredEvents = allEvents.filter((event) => {
+        const distance = calculateDistance(
+          latitude,
+          longitude,
+          event.latitude,
+          event.longitude
+        );
+        return distance <= 5;
+      });
 
-    res.json({
-      current_page: currentPage,
-      total_pages: totalPages,
-      total_items: totalEvents,
-      events: allEvents,
-    });
+      const totalEvents = filteredEvents.length;
+      const totalPages = Math.ceil(totalEvents / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, totalEvents);
+
+      const pageEvents = filteredEvents.slice(startIndex, endIndex);
+
+      res.json({
+        current_page: currentPage,
+        total_pages: totalPages,
+        total_items: totalEvents,
+        events: pageEvents,
+      });
+    } else {
+      // If latitude and longitude are not provided, perform regular pagination
+      const totalEvents = await Event.countDocuments(query);
+      const totalPages = Math.ceil(totalEvents / itemsPerPage);
+      const skip = (currentPage - 1) * itemsPerPage;
+
+      const allEvents = await Event.find(query)
+        .skip(skip)
+        .limit(itemsPerPage)
+        .sort({ endDate: 1 })
+        .populate("category")
+        .populate("subCategory");
+
+      res.json({
+        current_page: currentPage,
+        total_pages: totalPages,
+        total_items: totalEvents,
+        events: allEvents,
+      });
+    }
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
@@ -642,8 +714,8 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
           const location = event.venue[0].venuetitle[0] || 'Not Available';
           const city = event.venue[0].venuelocation[0] || 'Not Available';
           const country = event.venue[0].venuecountry[0] || 'Not Available';
-          const latitude = event.venue[0].venuelatitude[0] || 'Not Available';
-          const longitude = event.venue[0].venuelongitude[0] || 'Not Available';
+          // const latitude = event.venue[0].venuelatitude[0] || 'Not Available';
+          // const longitude = event.venue[0].venuelongitude[0] || 'Not Available';
           const ticketType = event.tickettypes?.[0]?.tickettype?.[0];
           const price = ticketType ? (ticketType.tickettypefacevalue[0]?._ || 'Not Available') : 'Not Available';
           const currency = ticketType ? (ticketType.tickettypefacevalue[0]?.$?.currency || 'Not Available') : 'Not Available';
@@ -658,6 +730,21 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
             continue;
           }
 
+          // Convert latitude and longitude to numbers if available, otherwise set them to null
+let latitude, longitude;
+if (event.venue[0].venuelatitude[0] && event.venue[0].venuelongitude[0]) {
+  latitude = parseFloat(event.venue[0].venuelatitude[0]);
+  longitude = parseFloat(event.venue[0].venuelongitude[0]);
+} else {
+  latitude = null;
+  longitude = null;
+}
+
+// Check if the latitude and longitude are valid numbers
+if (isNaN(latitude) || isNaN(longitude)) {
+  console.error(`Invalid latitude or longitude for event ${name}. Skipping...`);
+  continue;
+}
           // Extract campaign images
           const images = [];
           if (campaign.campaignmainimage && campaign.campaignmainimage[0]) {
