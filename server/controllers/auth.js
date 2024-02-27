@@ -120,7 +120,8 @@ exports.login = async (req, res, next) => {
 
       return res.status(200).json(user);
     } else {
-      return next(new ErrorResponse("Invalid Credentials", 401));
+      // return next(new ErrorResponse("Invalid Credentials", 401));
+      return res.status(401).json({ error: "Invalid Credentials" });
     }
   } catch (error) {
     res.status(500).json({
@@ -292,7 +293,7 @@ exports.forgotPassword = async (req, res, next) => {
             <h2>Hello ${user.firstname},</h2>
         </div>
         <div class="content">
-            <p>We have received a request to reset your password for your account on <strong>Event Panel</strong>. If you did not request this change, you can ignore this email and your password will not be changed.</p>
+            <p>We have received a request to reset your password for your account on <strong>Sterna</strong>. If you did not request this change, you can ignore this email and your password will not be changed.</p>
             
             <p>To reset your password, please click on the following link and follow the instructions:</p>
             
@@ -302,7 +303,7 @@ exports.forgotPassword = async (req, res, next) => {
         </div>
         <div class="footer">
             <h3>Thank you,</h3>
-            <h3>Event Team </h3>
+            <h3>Sterna Team </h3>
         </div>
     </div>
 </body>
