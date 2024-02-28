@@ -206,19 +206,13 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     }
 
     if (category) {
-      if (Array.isArray(category)) {
-        query.category = { $in: category };
-      } else {
-        query.category = category;
-      }
+      const categoryIds = category.split(","); 
+      query.category = { $in: categoryIds };
     }
     
     if (subCategory) {
-      if (Array.isArray(subCategory)) {
-        query.subCategory = { $in: subCategory };
-      } else {
-        query.subCategory = subCategory;
-      }
+      const subCategoryIds = subCategory.split(",");
+      query.subCategory = { $in: subCategoryIds };
     }
 
     if (provider) {
