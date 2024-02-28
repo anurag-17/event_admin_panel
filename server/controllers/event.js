@@ -206,11 +206,19 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     }
 
     if (category) {
-      query.category = category;
+      if (Array.isArray(category)) {
+        query.category = { $in: category };
+      } else {
+        query.category = category;
+      }
     }
-
+    
     if (subCategory) {
-      query.subCategory = subCategory;
+      if (Array.isArray(subCategory)) {
+        query.subCategory = { $in: subCategory };
+      } else {
+        query.subCategory = subCategory;
+      }
     }
 
     if (provider) {
