@@ -4,10 +4,25 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 
 exports.createSubCategory = async (req, res) => {
   try {
-    const newCategory = await SubCategory.create(req.body);
-    res.json(newCategory);
+    const { category, subCategory } = req.body;
+
+    const existingSubCategory = await SubCategory.findOne({
+      category,
+      subCategory: { $regex: new RegExp(`^${subCategory}$`, "i") },
+    });
+
+    if (existingSubCategory) {
+      return res.status(409).json({ error: "SubCategory must be unique within the category" });
+    }
+
+    const newSubCategory = await SubCategory.create(req.body);
+    res.json(newSubCategory);
   } catch (error) {
-    throw new Error(error);
+    if (error.code === 11000 && error.keyPattern.subCategory) {
+      return res.status(409).json({ error: "SubCategory must be unique within the category" });
+    }
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -75,6 +90,8 @@ exports.getallSubCategory = async (req, res) => {
     const skip = itemsPerPage ? (currentPage - 1) * itemsPerPage : 0;
 
     const getallSubCategory = await SubCategory.find(query)
+      .collation({ locale: "en", strength: 2 })
+      .sort({ subCategory: 1 })
       .skip(skip)
       .limit(itemsPerPage)
       .populate("category");

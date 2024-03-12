@@ -8,9 +8,11 @@ const {
     deleteBulkEvent,
     getEvent,
     getAllEvents,
+    getDashEvents,
     londontheatredirect,
     skiddleEvents,
-    getStats
+    getStats,
+    giganticEvents
 } = require("../controllers/event");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
@@ -26,10 +28,14 @@ router.post("/getEvent", getEvent);
 
 router.get("/getAllEvents", getAllEvents);
 
+router.get("/getDashEvents", getDashEvents);
+
 router.get("/getStats", getStats);
 
 router.get("/londontheatredirect", londontheatredirect);
 
 router.get("/skiddleEvents", skiddleEvents);
+
+router.get("/giganticEvents", giganticEvents);
 
 module.exports = router;

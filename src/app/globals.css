@@ -2,14 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.custom_table_text{
+ @apply text-[12px] sm:text-[12px] md:text-[14px] lg:text-[14px] xl:text-[14px] 2xl:text-[16px]
+}
+.custom_dropdown_text{
+  @apply text-[10px] sm:text-[11px] md:text-[12px] lg:text-[12px] xl:text-[14px] 2xl:text-[16px]
+ }
+ .custom_heading_text{
+  @apply text-[14px] sm:text-[18px] md:text-[16px] lg:text-[16px] xl:text-[20px] 2xl:text-[24px]
+ }
+ .custom_dashboard{
+  @apply flex my-auto gap-4 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-3 2xl:gap-6 justify-between border w-[48%] sm:w-[31%] md:w-[23.7%] lg:w-[23.5%] xl:w-[23%] 2xl:w-[23.5%] bg-white sm:p-2 p-2 md:p-3 xl:p-4 2xl:p-6
+ }
+ @media (max-width:400px){
+  .dashboard_main{
+    margin-top: 20px !important;
+  }
+  .dashboard_boxes{
+    display: table-column !important;
+    margin: auto;
+    
+    }
+    .dashboard_box{
+      width:auto !important;
+      margin: 15px 0px;
+    }
+ }
+
+
+ 
 .custom_input_label {
   @apply absolute bg-white z-20 text-gray-800
   2xl:text-[18px] 2xl:mt-6 2xl:ml-14
   xl:text-[14px] xl:mt-2 xl:ml-8
   lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
   md:text-[10px] md:mt-2 md:ml-6
-  sm:text-[9px] sm:mt-1 sm:ml-5
-  text-[8px] mt-[2px] ml-4;
+  sm:text-[10px] sm:mt-1 sm:ml-5
+  text-[10px] ml-4;
 }
 .custom_input {
   @apply rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
@@ -19,22 +49,38 @@
             sm:text-sm sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
             text-sm m-2 px-2 py-1 h-[20px];
 }
+.custom_inputt {
+  @apply rounded relative border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none  w-10/12  lg:w-10/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
+         xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
+             lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
+            md:m-4 md:px-3 md:py-2 md:h-[30px]
+          sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
+         m-2 px-2 py-1 h-[25px] text-[10px];
+}
 .custom_btn {
-  @apply border hover:bg-blue-400 text-white  rounded-lg bg-blue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
+  @apply border hover:bg-blue-400 text-white rounded-md lg:rounded-lg bg-blue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
               xl:text-[14px] xl:py-2 xl:px-4  xl:m-5 xl:mt-0
               lg:text-[12px] lg:py-2 lg:px-3 lg:m-5 lg:mt-0
               md:text-[12px] md:py-1 md:px-2 md:m-4 md:mt-0
-              sm:text-[11px] sm:py-1  sm:px-1 sm:m-3 sm:mt-0
-              text-[10px] py-[3px] px-1 m-2 mt-0;
+              sm:text-[11px] sm:py-1  sm:px-2 sm:m-3 sm:mt-0
+              text-[9px] py-[3px] px-2 m-2 mt-0;
 }
-.custom_select{
+.custom_btn_d {
+  @apply border 2xl:text-[20px] 2xl:p-2 2xl:m-0 2xl:mt-0
+              xl:text-[14px] xl:py-2 xl:px-4  xl:mb-2 xl:mt-0
+              lg:text-[12px] lg:py-2 lg:px-3 lg:mb-2 lg:mt-0
+              md:text-[12px] md:py-1 md:px-2 md:mb-2 md:mt-0
+              sm:text-[12px] sm:py-1  sm:px-2 sm:m-0 sm:mt-0
+              text-[10px] py-[3px] px-2 m-0 mt-0;
+}
+.custom_select {
   @apply rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600 focus:outline-none  
-  2xl:text-sm  2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
-  xl:text-[12px]  xl:px-3 xl:py-0  xl:w-28 
-  lg:text-[12px]  lg:px-2 lg:py-1  w-24
+    2xl:px-3 2xl:py-2 2xl:h-[35px] 2xl:w-36 
+  xl:px-3 xl:py-0  xl:w-28 
+  lg:px-2 lg:py-1  w-24
   md:px-0 md:py-0 md:h-[25px] 
     sm:px-2 sm:py-0 
-      px-2 pb-0 h-[24px] text-[9px] sm:text-[10px] md:text-[10px]
+      px-2 pb-0 h-[24px] ;
 }
 .sticky-header {
   position: sticky;
@@ -65,11 +111,8 @@
   }
 }
 
-
-
-
 .dashboard_div {
-  @apply text-center mb-3 items-center  border  w-1/4 bg-white rounded-lg 2xl:h-[80px]  lg:h-[60px] md:h-[50px] xl:px-4 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px] ;
+  @apply text-center mb-3 items-center  border  w-1/4 bg-white rounded-lg 2xl:h-[80px]  lg:h-[60px] md:h-[50px] xl:px-4 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px];
 }
 
 @media (min-width: 1024px) {
@@ -81,8 +124,6 @@
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border-top-right-radius: 0px;
-   
-
   }
 }
 
@@ -94,18 +135,28 @@
     background-position: top center;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    
-  } 
+  }
 }
-.carousel .slide img, .carousel_img , .carousel img{
+.carousel .slide img,
+.carousel_img,
+.carousel img {
   width: auto !important;
   height: auto !important;
 }
 
-.h1_text{
-  @apply my-1  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px]
+.h1_text {
+  @apply my-1  text-[9px] sm:text-[11px] md:text-[11px] lg:text-[11px] xl:text-[13px] 2xl:text-[20px];
 }
 
-.h1_text_issue{
-  @apply text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px] xl:text-[18px] 2xl:text-[20px]
+.h1_text_issue {
+  @apply text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px] xl:text-[18px] 2xl:text-[20px];
+}
+
+@media (min-width: 1535px) and (max-width:1795px) {
+  .dashboard_box_t {
+   font-size: 16px !important ;
+  }
+  .dashboard_box_num{
+    font-size: 22px !important ;
+  }
 }

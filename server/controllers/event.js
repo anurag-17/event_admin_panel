@@ -7,6 +7,7 @@ const EventIssue = require("../models/EventIssue");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
 const axios = require('axios');
+const { parseString } = require('xml2js');
 
 exports.createEvent = asyncHandler(async (req, res) => {
   try {
@@ -38,6 +39,7 @@ exports.createEvent = asyncHandler(async (req, res) => {
     req.body.latitude = location.lat;
     req.body.longitude = location.lng;
     // req.body.images = imagesArray;
+    req.body.event_provider = "Sterna";
     
     // Create the new event
     const newEvent = await Event.create(req.body);
@@ -58,10 +60,30 @@ exports.updateEvent = asyncHandler(async (req, res) => {
 });
 
 exports.deleteEvent = asyncHandler(async (req, res) => {
-  const { id } = req.body;
-  validateMongoDbId(id);
-  const deletedEvent = await Event.findByIdAndDelete(id);
-  res.json(deletedEvent);
+  try {
+    const { id } = req.body;
+    validateMongoDbId(id);
+
+    const eventRedirections = await EventRedirection.find({ event: id });
+
+    for (const eventRedirection of eventRedirections) {
+      await EventRedirection.deleteOne({ _id: eventRedirection._id });
+    }
+
+    const eventIssues = await EventIssue.find({ event: id });
+
+    for (const eventIssue of eventIssues) {
+      await EventIssue.deleteOne({ _id: eventIssue._id });
+    }
+
+    // Delete the event
+    const deletedEvent = await Event.findByIdAndDelete(id);
+
+    res.json(deletedEvent);
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 exports.deleteBulkEvent = asyncHandler(async (req, res) => {
@@ -90,7 +112,184 @@ exports.getEvent = asyncHandler(async (req, res) => {
   res.json(getEvent);
 });
 
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180); // Convert degrees to radians
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  return distance;
+}
 exports.getAllEvents = asyncHandler(async (req, res) => {
+  try {
+    // Delete expired events first
+    const currentDate = new Date();
+    // await Event.deleteMany({ endDate: { $lt: currentDate } });
+
+    const expiredEvents = await Event.find({ endDate: { $lt: currentDate } });
+
+    for (const event of expiredEvents) {
+      const eventRedirections = await EventRedirection.find({
+        event: event._id,
+      });
+
+      for (const eventRedirection of eventRedirections) {
+        await EventRedirection.deleteOne({ _id: eventRedirection._id });
+      }
+
+      const eventIssues = await EventIssue.find({ event: event._id });
+
+      for (const eventIssue of eventIssues) {
+        await EventIssue.deleteOne({ _id: eventIssue._id });
+      }
+    }
+
+    await Event.deleteMany({ endDate: { $lt: currentDate } });
+
+    const {
+      page = 1,
+      limit = 20,
+      searchQuery,
+      startDate,
+      endDate,
+      category,
+      subCategory,
+      provider,
+      city,
+      country,
+      latitude,
+      longitude,
+      price,
+    } = req.query;
+
+    const currentPage = parseInt(page, 10);
+    const itemsPerPage = parseInt(limit, 10);
+
+    let query = {};
+
+    if (searchQuery) {
+      query.$or = [
+        { name: { $regex: new RegExp(searchQuery, "i") } },
+        { location: { $regex: new RegExp(searchQuery, "i") } },
+        { city: { $regex: new RegExp(searchQuery, "i") } },
+        { country: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
+
+    if (startDate) {
+      const parsedStartDate = new Date(startDate);
+      if (isNaN(parsedStartDate)) {
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid start date format" });
+      }
+      query.startDate = { $gte: parsedStartDate };
+    }
+
+    if (endDate) {
+      const parsedEndDate = new Date(endDate);
+      if (isNaN(parsedEndDate)) {
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid end date format" });
+      }
+
+      parsedEndDate.setHours(23, 59, 59, 999);
+
+      query.endDate = { $lte: parsedEndDate };
+    }
+
+    if (category) {
+      const categoryIds = category.split(","); 
+      query.category = { $in: categoryIds };
+    }
+    
+    if (subCategory) {
+      const subCategoryIds = subCategory.split(",");
+      query.subCategory = { $in: subCategoryIds };
+    }
+
+    if (provider) {
+      query.event_provider = provider;
+    }
+
+    if (city) {
+      query.city = city;
+    }
+
+    if (country) {
+      query.country = country;
+    }
+
+    if (price && typeof price === "object" && price.min && price.max) {
+      query.price = { $gte: price.min, $lte: price.max };
+    }
+
+    // Calculate distance for each event and filter by 5km range
+    if (latitude && longitude) {
+      query.latitude = { $exists: true };
+      query.longitude = { $exists: true };
+      const allEvents = await Event.find(query)
+        .populate("category")
+        .populate("subCategory");
+
+      // Filter events based on distance within 5km range
+      const filteredEvents = allEvents.filter((event) => {
+        const distance = calculateDistance(
+          latitude,
+          longitude,
+          event.latitude,
+          event.longitude
+        );
+        return distance <= 5;
+      });
+
+      const totalEvents = filteredEvents.length;
+      const totalPages = Math.ceil(totalEvents / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, totalEvents);
+
+      const pageEvents = filteredEvents.slice(startIndex, endIndex);
+
+      res.json({
+        current_page: currentPage,
+        total_pages: totalPages,
+        total_items: totalEvents,
+        events: pageEvents,
+      });
+    } else {
+      // If latitude and longitude are not provided, perform regular pagination
+      const totalEvents = await Event.countDocuments(query);
+      const totalPages = Math.ceil(totalEvents / itemsPerPage);
+      const skip = (currentPage - 1) * itemsPerPage;
+
+      const allEvents = await Event.find(query)
+        .skip(skip)
+        .limit(itemsPerPage)
+        .sort({ endDate: 1 })
+        .populate("category")
+        .populate("subCategory");
+
+      res.json({
+        current_page: currentPage,
+        total_pages: totalPages,
+        total_items: totalEvents,
+        events: allEvents,
+      });
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+exports.getDashEvents = asyncHandler(async (req, res) => {
   try {
     // Delete expired events first
     const currentDate = new Date();
@@ -152,7 +351,7 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     const allEvents = await Event.find(query)
       .skip(skip)
       .limit(itemsPerPage)
-      .sort({ endDate: 1 })
+      .sort({ createdAt: -1 })
       .populate("category")
       .populate("subCategory");
 
@@ -244,7 +443,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
       {
         headers: {
           Accept: "application/json",
-          "Api-Key": process.env.skiddleApiKey,
+          "Api-Key": process.env.londontheatredirectkey,
         },
       }
     );
@@ -256,7 +455,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
       {
         headers: {
           Accept: "application/json",
-          "Api-Key": process.env.skiddleApiKey,
+          "Api-Key": process.env.londontheatredirectkey,
         },
         params: {
           // Include any other necessary parameters
@@ -291,7 +490,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
           {
             headers: {
               Accept: "application/json",
-              "Api-Key": process.env.skiddleApiKey,
+              "Api-Key": process.env.londontheatredirectkey,
             },
           }
         );
@@ -321,7 +520,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         
           // Extract relevant venue information
           const venueInfo = {
-            city: venueData.City,
+            city: venueData.City.trim(),
             address: venueData.Address || venueData.Name,
             location: venueData.Name,
             latitude: location.lat,
@@ -443,7 +642,7 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           images: imagesArray,
           location: event.venue.name,
           address: event.venue.address,
-          city: event.venue.town,
+          city: event.venue.town.trim(),
           country: event.venue.country,
           latitude: event.venue.latitude,
           longitude: event.venue.longitude,
@@ -465,5 +664,122 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+exports.giganticEvents = asyncHandler(async (req, res) => {
+  try {
+    let { startDate, endDate } = req.query;
+    
+    // Default startDate to the current date if not provided
+    startDate = startDate ? new Date(startDate) : new Date();
+
+    // Default endDate to one month after the startDate if not provided
+    endDate = endDate ? new Date(endDate) : new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const formattedStartDate = Math.floor(startDate.getTime() / 1000);
+    const formattedEndDate = Math.floor(endDate.getTime() / 1000);
+
+    const response = await axios.get(`https://www.gigantic.com/feeds/get_feed.php?affiliate_tag=sterna&available_from=${formattedStartDate}&available_to=${formattedEndDate}`);
+    const xmlData = response.data;
+
+    // Parse XML
+    parseString(xmlData, async (err, result) => {
+      if (err) throw err;
+      
+      const campaigns = result.campaigns.campaign;
+      
+      for (const campaign of campaigns) {
+
+        let genre = 'Other';
+
+        if (campaign.genres && campaign.genres[0] && campaign.genres[0].genre && campaign.genres[0].genre[0]) {
+          genre = campaign.genres[0].genre[0].trim(); 
+        }
+
+        // Save genre as category
+        let category = await Category.findOne({ title: genre });
+        if (!category) {
+          category = await Category.create({ title: genre });
+        }
+        const categoryId = category._id;
+
+        const events = campaign.events[0].event;
+        for (const event of events) {
+
+          // Extract relevant information
+          const name = event.eventtitle[0] || 'Not Available';
+          const description = event.eventsubtitle ? (event.eventsubtitle[0] || 'Not Available') : 'Not Available';
+          const endDate  = event.eventdoortime[0] ? new Date(event.eventdoortime[0]) : 'Not Available';
+          const startDate  = event.eventonsaletime[0] ? new Date(event.eventonsaletime[0]) : 'Not Available';
+          const location = event.venue[0].venuetitle[0] || 'Not Available';
+          const city = event.venue[0].venuelocation[0] || 'Not Available';
+          const country = event.venue[0].venuecountry[0] || 'Not Available';
+          // const latitude = event.venue[0].venuelatitude[0] || 'Not Available';
+          // const longitude = event.venue[0].venuelongitude[0] || 'Not Available';
+          const ticketType = event.tickettypes?.[0]?.tickettype?.[0];
+          const price = ticketType ? (ticketType.tickettypefacevalue[0]?._ || 'Not Available') : 'Not Available';
+          const currency = ticketType ? (ticketType.tickettypefacevalue[0]?.$?.currency || 'Not Available') : 'Not Available';
+          const resource_url = event.eventurl[0] || 'Not Available';
+          const event_provider =  'Gigantic';
+
+          // Check if the event already exists in the database
+          const existingEvent = await Event.findOne({ name: name, startDate: startDate });
+
+          if (existingEvent) {
+            console.error(`Event ${name} already exists. Skipping...`);
+            continue;
+          }
+
+          // Convert latitude and longitude to numbers if available, otherwise set them to null
+let latitude, longitude;
+if (event.venue[0].venuelatitude[0] && event.venue[0].venuelongitude[0]) {
+  latitude = parseFloat(event.venue[0].venuelatitude[0]);
+  longitude = parseFloat(event.venue[0].venuelongitude[0]);
+} else {
+  latitude = null;
+  longitude = null;
+}
+
+// Check if the latitude and longitude are valid numbers
+if (isNaN(latitude) || isNaN(longitude)) {
+  console.error(`Invalid latitude or longitude for event ${name}. Skipping...`);
+  continue;
+}
+          // Extract campaign images
+          const images = [];
+          if (campaign.campaignmainimage && campaign.campaignmainimage[0]) {
+            images.push({ url: campaign.campaignmainimage[0], position: 0 });
+          }  
+          if (campaign.campaigncoverimage && campaign.campaigncoverimage[0]) {
+            images.push({ url: campaign.campaigncoverimage[0], position: 1 });
+          }
+
+          await Event.create({
+            name,
+            description,
+            images,
+            startDate,
+            endDate,
+            location,
+            city,
+            country,
+            latitude,
+            longitude,
+            price,
+            currency,
+            resource_url,
+            event_provider,
+            category: categoryId
+          });
+        }
+      }
+      
+      console.log('Data saved successfully.');
+      res.status(200).json({ message: 'Data saved successfully.'})
+    });
+  } catch (error) {
+    console.error('Error:', error.message);
   }
 });

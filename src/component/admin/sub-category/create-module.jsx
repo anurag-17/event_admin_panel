@@ -1,39 +1,35 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../contexts/AuthContext";
 
-const AddSubCategory = ({
-  closeDrawer,
-  refreshData,
-  isLoadingBtn,
-  getallCategory,
-}) => {
+const AddSubCategory = ({ closeDrawer, refreshData, getallCategory }) => {
   const [category, setCategory] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [subCategory, setSubCategory] = useState("");
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
 
   const handleSubmit = async (e) => {
     e && e.preventDefault();
 
-    if(category === ""){
-      toast.warn("Please choose category!");
-    }else{
+    if (subCategory === "") {
+      toast.warn("Please Enter a subCategory!");
+    } else if (category === "") {
+      toast.warn("Please Select a Category!");
+    } else {
       setLoading(true);
 
       const data = {
         category: category,
         subCategory: subCategory,
       };
-  
+
       try {
         await fetch("/api/subCategory/createSubCategory", {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            authorization: auth_token,
+            authorization: adminAuthToken,
           },
           body: JSON.stringify(data),
         })
@@ -51,7 +47,7 @@ const AddSubCategory = ({
           .catch((e) => {
             console.log(e);
             setLoading(false);
-            toast.error("Failed. something went wrong!");
+            toast.error("Subcategory already exist!");
           });
       } catch (error) {
         setLoading(false);
@@ -71,10 +67,9 @@ const AddSubCategory = ({
         px-1 h-[25px] my-2
          "
       >
-        <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">
+        <h2 className="custom_heading_text font-semibold ">
           Add New SubCategory{" "}
         </h2>
-        <div className="mb-3 w-[40%]"></div>
       </div>
 
       <form
@@ -83,66 +78,36 @@ const AddSubCategory = ({
       >
         <div className="mt-2">
           <label
-            className="absolute bg-white z-20 text-gray-800
-            2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-            xl:text-[16px] xl:mt-2 xl:ml-8
-            lg:text-[14px] lg:mt-[10px] lg:ml-[26px]
-            md:text-[13px] md:mt-2 md:ml-6
-            sm:text-[11px] sm:mt-1 sm:ml-5
-            text-[10px] mt-[1px] ml-4 capitalize
+            className="custom_input_label capitalize
             "
           >
-            Sub category
+            Sub Category
           </label>
           <input
-            onChange={(e) => setSubCategory(e.target.value)}
-            value={subCategory}
+            name="subCategory"
             type="text"
-            name="name"
-            className="capitalize rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12 2xl:text-sm 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-            2xl:text-[18px] xl:text-[14px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-              lg:text-[12px]  lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[10px md:m-4 md:px-3 md:py-2 md:h-[30px]
-              sm:text-[9px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[8px] m-2 px-2 py-1 h-[20px]
-              "
-              maxLength={84}
+            value={subCategory}
+            onChange={(e) => setSubCategory(e.target.value)}
+            className="capitalize custom_inputt"
+            maxLength={100}
             required
           />
         </div>
         {/*------ category -----*/}
         <div className="gap-3 md:gap-5 xl:gap-6 lg:gap-6 ">
-          <label
-            className="absolute bg-white z-20 text-gray-800
-            2xl:text-[18px] 2xl:mt-6 2xl:ml-14
-            xl:text-[14px] xl:mt-2 xl:ml-8
-            lg:text-[12px] lg:mt-[10px] lg:ml-[26px]
-            md:text-[10px] md:mt-2 md:ml-6
-            sm:text-[9px] sm:mt-1 sm:ml-5
-            text-[8px] mt-[2px] ml-4 
-            "
-          >
-            Choose main category
-          </label>
+          <label className="custom_input_label">Choose main category</label>
           <div className="w-full">
             <select
               name="category"
               placeholder="Add Category"
-              className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12
-               2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-               xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-              lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[11px] md:m-4 md:px-3 md:py-2 md:h-[30px]
-              text-[8px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              m-2 px-2 py-1 h-[25px] capitalize
-              "
+              className="rounded custom_inputt capitalize"
               defaultValue={category}
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
             >
               <option value="" disabled required>
-                Category
+                Select Category
               </option>
               {Array.isArray(getallCategory) &&
                 getallCategory?.length > 0 &&
@@ -158,15 +123,10 @@ const AddSubCategory = ({
             </select>
           </div>
         </div>
-
+        <div className="flex justify-center">
         <button
           type="submit"
-          className="border bg-blue-500 hover:bg-blue-600 text-white  md:rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
-              xl:text-[14px] xl:p-2 xl:m-5 xl:mt-0
-              lg:text-[12px] lg:p-2 lg:m-5 lg:mt-0
-              md:text-[10px] md:p-1 md:m-4 md:mt-0
-              sm:text-[9px] sm:p-1 sm:m-3 sm:mt-0
-              text-[8px] p-1 m-2 mt-0 rounded-md
+          className="custom_btn
                "
           disabled={isLoading}
           onClick={() => {
@@ -175,6 +135,7 @@ const AddSubCategory = ({
         >
           {isLoading ? "Loading." : " Add SubCategory"}
         </button>
+        </div>
       </form>
     </>
   );

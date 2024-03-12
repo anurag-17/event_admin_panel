@@ -5,25 +5,27 @@ import { Transition, Dialog } from "@headlessui/react";
 import GetAUser from "./getauser";
 import Loader from "../../loader";
 import Pagination from "../../pagination";
+import { useAuth } from "../../../contexts/AuthContext";
+import Topbar from "../../../app/admin/admin-dashboard/topbar";
 
 const AllUser = () => {
   const [getAllUser, setGetAllUSer] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userId, setUserID] = useState("");
   const [isRefresh, setRefresh] = useState(false);
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
   const [getaUser, setGetUser] = useState({});
   const [selectedItemData, setSelectedItemData] = useState("");
   const [isLoader, setLoader] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, SetCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [dialogMatch, setDialogMatch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
 
-  useEffect(() => {
-    defaultGetaUser();
-  }, []);
+  // useEffect(() => {
+  //   defaultGetaUser();
+  // }, []);
 
   const defaultGetaUser = () => {
     setLoader(true);
@@ -31,7 +33,7 @@ const AllUser = () => {
       method: "POST",
       url: "/api/auth/getUserById",
       headers: {
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
     axios
@@ -46,7 +48,7 @@ const AllUser = () => {
   };
 
   const handlePageChange = (newPage) => {
-    SetCurrentPage(newPage);
+    setCurrentPage(newPage);
   };
 
   const refreshData = () => {
@@ -81,7 +83,7 @@ const AllUser = () => {
         limit: limit,
       },
       headers: {
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
     axios
@@ -98,14 +100,15 @@ const AllUser = () => {
 
   const handleSearch = (e) => {
     const search = e.target.value;
+    setCurrentPage(1);
     if (search.trim() === "") {
       refreshData();
     } else {
       const options = {
         method: "GET",
-        url: `/api/auth/all-users?search=${search}`,
+        url: `/api/auth/all-users?search=${search}&limit=${limit}&page=${1}`,
         headers: {
-          authorization: auth_token,
+          authorization: adminAuthToken,
         },
       };
       axios
@@ -113,6 +116,7 @@ const AllUser = () => {
         .then(function (response) {
           if (response.status === 200) {
             setGetAllUSer(response.data.users);
+            setTotalPages(response.data.totalPages || 1);
           }
         })
         .catch(function (error) {
@@ -124,18 +128,14 @@ const AllUser = () => {
   // ---------delete Api-----------
   const handleDelete = (userId) => {
     console.log(userId);
-    // ;
-    // alert("deleted successfully");
-    // setDialogMatch(false);
-    // return;
 
     const options = {
       method: "DELETE",
       url: `/api/auth/deleteaUser/${userId}`,
-      
+
       headers: {
         "Content-Type": "application/json",
-        authorization: auth_token,
+        authorization: adminAuthToken,
       },
     };
 
@@ -144,12 +144,9 @@ const AllUser = () => {
       .then(function (response) {
         console.log(response);
         if (response.status === 200) {
-          // toast.success("Deleted successfully !");
-          // handleClose();
           setDialogMatch(false);
           refreshData();
         } else {
-          // toast.error("Failed. something went wrong!");
           return;
         }
       })
@@ -158,43 +155,37 @@ const AllUser = () => {
       });
   };
 
-
-
   return (
     <>
+      <Topbar />
       {isLoader && <Loader />}
 
-      <div>
-        <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:pt-4 2xl:px-10 border ml-10 mr-4 lg:mx-8  bg-white rounded-lg   2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
-          <h2 className="font-semibold">Users List </h2>
-
-          <div className="flex items-center w-[40%]">
-            <input
-              type="search"
-              className=" border border-gray-500 p-[2px] lg:p-[4px] 2xl:p-3 rounded-lg  w-11/12 focus:outline-none text-black"
-              placeholder="Search"
-              aria-label="Search"
-              aria-describedby="button-addon1"
-              onChange={handleSearch}
-            />
-          </div>
-          <h2>Welcome Back, Admin</h2>
+      <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center p-1 2xl:px-10 border sm:ml-10 mx-4 sm:mr-4 lg:mx-8  bg-white rounded-lg   h-auto   xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className="  w-[50%] sm:w-[40%] my-3 ">
+          <h2 className="font-semibold custom_heading_text">Users List </h2>
         </div>
+        <div className="flex justify-end  w-[50%] sm:w-[40%]  ">
+          <input
+            type="search"
+            className=" border border-gray-500 py-[2px] lg:py-[4px] 2xl:py-3 rounded-md lg:rounded-lg w-full  max-w-[320px] 2xl:max-w-[440px]  md:w-12/12 focus:outline-none md:px-[15px] px-2 text-[15px] placeholder:text-[13px] custom_table_text"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="button-addon1"
+            onChange={handleSearch}
+          />
+        </div>
+      </div>
 
-        <div className=" flex mx-5 ml-10 mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
+      <div className=" flex sm:ml-10 mx-4 sm:mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
+        <div className=" w-full ">
           <div className=" w-full ">
-            <table className="w-[155%] sm:w-[100%]  border bg-white rounded-md mt-5 p-10">
+            <table className="w-[220%] sm:w-[110%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
                 <tr
                   className="bg-coolGray-200 text-gray-400 text-start flex  
-          2xl:text-[22px] 
-          xl:text-[14px]
-           lg:text-[12px] 
-           md:text-[12px] 
-           sm:text-[12px] 
-           text-[10px]"
+                  custom_table_text"
                 >
-                  <th className="mx-3 lg:mx-5 w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
+                  <th className="mx-3 lg:mx-3 w-1/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5   ">
                     S.NO
                   </th>
                   <th className="  w-3/12 text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5  ">
@@ -204,7 +195,7 @@ const AllUser = () => {
                     EMAIL
                   </th>
                   <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
-                    Provider
+                    PROVIDER
                   </th>
                   <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-1/12 ">
                     VIEW
@@ -221,19 +212,21 @@ const AllUser = () => {
                     return (
                       <tr
                         key={index}
-                        className="text-start flex w-full 2xl:text-[22px] xl:text-[14px] lg:text-[12px] md:text-[12px] sm:text-[12px] text-[10px]"
+                        className="text-start flex w-full custom_table_text"
                       >
-                        <td className="my-2 mx-3 lg:mx-5 w-1/12">
+                        <td className="my-auto mx-3 lg:mx-3 w-[7.5%] sm:w-1/12">
                           {serialNumber + "."}
                         </td>
-                        <td className="my-auto w-3/12">
+                        <td className="my-auto w-[22.5%] sm:w-[24%] md:w-[24%] lg:w-[24.5%] ">
                           {item.firstname} {item.lastname}
                         </td>
 
-                        <td className="my-auto w-5/12 sm:w-4/12">
+                        <td className="my-auto w-[37.7%]  sm:w-[32.33%] 2xl:w-[33%]">
                           {item.email}
                         </td>
-                        <td className="my-auto  w-2/12">{item.provider}</td>
+                        <td className="my-auto w-[15%]  sm:w-2/12">
+                          {item.provider}
+                        </td>
                         <td className="my-auto  w-1/12">
                           <button onClick={() => openModal(item?._id)}>
                             <svg
@@ -286,17 +279,25 @@ const AllUser = () => {
                   })}
                 </tbody>
               )}
+              {Array.isArray(getAllUser) && getAllUser?.length === 0 && (
+                <div className="py-6 px-4 border-t ">
+                  <p className="text-[14px]  2xl:text-[20px] font-medium text-center">
+                    {" "}
+                    No Data Found{" "}
+                  </p>
+                </div>
+              )}
             </table>
           </div>
         </div>
-        {totalPages > 1 && (
-          <Pagination
-            total_pages={totalPages}
-            current_page={currentPage}
-            onPageChange={handlePageChange}
-          />
-        )}
       </div>
+      {totalPages > 1 && (
+        <Pagination
+          total_pages={totalPages}
+          current_page={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
 
       <Transition appear show={isModalOpen} as={Fragment}>
         <Dialog as="div" className=" z-10" onClose={closeModal}>
@@ -323,7 +324,7 @@ const AllUser = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white pb-10 pt-5 px-12 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full sm:w-1/2 sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 text-left align-middle shadow-xl transition-all">
                   <div className="flex justify-end">
                     <button onClick={closeModal}>
                       <img
@@ -337,7 +338,7 @@ const AllUser = () => {
                     as="h3"
                     className="lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900 mb-4"
                   >
-                    <div></div>
+                   
                     User Detail
                   </Dialog.Title>
                   <GetAUser
@@ -354,11 +355,7 @@ const AllUser = () => {
 
       {/* --------user Delete----------- */}
       <Transition appear show={dialogMatch} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={() => setDialogMatch(false)}
-        >
+        <Dialog as="div" className="relative z-10" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -382,28 +379,51 @@ const AllUser = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-[500px] transform overflow-hidden rounded-2xl bg-white py-10 px-12 text-left align-middle shadow-2xl transition-all">
+                <Dialog.Panel className="w-[90%] sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 2xl:p-10 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="flex justify-center lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                    className="flex  custom_heading_text font-semibold leading-6 text-gray-900"
                   >
                     Are You Sure! Want to Delete?
                   </Dialog.Title>
-                  <div className="mt-3 flex justify-center gap-14">
-                    <button
-                      className="px-5 py-1 rounded-lg border border-[green] text-[green]"
-                      onClick={() => handleDelete(deleteId)}
-                    >
-                      Yes
-                    </button>
-                    <button
-                      className="px-5 py-1 rounded-lg border border-[red] text-[red]"
-                      onClick={() => {
-                        setDialogMatch(false);
-                      }}
-                    >
-                      No
-                    </button>
+                  <div className="mt-2">
+                    <p className="text-[12px] sm:text-[16px] font-normal ms:leading-[30px] text-gray-500 mt-4">
+                      Do you really want to delete these records? You can't
+                      view this in your list anymore if you delete!
+                    </p>
+                  </div>
+                  <div className="mt-4 lg:mt-8">
+                    <div className="flex justify-between gap-x-5">
+                      <button
+                         className="w-full border border-1 rounded-md border-lightBlue-400 text-lightBlue-700 hover:bg-lightBlue-200 text-sm  px-2 py-3
+                              hover:border-none  border-sky-400 text-sky-700 hover:bg-sky-200 custom_btn_d "
+                        onClick={() => {
+                          setDialogMatch(false);
+                        }}
+                      >
+                        No, Keep It
+                      </button>
+                      {isLoader ? (
+                        <button
+                          className="w-full border border-1 rounded-md 
+                          custom_btn_d  
+                              border-red-400 text-red-700 bg-red-200  px-2 py-3
+                              hover:border-none"
+                        >
+                          Loading...
+                        </button>
+                      ) : (
+                        <button
+                          className="w-full border border-1 rounded-md 
+                          custom_btn_d 
+                              border-red-400 text-red-700 hover:bg-red-200  px-2 py-3
+                              hover:border-none"
+                          onClick={() => handleDelete(deleteId)}
+                        >
+                          Yes, Delete It
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

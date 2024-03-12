@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const SubCategory = require("../models/subCategory");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
 
@@ -6,8 +7,8 @@ exports.createCategory = async (req, res) => {
   try {
     const { title } = req.body;
 
-    const existingCategory = await Category.findOne({ title });
-
+    const existingCategory = await Category.findOne({ title: { $regex: new RegExp(`^${title}$`, "i") } });
+    
     if (existingCategory) {
       return res.status(400).json({ error: 'Category with this title already exists' });
     }
@@ -36,11 +37,22 @@ exports.updateCategory = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
   const { id } = req.body;
   validateMongoDbId(id);
+
   try {
-    const deletedCategory = await Category.findByIdAndDelete(id);
-    res.json(deletedCategory);
+    const deletedCategory = await Category.findById(id);
+
+    if (!deletedCategory) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    await SubCategory.deleteMany({ category: id });
+
+    await Category.deleteOne({ _id: id });
+
+    res.json({ message: "Category and associated SubCategories deleted successfully" });
   } catch (error) {
-    throw new Error(error);
+    console.error("Error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -84,6 +96,8 @@ exports.getallCategory = async (req, res) => {
     const skip = itemsPerPage ? (currentPage - 1) * itemsPerPage : 0;
 
     const getallCategory = await Category.find(query)
+      .collation({ locale: "en", strength: 2 })
+      .sort({ title: 1 })
       .skip(skip)
       .limit(itemsPerPage);
 

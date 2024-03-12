@@ -73,12 +73,11 @@ exports.getEventIssue = asyncHandler(async (req, res) => {
 
 exports.getAllEventIssues = asyncHandler(async (req, res) => {
   try {
-
-    const currentDate = new Date();
-    await EventIssue.deleteMany({
-      event: { $exists: true },
-      "event.endDate": { $lt: currentDate },
+    const deletionResult = await EventIssue.deleteMany({
+      event: { $exists: false },
     });
+    console.log(deletionResult);
+
     const { page = 1, limit = 10, isResolved } = req.query;
 
     const currentPage = parseInt(page, 10);
@@ -87,8 +86,18 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
     let query = {};
 
     if (isResolved !== undefined) {
-      query.isResolved = isResolved === 'true';
+      query.isResolved = isResolved === "true";
     }
+
+    // Filter out non-existing events 
+    const favoriteEvents = await EventIssue.find();
+    const idsToRemove = favoriteEvents
+      .filter((fav) => fav.event === null)
+      .map((fav) => fav._id);
+
+      if (idsToRemove.length > 0) {
+        await EventIssue.deleteMany({ _id: { $in: idsToRemove } });
+      }
 
     const totalEventIssues = await EventIssue.countDocuments(query);
     const totalPages = Math.ceil(totalEventIssues / itemsPerPage);
@@ -101,7 +110,8 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
       .populate("event")
       .populate({
         path: "userId",
-        select: "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -provider_ID -role -provider -password -__v",
+        select:
+          "-passwordResetToken -passwordResetExpires -updatedAt -createdAt -provider_ID -role -provider -password -__v",
       });
 
     res.json({
@@ -111,6 +121,7 @@ exports.getAllEventIssues = asyncHandler(async (req, res) => {
       eventIssues: getAllEventIssues,
     });
   } catch (error) {
+    console.log("Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

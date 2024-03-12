@@ -139,13 +139,13 @@ server.get('/auth/facebook', passport.authenticate('facebook',{scope:['public_pr
 
 // Google Authenticate Callback
 server.get("/auth/google/callback", passport.authenticate("google",{
-  successRedirect:"/admin/admin-dashboard",
+  successRedirect:"/user",
   failureRedirect:"/login"
 }));
 
 // Facebook Authenticate Callback
 server.get("/auth/facebook/callback", passport.authenticate("facebook",{
-    successRedirect: '/admin/admin-dashboard',
+    successRedirect: '/user',
     failureRedirect: '/login'
 }));
 
@@ -188,6 +188,9 @@ server.use("/api/issue", require("./server/routes/eventIssue"));
 
 // Events Redirection 
 server.use("/api/redirection", require("./server/routes/eventRedirection"));
+
+// Favouite Events
+server.use("/api/favourite", require("./server/routes/favourite"));
 
 server.use("/api/auth/upload", require("./server/routes/auth"));
 

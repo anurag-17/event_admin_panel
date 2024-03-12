@@ -8,6 +8,7 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 const { generateToken , verifyToken} = require("../config/jwtToken");
 const sendToken = require("../utils/jwtToken");
 const axios = require('axios');
+const bcrypt = require("bcryptjs");
 const cheerio = require('cheerio');
 const jwt = require("jsonwebtoken");
 const uploadOnS3 = require("../utils/uploadImage");
@@ -30,24 +31,27 @@ exports.uploadImage = async (req, res, next) => {
 };
 
 exports.register = async (req, res, next) => {
-  const { email, mobile } = req.body;
+  const { email, password } = req.body;
 
-  const existingUser = await User.findOne({ $or: [{ email }, { mobile }] });
+  const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    return res
-      .status(203)
-      .json({ error: "User with this email or mobile number already exists." });
+    return res.status(203).json({ error: "User with this email already exists." });
   }
 
   const userData = {
     email,
-    mobile,
-    // role: req.body.role,
+    provider_ID: req.body.provider_ID,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
-    password: req.body.password,
+    provider: req.body.provider
   };
+
+  if (password) {
+    // const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(password, salt);
+    userData.password = password;
+  }
 
   try {
     const newUser = await User.create(userData);
@@ -60,16 +64,40 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return next(new ErrorResponse("Please provide Email and Password", 400));
+  if (!email) {
+    return next(new ErrorResponse("Please provide Email", 400));
   }
 
   try {
     const findUser = await User.findOne({ email }).select("+password");
-    // const isPasswordMatch = await bcrypt.compare(password, findUser.password);
 
+    // If user exists and is authenticated via a third-party provider
+    if (findUser && !findUser.password) {
+      const token = generateToken({ id: findUser._id });
+
+      await User.findByIdAndUpdate(
+        { _id: findUser._id?.toString() },
+        { activeToken: token },
+        { new: true }
+      );
+
+      const user = {
+        success: true,
+        user: {
+          _id: findUser._id,
+          firstname: findUser.firstname,
+          lastname: findUser.lastname,
+          email: findUser.email,
+          provider: findUser.provider,
+        },
+        token: token,
+      };
+
+      return res.status(200).json(user);
+    }
+
+    // If user exists and has a password, continue with password-based authentication
     if (findUser && (await findUser.matchPasswords(password))) {
-      // sendToken(findUser, 201, res);
       const token = generateToken({ id: findUser._id });
 
       await User.findByIdAndUpdate(
@@ -92,7 +120,8 @@ exports.login = async (req, res, next) => {
 
       return res.status(200).json(user);
     } else {
-      return next(new ErrorResponse("Invalid Credentials", 401));
+      // return next(new ErrorResponse("Invalid Credentials", 401));
+      return res.status(401).json({ error: "Invalid Credentials" });
     }
   } catch (error) {
     res.status(500).json({
@@ -215,7 +244,7 @@ exports.forgotPassword = async (req, res, next) => {
     const resetToken = user.getResetPasswordToken();
     await user.save();
 
-    const resetUrl = `http://localhost:4000/auth/reset-password/${resetToken}`;
+    const resetUrl = `http://100.24.75.181:4000/auth/reset-password/${resetToken}`;
 
     const message = `
     <!DOCTYPE html>
@@ -264,7 +293,7 @@ exports.forgotPassword = async (req, res, next) => {
             <h2>Hello ${user.firstname},</h2>
         </div>
         <div class="content">
-            <p>We have received a request to reset your password for your account on <strong>Event Panel</strong>. If you did not request this change, you can ignore this email and your password will not be changed.</p>
+            <p>We have received a request to reset your password for your account on <strong>Sterna</strong>. If you did not request this change, you can ignore this email and your password will not be changed.</p>
             
             <p>To reset your password, please click on the following link and follow the instructions:</p>
             
@@ -274,7 +303,7 @@ exports.forgotPassword = async (req, res, next) => {
         </div>
         <div class="footer">
             <h3>Thank you,</h3>
-            <h3>Event Team </h3>
+            <h3>Sterna Team </h3>
         </div>
     </div>
 </body>
@@ -296,7 +325,9 @@ exports.forgotPassword = async (req, res, next) => {
 
       await user.save();
 
-      return res.status(500).json("Email could not be sent");
+      return res
+        .status(500)
+        .json({ success: false, data: "Email could not be sent" });
     }
   } catch (error) {
     next(error);
@@ -328,18 +359,24 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 exports.verifyUser = async (req, res) => {
-  const { token } = req.params;
-  // console.log(token);
+  const {token } = req.params;
+
   try {
-    if (!verifyToken(token)) {
+    const decodedData = verifyToken(token);
+
+    if (!decodedData) {
       return res.status(401).json({ message: "Unauthorized Access" });
-    } else {
-      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-
-      const LoggedUser = await User.findOne({ _id: decodedData?.id }).select("-password -activeToken");
-
-      return res.status(200).json({ data: LoggedUser, message: "Verification Successfull" });
     }
+
+    const { id } = decodedData;
+
+    const LoggedUser = await User.findOne({ _id: id, activeToken: token }).select("-password -activeToken");
+
+    if (!LoggedUser) {
+      return res.status(401).json({ message: "Unauthorized Access" });
+    }
+
+    return res.status(200).json({ data: LoggedUser, message: "Verification Successful" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });
@@ -371,7 +408,11 @@ exports.updatedUser = async (req, res) => {
 
 exports.getallUser = async (req, res) => {
   try {
+    const { page = 1, limit = 10} = req.query;
     const searchQuery = req.query.search;
+    
+    const currentPage = parseInt(page, 10);
+    const itemsPerPage = parseInt(limit, 10);
 
     const userQuery = User.find();
 
@@ -384,29 +425,24 @@ exports.getallUser = async (req, res) => {
       ]);
     }
 
-    // Pagination
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    userQuery.skip(skip).limit(limit);
-
-    const users = await userQuery.exec();
-
     // Count total items
-    const totalItems = await User.countDocuments();
+    const totalItems = await User.countDocuments(userQuery);
 
     // Calculate total pages
-    const totalPages = Math.ceil(totalItems / limit);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    // Check if requested page exists
-    if (page > totalPages) {
-      throw new Error("This Page does not exist");
-    }
+    // // Check if requested page exists
+    // if (currentPage > totalPages) {
+    //   throw new Error("This Page does not exist");
+    // }
+
+    const skip = (currentPage - 1) * itemsPerPage;
+    const users = await userQuery.sort({ firstname: 1 }).skip(skip).limit(itemsPerPage).exec();
 
     res.json({
       totalItems,
       totalPages,
-      currentPage: page,
+      currentPage,
       users,
     });
   } catch (error) {
@@ -420,9 +456,9 @@ exports.getaUser = async (req, res) => {
   validateMongoDbId(_id);
 
   try {
-    const getaUser = await User.findById(_id);
+    const getaUser = await User.findById(_id)
     res.json({
-      getaUser,
+      getaUser
     });
   } catch (error) {
     throw new Error(error);
@@ -533,7 +569,7 @@ exports.fetchEvent = async (req, res) => {
         // Extract relevant venue information
         const venueInfo = {
           country: event._embedded.venues[0].country.name,
-          city: event._embedded.venues[0].city.name,
+          city: event._embedded.venues[0].city.name.trim(),
           address: event._embedded.venues[0].address.line1,
           location: event._embedded.venues[0].name,
           latitude: event._embedded.venues[0].location.latitude,
@@ -561,10 +597,7 @@ exports.fetchEvent = async (req, res) => {
           description: event.info,
           startDate: event.dates.start.dateTime,
           endDate: event.sales.public.endDateTime,
-          // image: event.images[0].url,
-          // images: event.images.map((image) => ({ url: image.url })),
           images: imagesArray,
-          // price: event.priceRanges.min || 0,
           resource_url: event.url,
           ...venueInfo,
           event_provider: "Ticketmaster",

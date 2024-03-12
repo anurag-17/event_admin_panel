@@ -28,7 +28,7 @@ router.route("/login").post(login);
 
 router.route("/adminLogin").post(adminLogin);
 
-router.route("/logout").get(isAuthenticatedUser, authorizeRoles("admin"),logout);
+router.route("/logout").get(isAuthenticatedUser, logout);
 
 router.route("/verifyUserToken/:token").get(verifyUser)
 

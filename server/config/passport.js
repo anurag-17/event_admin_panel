@@ -17,16 +17,14 @@ module.exports = function (passport) {
         //get the user data from google 
         const newUser = {
           googleId: profile.id,
-        //   displayName: profile.displayName,
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
-        //   image: profile.photos[0].value,
           email: profile.emails[0].value
         }
 
         try {
           //find the user in our database 
-          let user = await User.findOne({ email: profile.emails[0].value })
+          let user = await User.findOne({ email: profile.emails[0].value, provider_ID: profile.id})
 
           if (user) {
             //If user present in our database.

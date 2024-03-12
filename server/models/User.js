@@ -44,6 +44,12 @@ const UserSchema = new mongoose.Schema(
     activeToken: {
       type: String
     },
+    favoriteEvents: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "FavoriteEvent", // Reference to the FavoriteEvent model
+      },
+    ],
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,

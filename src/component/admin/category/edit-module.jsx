@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   const [isLoading, setLoading] = useState(false);
   const [title, setTitle] = useState({
     id: cateEdit,
   });
-  const auth_token = JSON.parse(localStorage.getItem("accessToken" || ""));
+  const { adminAuthToken } = useAuth();
+
   const inputHandler = (e) => {
     const { name, value } = e.target;
 
@@ -26,7 +28,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
       const response = await axios.put(`/api/category/updateCategory`, title, {
         headers: {
           "content-Type": "application/json",
-          authorization: auth_token,
+          authorization: adminAuthToken,
         },
       });
 
@@ -49,7 +51,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
   return (
     <>
       <div
-        className="flex justify-between items-center border border-[#f3f3f3] rounded-lg bg-white
+        className="flex justify-center items-center border border-[#f3f3f3] rounded-lg bg-white
         2xl:px-5  2xl:h-[50px] 2xl:my-5
         xl:px-4  xl:h-[40px] xl:my-4
         lg:px-3  lg:h-[35px] lg:my-2
@@ -58,10 +60,10 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
         px-1 h-[25px] my-2
          "
       >
-        <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">
+        <h2 className="custom_heading_text font-semibold ">
           Edit Category{" "}
         </h2>
-        <div className="mb-3 w-[40%]"></div>
+        
       </div>
       <div>
         <form
@@ -70,14 +72,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
         >
           <div className="mt-2">
             <label
-              className="absolute bg-white z-20 text-gray-800
-            2xl:text-[20px] 2xl:mt-5 2xl:ml-12
-            xl:text-[16px] xl:mt-[6px] xl:ml-7
-            lg:text-[14px] lg:mt-[6px] lg:ml-[26px]
-            md:text-[13px] md:mt-1 md:ml-6
-            sm:text-[11px] sm:mt-[2px] sm:ml-5
-            text-[10px] mt-[0px] ml-4
-            "
+              className="custom_input_label"
             >
               Category
             </label>
@@ -86,32 +81,19 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
               defaultValue={editData?.title}
               type="text"
               name="name"
-              className="rounded border border-gray-300 bg-gray-50 text-gray-500 focus:bg-white dark:border dark:border-gray-600  focus:outline-none relative w-10/12  lg:w-8/12
-               2xl:text-[20px] 2xl:m-10 2xl:px-3 2xl:py-2 2xl:h-[50px]
-               xl:text-[16px] xl:m-5 xl:px-3 xl:py-1 xl:h-[40px]
-              lg:text-sm lg:m-5 lg:px-2 lg:py-1 lg:h-[35px]
-              md:text-[13px] md:m-4 md:px-3 md:py-2 md:h-[30px]
-              sm:text-[12px] sm:m-3 sm:px-2 sm:py-1 sm:h-[30px]
-              text-[12px] m-2 px-2 py-1 h-[25px] capitalize
-              "
+              className="custom_inputt capitalize"
               required
               maxLength={84}
             />
           </div>
-
+         <div className="flex justify-center">
           <button
             type="submit"
             disabled={isLoading}
-            className="border  bg-blue-500 hover:bg-blue-600 text-white rounded-lg bg-lightBlue-600  2xl:text-[20px] 2xl:p-2 2xl:m-10 2xl:mt-0
-              xl:text-[14px] xl:py-2 xl:px-4  xl:m-5 xl:mt-0
-              lg:text-[12px] lg:py-2 lg:px-3 lg:m-5 lg:mt-0
-              md:text-[12px] md:py-1 md:px-2 md:m-4 md:mt-0
-              sm:text-[11px] sm:py-1  sm:px-1 sm:m-3 sm:mt-0
-              text-[10px] py-[3px] px-1 m-2 mt-0
-               "
+            className="custom_btn"
           >
             {isLoading ? "Loading." : "Update"}
-          </button>
+          </button></div>
         </form>
       </div>
     </>
