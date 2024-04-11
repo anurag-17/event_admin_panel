@@ -31,7 +31,7 @@ exports.uploadImage = async (req, res, next) => {
 };
 
 exports.register = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   const existingUser = await User.findOne({ email });
 
@@ -44,7 +44,8 @@ exports.register = async (req, res, next) => {
     provider_ID: req.body.provider_ID,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
-    provider: req.body.provider
+    provider: req.body.provider,
+    role
   };
 
   if (password) {
@@ -577,18 +578,18 @@ exports.fetchEvent = async (req, res) => {
         };
 
         // Extract segment and genre information
-        const segmentName = event.classifications[0].segment.name;
-        const genreName = event.classifications[0].genre.name;
+        // const segmentName = event.classifications[0].segment.name;
+        // const genreName = event.classifications[0].genre.name;
 
         // Save segmentName as category and genreName as subCategory
-        const category = segmentName || "Other";
-        const subCategory = genreName || "Other";
+        // const category = segmentName || "Other";
+        // const subCategory = genreName || "Other";
 
         // Save to Category model if not exists
-        const categoryDocument = await Category.findOneAndUpdate({ title: category }, { title: category }, { upsert: true, new: true });
+        // const categoryDocument = await Category.findOneAndUpdate({ title: category }, { title: category }, { upsert: true, new: true });
 
         // Save to SubCategory model if not exists
-        const subCategoryDocument = await SubCategory.findOneAndUpdate({ subCategory: subCategory }, { subCategory: subCategory }, { upsert: true, new: true });
+        // const subCategoryDocument = await SubCategory.findOneAndUpdate({ subCategory: subCategory }, { subCategory: subCategory }, { upsert: true, new: true });
         
         const imagesArray = event.images.map((image, index) => ({ url: image.url, position: index }));
         // Extract relevant event information
@@ -601,8 +602,9 @@ exports.fetchEvent = async (req, res) => {
           resource_url: event.url,
           ...venueInfo,
           event_provider: "Ticketmaster",
-          category: categoryDocument._id,
-          subCategory: subCategoryDocument._id
+          // category: categoryDocument._id,
+          // subCategory: subCategoryDocument._id
+          sourceCategory:segmentName
         };
 
         // Save the event to the database

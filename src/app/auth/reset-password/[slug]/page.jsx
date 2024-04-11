@@ -96,3 +96,4 @@ const ResetPassword = ({ params }) => {
 };
 
 export default ResetPassword;
+

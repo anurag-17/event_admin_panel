@@ -1069,6 +1069,9 @@ const Event = () => {
                         PROVIDER
                       </th>
                       <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
+                        Source Category
+                      </th>
+                      <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-3/12 ">
                         CATEGORY
                       </th>
                       <th className="text-start my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 w-2/12 ">
@@ -1145,6 +1148,9 @@ const Event = () => {
                             </td>
                             <td className="2xl:pl-2 my-auto  w-3/12 custom_table_text xl:pl-4">
                               {item.event_provider}
+                            </td>
+                            <td className="2xl:pl-2 my-auto  w-3/12 custom_table_text xl:pl-4">
+                              {item.sourceCategory}
                             </td>
                             <td className="my-auto  w-3/12 custom_table_text 2xl:pl-0 ">
                               <div className="">

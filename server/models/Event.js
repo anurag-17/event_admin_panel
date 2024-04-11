@@ -51,6 +51,9 @@ const EventSchema = new mongoose.Schema(
     capacity: {
       type: String,
     },
+    sourceCategory:{
+      type: String,
+    },
     images: [
       {
         url: { type: String },
