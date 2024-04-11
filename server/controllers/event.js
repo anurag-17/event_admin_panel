@@ -6,8 +6,8 @@ const EventRedirection = require("../models/EventRedirection");
 const EventIssue = require("../models/EventIssue");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
-const axios = require('axios');
-const { parseString } = require('xml2js');
+const axios = require("axios");
+const { parseString } = require("xml2js");
 
 exports.createEvent = asyncHandler(async (req, res) => {
   try {
@@ -20,13 +20,17 @@ exports.createEvent = asyncHandler(async (req, res) => {
     }
 
     // Use Google Geocoding API to get latitude and longitude
-    const address  = req.body.location;
-    const googleApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.GOOGLE_MAP_KEY}`;
+    const address = req.body.location;
+    const googleApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+      address
+    )}&key=${process.env.GOOGLE_MAP_KEY}`;
 
     const geocodingResponse = await axios.get(googleApiUrl);
 
     if (geocodingResponse.data.results.length === 0) {
-      return res.status(400).json({ error: "Invalid address, cannot find coordinates" });
+      return res
+        .status(400)
+        .json({ error: "Invalid address, cannot find coordinates" });
     }
 
     const location = geocodingResponse.data.results[0].geometry.location;
@@ -40,7 +44,7 @@ exports.createEvent = asyncHandler(async (req, res) => {
     req.body.longitude = location.lng;
     // req.body.images = imagesArray;
     req.body.event_provider = "Sterna";
-    
+
     // Create the new event
     const newEvent = await Event.create(req.body);
     res.status(201).json(newEvent);
@@ -94,12 +98,14 @@ exports.deleteBulkEvent = asyncHandler(async (req, res) => {
     //   return res.status(400).json({ error: 'Invalid eventIds array in the request body.' });
     // }
 
-    const deleteEvents = await Event.deleteMany({  });
-    
-    res.json({ message: `${deleteEvents.deletedCount} events deleted successfully.` });
+    const deleteEvents = await Event.deleteMany({});
+
+    res.json({
+      message: `${deleteEvents.deletedCount} events deleted successfully.`,
+    });
   } catch (error) {
     console.error("Error:", error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -170,7 +176,7 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
 
     const currentPage = parseInt(page, 10);
     const itemsPerPage = parseInt(limit, 10);
-
+    console.log(price);
     let query = {};
 
     if (searchQuery) {
@@ -206,10 +212,10 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     }
 
     if (category) {
-      const categoryIds = category.split(","); 
+      const categoryIds = category.split(",");
       query.category = { $in: categoryIds };
     }
-    
+
     if (subCategory) {
       const subCategoryIds = subCategory.split(",");
       query.subCategory = { $in: subCategoryIds };
@@ -294,8 +300,18 @@ exports.getDashEvents = asyncHandler(async (req, res) => {
     // Delete expired events first
     const currentDate = new Date();
     await Event.deleteMany({ endDate: { $lt: currentDate } });
-    
-    const { page = 1, limit = 20, searchQuery, startDate, endDate, category, subCategory, provider ,city} = req.query;
+
+    const {
+      page = 1,
+      limit = 20,
+      searchQuery,
+      startDate,
+      endDate,
+      category,
+      subCategory,
+      provider,
+      city,
+    } = req.query;
 
     const currentPage = parseInt(page, 10);
     const itemsPerPage = parseInt(limit, 10);
@@ -314,7 +330,9 @@ exports.getDashEvents = asyncHandler(async (req, res) => {
     if (startDate) {
       const parsedStartDate = new Date(startDate);
       if (isNaN(parsedStartDate)) {
-        return res.status(401).json({ status: 'fail', message: 'Invalid start date format' });
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid start date format" });
       }
       query.startDate = { $gte: parsedStartDate };
     }
@@ -322,7 +340,9 @@ exports.getDashEvents = asyncHandler(async (req, res) => {
     if (endDate) {
       const parsedEndDate = new Date(endDate);
       if (isNaN(parsedEndDate)) {
-        return res.status(401).json({ status: 'fail', message: 'Invalid end date format' });
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid end date format" });
       }
       query.endDate = { $lte: parsedEndDate };
     }
@@ -378,7 +398,9 @@ exports.getStats = asyncHandler(async (req, res) => {
       if (categoryObject) {
         query.category = categoryObject._id;
       } else {
-        return res.status(404).json({ status: 'fail', message: 'Category not found' });
+        return res
+          .status(404)
+          .json({ status: "fail", message: "Category not found" });
       }
     }
 
@@ -387,7 +409,9 @@ exports.getStats = asyncHandler(async (req, res) => {
       if (subCategoryObject) {
         query.subCategory = subCategoryObject._id;
       } else {
-        return res.status(404).json({ status: 'fail', message: 'SubCategory not found' });
+        return res
+          .status(404)
+          .json({ status: "fail", message: "SubCategory not found" });
       }
     }
 
@@ -408,7 +432,7 @@ exports.getStats = asyncHandler(async (req, res) => {
       totalSubCategories,
       totalUsers,
       totalEventRedirections,
-      totalEventIssues
+      totalEventIssues,
     });
   } catch (error) {
     console.error("Error:", error.message);
@@ -426,7 +450,7 @@ function mapEventTypeToCategory(eventType, eventTypes) {
   }
 
   return eventTypeMap[eventType] || "Other";
-};
+}
 exports.londontheatredirect = asyncHandler(async (req, res) => {
   try {
     let { startDate, endDate } = req.query;
@@ -447,7 +471,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         },
       }
     );
-    const eventTypes = eventTypesResponse.data.EventTypes;  
+    const eventTypes = eventTypesResponse.data.EventTypes;
 
     // Fetch events data
     const eventsResponse = await axios.get(
@@ -479,7 +503,11 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
     // Process and save each filtered event to the database
     for (const event of filteredEvents) {
       // Check if the event already exists in the database
-      const existingEvent = await Event.findOne({ name: event.Name, startDate: event.StartDate, endDate: event.EndDate });
+      const existingEvent = await Event.findOne({
+        name: event.Name,
+        startDate: event.StartDate,
+        endDate: event.EndDate,
+      });
 
       if (existingEvent) {
         console.error(`Event ${event.Name} already exists. Skipping...`);
@@ -501,23 +529,29 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         );
 
         // Find or create the category in the Category model
-        let category = await Category.findOne({ title: eventTypeCategory });
+        // disabling automation
+        // let category = await Category.findOne({ title: eventTypeCategory });
 
-        if (!category) {
-          // If the category doesn't exist, create it
-          category = await Category.create({ title: eventTypeCategory });
-        }
+        // if (!category) {
+        //   // If the category doesn't exist, create it
+        //   category = await Category.create({ title: eventTypeCategory });
+        // }
 
         const venueData = venueResponse.data.Venue;
 
         // Use Google Geocoding API to get latitude and longitude for the venue
         const addressToGeocode = venueData.Address || venueData.Name;
-        const googleApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressToGeocode)}&key=${process.env.GOOGLE_MAP_KEY}`;
+        const googleApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          addressToGeocode
+        )}&key=${process.env.GOOGLE_MAP_KEY}`;
         const geocodingResponse = await axios.get(googleApiUrl);
-        
-        if (geocodingResponse.data.results && geocodingResponse.data.results.length > 0) {
+
+        if (
+          geocodingResponse.data.results &&
+          geocodingResponse.data.results.length > 0
+        ) {
           const location = geocodingResponse.data.results[0].geometry.location;
-        
+
           // Extract relevant venue information
           const venueInfo = {
             city: venueData.City.trim(),
@@ -540,22 +574,28 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
             resource_url: event.EventDetailUrl,
             ...venueInfo,
             event_provider: "London Theatre Direct",
-            category: category._id,
+            // category: category._id,
+            sourceCategory:eventTypeCategory,
           };
-        
+
           // Save the event to the database
           await Event.create(eventData);
           console.log(`Event ${event.Name} saved successfully.`);
-          
+
           // Increment the eventsAdded counter
           eventsAdded++;
         } else {
-          console.error("Error fetching geocoding data:", geocodingResponse.data.error_message || "Unknown error");
+          console.error(
+            "Error fetching geocoding data:",
+            geocodingResponse.data.error_message || "Unknown error"
+          );
         }
       }
     }
 
-    res.status(200).json({ message: `Filtered events saved successfully. ${eventsAdded} event(s) added.` });
+    res.status(200).json({
+      message: `Filtered events saved successfully. ${eventsAdded} event(s) added.`,
+    });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(403).send("Internal Server Error");
@@ -564,7 +604,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
 
 function mapEventCodeToCategory(eventCode) {
   const codeToCategoryMap = {
-    FEST: "Festivals",
+    FEST: "Festival",
     LIVE: "Live music",
     CLUB: "Clubbing/Dance music",
     DATE: "Dating event",
@@ -593,7 +633,7 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
 
     // Fetch events data from Skiddle API
     const skiddleApiUrl = `https://www.skiddle.com/api/v1/events/?api_key=${process.env.skiddleApiKey}&limit=100`;
-    
+
     const skiddleResponse = await axios.get(skiddleApiUrl);
     const skiddleEvents = skiddleResponse.data.results;
 
@@ -615,16 +655,17 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
       const eventCategory = mapEventCodeToCategory(event.EventCode);
 
       // Find or create the category in the Category model
-      const category = await Category.findOneAndUpdate(
-        { title: eventCategory },
-        { title: eventCategory },
-        { upsert: true, new: true }
-      );    
+      //disabling category
+      // const category = await Category.findOneAndUpdate(
+      //   { title: eventCategory },
+      //   { title: eventCategory },
+      //   { upsert: true, new: true }
+      // );
 
       const existingEvent = await Event.findOne({
         name: event.eventname,
         startDate: event.startdate,
-        endDate: event.enddate
+        endDate: event.enddate,
       });
 
       if (existingEvent) {
@@ -649,18 +690,21 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           resource_url: `${event.link}?sktag=15306`,
           price: event.entryprice,
           event_provider: "Skiddle",
-          category: category._id,
+          // category: category._id,
+          sourceCategory:eventCategory
         };
 
         // Save the event to the database
         await Event.create(eventData);
-        
+
         // Increment the eventsAdded counter
         eventsAdded++;
       }
     }
 
-    res.status(200).json({ message: `Filtered events saved successfully. ${eventsAdded} event(s) added.` });
+    res.status(200).json({
+      message: `Filtered events saved successfully. ${eventsAdded} event(s) added.`,
+    });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).send("Internal Server Error");
@@ -670,7 +714,7 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
 exports.giganticEvents = asyncHandler(async (req, res) => {
   try {
     let { startDate, endDate } = req.query;
-    
+
     // Default startDate to the current date if not provided
     startDate = startDate ? new Date(startDate) : new Date();
 
@@ -681,51 +725,70 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
     const formattedStartDate = Math.floor(startDate.getTime() / 1000);
     const formattedEndDate = Math.floor(endDate.getTime() / 1000);
 
-    const response = await axios.get(`https://www.gigantic.com/feeds/get_feed.php?affiliate_tag=sterna&available_from=${formattedStartDate}&available_to=${formattedEndDate}`);
+    const response = await axios.get(
+      `https://www.gigantic.com/feeds/get_feed.php?affiliate_tag=sterna&available_from=${formattedStartDate}&available_to=${formattedEndDate}`
+    );
     const xmlData = response.data;
 
     // Parse XML
     parseString(xmlData, async (err, result) => {
       if (err) throw err;
-      
+
       const campaigns = result.campaigns.campaign;
-      
+
       for (const campaign of campaigns) {
+        let genre = "Other";
 
-        let genre = 'Other';
-
-        if (campaign.genres && campaign.genres[0] && campaign.genres[0].genre && campaign.genres[0].genre[0]) {
-          genre = campaign.genres[0].genre[0].trim(); 
+        if (
+          campaign.genres &&
+          campaign.genres[0] &&
+          campaign.genres[0].genre &&
+          campaign.genres[0].genre[0]
+        ) {
+          genre = campaign.genres[0].genre[0].trim();
         }
 
         // Save genre as category
-        let category = await Category.findOne({ title: genre });
-        if (!category) {
-          category = await Category.create({ title: genre });
-        }
-        const categoryId = category._id;
+        //disabling automation category
+        // let category = await Category.findOne({ title: genre });
+        // if (!category) {
+        //   category = await Category.create({ title: genre });
+        // }
+        // const categoryId = category._id;
 
         const events = campaign.events[0].event;
         for (const event of events) {
-
           // Extract relevant information
-          const name = event.eventtitle[0] || 'Not Available';
-          const description = event.eventsubtitle ? (event.eventsubtitle[0] || 'Not Available') : 'Not Available';
-          const endDate  = event.eventdoortime[0] ? new Date(event.eventdoortime[0]) : 'Not Available';
-          const startDate  = event.eventonsaletime[0] ? new Date(event.eventonsaletime[0]) : 'Not Available';
-          const location = event.venue[0].venuetitle[0] || 'Not Available';
-          const city = event.venue[0].venuelocation[0] || 'Not Available';
-          const country = event.venue[0].venuecountry[0] || 'Not Available';
+          const name = event.eventtitle[0] || "Not Available";
+          const description = event.eventsubtitle
+            ? event.eventsubtitle[0] || "Not Available"
+            : "Not Available";
+          const endDate = event.eventdoortime[0]
+            ? new Date(event.eventdoortime[0])
+            : "Not Available";
+          const startDate = event.eventonsaletime[0]
+            ? new Date(event.eventonsaletime[0])
+            : "Not Available";
+          const location = event.venue[0].venuetitle[0] || "Not Available";
+          const city = event.venue[0].venuelocation[0] || "Not Available";
+          const country = event.venue[0].venuecountry[0] || "Not Available";
           // const latitude = event.venue[0].venuelatitude[0] || 'Not Available';
           // const longitude = event.venue[0].venuelongitude[0] || 'Not Available';
           const ticketType = event.tickettypes?.[0]?.tickettype?.[0];
-          const price = ticketType ? (ticketType.tickettypefacevalue[0]?._ || 'Not Available') : 'Not Available';
-          const currency = ticketType ? (ticketType.tickettypefacevalue[0]?.$?.currency || 'Not Available') : 'Not Available';
-          const resource_url = event.eventurl[0] || 'Not Available';
-          const event_provider =  'Gigantic';
+          const price = ticketType
+            ? ticketType.tickettypefacevalue[0]?._ || "Not Available"
+            : "Not Available";
+          const currency = ticketType
+            ? ticketType.tickettypefacevalue[0]?.$?.currency || "Not Available"
+            : "Not Available";
+          const resource_url = event.eventurl[0] || "Not Available";
+          const event_provider = "Gigantic";
 
           // Check if the event already exists in the database
-          const existingEvent = await Event.findOne({ name: name, startDate: startDate });
+          const existingEvent = await Event.findOne({
+            name: name,
+            startDate: startDate,
+          });
 
           if (existingEvent) {
             console.error(`Event ${name} already exists. Skipping...`);
@@ -733,25 +796,30 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
           }
 
           // Convert latitude and longitude to numbers if available, otherwise set them to null
-let latitude, longitude;
-if (event.venue[0].venuelatitude[0] && event.venue[0].venuelongitude[0]) {
-  latitude = parseFloat(event.venue[0].venuelatitude[0]);
-  longitude = parseFloat(event.venue[0].venuelongitude[0]);
-} else {
-  latitude = null;
-  longitude = null;
-}
+          let latitude, longitude;
+          if (
+            event.venue[0].venuelatitude[0] &&
+            event.venue[0].venuelongitude[0]
+          ) {
+            latitude = parseFloat(event.venue[0].venuelatitude[0]);
+            longitude = parseFloat(event.venue[0].venuelongitude[0]);
+          } else {
+            latitude = null;
+            longitude = null;
+          }
 
-// Check if the latitude and longitude are valid numbers
-if (isNaN(latitude) || isNaN(longitude)) {
-  console.error(`Invalid latitude or longitude for event ${name}. Skipping...`);
-  continue;
-}
+          // Check if the latitude and longitude are valid numbers
+          if (isNaN(latitude) || isNaN(longitude)) {
+            console.error(
+              `Invalid latitude or longitude for event ${name}. Skipping...`
+            );
+            continue;
+          }
           // Extract campaign images
           const images = [];
           if (campaign.campaignmainimage && campaign.campaignmainimage[0]) {
             images.push({ url: campaign.campaignmainimage[0], position: 0 });
-          }  
+          }
           if (campaign.campaigncoverimage && campaign.campaigncoverimage[0]) {
             images.push({ url: campaign.campaigncoverimage[0], position: 1 });
           }
@@ -771,15 +839,16 @@ if (isNaN(latitude) || isNaN(longitude)) {
             currency,
             resource_url,
             event_provider,
-            category: categoryId
+            // category: categoryId,
+            sourceCategory:genre
           });
         }
       }
-      
-      console.log('Data saved successfully.');
-      res.status(200).json({ message: 'Data saved successfully.'})
+
+      console.log("Data saved successfully.");
+      res.status(200).json({ message: "Data saved successfully." });
     });
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error("Error:", error.message);
   }
 });

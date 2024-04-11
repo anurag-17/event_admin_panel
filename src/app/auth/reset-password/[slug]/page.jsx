@@ -53,7 +53,7 @@ const ResetPassword = ({ params }) => {
      "
           >
             <h2 className="2xl:text-[22px] xl:text-[18px] lg:text-[16px] md:text-[14px] sm:text-[12px] text-[10px] font-semibold ">
-            Change Password
+              Change Password
             </h2>
           </div>
           <div>
@@ -62,11 +62,7 @@ const ResetPassword = ({ params }) => {
               className=" bg-white border  rounded-lg 2xl:p-2 xl:p-5  lg:p-1 md:p-2 p-1  mx-auto"
             >
               <div className="">
-                <label
-                  className="custom_input_label"
-                >
-                  New Password
-                </label>
+                <label className="custom_input_label">New Password</label>
                 <input
                   type="password"
                   name="password"
@@ -77,15 +73,9 @@ const ResetPassword = ({ params }) => {
               </div>
 
               <div className="mt-4">
-                
-                  <button
-                    type="submit"
-               
-                    className="custom_btn"
-                  >
+                <button type="submit" className="custom_btn">
                   Update Password
-                  </button>
-                
+                </button>
               </div>
             </form>
           </div>
