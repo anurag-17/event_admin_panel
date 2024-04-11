@@ -77,7 +77,7 @@ const ResetPassword = ({ params }) => {
               </div>
 
               <div className="mt-4">
-                
+
                   <button
                     type="submit"
                
@@ -85,7 +85,7 @@ const ResetPassword = ({ params }) => {
                   >
                   Update Password
                   </button>
-                
+
               </div>
             </form>
           </div>
