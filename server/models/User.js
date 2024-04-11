@@ -83,7 +83,7 @@ UserSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
 
   this.passwordResetToken = resetToken;
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+  this.passwordResetExpires = Date.now() + 25 * 60 * 1000; // 25 minutes
   return resetToken;
 };
 
