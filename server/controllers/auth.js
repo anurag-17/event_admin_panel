@@ -340,14 +340,14 @@ exports.resetPassword = async (req, res, next) => {
       passwordResetToken: req.params.resetToken,
       passwordResetExpires: { $gt: Date.now() },
     });
-    
+    console.log(user);
     if (!user) {
       return next(new ErrorResponse("Invalid Reset Token", 400));
     }
     user.password = req.body.password;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
-
+    console.log(user);
     await user.save();
     res.status(201).json({
       success: true,
