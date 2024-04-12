@@ -130,7 +130,7 @@ exports.getallSubCategory = async (req, res) => {
   }
 };
 
-exports.getSubCategoriesByCatIds = async (req, res) => {
+exports.getSubCategoryByCatId = async (req, res) => {
   try {
     console.log(req.params);
     // Assume categories are passed as a comma-separated string in the URL, e.g., /api/subcategories?categories=5f8d0401c28e5a486434f234,5f8d0401c28e5a486434f235
