@@ -516,7 +516,7 @@ const Event = () => {
     };
 
     const requests = [
-      axios.request(options1),
+      // axios.request(options1),
       axios.request(options2),
       axios.request(options3),
       axios.request(options4),
