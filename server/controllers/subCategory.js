@@ -36,7 +36,11 @@ exports.updateSubCategory = async (req, res) => {
   validateMongoDbId(id);
 
   try {
-    const updatedSubCategory = await SubCategory.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedSubCategory = await SubCategory.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
     if (!updatedSubCategory) {
       return res.status(404).json({ message: "SubCategory not found" });
     }
@@ -49,14 +53,13 @@ exports.updateSubCategory = async (req, res) => {
 
     res.json({
       updatedSubCategory,
-      eventsUpdated: eventsUpdated.nModified // number of events updated
+      eventsUpdated: eventsUpdated.nModified, // number of events updated
     });
   } catch (error) {
     console.error("Error updating subcategory and events: ", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 
 exports.deleteSubCategory = async (req, res) => {
   const { id } = req.body;
@@ -132,24 +135,46 @@ exports.getallSubCategory = async (req, res) => {
 
 exports.getSubCategoryByCatId = async (req, res) => {
   try {
-    console.log(req.params);
-    // Assume categories are passed as a comma-separated string in the URL, e.g., /api/subcategories?categories=5f8d0401c28e5a486434f234,5f8d0401c28e5a486434f235
-    const categories = req.query.categories.split(','); // Split the string into an array of IDs
+    console.log('Received params:', req.params);
+    let categories;
+    if (req.params.category) {
+      categories = req.params.category.includes(",")
+        ? req.params.category.split(",")
+        : [req.params.category];
+      console.log('Categories array:', categories);
+    } else {
+      console.error('No categories provided');
+      return res
+        .status(400)
+        .json({ success: false, message: "No categories provided" });
+    }
 
-    // Validate each category ID
-    categories.forEach(category => {
-      validateMongoDbId(category);
+    categories.forEach((category) => {
+      try {
+        validateMongoDbId(category);
+      } catch (error) {
+        console.error('Invalid category ID:', category, error);
+        return res.status(400).json({ success: false, message: "Invalid category ID: " + category });
+      }
     });
 
-    // Find subcategories that match any of the category IDs in the array
-    const getSubCategories = await SubCategory.find({ category: { $in: categories } }).populate('category');
-    
-    if (!getSubCategories.length) { // Check if the result array is empty
+    const getSubCategories = await SubCategory.find({
+      category: { $in: categories },
+    }).populate("category");
+
+    console.log('SubCategories found:', getSubCategories);
+
+    if (!getSubCategories.length) {
+      console.log('No subcategories found for provided categories');
       return res.status(404).json({ success: false, message: "No data found" });
     }
 
     return res.status(200).json({ success: true, getSubCategories });
   } catch (error) {
+    console.error('Error in processing request:', error);
     res.status(500).json({ message: "Internal Server Error", error });
   }
 };
+
+
+
