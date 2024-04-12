@@ -1,6 +1,7 @@
 const SubCategory = require("../models/subCategory");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
+const Event = require("../models/Event");
 
 exports.createSubCategory = async (req, res) => {
   try {
@@ -12,14 +13,18 @@ exports.createSubCategory = async (req, res) => {
     });
 
     if (existingSubCategory) {
-      return res.status(409).json({ error: "SubCategory must be unique within the category" });
+      return res
+        .status(409)
+        .json({ error: "SubCategory must be unique within the category" });
     }
 
     const newSubCategory = await SubCategory.create(req.body);
     res.json(newSubCategory);
   } catch (error) {
     if (error.code === 11000 && error.keyPattern.subCategory) {
-      return res.status(409).json({ error: "SubCategory must be unique within the category" });
+      return res
+        .status(409)
+        .json({ error: "SubCategory must be unique within the category" });
     }
     console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -29,15 +34,29 @@ exports.createSubCategory = async (req, res) => {
 exports.updateSubCategory = async (req, res) => {
   const { id } = req.body;
   validateMongoDbId(id);
+
   try {
-    const updatedCategory = await SubCategory.findByIdAndUpdate(id, req.body, {
-      new: true,
+    const updatedSubCategory = await SubCategory.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedSubCategory) {
+      return res.status(404).json({ message: "SubCategory not found" });
+    }
+
+    // After updating the SubCategory, update the category in all Events that have this subCategory
+    const eventsUpdated = await Event.updateMany(
+      { subCategory: updatedSubCategory._id }, // filter to match events with this subCategory
+      { $set: { category: updatedSubCategory.category } } // set the new category
+    );
+
+    res.json({
+      updatedSubCategory,
+      eventsUpdated: eventsUpdated.nModified // number of events updated
     });
-    res.json(updatedCategory);
   } catch (error) {
-    throw new Error(error);
+    console.error("Error updating subcategory and events: ", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 exports.deleteSubCategory = async (req, res) => {
   const { id } = req.body;
@@ -53,7 +72,9 @@ exports.deleteSubCategory = async (req, res) => {
 exports.deleteBulkSubCategory = async (req, res) => {
   try {
     const { CategoryIds } = req.body;
-    const deleteCategorys = await SubCategory.deleteMany({ _id: { $in: CategoryIds } });
+    const deleteCategorys = await SubCategory.deleteMany({
+      _id: { $in: CategoryIds },
+    });
     res.json(deleteCategorys);
   } catch (error) {
     throw new Error(error);
@@ -85,7 +106,9 @@ exports.getallSubCategory = async (req, res) => {
     }
 
     const totalSubCategories = await SubCategory.countDocuments(query);
-    const totalPages = itemsPerPage ? Math.ceil(totalSubCategories / itemsPerPage) : 1;
+    const totalPages = itemsPerPage
+      ? Math.ceil(totalSubCategories / itemsPerPage)
+      : 1;
 
     const skip = itemsPerPage ? (currentPage - 1) * itemsPerPage : 0;
 
@@ -104,5 +127,22 @@ exports.getallSubCategory = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+exports.getSubCategoryByCatId = async (req, res) => {
+  try {
+    console.log(req.params);
+    const category = req.params.category;
+    validateMongoDbId(category);
+    const getSubCategory = await SubCategory.find({ category }).populate(
+      "category"
+    );
+    if (!getSubCategory) {
+      return res.status(404).json({success:false, message:"No data found"})
+    }
+    return res.status(200).json({success:true, getSubCategory})
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error",error });
   }
 };

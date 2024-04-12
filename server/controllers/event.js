@@ -451,6 +451,7 @@ function mapEventTypeToCategory(eventType, eventTypes) {
 
   return eventTypeMap[eventType] || "Other";
 }
+
 exports.londontheatredirect = asyncHandler(async (req, res) => {
   try {
     let { startDate, endDate } = req.query;
@@ -461,7 +462,9 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
     // Default endDate to one month after the current date if not provided
     endDate = endDate ? new Date(endDate) : new Date();
     endDate.setMonth(endDate.getMonth() + 1);
-
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(400).send("Invalid date format");
+  }
     const eventTypesResponse = await axios.get(
       "https://api.londontheatredirect.com/rest/v2/System/EventTypes",
       {
@@ -493,12 +496,18 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
     let eventsAdded = 0;
 
     // Filter events based on startDate and endDate
-    const filteredEvents = events.filter((event) => {
-      const eventStartDate = new Date(event.StartDate);
-      const eventEndDate = new Date(event.EndDate);
+    let filteredEvents
+    try {
+      filteredEvents = events.filter((event) => {
+        const eventStartDate = new Date(event.StartDate);
+        const eventEndDate = new Date(event.EndDate);
+  
+        return eventStartDate >= startDate && eventEndDate <= endDate;
+      });
+    } catch (error) {
+      console.log("filtererror", error);
+    }
 
-      return eventStartDate >= startDate && eventEndDate <= endDate;
-    });
 
     // Process and save each filtered event to the database
     for (const event of filteredEvents) {
@@ -536,6 +545,12 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         //   // If the category doesn't exist, create it
         //   category = await Category.create({ title: eventTypeCategory });
         // }
+         let subcategory = await SubCategory.findOne({ subCategory: eventTypeCategory });
+
+        if (!subcategory && eventTypeCategory) {
+          // If the category doesn't exist, create it
+          subcategory = await SubCategory.create({ subCategory: eventTypeCategory });
+        }
 
         const venueData = venueResponse.data.Venue;
 
@@ -574,7 +589,8 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
             resource_url: event.EventDetailUrl,
             ...venueInfo,
             event_provider: "London Theatre Direct",
-            // category: category._id,
+            subCategory: subcategory._id,
+            category: subcategory.category,
             sourceCategory:eventTypeCategory,
           };
 
@@ -587,6 +603,8 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         } else {
           console.error(
             "Error fetching geocoding data:",
+            // geocodingResponse.data.error_message || "Unknown error"
+            geocodingResponse.data.status || "No results returned", // More specific status
             geocodingResponse.data.error_message || "Unknown error"
           );
         }
@@ -656,11 +674,11 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
 
       // Find or create the category in the Category model
       //disabling category
-      // const category = await Category.findOneAndUpdate(
-      //   { title: eventCategory },
-      //   { title: eventCategory },
-      //   { upsert: true, new: true }
-      // );
+      const subCategory = await SubCategory.findOneAndUpdate(
+        { subCategory: eventCategory },
+        { subCategory: eventCategory },
+        { upsert: true, new: true }
+      );
 
       const existingEvent = await Event.findOne({
         name: event.eventname,
@@ -691,6 +709,8 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           price: event.entryprice,
           event_provider: "Skiddle",
           // category: category._id,
+          subCategory: subCategory._id,
+          category: subCategory.category,
           sourceCategory:eventCategory
         };
 
@@ -755,6 +775,11 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
         //   category = await Category.create({ title: genre });
         // }
         // const categoryId = category._id;
+        let subcategory = await SubCategory.findOne({ subCategory: genre });
+        if (!subcategory) {
+          subcategory = await SubCategory.create({ subCategory: genre });
+        }
+        const subcategoryId = subcategory._id;
 
         const events = campaign.events[0].event;
         for (const event of events) {
@@ -839,7 +864,8 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
             currency,
             resource_url,
             event_provider,
-            // category: categoryId,
+            subCategory:subcategoryId,
+            category: subcategory.category,
             sourceCategory:genre
           });
         }
