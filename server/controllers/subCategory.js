@@ -130,19 +130,26 @@ exports.getallSubCategory = async (req, res) => {
   }
 };
 
-exports.getSubCategoryByCatId = async (req, res) => {
+exports.getSubCategoriesByCatIds = async (req, res) => {
   try {
     console.log(req.params);
-    const category = req.params.category;
-    validateMongoDbId(category);
-    const getSubCategory = await SubCategory.find({ category }).populate(
-      "category"
-    );
-    if (!getSubCategory) {
-      return res.status(404).json({success:false, message:"No data found"})
+    // Assume categories are passed as a comma-separated string in the URL, e.g., /api/subcategories?categories=5f8d0401c28e5a486434f234,5f8d0401c28e5a486434f235
+    const categories = req.query.categories.split(','); // Split the string into an array of IDs
+
+    // Validate each category ID
+    categories.forEach(category => {
+      validateMongoDbId(category);
+    });
+
+    // Find subcategories that match any of the category IDs in the array
+    const getSubCategories = await SubCategory.find({ category: { $in: categories } }).populate('category');
+    
+    if (!getSubCategories.length) { // Check if the result array is empty
+      return res.status(404).json({ success: false, message: "No data found" });
     }
-    return res.status(200).json({success:true, getSubCategory})
+
+    return res.status(200).json({ success: true, getSubCategories });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error",error });
+    res.status(500).json({ message: "Internal Server Error", error });
   }
 };
