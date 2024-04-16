@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html className='overscroll-none' lang="en">
       <body className={inter.className}>
       <AuthProvider>
           {children}
