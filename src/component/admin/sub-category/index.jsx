@@ -28,7 +28,7 @@ const SubCategoryPage = () => {
   const [getallCategory, setGetallCategory] = useState([]);
   const [isLoadingBtn, setLoadingBtn] = useState(false);
 
-  const limit = 20;
+  const limit = 50;
   const { adminAuthToken } = useAuth();
 
   const openSubCategory = () => setSubCateDrwaer(true);

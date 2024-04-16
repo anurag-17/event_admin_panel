@@ -22,7 +22,7 @@ const Category = () => {
   const [isLoader, setLoader] = useState(false);
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
-  const limit = 20;
+  const limit = 50;
   const { adminAuthToken } = useAuth();
 
   const openDrawerO = async (_id) => {
@@ -164,7 +164,7 @@ const Category = () => {
             </button>
           </div>
         </div>
-        <div className="sm:ml-10 mx-4 sm:mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll">
+        <div className="sm:ml-10 mx-4 sm:mr-4 lg:mx-8  overflow-y-scroll">
           <table className="w-full border bg-white rounded-md mt-5 p-100">
             <thead className="sticky-header">
               <tr
@@ -191,7 +191,7 @@ const Category = () => {
                     className="text-start flex w-full custom_table_text"
                   >
                     <td className="mx-5 my-auto w-[30px] sm:w-2/12">
-                      {index + 1 + 20 * (current_page - 1)}
+                      {index + 1 + 50 * (current_page - 1)}
                     </td>
                     <td className="my-auto xl:ml-10 w-6/12 sm:w-4/12 capitalize custom_table_text">
                       {item?.title}

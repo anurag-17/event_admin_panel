@@ -19,7 +19,7 @@ const AllUser = () => {
   const [isLoader, setLoader] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(50);
   const [dialogMatch, setDialogMatch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
 
@@ -178,7 +178,7 @@ const AllUser = () => {
 
       <div className=" flex sm:ml-10 mx-4 sm:mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
         <div className=" w-full ">
-          <div className=" w-full ">
+          <div className=" overflow-y-scroll w-full ">
             <table className="w-[220%] sm:w-[110%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
                 <tr
@@ -208,7 +208,7 @@ const AllUser = () => {
               {getAllUser?.length > 0 && (
                 <tbody>
                   {getAllUser.map((item, index) => {
-                    const serialNumber = (currentPage - 1) * 10 + (index + 1);
+                    const serialNumber = (currentPage - 1) * 50 + (index + 1);
                     return (
                       <tr
                         key={index}

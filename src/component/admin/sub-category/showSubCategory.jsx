@@ -8,7 +8,7 @@ const ShowSubCategory = ({
   return (
     <>
       <div className=" flex  sm:ml-10 mx-4 sm:mr-4  lg:mx-8  overflow-x-auto md:overscroll-none ">
-        <div className="   h-[300px] xl:h-[400px] overflow-y-scroll  w-full ">
+        <div className=" overflow-y-scroll  w-full ">
           <table className="w-[140%] md:w-full sm:w-[100%]  border bg-white rounded-md mt-5 p-10 mb-10">
             <thead className="sticky-header">
               <tr
@@ -39,7 +39,7 @@ const ShowSubCategory = ({
                     className="text-start flex w-full custom_table_text"
                   >
                     <td className="mx-5 my-auto w-[30px] sm:w-2/12">
-                      {index + 1 + 20 * (current_page - 1)}
+                      {index + 1 + 50 * (current_page - 1)}
                     </td>
 
                     <td className=" capitalize my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12">
