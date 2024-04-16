@@ -98,8 +98,8 @@ const AdminDashboard = () => {
     <>
       {loader && <Loader />}
 
-      <section className="z-50">
-        <div className="flex lg:static">
+      <section className="z-50 overscroll-none">
+        <div className="flex lg:static ">
           <div
             className="py-1 md:py-0 px-3 absolute top-2 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
             onClick={() => setShowDrawer(true)}

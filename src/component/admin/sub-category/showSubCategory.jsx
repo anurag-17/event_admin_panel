@@ -7,7 +7,7 @@ const ShowSubCategory = ({
 }) => {
   return (
     <>
-      <div className=" flex  sm:ml-10 mx-4 sm:mr-4  lg:mx-8  overflow-x-auto md:overscroll-none ">
+      <div className=" flex  sm:ml-10 mx-4 sm:mr-4  lg:mx-8  overflow-x-auto md:overscroll-none  2xl:mb-16 xl:mb-12 lg:mb-10">
         <div className=" overflow-y-scroll  w-full ">
           <table className="w-[140%] md:w-full sm:w-[100%]  border bg-white rounded-md mt-5 p-10 mb-10">
             <thead className="sticky-header">

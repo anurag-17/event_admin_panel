@@ -646,8 +646,8 @@ const Event = () => {
       {isLoader && <Loader />}
       <ToastContainer autoClose={3000} />
       <Topbar />
-      <div className="h-screen ">
-        <div className="mt-2 sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-5 lg:mx-8 bg-white rounded-lg 2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4">
+      <div className="h-screen 2xl:mb-16 xl:mb-12 lg:mb-10">
+        <div className="mt-2 sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center 2xl:px-10 border mx-5 lg:mx-8 bg-white rounded-lg 2xl:h-[80px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4">
           <h2 className="font-semibold custom_heading_text">Event List </h2>
         </div>
 
@@ -1035,9 +1035,9 @@ const Event = () => {
 
         <div className=" flex mx-5 lg:mx-8  overflow-x-auto ">
           <div className="  w-full ">
-            <div className="overflow-y-scroll  ">
+            <div className="  ">
               <div className="">
-                <table className="w-[1500px] lg:w-[150%] xl:w-[130%]  border bg-white rounded-md mt-5 p-10">
+                <table className="w-[1500px] lg:w-[180%] xl:w-[150%]  border bg-white rounded-md mt-5 p-10">
                   <thead className="sticky-header">
                     <tr
                       className="w-full bg-coolGray-200 text-gray-400 text-start flex  px-2 border
@@ -1283,15 +1283,13 @@ const Event = () => {
           </div>
         </div>
         {total_pages > 1 && (
-        <Pagination
-          total_pages={total_pages}
-          current_page={current_page}
-          onPageChange={handlePageChange}
-        />
-      )}
+          <Pagination
+            total_pages={total_pages}
+            current_page={current_page}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
-
-     
 
       <Transition appear show={isOpenDelete} as={Fragment}>
         <Dialog as="div" className="z-10 fixed" onClose={() => {}}>
