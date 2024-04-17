@@ -12,6 +12,7 @@ import Loader from "../../loader";
 import Pagination from "../../pagination";
 import Topbar from "../../../app/admin/admin-dashboard/topbar";
 import { useAuth } from "../../../contexts/AuthContext";
+import Synonyms from "./synonyms";
 
 const SubCategoryPage = () => {
   const [isOpenDelete, setOpenDelete] = useState(false);
@@ -21,6 +22,7 @@ const SubCategoryPage = () => {
   const [cateEdit, setCateEdit] = useState("");
   const [editData, setEditData] = useState({});
   const [isDrawerOpenO, setIsDrawerOpenO] = useState(false);
+  const [isDrawerOpenOO, setIsDrawerOpenOO] = useState(false);
   const [allSubCategory, setAllSubCategory] = useState([]);
   const [isLoader, setLoader] = useState(false);
   const [current_page, setCurrentPage] = useState(1);
@@ -58,7 +60,6 @@ const SubCategoryPage = () => {
       .then((response) => {
         setAllSubCategory(response?.data?.subCategories);
         setTotalPages(response?.data?.total_pages || 1);
-        console.log(response?.data, "hayhay");
         setLoader(false);
       })
       .catch((error) => {
@@ -66,8 +67,8 @@ const SubCategoryPage = () => {
       });
   };
 
-   // -------------search Sub Category----------
-   
+  // -------------search Sub Category----------
+
   const handleSearch = (e) => {
     const search = e.target.value;
     setCurrentPage(1);
@@ -159,11 +160,43 @@ const SubCategoryPage = () => {
         setLoadingBtn(false);
       });
   };
+
   useEffect(() => {
     setAllSubCategory(current_page, limit);
   }, [isRefresh, current_page]);
 
- 
+  const openDrawerOO = async ({ subCateId }) => {
+    setCateEdit(subCateId);
+    setLoader(true);
+
+    try {
+      const res = await axios.post(
+        "/api/subCategory/getSubCategory",
+        { id: subCateId },
+        {
+          headers: {
+            authorization: adminAuthToken,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setEditData(res?.data);
+        console.log(res?.data, "kkk");
+        setIsDrawerOpenOO(true);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        console.error("Unexpected response status:", response.status);
+      }
+    } catch (error) {
+      setLoader(false);
+      console.error("Error:", error);
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const closeDrawerOO = () => setIsDrawerOpenOO(false);
 
   return (
     <>
@@ -171,7 +204,7 @@ const SubCategoryPage = () => {
 
       {isLoader && <Loader />}
       <section className="h-screen">
-      <Topbar />
+        <Topbar />
         <div className=" sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[80px] xl:h-[70px] lg:h-[60px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold whitespace-nowrap custom_heading_text">
             {" "}
@@ -223,6 +256,7 @@ const SubCategoryPage = () => {
           current_page={current_page}
           allSubCategory={allSubCategory}
           openDrawerO={openDrawerO}
+          openDrawerOO={openDrawerOO}
           openModal={openModal}
         />
         {total_pages > 1 && (
@@ -259,7 +293,7 @@ const SubCategoryPage = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-               <Dialog.Panel className="w-[90%] sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 2xl:p-10 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-[90%] sm:w-full sm:max-w-[500px] transform overflow-hidden rounded-2xl bg-white p-4  sm:px-8 lg:px-8 2xl:p-10 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="custom_heading_text font-semibold leading-6 text-gray-900 mt lg:mt-5"
@@ -382,6 +416,65 @@ const SubCategoryPage = () => {
                     closeDrawer={closeDrawerO}
                     isLoadingBtn={isLoadingBtn}
                     getallCategory={getallCategory}
+                  />
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
+      {/* =============synonyms========== */}
+
+      <Transition appear show={isDrawerOpenOO} as={Fragment}>
+        <Dialog as="div" className=" z-[111] absolute" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-5/6 sm:w-full sm:max-w-[500px]  max-w-[450px]  2xl:max-w-[700px] transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="flex justify-end lg:text-[20px] text-[16px] font-semibold leading-6 text-gray-900"
+                  >
+                    <button
+                      type="button"
+                      onClick={closeDrawerOO}
+                      className=" text-gray-400  shadow-2xl text-sm   top-2  inline-flex items-center justify-center "
+                    >
+                      <img
+                        src="/images/close-square.svg"
+                        className="w-7 md:w-7 lg:w-8 xl:w-9 2xl:w-14"
+                        alt="close"
+                      />
+                      <span className="sr-only bg-black">Close menu</span>
+                    </button>
+                  </Dialog.Title>
+                  <Synonyms
+                    editData={editData}
+                    cateEdit={cateEdit}
+                    refreshData={refreshData}
+                    closeDrawer={closeDrawerOO}
+                    isLoadingBtn={isLoadingBtn}
                   />
                 </Dialog.Panel>
               </Transition.Child>

@@ -13,13 +13,13 @@ import { useAuth } from "../../../contexts/AuthContext";
 const Category = () => {
   const [getAllCate, setGetAllCate] = useState([]);
   const [cateEdit, setCateEdit] = useState("");
+  const [isLoader, setLoader] = useState(false);
   const [editData, setEditData] = useState([]);
   const [categoryID, setCategoryID] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isDrawerOpenO, setIsDrawerOpenO] = useState(false);
   const [isOpenDelete, setOpenDelete] = useState(false);
   const [isRefresh, setRefresh] = useState(false);
-  const [isLoader, setLoader] = useState(false);
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
   const limit = 50;
@@ -255,7 +255,7 @@ const Category = () => {
           <Pagination
             total_pages={total_pages}
             current_page={current_page}
-             onPageChange={handlePageChange}
+            onPageChange={handlePageChange}
           />
         )}
       </div>
