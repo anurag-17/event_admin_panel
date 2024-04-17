@@ -24,7 +24,7 @@ const Topbar = () => {
  
   return (
     <div>
-      <div className=" flex  justify-between items-center  2xl:px-10  bg-white  2xl:h-[100px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+      <div className=" flex  justify-between items-center  2xl:px-10  bg-white  2xl:h-[80px] xl:h-[70px] lg:h-[60px] md:h-[50px] sm:h-[45px] h-[45px]  xl:px-8 lg:px-5 md:px-4 sm:px-4 px-1 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
         <div>
           <h2 className="font-semibold ml-10 lg:ml-0 custom_heading_text">
             {" "}

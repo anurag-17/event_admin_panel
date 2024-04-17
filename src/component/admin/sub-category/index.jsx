@@ -28,7 +28,7 @@ const SubCategoryPage = () => {
   const [getallCategory, setGetallCategory] = useState([]);
   const [isLoadingBtn, setLoadingBtn] = useState(false);
 
-  const limit = 20;
+  const limit = 50;
   const { adminAuthToken } = useAuth();
 
   const openSubCategory = () => setSubCateDrwaer(true);
@@ -170,9 +170,9 @@ const SubCategoryPage = () => {
       <ToastContainer autoClose={1000} />
 
       {isLoader && <Loader />}
+      <section className="h-screen">
       <Topbar />
-      <section>
-        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+        <div className=" sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[80px] xl:h-[70px] lg:h-[60px] xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold whitespace-nowrap custom_heading_text">
             {" "}
             Sub Category List{" "}
@@ -190,7 +190,7 @@ const SubCategoryPage = () => {
           <div className="flex justify-around">
             <button
               onClick={openSubCategory}
-              className=" rounded-md my-auto bg-lightBlue-600 border cursor-pointer 2xl:p-3  2xl:text-[18px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[12px]"
+              className=" rounded-md my-auto bg-lightBlue-600 border cursor-pointer 2xl:p-2  2xl:text-[18px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[12px]"
             >
               + Add Sub category
             </button>

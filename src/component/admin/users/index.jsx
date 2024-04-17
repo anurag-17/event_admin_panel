@@ -19,7 +19,7 @@ const AllUser = () => {
   const [isLoader, setLoader] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(50);
   const [dialogMatch, setDialogMatch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
 
@@ -159,8 +159,9 @@ const AllUser = () => {
     <>
       <Topbar />
       {isLoader && <Loader />}
+<section className="h-screen mb-10">
 
-      <div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center p-1 2xl:px-10 border sm:ml-10 mx-4 sm:mr-4 lg:mx-8  bg-white rounded-lg   h-auto   xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+<div className="mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 flex justify-between items-center p-1 2xl:px-10 border sm:ml-10 mx-4 sm:mr-4 lg:mx-8  bg-white rounded-lg   h-auto   xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
         <div className="  w-[50%] sm:w-[40%] my-3 ">
           <h2 className="font-semibold custom_heading_text">Users List </h2>
         </div>
@@ -178,7 +179,7 @@ const AllUser = () => {
 
       <div className=" flex sm:ml-10 mx-4 sm:mr-4 sm:mx-10 lg:mx-8  overflow-x-auto md:overscroll-none ">
         <div className=" w-full ">
-          <div className=" w-full ">
+          <div className=" overflow-y-scroll w-full ">
             <table className="w-[220%] sm:w-[110%]  border bg-white rounded-md mt-5 p-10">
               <thead className="">
                 <tr
@@ -208,7 +209,7 @@ const AllUser = () => {
               {getAllUser?.length > 0 && (
                 <tbody>
                   {getAllUser.map((item, index) => {
-                    const serialNumber = (currentPage - 1) * 10 + (index + 1);
+                    const serialNumber = (currentPage - 1) * 50 + (index + 1);
                     return (
                       <tr
                         key={index}
@@ -298,6 +299,7 @@ const AllUser = () => {
           onPageChange={handlePageChange}
         />
       )}
+</section>
 
       <Transition appear show={isModalOpen} as={Fragment}>
         <Dialog as="div" className=" z-10" onClose={closeModal}>

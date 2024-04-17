@@ -98,10 +98,10 @@ const AdminDashboard = () => {
     <>
       {loader && <Loader />}
 
-      <section className="z-50">
-        <div className="flex min-h-screen  lg:static ">
+      <section className="z-50 overscroll-none">
+        <div className="flex lg:static ">
           <div
-            className="py-1 md:py-0 px-3  absolute top-2 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
+            className="py-1 md:py-0 px-3 absolute top-2 md:top-4 flex flex-col gap-[5px] cursor-pointer lg:hidden"
             onClick={() => setShowDrawer(true)}
           >
             <div className="bg-black h-[2px] w-[20px]"></div>
@@ -110,15 +110,15 @@ const AdminDashboard = () => {
           </div>
           <div
             className={`z-50 flex flex-col justify-between min-h-screen md:py-[10px] lg:py-[30px] xl:py-[10px] 2xl:py-[30px] py-[10px] text-white bg-black 
-            xl:w-[22%] lg:w-[24%] md:w-[30%] sm:w-[35%] w-[50%]  drawer
+            xl:w-[22%] lg:w-[24%] md:w-[30%] sm:w-[35%] w-[50%]  drawer 
                  ${
                    showDrawer
-                     ? "block  absolute top-0 left-0 min-h-screen is-show"
+                     ? "block  absolute top-0 left-0 min-h-screen is-show overflow-y-auto"
                      : "hidden lg:block"
                  }`}
           >
             <div
-              className="relative text-white  flex flex-col gap-[5px] cursor-pointer lg:hidden  text-right mr-3 mt-2"
+              className="relative text-white flex flex-col gap-[5px] cursor-pointer lg:hidden text-right mr-3 mt-2"
               onClick={() => setShowDrawer(false)}
             >
               <div className="flex justify-end">
@@ -189,7 +189,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="bg-[#f3f3f3] w-full">
+          <div className="bg-[#f3f3f3] w-full overflow-y-auto">
             {menulist.map((item, index) => (
               <Fragment key={index}>
                 {ComponentId === item.id && item.component}

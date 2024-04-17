@@ -22,7 +22,7 @@ const Category = () => {
   const [isLoader, setLoader] = useState(false);
   const [current_page, setCurrentPage] = useState(1);
   const [total_pages, setTotalPages] = useState(1);
-  const limit = 20;
+  const limit = 50;
   const { adminAuthToken } = useAuth();
 
   const openDrawerO = async (_id) => {
@@ -139,8 +139,8 @@ const Category = () => {
       {isLoader && <Loader />}
       <ToastContainer autoClose={3000} />
       <Topbar />
-      <div className="">
-        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[100px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
+      <div className="h-screen 2xl:pb-16 xl:pb-12 lg:pb-10">
+        <div className="sm:mt-2 lg:mt-3 xl:mt-4 2xl:mt-7 border flex md:flex-row gap-y-3 py-4  flex-col justify-between items-center 2xl:pt-4 2xl:px-10 mt-2 sm:ml-10 mx-4 sm:mr-4 lg:mx-8 rounded-lg bg-white 2xl:h-[80px] xl:h-[70px] lg:h-[60px]  h-auto xl:px-8 lg:px-5 md:px-4 sm:px-4 px-4 2xl:text-2xl xl:text-[18px] lg:text-[16px] md:text-[15px] sm:text-[14px] text-[13px]">
           <h2 className="font-semibold whitespace-nowrap custom_heading_text">
             Category List{" "}
           </h2>
@@ -158,13 +158,13 @@ const Category = () => {
           <div className="">
             <button
               onClick={openDrawer}
-              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-3  2xl:text-[22px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[12px]"
+              className="border hover:bg-gray-300 rounded-md my-auto bg-lightBlue-600  cursor-pointer 2xl:p-2  2xl:text-[18px] xl:p-2 xl:text-[14px] lg:p-[6px] lg:text-[12px] md:text-[10px] md:p-1 sm:text-[10px] sm:p-1 p-[3px] text-[12px]"
             >
               + Add Category
             </button>
           </div>
         </div>
-        <div className="sm:ml-10 mx-4 sm:mr-4 lg:mx-8 h-[300px] xl:h-[400px] overflow-y-scroll">
+        <div className="sm:ml-10 mx-4 sm:mr-4 lg:mx-8  overflow-y-scroll">
           <table className="w-full border bg-white rounded-md mt-5 p-100">
             <thead className="sticky-header">
               <tr
@@ -191,7 +191,7 @@ const Category = () => {
                     className="text-start flex w-full custom_table_text"
                   >
                     <td className="mx-5 my-auto w-[30px] sm:w-2/12">
-                      {index + 1 + 20 * (current_page - 1)}
+                      {index + 1 + 50 * (current_page - 1)}
                     </td>
                     <td className="my-auto xl:ml-10 w-6/12 sm:w-4/12 capitalize custom_table_text">
                       {item?.title}
