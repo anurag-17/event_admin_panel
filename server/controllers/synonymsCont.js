@@ -1,6 +1,8 @@
+const { default: mongoose } = require("mongoose");
 const Synonyms = require("../models/Synonyms");
 const SubCategory = require("../models/subCategory");
 const validateMongoDbId = require("../utils/validateMongodbId");
+const Event = require("../models/Event");
 
 exports.createSynonyms = async (req, res) => {
   try {
@@ -36,7 +38,7 @@ exports.createSynonyms = async (req, res) => {
 
     const newSynonym = await Synonyms.create({
       subCategory: parentSubcategory._id,
-      title: childSubcategory.title,
+      title: childSubcategory.subCategory,
       childSubCategory: childSubcategory._id,
     });
 
@@ -146,6 +148,7 @@ exports.editSynonym = async (req, res) => {
     // you won't encounter a typical error as long as you assign a valid MongoDB ObjectId string.
     //  Mongoose handles the dereferencing automatically when you save the document.
     synonym.childSubCategory = newChildId;
+    synonym.title=newChildSubcategory.subCategory
     await synonym.save();
 
     // Disable the new child subcategory

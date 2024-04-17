@@ -35,7 +35,8 @@ const EventSchema = new mongoose.Schema(
       type: Number,
     },
     price: {
-      type: String,
+      type: Number,
+      default:0
     },
     currency: {
       type: String,

@@ -5,6 +5,7 @@ const ShowSubCategory = ({
   openModal,
   isLoader,
   current_page,
+  allSynonym,
 }) => {
   return (
     <>
@@ -22,8 +23,12 @@ const ShowSubCategory = ({
                 <th className=" my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12">
                   SUB CATEGORY
                 </th>
+
                 <th className=" my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12 md:ml-3">
                   MAIN CATEGORY
+                </th>
+                <th className=" my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-3/12 md:ml-3">
+                  Synonym
                 </th>
                 <th className=" my-auto py-2 sm:py-2 md:py-2 lg:py-3 xl:py-4 2xl:py-5 text-start w-2/12">
                   ACTION
@@ -48,6 +53,18 @@ const ShowSubCategory = ({
                     </td>
                     <td className=" capitalize my-auto w-3/12 ml-2  ">
                       {item?.category?.title ? item?.category?.title : "-"}
+                    </td>
+                    <td className=" capitalize my-auto w-3/12 ml-2  ">
+                      {Array.isArray(allSynonym)
+                        ? allSynonym
+                            .filter((items) => items.subCategory === item?._id)
+                            .map((items, index, filteredArray) => (
+                              <span key={index} className="mr-1">
+                                {items.title}
+                                {index < filteredArray.length - 1 ? ", " : ""}
+                              </span>
+                            ))
+                        : "-"}
                     </td>
                     <td className="flex gap-3 my-2 lg:w-2/12">
                       <button
@@ -105,7 +122,6 @@ const ShowSubCategory = ({
                           />
                         </svg>
                       </button>
-                      
                     </td>
                   </tr>
                 ))}
