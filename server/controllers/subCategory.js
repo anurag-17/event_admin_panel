@@ -88,7 +88,11 @@ exports.getSubCategory = async (req, res) => {
   const { id } = req.body;
   validateMongoDbId(id);
   try {
-    const getaCategory = await SubCategory.findById(id).populate("category");
+    const getaCategory = await SubCategory.findOne({ _id: id, disable: false }).populate("category");
+
+    if (!getaCategory) {
+      return res.status(404).json({ message: 'SubCategory not found or is disable' });
+    }
     res.json(getaCategory);
   } catch (error) {
     throw new Error(error);
@@ -100,24 +104,22 @@ exports.getallSubCategory = async (req, res) => {
     const { page, limit, searchQuery } = req.query;
 
     const currentPage = parseInt(page, 10) || 1;
-    const itemsPerPage = parseInt(limit, 10) || undefined;
+    const itemsPerPage = parseInt(limit, 10) || 10; // default to 10 if undefined
 
-    let query = {};
+    let query = { disable: false }; // Only fetch subcategories that are not disable
 
     if (searchQuery) {
-      query.subCategory = { $regex: new RegExp(searchQuery, "i") };
+      query.name = { $regex: new RegExp(searchQuery, "i") }; // Assuming the field to search on is 'name'
     }
 
     const totalSubCategories = await SubCategory.countDocuments(query);
-    const totalPages = itemsPerPage
-      ? Math.ceil(totalSubCategories / itemsPerPage)
-      : 1;
+    const totalPages = itemsPerPage ? Math.ceil(totalSubCategories / itemsPerPage) : 1;
 
     const skip = itemsPerPage ? (currentPage - 1) * itemsPerPage : 0;
 
-    const getallSubCategory = await SubCategory.find(query)
-      .collation({ locale: "en", strength: 2 })
-      .sort({ subCategory: 1 })
+    const allSubCategories = await SubCategory.find(query)
+      .collation({ locale: "en", strength: 2 }) // Handles case insensitivity for non-regex queries as well
+      .sort({ name: 1 }) // Sort by 'name' field assuming that's what you mean by 'subCategory'
       .skip(skip)
       .limit(itemsPerPage)
       .populate("category");
@@ -126,9 +128,10 @@ exports.getallSubCategory = async (req, res) => {
       current_page: currentPage,
       total_pages: totalPages,
       total_items: totalSubCategories,
-      subCategories: getallSubCategory,
+      subCategories: allSubCategories,
     });
   } catch (error) {
+    console.error("Error fetching subcategories:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -160,6 +163,7 @@ exports.getSubCategoryByCatId = async (req, res) => {
 
     const getSubCategories = await SubCategory.find({
       category: { $in: categories },
+      disable: false 
     }).populate("category");
 
     console.log('SubCategories found:', getSubCategories);
