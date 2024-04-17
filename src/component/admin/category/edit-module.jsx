@@ -60,10 +60,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
         px-1 h-[25px] my-2
          "
       >
-        <h2 className="custom_heading_text font-semibold ">
-          Edit Category{" "}
-        </h2>
-        
+        <h2 className="custom_heading_text font-semibold ">Edit Category </h2>
       </div>
       <div>
         <form
@@ -71,11 +68,7 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
           className=" bg-white border  rounded-lg 2xl:p-2 xl:p-2  lg:p-1 md:p-2 p-1  mx-auto"
         >
           <div className="mt-2">
-            <label
-              className="custom_input_label"
-            >
-              Category
-            </label>
+            <label className="custom_input_label">Category</label>
             <input
               onChange={inputHandler}
               defaultValue={editData?.title}
@@ -86,14 +79,11 @@ const EditCate = ({ editData, cateEdit, closeDrawer, refreshData }) => {
               maxLength={84}
             />
           </div>
-         <div className="flex justify-center">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="custom_btn"
-          >
-            {isLoading ? "Loading." : "Update"}
-          </button></div>
+          <div className="flex justify-center">
+            <button type="submit" disabled={isLoading} className="custom_btn">
+              {isLoading ? "Loading." : "Update"}
+            </button>
+          </div>
         </form>
       </div>
     </>
