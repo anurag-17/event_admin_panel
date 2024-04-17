@@ -172,6 +172,7 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
       latitude,
       longitude,
       price,
+      onDate,
     } = req.query;
 
     const currentPage = parseInt(page, 10);
@@ -209,6 +210,30 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
       parsedEndDate.setHours(23, 59, 59, 999);
 
       query.endDate = { $lte: parsedEndDate };
+    }
+    if (onDate) {
+      const parsedonDate = new Date(onDate);
+
+      // Check if the parsed date is valid
+      if (isNaN(parsedonDate.getTime())) {
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Invalid date format" });
+      }
+
+      // Setting the start of the day for the startDate
+      const startOfDay = new Date(parsedonDate);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      // Setting the end of the day for endDate
+      const endOfDay = new Date(parsedonDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      // Modify the query to search between start and end of the day
+      query.startDate = {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      };
     }
 
     if (category) {
@@ -464,7 +489,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
     endDate.setMonth(endDate.getMonth() + 1);
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
       return res.status(400).send("Invalid date format");
-  }
+    }
     const eventTypesResponse = await axios.get(
       "https://api.londontheatredirect.com/rest/v2/System/EventTypes",
       {
@@ -496,18 +521,17 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
     let eventsAdded = 0;
 
     // Filter events based on startDate and endDate
-    let filteredEvents
+    let filteredEvents;
     try {
       filteredEvents = events.filter((event) => {
         const eventStartDate = new Date(event.StartDate);
         const eventEndDate = new Date(event.EndDate);
-  
+
         return eventStartDate >= startDate && eventEndDate <= endDate;
       });
     } catch (error) {
       console.log("filtererror", error);
     }
-
 
     // Process and save each filtered event to the database
     for (const event of filteredEvents) {
@@ -545,11 +569,15 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         //   // If the category doesn't exist, create it
         //   category = await Category.create({ title: eventTypeCategory });
         // }
-         let subcategory = await SubCategory.findOne({ subCategory: eventTypeCategory });
+        let subcategory = await SubCategory.findOne({
+          subCategory: eventTypeCategory,
+        });
 
         if (!subcategory && eventTypeCategory) {
           // If the category doesn't exist, create it
-          subcategory = await SubCategory.create({ subCategory: eventTypeCategory });
+          subcategory = await SubCategory.create({
+            subCategory: eventTypeCategory,
+          });
         }
 
         const venueData = venueResponse.data.Venue;
@@ -591,7 +619,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
             event_provider: "London Theatre Direct",
             subCategory: subcategory._id,
             category: subcategory.category,
-            sourceCategory:eventTypeCategory,
+            sourceCategory: eventTypeCategory,
           };
 
           // Save the event to the database
@@ -711,7 +739,7 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           // category: category._id,
           subCategory: subCategory._id,
           category: subCategory.category,
-          sourceCategory:eventCategory
+          sourceCategory: eventCategory,
         };
 
         // Save the event to the database
@@ -864,9 +892,9 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
             currency,
             resource_url,
             event_provider,
-            subCategory:subcategoryId,
+            subCategory: subcategoryId,
             category: subcategory.category,
-            sourceCategory:genre
+            sourceCategory: genre,
           });
         }
       }
