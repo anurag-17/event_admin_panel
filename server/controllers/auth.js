@@ -589,7 +589,19 @@ exports.fetchEvent = async (req, res) => {
         // const categoryDocument = await Category.findOneAndUpdate({ title: category }, { title: category }, { upsert: true, new: true });
 
         // Save to SubCategory model if not exists
-        const subCategoryDocument = await SubCategory.findOneAndUpdate({ subCategory: subCategory }, { subCategory: subCategory }, { upsert: true, new: true });
+        // First, check if there's a synonym for the genre
+      const findSynonyms = await Synonyms.findOne({ title: genreName });
+      let subCategoryDocument;
+
+      if (findSynonyms) {
+        subCategoryDocument = await SubCategory.findById(findSynonyms.subCategory);
+      } else {
+        subCategoryDocument = await SubCategory.findOneAndUpdate(
+          { name: genreName },
+          { $setOnInsert: { name: genreName } },
+          { upsert: true, new: true }
+        );
+      }
         
         const imagesArray = event.images.map((image, index) => ({ url: image.url, position: index }));
         // Extract relevant event information

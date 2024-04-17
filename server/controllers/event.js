@@ -8,6 +8,7 @@ const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
 const axios = require("axios");
 const { parseString } = require("xml2js");
+const Synonyms = require("../models/Synonyms");
 
 exports.createEvent = asyncHandler(async (req, res) => {
   try {
@@ -569,9 +570,18 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
         //   // If the category doesn't exist, create it
         //   category = await Category.create({ title: eventTypeCategory });
         // }
-        let subcategory = await SubCategory.findOne({
-          subCategory: eventTypeCategory,
+        let findSynonyms = await Synonyms.findOne({
+          title: eventTypeCategory,
         });
+        let subcategory;
+        if (findSynonyms) {
+          subcategory = await SubCategory.findById(findSynonyms.subCategory);
+        }
+        if (!findSynonyms) {
+          subcategory = await SubCategory.findOne({
+            subCategory: eventTypeCategory,
+          });
+        }
 
         if (!subcategory && eventTypeCategory) {
           // If the category doesn't exist, create it
@@ -699,14 +709,20 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
       // Check if the event already exists in the database
 
       const eventCategory = mapEventCodeToCategory(event.EventCode);
-
+      let subCategory;
       // Find or create the category in the Category model
       //disabling category
-      const subCategory = await SubCategory.findOneAndUpdate(
-        { subCategory: eventCategory },
-        { subCategory: eventCategory },
-        { upsert: true, new: true }
-      );
+      // First, check if there's a synonym for the event category
+      const findSynonyms = await Synonyms.findOne({ title: eventCategory });
+      if (findSynonyms) {
+        subCategory = await SubCategory.findById(findSynonyms.subCategory);
+      } else {
+        subCategory = await SubCategory.findOneAndUpdate(
+          { subCategory: eventCategory },
+          { subCategory: eventCategory },
+          { upsert: true, new: true }
+        );
+      }
 
       const existingEvent = await Event.findOne({
         name: event.eventname,
@@ -803,9 +819,16 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
         //   category = await Category.create({ title: genre });
         // }
         // const categoryId = category._id;
-        let subcategory = await SubCategory.findOne({ subCategory: genre });
-        if (!subcategory) {
-          subcategory = await SubCategory.create({ subCategory: genre });
+        // First check if there's a synonym for the genre
+        const findSynonyms = await Synonyms.findOne({ title: genre });
+        let subcategory;
+        if (findSynonyms) {
+          subcategory = await SubCategory.findById(findSynonyms.subCategory);
+        } else {
+          subcategory = await SubCategory.findOne({ subCategory: genre });
+          if (!subcategory) {
+            subcategory = await SubCategory.create({ subCategory: genre });
+          }
         }
         const subcategoryId = subcategory._id;
 
