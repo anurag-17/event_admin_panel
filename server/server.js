@@ -176,7 +176,7 @@ app.use("/api/subCategory", require("./routes/subCategory"));
 app.use("/api/event", require("./routes/event"));
 
 app.use("/api/auth/upload", require("./routes/auth"));
-
+app.use("/api/synonyms", require("./routes/synonymsRoute"))
 // Error Handler 
 app.use(errorHandler);
 

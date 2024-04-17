@@ -10,6 +10,10 @@ const subCategorySchema = new mongoose.Schema(
     subCategory: {
       type: String,
       unique: true,
+    },
+    disable: {
+      type: Boolean, 
+      default:false
     }
   },
   {

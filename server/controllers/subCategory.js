@@ -166,7 +166,7 @@ exports.getSubCategoryByCatId = async (req, res) => {
 
     if (!getSubCategories.length) {
       console.log('No subcategories found for provided categories');
-      return res.status(404).json({ success: false, message: "No data found" });
+      return res.status(200).json({ success: false, message: "No data found" });
     }
 
     return res.status(200).json({ success: true, getSubCategories });
