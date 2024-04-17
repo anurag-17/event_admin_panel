@@ -104,7 +104,7 @@ exports.getallSubCategory = async (req, res) => {
     const { page, limit, searchQuery } = req.query;
 
     const currentPage = parseInt(page, 10) || 1;
-    const itemsPerPage = parseInt(limit, 10) || 10; // default to 10 if undefined
+    const itemsPerPage = parseInt(limit, 10) || 100; // default to 10 if undefined
 
     let query = { disable: false }; // Only fetch subcategories that are not disable
 

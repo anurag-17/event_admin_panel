@@ -163,6 +163,7 @@ app.get("/", (req, res) => {
   res.send("API is running..");
 });
 
+app.use("/api/auth/duplicate", require("./routes/synonymsRoute"));
 // Auth and User 
 app.use("/api/auth", require("./routes/auth"));
 
@@ -176,7 +177,7 @@ app.use("/api/subCategory", require("./routes/subCategory"));
 app.use("/api/event", require("./routes/event"));
 
 app.use("/api/auth/upload", require("./routes/auth"));
-app.use("/api/synonyms", require("./routes/synonymsRoute"))
+// app.use("/api/auth/duplicate", require("./routes/synonymsRoute")).
 // Error Handler 
 app.use(errorHandler);
 

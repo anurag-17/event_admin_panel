@@ -29,7 +29,7 @@ const SubCategoryPage = () => {
   const [total_pages, setTotalPages] = useState(1);
   const [getallCategory, setGetallCategory] = useState([]);
   const [isLoadingBtn, setLoadingBtn] = useState(false);
-
+  const [synonym, setSynonym] = useState([])
   const limit = 50;
   const { adminAuthToken } = useAuth();
 
@@ -43,8 +43,28 @@ const SubCategoryPage = () => {
 
   useEffect(() => {
     defaultSubCategory(current_page, limit);
+    defaultSynonyms(1,100)
   }, [current_page, isRefresh]);
-
+const defaultSynonyms = (page, limit)=>{
+  setLoader(true);
+  const option = {
+    method: "GET",
+    url: "/api/auth/duplicate/getAll",
+    params: {
+      page: page,
+      limit: limit,
+    },
+    headers: {
+      authorization: adminAuthToken,
+    },
+  };
+  axios.request(option).then((res)=>{
+    // console.log(res.data.data);
+    setSynonym(res.data.data)
+  }).catch((e)=>{
+    console.log(e);
+  })
+}
   const defaultSubCategory = (page, limit) => {
     setLoader(true);
     const option = {
@@ -258,6 +278,7 @@ const SubCategoryPage = () => {
           openDrawerO={openDrawerO}
           openDrawerOO={openDrawerOO}
           openModal={openModal}
+          allSynonym={synonym}
         />
         {total_pages > 1 && (
           <Pagination

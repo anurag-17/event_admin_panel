@@ -193,6 +193,7 @@ server.use("/api/redirection", require("./server/routes/eventRedirection"));
 server.use("/api/favourite", require("./server/routes/favourite"));
 
 server.use("/api/auth/upload", require("./server/routes/auth"));
+server.use("/api/auth/duplicate", require("./server/routes/synonymsRoute"));
 
 server.get('*', (req, res) => {
   return handle(req, res);

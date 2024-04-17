@@ -260,7 +260,7 @@ exports.getAllEvents = asyncHandler(async (req, res) => {
     }
 
     if (price && typeof price === "object" && price.min && price.max) {
-      query.price = { $gte: price.min, $lte: price.max };
+      query.price = { $gte: Number(price.min || 0), $lte: Number(price.max|| 100000) };
     }
 
     // Calculate distance for each event and filter by 5km range
@@ -623,7 +623,7 @@ exports.londontheatredirect = asyncHandler(async (req, res) => {
             startDate: event.StartDate,
             endDate: event.EndDate,
             images: imagesArray,
-            price: event.CurrentPrice,
+            price: event.CurrentPrice? Number(event.CurrentPrice):0,
             resource_url: event.EventDetailUrl,
             ...venueInfo,
             event_provider: "London Theatre Direct",
@@ -750,7 +750,7 @@ exports.skiddleEvents = asyncHandler(async (req, res) => {
           latitude: event.venue.latitude,
           longitude: event.venue.longitude,
           resource_url: `${event.link}?sktag=15306`,
-          price: event.entryprice,
+          price: event.entryprice ? Number(event.entryprice):0,
           event_provider: "Skiddle",
           // category: category._id,
           subCategory: subCategory._id,
@@ -852,8 +852,8 @@ exports.giganticEvents = asyncHandler(async (req, res) => {
           // const longitude = event.venue[0].venuelongitude[0] || 'Not Available';
           const ticketType = event.tickettypes?.[0]?.tickettype?.[0];
           const price = ticketType
-            ? ticketType.tickettypefacevalue[0]?._ || "Not Available"
-            : "Not Available";
+            ? Number(ticketType.tickettypefacevalue[0]?._ )|| 0
+            : 0;
           const currency = ticketType
             ? ticketType.tickettypefacevalue[0]?.$?.currency || "Not Available"
             : "Not Available";

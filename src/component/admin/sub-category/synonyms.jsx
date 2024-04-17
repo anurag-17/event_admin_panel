@@ -11,33 +11,47 @@ const Synonyms = (editData, closeDrawer, refreshData, isLoadingBtn) => {
   const subValue = editData?.editData?.subCategory;
   const parentId = editData?.cateEdit;
   const [synonymsDetails, setSynonymsDetails] = useState({
-    parentId: editData?.cateEdit,
-    childId: "",
+    parentId: "",
+    childId: editData?.cateEdit,
   });
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    console.log(synonymsDetails);
     try {
-      const { status } = await axios.put(
-        "/api/synonyms/create",
-        synonymsDetails,
-        {
+      if (synonymsDetails.parentId === synonymsDetails.childId) {
+        return alert("same");
+      }
+      await axios
+        .post("/api/auth/duplicate/create", synonymsDetails, {
           headers: {
             "Content-Type": "application/json",
             authorization: adminAuthToken,
           },
-        }
-      );
+        })
+        .then((res) => {
+          console.log(res.data.success);
+          if (res.data.success) {
+            refreshData();
+            closeDrawer();
+            toast.success("Synonyms created Successfully!");
+          } else {
+            toast.error("Failed to create Synonyms. Server error!");
+            console.log(res);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
 
-      if (status === 200) {
-        toast.success("SubCategory Updated Successfully!");
-        closeDrawer();
-        refreshData();
-      } else {
-        toast.error("Failed to update SubCategory. Server error!");
-      }
+      // if (status === 200) {
+      //   toast.success("SubCategory Updated Successfully!");
+      //   closeDrawer();
+      //   refreshData();
+      // } else {
+      //   toast.error("Failed to update SubCategory. Server error!");
+      // }
     } catch (error) {
       console.error(error);
       toast.error("Failed. Something went wrong!");
@@ -48,6 +62,7 @@ const Synonyms = (editData, closeDrawer, refreshData, isLoadingBtn) => {
 
   useEffect(() => {
     defaultSubCategory();
+   
   }, []);
 
   const defaultSubCategory = () => {
@@ -79,16 +94,17 @@ const Synonyms = (editData, closeDrawer, refreshData, isLoadingBtn) => {
             <input
               defaultValue={subValue}
               className="custom_inputt capitalize"
+              disabled
             />
           </div>
 
           <div>
-            <label className="custom_input_label"> Sub Category:</label>
+            <label className="custom_input_label">Parent Sub Category:</label>
             <select
               //   type="text"
-              name="childId"
+              name="parentId"
               className="custom_inputt custom_dropdown_text"
-              value={synonymsDetails?.childId}
+              value={synonymsDetails?.childparentIdId}
               required
               onChange={(e) => {
                 setSynonymsDetails({

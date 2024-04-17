@@ -534,7 +534,7 @@ exports.fetchEvent = async (req, res) => {
 
     // Fetch events data
     const response = await axios.get(
-      process.env.TICKETMASTER_URL,
+      "https://app.ticketmaster.com/discovery/v2/events.json",
       {
         params: {
           apikey: apiKey,
@@ -590,7 +590,7 @@ exports.fetchEvent = async (req, res) => {
 
         // Save to SubCategory model if not exists
         // First, check if there's a synonym for the genre
-      const findSynonyms = await Synonyms.findOne({ title: genreName });
+      const findSynonyms = await Synonyms.findOne({ title: subCategory });
       let subCategoryDocument;
 
       if (findSynonyms) {

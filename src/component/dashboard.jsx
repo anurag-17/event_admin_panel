@@ -99,7 +99,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    defaultsubCategory(current_page, limit);
+    defaultsubCategory(5,1);
   }, [current_page, isRefresh]);
 
   const defaultsubCategory = (limit, page) => {
